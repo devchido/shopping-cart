@@ -6,7 +6,7 @@ CREATE TABLE `shop`.`user` (
   `lastName` VARCHAR(50) NULL DEFAULT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
-  `passwordHash` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(32) NOT NULL,
   `admin` TINYINT(1) NOT NULL DEFAULT 0,
   `vendor` TINYINT(1) NOT NULL DEFAULT 0,
   `registeredAt` DATETIME NOT NULL,

@@ -11,7 +11,7 @@ public class UserDto {
     private String lastName;
     private String mobile;
     private String email;
-    private String passwordHash;
+    private String password;
     private Boolean admin;
     private Boolean vendor;
     private Instant registeredAt;

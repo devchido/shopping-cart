@@ -56,9 +56,10 @@ CREATE TABLE `shop`.`category` (
   
 -- Bảng product_category
 CREATE TABLE `shop`.`product_category` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `productId` BIGINT NOT NULL,
   `categoryId` BIGINT NOT NULL,
-  PRIMARY KEY (`productId`, `categoryId`),
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_pc_product`
     FOREIGN KEY (`productId`)
     REFERENCES `shop`.`product` (`id`)

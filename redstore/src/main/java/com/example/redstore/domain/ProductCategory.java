@@ -7,15 +7,15 @@ import lombok.Data;
 @Entity
 @Table(name = "product_category")
 public class ProductCategory {
-    @EmbeddedId
-    private ProductCategoryId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-    @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
-    @MapsId("categoryId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "categoryId", nullable = false)
     private Category category;

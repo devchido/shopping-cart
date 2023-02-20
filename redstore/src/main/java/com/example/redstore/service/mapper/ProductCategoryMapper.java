@@ -5,8 +5,11 @@ import com.example.redstore.service.dto.ProductCategoryDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+
 @Component
 public class ProductCategoryMapper implements EntityMapper<ProductCategoryDto, ProductCategory>{
+
     @Override
     public ProductCategoryDto toDo(ProductCategory productCategory) {
         return null;

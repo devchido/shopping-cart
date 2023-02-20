@@ -24,7 +24,6 @@ public class OrderDto {
     private Float discount;
     private Float grandTotal;
     private String firstName;
-    private String middleName;
     private String lastName;
     private String mobile;
     private String email;

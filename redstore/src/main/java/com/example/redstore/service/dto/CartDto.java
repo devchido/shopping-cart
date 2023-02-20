@@ -16,7 +16,6 @@ public class CartDto {
     private String token;
     private Short status;
     private String firstName;
-    private String middleName;
     private String lastName;
     private String mobile;
     private String email;

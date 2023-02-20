@@ -53,9 +53,6 @@ public class Order {
     @Column(name = "firstName", length = 50)
     private String firstName;
 
-    @Column(name = "middleName", length = 50)
-    private String middleName;
-
     @Column(name = "lastName", length = 50)
     private String lastName;
 

@@ -13,13 +13,13 @@ public class Product {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "title", nullable = false, length = 75)
     private String title;
 
-    @Column(name = "metaTitle", length = 100)
+    @Column(name = "meta_title", length = 100)
     private String metaTitle;
 
     @Column(name = "slug", nullable = false, length = 100)
@@ -46,19 +46,19 @@ public class Product {
     @Column(name = "shop", nullable = false)
     private Boolean shop = false;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @Column(name = "publishedAt")
+    @Column(name = "published_at")
     private Instant publishedAt;
 
-    @Column(name = "startsAt")
+    @Column(name = "starts_at")
     private Instant startsAt;
 
-    @Column(name = "endsAt")
+    @Column(name = "ends_at")
     private Instant endsAt;
 
     @Lob

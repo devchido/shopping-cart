@@ -13,11 +13,11 @@ public class CartItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "productId", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cartId", nullable = false)
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
     @Column(name = "sku", nullable = false, length = 100)
@@ -35,10 +35,10 @@ public class CartItem {
     @Column(name = "active", nullable = false)
     private Boolean active = false;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Lob

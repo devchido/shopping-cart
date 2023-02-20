@@ -12,10 +12,10 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "firstName", length = 50)
+    @Column(name = "first_name", length = 50)
     private String firstName;
 
-    @Column(name = "lastName", length = 50)
+    @Column(name = "last_name", length = 50)
     private String lastName;
 
     @Column(name = "mobile", length = 15)
@@ -33,10 +33,10 @@ public class User {
     @Column(name = "vendor", nullable = false)
     private Boolean vendor = false;
 
-    @Column(name = "registeredAt", nullable = false)
+    @Column(name = "registered_at", nullable = false)
     private Instant registeredAt;
 
-    @Column(name = "lastLogin")
+    @Column(name = "last_login")
     private Instant lastLogin;
 
     @Column(name = "intro")
@@ -45,6 +45,7 @@ public class User {
     @Lob
     @Column(name = "profile")
     private String profile;
+
 
 
 }

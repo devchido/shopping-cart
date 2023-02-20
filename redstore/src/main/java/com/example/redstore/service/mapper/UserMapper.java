@@ -11,7 +11,7 @@ public class UserMapper implements EntityMapper<UserDto, User> {
     @Override
     public UserDto toDo(User entity) {
         UserDto dto = new UserDto();
-        dto.setId(entity.getId());
+//        dto.setId(entity.getId());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setMobile(entity.getMobile());
@@ -29,7 +29,7 @@ public class UserMapper implements EntityMapper<UserDto, User> {
     @Override
     public User toEntity(UserDto dto) {
         User entity = new User();
-        entity.setId(dto.getId());
+//        entity.setId(dto.getId());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setMobile(dto.getMobile());

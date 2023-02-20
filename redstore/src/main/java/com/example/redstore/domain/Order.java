@@ -9,15 +9,14 @@ import java.time.Instant;
 @Table(name = "`order`")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "sessionId", nullable = false, length = 100)
+    @Column(name = "session_id", nullable = false, length = 100)
     private String sessionId;
 
     @Column(name = "token", nullable = false, length = 100)
@@ -26,10 +25,10 @@ public class Order {
     @Column(name = "status", nullable = false)
     private Short status;
 
-    @Column(name = "subTotal", nullable = false)
+    @Column(name = "sub_total", nullable = false)
     private Float subTotal;
 
-    @Column(name = "itemDiscount", nullable = false)
+    @Column(name = "item_discount", nullable = false)
     private Float itemDiscount;
 
     @Column(name = "tax", nullable = false)
@@ -47,13 +46,13 @@ public class Order {
     @Column(name = "discount", nullable = false)
     private Float discount;
 
-    @Column(name = "grandTotal", nullable = false)
+    @Column(name = "grand_total", nullable = false)
     private Float grandTotal;
 
-    @Column(name = "firstName", length = 50)
+    @Column(name = "first_name", length = 50)
     private String firstName;
 
-    @Column(name = "lastName", length = 50)
+    @Column(name = "last_name", length = 50)
     private String lastName;
 
     @Column(name = "mobile", length = 15)
@@ -80,14 +79,16 @@ public class Order {
     @Column(name = "country", length = 50)
     private String country;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Lob
     @Column(name = "content")
     private String content;
+
+
 
 }

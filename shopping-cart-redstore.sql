@@ -2,15 +2,15 @@ CREATE SCHEMA `shop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
 -- Bảng user
 CREATE TABLE `shop`.`user` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(50) NULL DEFAULT NULL,
-  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `first_name` VARCHAR(50) NULL DEFAULT NULL,
+  `last_name` VARCHAR(50) NULL DEFAULT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
   `password` VARCHAR(32) NOT NULL,
   `admin` TINYINT(1) NOT NULL DEFAULT 0,
   `vendor` TINYINT(1) NOT NULL DEFAULT 0,
-  `registeredAt` DATETIME NOT NULL,
-  `lastLogin` DATETIME NULL DEFAULT NULL,
+  `registered_at` DATETIME NOT NULL,
+  `last_login` DATETIME NULL DEFAULT NULL,
   `intro` TINYTEXT NULL DEFAULT NULL,
   `profile` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -20,9 +20,9 @@ CREATE TABLE `shop`.`user` (
 -- Bảng product
 CREATE TABLE `shop`.`product` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `userId` BIGINT NOT NULL,
+  `user_id` BIGINT NOT NULL,
   `title` VARCHAR(75) NOT NULL,
-  `metaTitle` VARCHAR(100) NULL,
+  `meta_title` VARCHAR(100) NULL,
   `slug` VARCHAR(100) NOT NULL,
   `summary` TINYTEXT NULL,
   `type` SMALLINT(6) NOT NULL DEFAULT 0,
@@ -31,16 +31,16 @@ CREATE TABLE `shop`.`product` (
   `discount` FLOAT NOT NULL DEFAULT 0,
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
   `shop` TINYINT(1) NOT NULL DEFAULT 0,
-  `createdAt` DATETIME NOT NULL,
-  `updatedAt` DATETIME NULL DEFAULT NULL,
-  `publishedAt` DATETIME NULL DEFAULT NULL,
-  `startsAt` DATETIME NULL DEFAULT NULL,
-  `endsAt` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
+  `published_at` DATETIME NULL DEFAULT NULL,
+  `starts_at` DATETIME NULL DEFAULT NULL,
+  `ends_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `uq_slug` (`slug` ASC),
   CONSTRAINT `fk_product_user`
-    FOREIGN KEY (`userId`)
+    FOREIGN KEY (`user_id`)
     REFERENCES `shop`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
@@ -49,7 +49,7 @@ CREATE TABLE `shop`.`product` (
 CREATE TABLE `shop`.`category` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(75) NOT NULL,
-  `metaTitle` VARCHAR(100) NULL DEFAULT NULL,
+  `meta_title` VARCHAR(100) NULL DEFAULT NULL,
   `slug` VARCHAR(100) NOT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`));
@@ -57,16 +57,16 @@ CREATE TABLE `shop`.`category` (
 -- Bảng product_category
 CREATE TABLE `shop`.`product_category` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `productId` BIGINT NOT NULL,
-  `categoryId` BIGINT NOT NULL,
+  `product_id` BIGINT NOT NULL,
+  `category_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_pc_product`
-    FOREIGN KEY (`productId`)
+    FOREIGN KEY (`product_id`)
     REFERENCES `shop`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_pc_category`
-    FOREIGN KEY (`categoryId`)
+    FOREIGN KEY (`category_id`)
     REFERENCES `shop`.`category` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
@@ -74,12 +74,12 @@ CREATE TABLE `shop`.`product_category` (
 -- bảng cart
 CREATE TABLE `shop`.`cart` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `userId` BIGINT NULL DEFAULT NULL,
-  `sessionId` VARCHAR(100) NOT NULL,
+  `user_id` BIGINT NULL DEFAULT NULL,
+  `session_id` VARCHAR(100) NOT NULL,
   `token` VARCHAR(100) NOT NULL,
   `status` SMALLINT(6) NOT NULL DEFAULT 0,
-  `firstName` VARCHAR(50) NULL DEFAULT NULL,
-  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `first_name` VARCHAR(50) NULL DEFAULT NULL,
+  `last_name` VARCHAR(50) NULL DEFAULT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
   `line1` VARCHAR(50) NULL DEFAULT NULL,
@@ -88,12 +88,12 @@ CREATE TABLE `shop`.`cart` (
   `district` VARCHAR(50) NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
   `country` VARCHAR(50) NULL DEFAULT NULL,
-  `createdAt` DATETIME NOT NULL,
-  `updatedAt` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_cart_user`
-    FOREIGN KEY (`userId`)
+    FOREIGN KEY (`user_id`)
     REFERENCES `shop`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
@@ -101,25 +101,25 @@ CREATE TABLE `shop`.`cart` (
 -- Bảng cart_item
 CREATE TABLE `shop`.`cart_item` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `productId` BIGINT NOT NULL,
-  `cartId` BIGINT NOT NULL,
+  `product_id` BIGINT NOT NULL,
+  `cart_id` BIGINT NOT NULL,
   `sku` VARCHAR(100) NOT NULL,
   `price` FLOAT NOT NULL DEFAULT 0,
   `discount` FLOAT NOT NULL DEFAULT 0,
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
   `active` TINYINT(1) NOT NULL DEFAULT 0,
-  `createdAt` DATETIME NOT NULL,
-  `updatedAt` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_cart_item_product`
-    FOREIGN KEY (`productId`)
+    FOREIGN KEY (`product_id`)
     REFERENCES `shop`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 ALTER TABLE `shop`.`cart_item` 
 ADD CONSTRAINT `fk_cart_item_cart`
-  FOREIGN KEY (`cartId`)
+  FOREIGN KEY (`cart_id`)
   REFERENCES `shop`.`cart` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
@@ -127,20 +127,20 @@ ADD CONSTRAINT `fk_cart_item_cart`
 -- Bảng order
 CREATE TABLE `shop`.`order` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `userId` BIGINT NULL DEFAULT NULL,
-  `sessionId` VARCHAR(100) NOT NULL,
+  `user_id` BIGINT NULL DEFAULT NULL,
+  `session_id` VARCHAR(100) NOT NULL,
   `token` VARCHAR(100) NOT NULL,
   `status` SMALLINT(6) NOT NULL DEFAULT 0,
-  `subTotal` FLOAT NOT NULL DEFAULT 0,
-  `itemDiscount` FLOAT NOT NULL DEFAULT 0,
+  `sub_total` FLOAT NOT NULL DEFAULT 0,
+  `item_discount` FLOAT NOT NULL DEFAULT 0,
   `tax` FLOAT NOT NULL DEFAULT 0,
   `shipping` FLOAT NOT NULL DEFAULT 0,
   `total` FLOAT NOT NULL DEFAULT 0,
   `promo` VARCHAR(50) NULL DEFAULT NULL,
   `discount` FLOAT NOT NULL DEFAULT 0,
-  `grandTotal` FLOAT NOT NULL DEFAULT 0,
-  `firstName` VARCHAR(50) NULL DEFAULT NULL,
-  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `grand_total` FLOAT NOT NULL DEFAULT 0,
+  `first_name` VARCHAR(50) NULL DEFAULT NULL,
+  `last_name` VARCHAR(50) NULL DEFAULT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
   `line1` VARCHAR(50) NULL DEFAULT NULL,
@@ -149,12 +149,12 @@ CREATE TABLE `shop`.`order` (
   `district` VARCHAR(50) NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
   `country` VARCHAR(50) NULL DEFAULT NULL,
-  `createdAt` DATETIME NOT NULL,
-  `updatedAt` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_order_user`
-    FOREIGN KEY (`userId`)
+    FOREIGN KEY (`user_id`)
     REFERENCES `shop`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
@@ -162,24 +162,24 @@ CREATE TABLE `shop`.`order` (
 -- Bảng order_item
 CREATE TABLE `shop`.`order_item` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `productId` BIGINT NOT NULL,
-  `orderId` BIGINT NOT NULL,
+  `product_id` BIGINT NOT NULL,
+  `order_id` BIGINT NOT NULL,
   `sku` VARCHAR(100) NOT NULL,
   `price` FLOAT NOT NULL DEFAULT 0,
   `discount` FLOAT NOT NULL DEFAULT 0,
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
-  `createdAt` DATETIME NOT NULL,
-  `updatedAt` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_order_item_product`
-    FOREIGN KEY (`productId`)
+    FOREIGN KEY (`product_id`)
     REFERENCES `shop`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 ALTER TABLE `shop`.`order_item` 
 ADD CONSTRAINT `fk_order_item_order`
-  FOREIGN KEY (`orderId`)
+  FOREIGN KEY (`order_id`)
   REFERENCES `shop`.`order` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
@@ -187,24 +187,24 @@ ADD CONSTRAINT `fk_order_item_order`
 -- Bảng transaction
 CREATE TABLE `shop`.`transaction` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `userId` BIGINT NOT NULL,
-  `orderId` BIGINT NOT NULL,
+  `user_id` BIGINT NOT NULL,
+  `order_id` BIGINT NOT NULL,
   `code` VARCHAR(100) NOT NULL,
   `type` SMALLINT(6) NOT NULL DEFAULT 0,
   `mode` SMALLINT(6) NOT NULL DEFAULT 0,
   `status` SMALLINT(6) NOT NULL DEFAULT 0,
-  `createdAt` DATETIME NOT NULL,
-  `updatedAt` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_transaction_user`
-    FOREIGN KEY (`userId`)
+    FOREIGN KEY (`user_id`)
     REFERENCES `shop`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 ALTER TABLE `shop`.`transaction` 
 ADD CONSTRAINT `fk_transaction_order`
-  FOREIGN KEY (`orderId`)
+  FOREIGN KEY (`order_id`)
   REFERENCES `shop`.`order` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;

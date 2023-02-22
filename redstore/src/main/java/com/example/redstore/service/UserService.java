@@ -7,8 +7,11 @@ import com.example.redstore.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,13 +20,38 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-//    public List<UserDto> filter(String id, String firstName, String lastName, String mobile, String email, String admin, String registeredAt) {
-//        List<User> entity = userRepository.filter(id, firstName, lastName, mobile, email, admin, registeredAt);
-//        List<UserDto> dtos = userMapper.toDo(entity);
-//        return dtos;}
-    public List<UserDto> filter( ) {
-        List<User> entity = userRepository.findAll();
+    // Filter user by: id, firstName, lastName, mobile, email
+    public List<UserDto> filter(String id, String firstName, String lastName, String mobile, String email) {
+        List<User> entity = userRepository.filter(id, firstName, lastName, mobile, email);
         List<UserDto> dtos = userMapper.toDo(entity);
-        return dtos;
+        return dtos;}
+
+    // Create new user
+    public void create(UserDto dto) {
+        // get tất cả các id đã có
+        Optional<User> userOptional = userRepository.findById(String.valueOf(dto.getId()));
+        // Nếu id nhập vào đã có thì thông báo đã có id và hủy sự sự kiện create
+        if (userOptional.isPresent()){
+            throw new RuntimeException("Đã có id :" + dto.getId());
+        };
+        User sinhVien =  userMapper.toEntity(dto);
+        userRepository.save(sinhVien);
+        System.out.println("Thực thi create");
+    }
+
+    // Edit user
+    @Transactional
+    public void edit(Long id, UserDto dto){
+        User user = userMapper.toEntity(dto);
+        user.setId(id);
+        userRepository.save(user);
+        System.out.println("Thực thi edit");
+    }
+
+    // Delete user
+    @Transactional
+    public void delete(Long id) {
+        userRepository.deleteById(String.valueOf(id));
+        System.out.println("Thực thi delete");
     }
 }

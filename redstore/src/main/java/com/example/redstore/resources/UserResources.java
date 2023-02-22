@@ -15,14 +15,26 @@ import java.util.List;
 public class UserResources {
     private final UserService userService;
 
-    //    @GetMapping("/filter")
-//    List<UserDto> filter(@RequestParam String id,@RequestParam String firstName,@RequestParam String lastName,@RequestParam String mobile,@RequestParam String email,@RequestParam String admin,@RequestParam String registeredAt){
-//        List<UserDto> dtos = userService.filter(id, firstName, lastName, mobile, email, admin, registeredAt);
-//        return dtos;
-//    }
-    @GetMapping("")
-    List<UserDto> filter(){
-        List<UserDto> dtos = userService.filter();
+    @GetMapping("/filter")
+    List<UserDto> filter(@RequestParam String id, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String mobile, @RequestParam String email) {
+        List<UserDto> dtos = userService.filter(id, firstName, lastName, mobile, email);
         return dtos;
+    }
+
+    @PostMapping("")
+    public void create(@RequestBody UserDto dto) {
+        userService.create(dto);
+    }
+
+    //edit
+    @PutMapping("/{id}")
+    public void edit(@RequestBody UserDto dto, @PathVariable("id") Long id) {
+        userService.edit(id, dto);
+    }
+
+    //delete
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable("id") Long id) {
+        userService.delete(id);
     }
 }

@@ -17,16 +17,16 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
         dto.setId(entity.getId());
         dto.setUser(userMapper.toDo(entity.getUser()));
         dto.setSessionId(entity.getSessionId());
-        dto.setToken(entity.getToken());
+//        dto.setToken(entity.getToken());
         dto.setStatus(entity.getStatus());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setMobile(entity.getMobile());
         dto.setEmail(entity.getEmail());
         dto.setLine1(entity.getLine1());
-        dto.setLine2(entity.getLine2());
-        dto.setWard(entity.getWard());
-        dto.setDistrict(entity.getDistrict());
+//        dto.setLine2(entity.getLine2());
+//        dto.setWard(entity.getWard());
+//        dto.setDistrict(entity.getDistrict());
         dto.setCity(entity.getCity());
         dto.setCountry(entity.getCountry());
         dto.setCreatedAt(entity.getCreatedAt());
@@ -39,18 +39,16 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
     public Cart toEntity(CartDto dto) {
         Cart entity = new Cart();
         entity.setId(dto.getId());
-        entity.setUser(userMapper.toEntity(dto.getUser()));
+
+        // lấy kết quả từ biến ảo userId
+//        entity.setUser(userMapper.toEntity(dto.getUser()));
         entity.setSessionId(dto.getSessionId());
-        entity.setToken(dto.getToken());
         entity.setStatus(dto.getStatus());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setMobile(dto.getMobile());
         entity.setEmail(dto.getEmail());
         entity.setLine1(dto.getLine1());
-        entity.setLine2(dto.getLine2());
-        entity.setWard(dto.getWard());
-        entity.setDistrict(dto.getDistrict());
         entity.setCity(dto.getCity());
         entity.setCountry(dto.getCountry());
         entity.setCreatedAt(dto.getCreatedAt());

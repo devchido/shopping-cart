@@ -16,7 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     // find by sulg
     Optional<Product> findBySlug(String slug);
 
-    // Filter by id, user, title, type, sku, price, discount, quantity, shop
+//     Filter by id, user, title, type, sku, price, discount, quantity, shop
     // createdAt, updatedAt ASC DESC
 //    @Query(value = "SELECT * from shop.user as U " +
 //            "         where U.id like concat('%', :id,'%') " +

@@ -9,6 +9,7 @@ import java.time.Instant;
 @Table(name = "cart_item")
 public class CartItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

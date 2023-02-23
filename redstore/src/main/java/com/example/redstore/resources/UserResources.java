@@ -37,4 +37,10 @@ public class UserResources {
     public void delete(@PathVariable("id") Long id) {
         userService.delete(id);
     }
+
+    @GetMapping("")
+    public List<UserDto> findAll(){
+        List<UserDto> dtos = userService.findAll();
+        return dtos;
+    }
 }

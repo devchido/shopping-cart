@@ -10,11 +10,11 @@ public class ProductDto {
     private Long id;
     private UserDto user;
     private String title;
-    private String metaTitle;
+    //    private String metaTitle;
     private String slug;
     private String summary;
-    private Short type;
-    private String sku;
+    //    private Short type;
+    //    private String sku;
     private Float price;
     private Float discount;
     private Short quantity;

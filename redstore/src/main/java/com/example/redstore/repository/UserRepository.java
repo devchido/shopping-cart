@@ -7,9 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
+
+    // Filter by id, first_name, last_name, mobile, email
     @Query(value = "SELECT * from shop.user as U " +
             "         where U.id like concat('%', :id,'%') " +
             "            and U.first_name like concat('%',:firstName,'%') " +
@@ -22,5 +25,11 @@ public interface UserRepository extends JpaRepository<User, String> {
                       @Param("lastName") String lastName,
                       @Param("mobile") String mobile,
                       @Param("email") String email);
+
+    // find by mobile
+    Optional<User> findByMobile(String mobile);
+    // find by email
+    Optional<User> findByEmail(String email);
+
 
 }

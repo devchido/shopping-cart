@@ -9,6 +9,7 @@ import java.time.Instant;
 @Table(name = "product")
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -19,8 +20,8 @@ public class Product {
     @Column(name = "title", nullable = false, length = 75)
     private String title;
 
-    @Column(name = "meta_title", length = 100)
-    private String metaTitle;
+//    @Column(name = "meta_title", length = 100)
+//    private String metaTitle;
 
     @Column(name = "slug", nullable = false, length = 100)
     private String slug;
@@ -28,11 +29,11 @@ public class Product {
     @Column(name = "summary")
     private String summary;
 
-    @Column(name = "type", nullable = false)
-    private Short type;
+//    @Column(name = "type", nullable = false)
+//    private Short type;
 
-    @Column(name = "sku", nullable = false, length = 100)
-    private String sku;
+//    @Column(name = "sku", nullable = false, length = 100)
+//    private String sku;
 
     @Column(name = "price", nullable = false)
     private Float price;

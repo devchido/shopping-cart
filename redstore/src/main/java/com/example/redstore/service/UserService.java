@@ -7,8 +7,6 @@ import com.example.redstore.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,15 +25,24 @@ public class UserService {
         return dtos;}
 
     // Create new user
+    @Transactional
     public void create(UserDto dto) {
         // get tất cả các id đã có
-        Optional<User> userOptional = userRepository.findById(String.valueOf(dto.getId()));
+//        Optional<User> userOptionalId = userRepository.findById(String.valueOf(dto.getId()));
         // Nếu id nhập vào đã có thì thông báo đã có id và hủy sự sự kiện create
-        if (userOptional.isPresent()){
-            throw new RuntimeException("Đã có id :" + dto.getId());
+//        if (userOptionalId.isPresent()){
+//            throw new RuntimeException("Đã có id :" + dto.getId());
+//        };
+        Optional<User> userOptionalmobile = userRepository.findByMobile(dto.getMobile());
+        if (userOptionalmobile.isPresent()){
+            throw new RuntimeException("Mobile: " + dto.getMobile() + " đã được sử dụng.");
         };
-        User sinhVien =  userMapper.toEntity(dto);
-        userRepository.save(sinhVien);
+        Optional<User> userOptionalemail = userRepository.findByEmail(dto.getEmail());
+        if (userOptionalemail.isPresent()){
+            throw new RuntimeException("Email:" + dto.getEmail() + "đã được sử dụng.");
+        };
+        User entity =  userMapper.toEntity(dto);
+        userRepository.save(entity);
         System.out.println("Thực thi create");
     }
 
@@ -53,5 +60,11 @@ public class UserService {
     public void delete(Long id) {
         userRepository.deleteById(String.valueOf(id));
         System.out.println("Thực thi delete");
+    }
+    // get all
+    public List<UserDto> findAll (){
+        List<User> entity =userRepository.findAll();
+        List<UserDto> dtos = userMapper.toDo(entity);
+        return dtos;
     }
 }

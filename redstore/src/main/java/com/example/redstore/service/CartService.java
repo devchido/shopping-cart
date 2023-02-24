@@ -34,6 +34,19 @@ public class CartService {
         Cart entity =  cartMapper.toEntity(dto);
         User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
         entity.setUser(userId);
+        // Set first name
+        User userFirstName = userRepository.findByFirstName(dto.getFirstName()).orElse(null);
+        entity.setFirstName(String.valueOf(userFirstName));
+        //Set Last Name
+        User userLastName = userRepository.findByLastName(dto.getLastName()).orElse(null);
+        entity.setLastName(String.valueOf(userLastName));
+        // Set Mobile
+        User userMobile = userRepository.findByMobile(dto.getMobile()).orElse(null);
+        entity.setMobile(String.valueOf(userMobile));
+        // Set Email
+        User userEmail = userRepository.findByEmail(dto.getEmail()).orElse(null);
+        entity.setEmail(String.valueOf(userEmail));
+        // Set create at
         entity.setCreatedAt(Instant.now());
         cartRepository.save(entity);
         System.out.println("Thực thi create");
@@ -44,6 +57,8 @@ public class CartService {
     public void edit(Long id, CartDto dto){
         Cart entity = cartMapper.toEntity(dto);
         entity.setId(id);
+
+        // Set update at
         entity.setUpdatedAt(Instant.now());
         cartRepository.save(entity);
 

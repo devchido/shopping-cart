@@ -10,7 +10,11 @@ import java.time.Instant;
 public class CartItemDto  {
     private Long id;
     private ProductDto product;
+    // Biến ảo nhận id của product
+    private Long productId;
     private CartDto cart;
+    // Biến ảo nhận id của cart
+    private Long cartId;
     private String sku;
     private Float price;
     private Float discount;

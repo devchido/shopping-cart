@@ -16,17 +16,13 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
         CartDto dto = new CartDto();
         dto.setId(entity.getId());
         dto.setUser(userMapper.toDo(entity.getUser()));
-        dto.setSessionId(entity.getSessionId());
-//        dto.setToken(entity.getToken());
+//        dto.setSessionId(entity.getSessionId());
         dto.setStatus(entity.getStatus());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setMobile(entity.getMobile());
         dto.setEmail(entity.getEmail());
         dto.setLine1(entity.getLine1());
-//        dto.setLine2(entity.getLine2());
-//        dto.setWard(entity.getWard());
-//        dto.setDistrict(entity.getDistrict());
         dto.setCity(entity.getCity());
         dto.setCountry(entity.getCountry());
         dto.setCreatedAt(entity.getCreatedAt());
@@ -42,12 +38,12 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
 
         // lấy kết quả từ biến ảo userId
 //        entity.setUser(userMapper.toEntity(dto.getUser()));
-        entity.setSessionId(dto.getSessionId());
+//        entity.setSessionId(dto.getSessionId());
         entity.setStatus(dto.getStatus());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setMobile(dto.getMobile());
-        entity.setEmail(dto.getEmail());
+//        entity.setFirstName(dto.getFirstName());
+//        entity.setLastName(dto.getLastName());
+//        entity.setMobile(dto.getMobile());
+//        entity.setEmail(dto.getEmail());
         entity.setLine1(dto.getLine1());
         entity.setCity(dto.getCity());
         entity.setCountry(dto.getCountry());
@@ -66,7 +62,6 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
         });
         return dtos;
     }
-
     @Override
     public List<Cart> toEntity(List<CartDto> d) {
         return null;

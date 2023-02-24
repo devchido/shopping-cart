@@ -13,7 +13,7 @@ public class CartDto {
     private Long id;
     private UserDto user;
     private Long userId;
-    private String sessionId;
+//    private String sessionId;
 //    private String token;
     private Short status;
     private String firstName;

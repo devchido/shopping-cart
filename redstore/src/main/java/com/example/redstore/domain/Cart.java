@@ -17,8 +17,8 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "session_id", nullable = false, length = 100)
-    private String sessionId;
+//    @Column(name = "session_id", nullable = false, length = 100)
+//    private String sessionId;
 
 //    @Column(name = "token", nullable = false, length = 100)
 //    private String token;

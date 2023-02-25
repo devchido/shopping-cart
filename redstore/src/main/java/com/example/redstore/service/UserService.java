@@ -5,6 +5,8 @@ import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,5 +68,10 @@ public class UserService {
         List<User> entity =userRepository.findAll();
         List<UserDto> dtos = userMapper.toDo(entity);
         return dtos;
+    }
+
+    @Transactional
+    public Page<UserDto> findAllPage(Pageable pageable){
+        return userRepository.findAll(pageable).map(userMapper::toDo);
     }
 }

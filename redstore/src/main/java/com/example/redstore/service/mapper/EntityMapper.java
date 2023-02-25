@@ -1,5 +1,7 @@
 package com.example.redstore.service.mapper;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface EntityMapper<D,E>{
@@ -7,4 +9,5 @@ public interface EntityMapper<D,E>{
     E toEntity(D d);
     List<D> toDo(List<E> e);
     List<E> toEntity(List<D> d);
+
 }

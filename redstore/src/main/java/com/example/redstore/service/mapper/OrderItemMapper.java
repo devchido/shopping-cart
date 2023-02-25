@@ -33,8 +33,8 @@ public class OrderItemMapper implements EntityMapper<OrderItemDto, OrderItem>{
     public OrderItem toEntity(OrderItemDto dto) {
         OrderItem entity = new OrderItem();
         entity.setId(dto.getId());
-        entity.setProduct(productMapper.toEntity(dto.getProduct()));
-        entity.setOrder(orderMapper.toEntity(dto.getOrder()));
+//        entity.setProduct(productMapper.toEntity(dto.getProduct()));
+//        entity.setOrder(orderMapper.toEntity(dto.getOrder()));
         entity.setSku(dto.getSku());
         entity.setPrice(dto.getPrice());
         entity.setDiscount(dto.getDiscount());

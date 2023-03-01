@@ -1,5 +1,6 @@
 package com.example.redstore.resources;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.UserService;
@@ -74,6 +75,16 @@ public class UserResources {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/info")
+    public UserDto getUserInformation() {
+        UserDto result = new UserDto();
+        result.setId(SecurityUtils.getPrincipal().getId());
+        result.setFirstName(SecurityUtils.getPrincipal().getFirstName());
+        result.setLastName(SecurityUtils.getPrincipal().getLastName());
+        result.setMobile(SecurityUtils.getPrincipal().getMobile());
+        result.setEmail(SecurityUtils.getPrincipal().getEmail());
+        return result;
+    }
 
     // Page: Phân trang
 //    Pageable pageable = PageRequest.of(1, 10);

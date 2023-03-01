@@ -1,13 +1,27 @@
 package com.example.redstore.domain;
 
+import com.example.redstore.token.Token;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -25,17 +39,17 @@ public class User {
     @Column(name = "email", length = 50)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 32)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "admin", nullable = false)
+    @Column(name = "admin")
     private Boolean admin = false;
 
-    @Column(name = "vendor", nullable = false)
+    @Column(name = "vendor")
     private Boolean vendor = false;
 
-    @Column(name = "registered_at", nullable = false)
-    private Instant registeredAt;
+    @Column(name = "registered_at")
+    private Instant registeredAt ;
 
     @Column(name = "last_login")
     private Instant lastLogin;
@@ -47,6 +61,44 @@ public class User {
     @Column(name = "profile")
     private String profile;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

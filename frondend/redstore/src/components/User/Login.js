@@ -1,19 +1,17 @@
 import React, { Component } from "react";
 import Profile from "./Profile";
-
-
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
+            email: "",
             password: "",
             isLogin: localStorage.getItem("token") != null,
         };
-    };
-
-    
+    }
 
     setParams = (even) => {
         this.setState({ [even.target.name]: even.target.value });
@@ -24,7 +22,7 @@ export default class Login extends Component {
         myHeaders.append("Content-Type", "application/json");
 
         var raw = JSON.stringify({
-            email: this.state.username,
+            email: this.state.email,
             password: this.state.password,
         });
 
@@ -38,48 +36,42 @@ export default class Login extends Component {
         fetch("/api/v1/auth/authenticate", requestOptions)
             .then((response) => {
                 console.log(response);
-                if (response.ok) {
-                    
+                if(response.ok){
                     return response.json();
                 }
-                throw Error(response.status);
-                // response.text()
+                throw Error(response.status)
             })
             .then((result) => {
                 console.log(result);
                 localStorage.setItem("token", result.token);
-                // alert("Successfully");
-                this.setState({isLogin:true});
+                console.log("true");
+                this.setState({isLogin: true});
+                <Link to={"/"}/>
+                
             })
             .catch((error) => {
-                console.log("error", error);
-                alert("Username, password are wrong");
+                console.log("error", error)
+                alert("Email, password are wrong");
             });
     };
-    
-    onLogoutSuccess = () => {
-        this.setState({isLogin:false});
-    }
+
     
 
     render() {
         return (
-            <div>{this.state.isLogin ?
-                <Profile key={this.state.isLogin} onLogoutSuccess={this.onLogoutSuccess} /> :
-                
+            
+            <div>
+
                     <form id="loginForm">
-                        <input type="text" name="username" placeholder="Username" onChange={this.setParams} />
+                        <input type="text" name="email" placeholder="Email" onChange={this.setParams} />
                         <input type="password" name="password" placeholder="Password" onChange={this.setParams} />
                         <button className="btn" type="button" onClick={this.login}>
                             login
                         </button>
                         {/* <a href="">forgot password</a> */}
                     </form>
-                
-                }
+
             </div>
         );
     }
 }
-
-

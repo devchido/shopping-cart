@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+// import { CommonActions } from '@react-navigation/native';
 
 class Profile extends Component {
     constructor(props) {
@@ -14,10 +15,7 @@ class Profile extends Component {
 
     loadDataProfile = () => {
         var myHeaders = new Headers();
-        myHeaders.append(
-            "Authorization",
-            "Bearer " + localStorage.getItem("token")
-        );
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
         var requestOptions = {
             method: "GET",
@@ -29,38 +27,45 @@ class Profile extends Component {
             .then((response) => {
                 if (response.ok) {
                     return response.json();
-                } 
+                }
                 throw new Error(response.status);
             })
             .then((result) => {
-                console.log(result)
-                this.setState({user: result})
+                console.log(result);
+                this.setState({ user: result });
             })
             .catch((error) => {
-                
                 console.log("error", error);
+                localStorage.setItem("token", "")
                 this.logout();
             });
     };
 
-
     logout = () => {
         localStorage.removeItem("token");
-        // alert("Logout successful");
         this.props.onLogoutSuccess();
     };
 
     render() {
         return (
-            <div>
-                <div>
-                    Name: {this.state.user.firstName} {this.state.user.lastName}
+            <>
+                <div className="account-page"></div>
+                <div className="container">
+                    <div className="row">
+                        <div className="">
+                            <span>
+                                Name: {this.state.user.firstName} {this.state.user.lastName}
+                            </span>
+                            <br/>
+                            <span>email: {this.state.user.email}</span>
+                            <br/>
+                            <button type="button" onClick={this.logout}>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div>email: {this.state.user.email}</div>
-                <button type="button" onClick={this.logout}>
-                    Logout
-                </button>
-            </div>
+            </>
         );
     }
 }

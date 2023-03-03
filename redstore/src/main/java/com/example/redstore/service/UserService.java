@@ -27,6 +27,7 @@ public class UserService {
         return dtos;}
 
     // Create new user
+    /*
     @Transactional
     public void create(UserDto dto) {
         // get tất cả các id đã có
@@ -47,6 +48,8 @@ public class UserService {
         userRepository.save(entity);
         System.out.println("Thực thi create");
     }
+    */
+
 
     // Edit user
     @Transactional
@@ -54,6 +57,7 @@ public class UserService {
         User user = userMapper.toEntity(dto);
         user.setId(id);
         userRepository.save(user);
+
         System.out.println("Thực thi edit");
     }
 

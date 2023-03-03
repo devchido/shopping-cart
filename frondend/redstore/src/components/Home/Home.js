@@ -1,35 +1,30 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import Banner from "../layouts/Banner";
 
-import { getAllProducts } from '../../redux/actions/product.action';
-
-import Brands from './Brands'
-import FeatureProducts from './FeatureProducts'
-import LatestProducts from './LatestProducts'
-import Offer from './Offer'
-import Testimonials from './Testimonials'
+import Brands from "./Brands";
+import FeaturedCategories from "./FeaturedCategories";
+import Offer from "./Offer";
+import SmallContainer from "./SmallContainer";
+import Testimonials from "./Testimonials";
 
 class Home extends Component {
-
     render() {
-        const { products, loading } = this.props.product;
-        const { cart } = this.props;
-
-
         return (
-            <div>
-                <div className="small-container">
-                    <h2 className="title">Featured Products</h2>
-                    <FeatureProducts products={products} loading={loading} cart={cart} />
-                    {/* <h2 className="title">Latest Products</h2>
-                    <LatestProducts /> */}
-                </div>
+            <>
+                <Banner />
+                {/* featured categories */}
+                <FeaturedCategories />
+                {/* featured products */}
+                <SmallContainer />
+                {/* offer */}
                 <Offer />
+                {/* testimonial */}
                 <Testimonials />
+                {/* brands */}
+
                 <Brands />
-            </div>
-        )
+            </>
+        );
     }
 }
 export default Home;

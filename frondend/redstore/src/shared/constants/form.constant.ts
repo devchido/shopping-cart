@@ -1,0 +1,1 @@
+export const MIN_INPUT_SEARCH_ASYNC = 3;

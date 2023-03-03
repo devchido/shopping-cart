@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addToCartMain, removeFromCartMain } from '../../redux/actions/cart.action';
 import { getProductByProductNumber } from '../../redux/actions/product.action';
-import Spinner from '../Common/Spinner';
-import FeatureProducts from '../Home/FeatureProducts';
+import Spinner from '../../components/Common/Spinner';
+import FeatureProducts from '../../components/Home/FeatureProducts';
 
 class SingleProduct extends Component {
     constructor(props) {

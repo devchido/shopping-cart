@@ -20,7 +20,8 @@ public class UserDto {
     private String password;
     private Boolean admin;
     private Boolean vendor;
-    private Instant registeredAt;
+    private Instant createAt;
+    private String photos;
     private Instant lastLogin;
     private String intro;
     private String profile;

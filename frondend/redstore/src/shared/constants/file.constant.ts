@@ -1,0 +1,1 @@
+export const TYPE_BLOB = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,';

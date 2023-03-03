@@ -33,10 +33,10 @@ public class User implements UserDetails {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Column(name = "mobile", length = 15)
+    @Column(name = "mobile", length = 15, unique = true)
     private String mobile;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "email", length = 50, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -48,14 +48,17 @@ public class User implements UserDetails {
     @Column(name = "vendor")
     private Boolean vendor = false;
 
-    @Column(name = "registered_at")
-    private Instant registeredAt ;
+    @Column(name = "create_at")
+    private Instant createAt;
 
     @Column(name = "last_login")
     private Instant lastLogin;
 
     @Column(name = "intro")
     private String intro;
+
+    @Column(name = "photos")
+    private String photos;
 
     @Lob
     @Column(name = "profile")
@@ -77,6 +80,7 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
+
     @Override
     public String getPassword() {
         return password;

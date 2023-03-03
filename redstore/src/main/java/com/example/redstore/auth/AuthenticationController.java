@@ -13,6 +13,7 @@ public class AuthenticationController {
 
   private final AuthenticationService service;
 
+  // http://localhost:8080/api/v1/auth/register
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
       @RequestBody UserDto request
@@ -24,6 +25,12 @@ public class AuthenticationController {
       @RequestBody AuthenticationRequest request
   ) {
     return ResponseEntity.ok(service.authenticate(request));
+  }
+  @PutMapping("/updateUser/{id}")
+  public ResponseEntity<AuthenticationResponse> updateUser(
+          @RequestBody UserDto dto, @PathVariable("id") Long id
+  ){
+    return ResponseEntity.ok(service.updateUser(dto, id));
   }
 
 

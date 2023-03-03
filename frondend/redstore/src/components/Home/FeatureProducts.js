@@ -9,75 +9,75 @@ import ProductItem from '../Products/products/ProductItem';
 
 class FeatureProducts extends Component {
     render() {
-        const setting = {
-            slidesToShow: 4,
-            slidesToScroll: 1,
-            autoplay: true,
-            autoplaySpeed: 2200,
-            responsive: [
-                {
-                    breakpoint: 1024,
-                    settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 1,
-                        infinite: true,
-                        dots: true
-                    }
-                },
-                {
-                    breakpoint: 600,
-                    settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 1
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1
-                    }
-                }
-            ]
-        }
-
-        const { products, loading } = this.props;
-        const { cartItem } = this.props.cart;
-        let productItem;
-        let addedProducts = [];
-
-        if (cartItem) {
-            cartItem.map(item => {
-                addedProducts.push(item.productNumber);
-            })
-        }
-
-        if (products === null || loading) {
-            productItem = <Spinner />
-        } else {
-            if (products) {
-                if (products.length > 0) {
-                    productItem = products.map(product => (
-                        // <ProductItemmew key={product._id} product={product} />
-                        <ProductItem key={product._id} product={product} added={addedProducts} />
-                        // console.log(product._id);
-                    ))
-                }
-            } else {
-                productItem = <h4>No product found...</h4>
-            }
-        }
-
-
+        
 
         return (
-            <div>
-                {/* <div id="slick-item" class="row "> */}
-                <Slider {...setting}>
-                    {productItem}
-                </Slider>
-                {/* </div> */}
+            <div className="row">
+        <div className="col-4">
+            <a href="product-details.html">
+                <img src="./assets/images/product-1.jpg" alt="" />
+            </a>
+            <a href="product-details.html">
+                <h4>Red Printed T-Shirt</h4>
+            </a>
+            <div className="rating">
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star-o" />
             </div>
+            <p>$50.00</p>
+        </div>
+        <div className="col-4">
+            <a href="product-details.html">
+                <img src="./assets/images/product-2.jpg" alt="" />
+            </a>
+            <a href="product-details.html">
+                <h4>Red Printed T-Shirt</h4>
+            </a>
+            <div className="rating">
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star-half-o" />
+                <i className="fa fa-star-o" />
+            </div>
+            <p>$50.00</p>
+        </div>
+        <div className="col-4">
+            <a href="product-details.html">
+                <img src="./assets/images/product-3.jpg" alt="" />
+            </a>
+            <a href="product-details.html">
+                <h4>Red Printed T-Shirt</h4>
+            </a>
+            <div className="rating">
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star-half-o" />
+            </div>
+            <p>$50.00</p>
+        </div>
+        <div className="col-4">
+            <a href="product-details.html">
+                <img src="./assets/images/product-4.jpg" alt="" />
+            </a>
+            <a href="product-details.html">
+                <h4>Red Printed T-Shirt</h4>
+            </a>
+            <div className="rating">
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star-o" />
+            </div>
+            <p>$50.00</p>
+        </div>
+    </div>
         )
     }
 }

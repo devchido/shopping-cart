@@ -1,21 +1,86 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import Profile from "./Profile";
 
 class Register extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: "",
+            lastName: "",
+            email: "",
+            mobile: "",
+            password: "",
+            repassword: "",
+        };
+    }
+
+    setParams = (even) => {
+        this.setState({ [even.target.name]: even.target.value });
+    };
+
+    register = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            email: this.state.email,
+            mobile: this.state.mobile,
+            password: this.state.password,
+        });
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+        };
+
+        fetch("/api/v1/auth/register", requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                console.log(result);
+                localStorage.setItem("token", result.token);
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("Failed");
+            });
+    };
+
+    checkRegister = () => {
+        if (this.state.password != this.state.repassword) {
+            alert("You did not enter the same new password twice. Please re-enter your password.");
+            return false;
+        } else {
+            this.register();
+            return true;
+        }
+    };
+
     render() {
         return (
-            
             <div>
                 <form action="" id="regForm">
-                    <input type="text" placeholder="Username" />
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <input type="password" placeholder="Confirm Password" />
-                    <button class="btn" type="submit">Register</button>
-
+                    <input type="text" placeholder="First name" name="firstName" onChange={this.setParams} />
+                    <input type="text" placeholder="Last name" name="lastName" onChange={this.setParams} />
+                    <input type="email" placeholder="Email" name="email" onChange={this.setParams} />
+                    <input type="mobile" placeholder="Mobile" name="mobile" onChange={this.setParams} />
+                    <input type="password" placeholder="Password" name="password" onChange={this.setParams} />
+                    <input type="password" placeholder="Confirm Password" name="repassword" onChange={this.setParams} />
+                    <button class="btn" type="button" onClick={this.checkRegister}>
+                        Register
+                    </button>
                 </form>
             </div>
-        )
+        );
     }
 }
 
-export default Register
+export default Register;

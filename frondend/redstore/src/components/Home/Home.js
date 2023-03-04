@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Banner from "../layouts/Banner";
+import Navbar from "../layouts/Navbar";
 
 import Brands from "./Brands";
 import FeaturedCategories from "./FeaturedCategories";
@@ -11,6 +12,7 @@ class Home extends Component {
     render() {
         return (
             <>
+            {/* <Navbar /> */}
                 <Banner />
                 {/* featured categories */}
                 <FeaturedCategories />

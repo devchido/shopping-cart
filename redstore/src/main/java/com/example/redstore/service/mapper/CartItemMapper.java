@@ -20,7 +20,6 @@ public class CartItemMapper implements EntityMapper<CartItemDto, CartItem> {
         dto.setId(entity.getId());
         dto.setProduct(productMapper.toDo(entity.getProduct()));
         dto.setCart(cartMapper.toDo(entity.getCart()));
-        dto.setSku(entity.getSku());
         dto.setPrice(entity.getPrice());
         dto.setDiscount(entity.getDiscount());
         dto.setQuantity(entity.getQuantity());
@@ -35,13 +34,9 @@ public class CartItemMapper implements EntityMapper<CartItemDto, CartItem> {
     public CartItem toEntity(CartItemDto dto) {
         CartItem entity = new CartItem();
         entity.setId(dto.getId());
-//        entity.setProduct(productMapper.toEntity(dto.getProduct()));
-//        entity.setCart(cartMapper.toEntity(dto.getCart()));
-        entity.setSku(dto.getSku());
         entity.setPrice(dto.getPrice());
         entity.setDiscount(dto.getDiscount());
         entity.setQuantity(dto.getQuantity());
-//        entity.setActive(dto.getActive());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
         entity.setContent(dto.getContent());

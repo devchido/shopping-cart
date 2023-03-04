@@ -21,9 +21,6 @@ public class Transaction {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(name = "code", nullable = false, length = 100)
-    private String code;
-
     @Column(name = "type", nullable = false)
     private Short type;
 
@@ -42,7 +39,5 @@ public class Transaction {
     @Lob
     @Column(name = "content")
     private String content;
-
-
 
 }

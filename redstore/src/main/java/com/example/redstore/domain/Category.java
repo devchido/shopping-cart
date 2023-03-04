@@ -15,9 +15,6 @@ public class Category {
     @Column(name = "title", nullable = false, length = 75)
     private String title;
 
-    @Column(name = "meta_title", length = 100)
-    private String metaTitle;
-
     @Column(name = "slug", nullable = false, length = 100)
     private String slug;
 

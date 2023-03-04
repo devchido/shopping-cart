@@ -11,58 +11,26 @@ class ProductItem extends Component {
 
 
     render() {
-        const { product } = this.props;
-        const { added } = this.props;
-        let addRemoveBtn;
-
-        addRemoveBtn = added.includes(product.productNumber);
-
-        //DISCOUNT CALCULATION
-        let discount_price;
-        discount_price = ((product.price * product.discount) / 100);
-        discount_price = product.price - discount_price;
-
-        //ADD TO CART
-        const addToCart = (e, productNumber) => {
-            e.preventDefault();
-            this.props.addToCartMain(productNumber);
-        }
-
-        //REOMOVE FROM CART
-        const removeFromCart = (e, productNumber) => {
-            e.preventDefault();
-            this.props.removeFromCartMain(productNumber);
-        }
+    
 
         return (
-            <div className="col-4" >
-                <Link to={`/single_product/${product.productNumber}`}>
-                    <img src={product.productImages[0]} alt="" />
-                    <h4>{product.productName}</h4>
-                    <div className="rating">
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star-o"></i>
-                        <i className="fa fa-star-o"></i>
+            <div class="col-4">
+                    <a href="product-details.html"><img src="./assets/images/product-1.jpg" alt="" /></a>
+                    <a href="product-details.html"><h4>Red Printed T-Shirt</h4></a>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
                     </div>
-                    <p>Rs.{discount_price} <del>Rs. {product.price} /-</del></p>
-                </Link>
-                {addRemoveBtn ?
-                    (<a href="" className="btn-rm" value={product._id} onClick={(e) => removeFromCart(e, product.productNumber)}>Added to cart</a>) :
-                    <a href="" className="btn" value={product._id} onClick={(e) => addToCart(e, product.productNumber)}>Add To Cart</a>
-                }
-            </div>
+                    <p>$50.00</p>
+                </div>
 
         )
     }
 }
 
-ProductItem.propTypes = {
-    addToCartMain: PropTypes.func.isRequired,
-    removeFromCartMain: PropTypes.func.isRequired,
-    getProductByProductNumber: PropTypes.func.isRequired,
-    product: PropTypes.object.isRequired
-}
 
-export default connect(null, { addToCartMain, removeFromCartMain, getProductByProductNumber })(ProductItem);
+
+export default ProductItem;

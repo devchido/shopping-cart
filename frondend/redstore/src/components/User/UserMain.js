@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import Login from "./Login";
 import Register from "./Register";
-import { Link } from "react-router-dom";
-import SideMenu from "../layouts/SideMenu";
-import Profile from "./Profile";
 
 class UserMain extends Component {
     constructor(props) {
@@ -36,7 +33,6 @@ class UserMain extends Component {
                             </div>
                             <div class="col-2">
                                 <div class="form-container ">
-                                    {}
                                     <div class="form-btn ">
                                         <span id="loginTab" onClick={loginForm}>
                                             Login

@@ -6,35 +6,46 @@ CREATE TABLE `shop`.`user` (
   `last_name` VARCHAR(50) NULL DEFAULT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `admin` TINYINT(1) NOT NULL DEFAULT 0,
-  `vendor` TINYINT(1) NOT NULL DEFAULT 0,
-  `registered_at` DATETIME NOT NULL,
-  `last_login` DATETIME NULL DEFAULT NULL,
-  `intro` TINYTEXT NULL DEFAULT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `create_at` DATETIME NULL DEFAULT NULL,
+  `intro` VARCHAR(255) NULL DEFAULT NULL,
+  `photos` VARCHAR(255) NULL DEFAULT NULL,
   `profile` TEXT NULL DEFAULT NULL,
+  `role` VARCHAR(255), 
   PRIMARY KEY (`id`),
   UNIQUE INDEX `uq_mobile` (`mobile` ASC),
-  UNIQUE INDEX `uq_email` (`email` ASC) );
-  
+  UNIQUE INDEX `uq_email` (`email` ASC) 
+);
+create table `shop`.`token` (
+	`id` integer not null, 
+    `expired` bit not null, 
+    `revoked` bit not null, 
+    `token` varchar(255), 
+    `token_type` varchar(255), 
+    `user_id` bigint, 
+    UNIQUE INDEX `uq_token` (`token` ASC),
+    primary key (id),CONSTRAINT `fk_token_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `shop`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+create table `shop`.`token_seq` (next_val bigint);
+insert into `shop`.`token_seq` values ( 1 );
+
 -- Bảng product
 CREATE TABLE `shop`.`product` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT NOT NULL,
   `title` VARCHAR(75) NOT NULL,
- --  `meta_title` VARCHAR(100) NULL, 
   `slug` VARCHAR(100) NOT NULL,
   `summary` TINYTEXT NULL,
---   `type` SMALLINT(6) NOT NULL DEFAULT 0,
---   `sku` VARCHAR(100) NOT NULL,
   `price` FLOAT NOT NULL DEFAULT 0,
   `discount` FLOAT NOT NULL DEFAULT 0,
+  `photos` VARCHAR(255) NULL DEFAULT NULL, 
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
-  `shop` TINYINT(1) NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NULL DEFAULT NULL,
-  `published_at` DATETIME NULL DEFAULT NULL,
-  `starts_at` DATETIME NULL DEFAULT NULL,
   `ends_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -49,7 +60,6 @@ CREATE TABLE `shop`.`product` (
 CREATE TABLE `shop`.`category` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(75) NOT NULL,
-  `meta_title` VARCHAR(100) NULL DEFAULT NULL,
   `slug` VARCHAR(100) NOT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`));
@@ -75,17 +85,12 @@ CREATE TABLE `shop`.`product_category` (
 CREATE TABLE `shop`.`cart` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT NULL DEFAULT NULL,
---   `session_id` VARCHAR(100) NOT NULL,
---   `token` VARCHAR(100) NOT NULL, 
   `status` SMALLINT(6) NOT NULL DEFAULT 0,
   `first_name` VARCHAR(50) NULL DEFAULT NULL,
   `last_name` VARCHAR(50) NULL DEFAULT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
   `line1` VARCHAR(50) NULL DEFAULT NULL,
---   `line2` VARCHAR(50) NULL DEFAULT NULL,
---   `ward` VARCHAR(50) NULL DEFAULT NULL,
---   `district` VARCHAR(50) NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
   `country` VARCHAR(50) NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL,
@@ -103,7 +108,6 @@ CREATE TABLE `shop`.`cart_item` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `product_id` BIGINT NOT NULL,
   `cart_id` BIGINT NOT NULL,
-  `sku` VARCHAR(100) NOT NULL,
   `price` FLOAT NOT NULL DEFAULT 0,
   `discount` FLOAT NOT NULL DEFAULT 0,
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
@@ -128,26 +132,16 @@ ADD CONSTRAINT `fk_cart_item_cart`
 CREATE TABLE `shop`.`order` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT NULL DEFAULT NULL,
---   `session_id` VARCHAR(100) NOT NULL,
   `cart_id` BIGINT NULL DEFAULT NULL,
---   `token` VARCHAR(100) NOT NULL,
   `status` SMALLINT(6) NOT NULL DEFAULT 0,
   `sub_total` FLOAT NOT NULL DEFAULT 0,
   `item_discount` FLOAT NOT NULL DEFAULT 0,
---   `tax` FLOAT NOT NULL DEFAULT 0,
---   `shipping` FLOAT NOT NULL DEFAULT 0,
   `total` FLOAT NOT NULL DEFAULT 0,
---   `promo` VARCHAR(50) NULL DEFAULT NULL,
---   `discount` FLOAT NOT NULL DEFAULT 0,
---   `grand_total` FLOAT NOT NULL DEFAULT 0,
   `first_name` VARCHAR(50) NULL DEFAULT NULL,
   `last_name` VARCHAR(50) NULL DEFAULT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
   `line1` VARCHAR(50) NULL DEFAULT NULL,
---   `line2` VARCHAR(50) NULL DEFAULT NULL,
---   `ward` VARCHAR(50) NULL DEFAULT NULL,
---   `district` VARCHAR(50) NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
   `country` VARCHAR(50) NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL,
@@ -165,7 +159,6 @@ CREATE TABLE `shop`.`order_item` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `product_id` BIGINT NOT NULL,
   `order_id` BIGINT NOT NULL,
-  `sku` VARCHAR(100) NOT NULL,
   `price` FLOAT NOT NULL DEFAULT 0,
   `discount` FLOAT NOT NULL DEFAULT 0,
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
@@ -190,7 +183,6 @@ CREATE TABLE `shop`.`transaction` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT NOT NULL,
   `order_id` BIGINT NOT NULL,
-  `code` VARCHAR(100) NOT NULL,
   `type` SMALLINT(6) NOT NULL DEFAULT 0,
   `mode` SMALLINT(6) NOT NULL DEFAULT 0,
   `status` SMALLINT(6) NOT NULL DEFAULT 0,

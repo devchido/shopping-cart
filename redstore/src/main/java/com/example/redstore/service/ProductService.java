@@ -8,6 +8,9 @@ import com.example.redstore.service.dto.ProductDto;
 import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,5 +75,20 @@ public class ProductService {
         List<Product> entity = productRepository.findAll();
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
+    }
+
+//    public List<ProductDto> filter(
+//                                   @Param("user_id") String user_id,
+//                                   @Param("title") String title,
+//                                   @Param("summary") String summary,
+//                                   @Param("price") String price,
+//                                   @Param("discount") String discount){
+//        List<Product> entity = productRepository.filter( user_id, title, summary, price, discount);
+//        List<ProductDto> dtos = productMapper.toDo(entity);
+//        return dtos;
+//    }
+    @Transactional
+    public Page<ProductDto> findAllPage(Pageable pageable){
+        return productRepository.findAll(pageable).map(productMapper::toDo);
     }
 }

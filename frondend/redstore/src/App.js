@@ -1,24 +1,22 @@
 import React, { Component, Fragment } from "react";
 import { BrowserRouter, BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import './App.css';
-import axios from "axios";
 //Redux
 import { Provider } from "react-redux";
 import { store, persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 
-import home from "./pages/home";
 import Navbar from "./components/layouts/Navbar";
 import Products from "./components/Products/Products";
 import Footer from "./components/layouts/Footer";
 import ShoppingCart from "./components/Shopping_cart/ShoppingCart";
 import SingleProduct from "./components/Products/SingleProduct";
-import UserMain from "./components/User/UserMain";
 import Address from "./components/User/Address";
-import NotFoundRoute from "./components/Common/NotFoundRoute";
 import NotFound from "./components/Not-Found/NotFound";
 import Home from "./pages/home";
 import Profile from "./components/User/Profile";
+import Login from "./components/User/Login";
+import Register from "./components/User/Register";
 
 function App() {
     return (
@@ -32,7 +30,8 @@ function App() {
                             <Route path="/products" element={<Products />} />
                             <Route path="/shopping_cart" element={<ShoppingCart />} />
                             <Route path="/single_product/:id" element={<SingleProduct />} />
-                            <Route path="/login" element={<UserMain />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
                             <Route path="/user_address" element={<Address />} />
                             <Route path="/not-found" element={<NotFound />} />
                             <Route path="/profile" element={<Profile />} />
@@ -45,3 +44,4 @@ function App() {
     );
 }
 export default App;
+

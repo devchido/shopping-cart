@@ -10,6 +10,7 @@ public class ProductDto {
     private Long id;
     private UserDto user;
     private String title;
+    private String photos;
     //    private String metaTitle;
     private String slug;
     private String summary;
@@ -21,8 +22,8 @@ public class ProductDto {
     private Boolean shop;
     private Instant createdAt;
     private Instant updatedAt;
-    private Instant publishedAt;
-    private Instant startsAt;
+//    private Instant publishedAt;
+//    private Instant startsAt;
     private Instant endsAt;
     private String content;
 }

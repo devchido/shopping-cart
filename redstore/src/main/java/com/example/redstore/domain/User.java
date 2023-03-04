@@ -42,17 +42,8 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "admin")
-    private Boolean admin = false;
-
-    @Column(name = "vendor")
-    private Boolean vendor = false;
-
     @Column(name = "create_at")
     private Instant createAt;
-
-    @Column(name = "last_login")
-    private Instant lastLogin;
 
     @Column(name = "intro")
     private String intro;

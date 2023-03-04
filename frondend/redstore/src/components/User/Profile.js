@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "../layouts/Navbar";
 // import { CommonActions } from '@react-navigation/native';
 
 class Profile extends Component {
@@ -8,6 +10,7 @@ class Profile extends Component {
             user: {},
         };
     }
+    
 
     componentDidMount() {
         this.loadDataProfile();
@@ -33,6 +36,9 @@ class Profile extends Component {
             .then((result) => {
                 console.log(result);
                 this.setState({ user: result });
+                
+                
+                
             })
             .catch((error) => {
                 console.log("error", error);
@@ -41,16 +47,24 @@ class Profile extends Component {
             });
     };
 
+    
+
     logout = () => {
         localStorage.removeItem("token");
-        this.props.onLogoutSuccess();
+        // window.location.reload();
+        window.location = "/"
+        
+
     };
 
     render() {
+        
         return (
             <>
-                <div className="account-page"></div>
-                <div className="container">
+            {/* <Navbar /> */}
+                <div className="account-page">
+                    
+                <div className="container ">
                     <div className="row">
                         <div className="">
                             <span>
@@ -59,11 +73,12 @@ class Profile extends Component {
                             <br/>
                             <span>email: {this.state.user.email}</span>
                             <br/>
-                            <button type="button" onClick={this.logout}>
-                                Logout
+                            <button className="btn" type="button" onClick={this.logout}>
+                                <Link to={"/"}>Logout</Link>
                             </button>
                         </div>
                     </div>
+                </div>
                 </div>
             </>
         );

@@ -19,17 +19,19 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
 //     Filter by id, user, title, type, sku, price, discount, quantity, shop
     // createdAt, updatedAt ASC DESC
-//    @Query(value = "SELECT * from shop.user as U " +
-//            "         where U.id like concat('%', :id,'%') " +
-//            "            and U.first_name like concat('%',:firstName,'%') " +
-//            "            and U.last_name like concat('%', :lastName ,'%') " +
-//            "            and U.mobile like concat('%', :mobile ,'%') " +
-//            "            and U.email like concat('%', :email ,'%') " +
-//            "         ORDER BY U.first_name, U.last_name ASC;", nativeQuery = true)
-//    List<Product> filter(@Param("id") String id,
-//                      @Param("firstName") String firstName,
-//                      @Param("lastName") String lastName,
-//                      @Param("mobile") String mobile,
-//                      @Param("email") String email);
+//@Query(value = "SELECT P from Product as P " +
+//
+//        "            where P.user. like concat('%',:user,'%') " +
+//        "            and P.title like concat('%', :title ,'%') " +
+//        "            and P.summary like concat('%', :summary ,'%') " +
+//        "            and P.price like concat('%', :price ,'%') " +
+//        "            and P.discount like concat('%', :discount ,'%') " +
+//        "         ORDER BY P.price, P.discount ASC" )
+//List<Product> filter(
+//                  @Param("user_id") String user_id,
+//                  @Param("title") String title,
+//                  @Param("summary") String summary,
+//                  @Param("price") String price,
+//                  @Param("discount") String discount);
 
 }

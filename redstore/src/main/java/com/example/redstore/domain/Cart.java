@@ -17,12 +17,6 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @Column(name = "session_id", nullable = false, length = 100)
-//    private String sessionId;
-
-//    @Column(name = "token", nullable = false, length = 100)
-//    private String token;
-
     @Column(name = "status", nullable = false)
     private Short status;
 
@@ -41,15 +35,6 @@ public class Cart {
     @Column(name = "line1", length = 50)
     private String line1;
 
-//    @Column(name = "line2", length = 50)
-//    private String line2;
-//
-//    @Column(name = "ward", length = 50)
-//    private String ward;
-//
-//    @Column(name = "district", length = 50)
-//    private String district;
-
     @Column(name = "city", length = 50)
     private String city;
 
@@ -65,7 +50,4 @@ public class Cart {
     @Lob
     @Column(name = "content")
     private String content;
-
-
-
 }

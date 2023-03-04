@@ -21,9 +21,6 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(name = "sku", nullable = false, length = 100)
-    private String sku;
-
     @Column(name = "price", nullable = false)
     private Float price;
 
@@ -42,7 +39,5 @@ public class OrderItem {
     @Lob
     @Column(name = "content")
     private String content;
-
-
 
 }

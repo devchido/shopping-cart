@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "../layouts/Navbar";
 import Profile from "./Profile";
 
 class Register extends Component {
@@ -47,6 +49,7 @@ class Register extends Component {
             .then((result) => {
                 console.log(result);
                 localStorage.setItem("token", result.token);
+                window.location = "/";
             })
             .catch((error) => {
                 console.log("error", error);
@@ -66,19 +69,47 @@ class Register extends Component {
 
     render() {
         return (
-            <div>
-                <form action="" id="regForm">
-                    <input type="text" placeholder="First name" name="firstName" onChange={this.setParams} />
-                    <input type="text" placeholder="Last name" name="lastName" onChange={this.setParams} />
-                    <input type="email" placeholder="Email" name="email" onChange={this.setParams} />
-                    <input type="mobile" placeholder="Mobile" name="mobile" onChange={this.setParams} />
-                    <input type="password" placeholder="Password" name="password" onChange={this.setParams} />
-                    <input type="password" placeholder="Confirm Password" name="repassword" onChange={this.setParams} />
-                    <button class="btn" type="button" onClick={this.checkRegister}>
-                        Register
-                    </button>
-                </form>
-            </div>
+            <>
+            {/* <Navbar /> */}
+                <div class="account-page">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-2">
+                                <img
+                                    src="./assets/images/image1.png"
+                                    alt=""
+                                    width="100%"
+                                    className="w3-container w3-center w3-animate-left"
+                                />
+                            </div>
+                            <div class="col-2">
+                                <div class="form-container ">
+                                    <div class="form-btn ">
+                                        <span id="loginTab"><Link to= {"/login"}>Login</Link></span>
+                                        <span id="regTab">Register</span>
+                                    </div>
+                                    <form action="" id="regForm">
+                                        <input type="text" placeholder="First name" name="firstName" onChange={this.setParams} />
+                                        <input type="text" placeholder="Last name" name="lastName" onChange={this.setParams} />
+                                        <input type="email" placeholder="Email" name="email" onChange={this.setParams} />
+                                        <input type="mobile" placeholder="Mobile" name="mobile" onChange={this.setParams} />
+                                        <input type="password" placeholder="Password" name="password" onChange={this.setParams} />
+                                        <input
+                                            type="password"
+                                            placeholder="Confirm Password"
+                                            name="repassword"
+                                            onChange={this.setParams}
+                                        />
+                                        <button class="btn" type="button" onClick={this.checkRegister}>
+                                            Register
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>
         );
     }
 }

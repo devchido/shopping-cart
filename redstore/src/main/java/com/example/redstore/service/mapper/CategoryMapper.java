@@ -13,7 +13,6 @@ public class CategoryMapper implements EntityMapper<CategoryDto, Category>{
         CategoryDto dto = new CategoryDto();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
-        dto.setMetaTitle(entity.getMetaTitle());
         dto.setSlug(entity.getSlug());
         dto.setContent(entity.getContent());
         return dto;
@@ -24,7 +23,6 @@ public class CategoryMapper implements EntityMapper<CategoryDto, Category>{
         Category entity = new Category();
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());
-        entity.setMetaTitle(dto.getMetaTitle());
         entity.setSlug(dto.getSlug());
         entity.setContent(dto.getContent());
         return entity;

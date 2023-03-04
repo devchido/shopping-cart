@@ -21,9 +21,6 @@ public class CartItem {
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @Column(name = "sku", nullable = false, length = 100)
-    private String sku;
-
     @Column(name = "price", nullable = false)
     private Float price;
 
@@ -45,7 +42,5 @@ public class CartItem {
     @Lob
     @Column(name = "content")
     private String content;
-
-
 
 }

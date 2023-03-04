@@ -18,11 +18,8 @@ public class UserDto {
     private String mobile;
     private String email;
     private String password;
-    private Boolean admin;
-    private Boolean vendor;
     private Instant createAt;
     private String photos;
-    private Instant lastLogin;
     private String intro;
     private String profile;
 }

@@ -1,36 +1,47 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { addToCartMain, removeFromCartMain } from '../../../redux/actions/cart.action';
-import { getProductByProductNumber } from '../../../redux/actions/product.action';
-import Spinner from '../../Common/Spinner';
-
-
+import React, { Component } from "react";
 class ProductItem extends Component {
-
+    constructor() {
+        super();
+        this.state = {
+            products: null,
+        };
+    }
+    componentDidMount() {
+        fetch("/product").then((resp) => {
+            resp.json().then((result) => {
+                console.log(result);
+                this.setState({ products: result});
+            });
+        });
+    }
 
     render() {
-    
-
         return (
-            <div class="col-4">
-                    <a href="product-details.html"><img src="./assets/images/product-1.jpg" alt="" /></a>
-                    <a href="product-details.html"><h4>Red Printed T-Shirt</h4></a>
-                    <div class="rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star-o"></i>
-                    </div>
-                    <p>$50.00</p>
-                </div>
-
-        )
+            <>
+                {this.state.products
+                    ? this.state.products.map((item, i) => 
+                          <div class="col-4">
+                              <a href="#">
+                                  <img src="./assets/images/product-1.jpg" alt="" />
+                              </a>
+                              <a href="#">
+                                  <h4>{item.title}</h4>
+                              </a>
+                              <p></p>
+                              {/* <div class="rating">
+                                  <i class="fa fa-star"></i>
+                                  <i class="fa fa-star"></i>
+                                  <i class="fa fa-star"></i>
+                                  <i class="fa fa-star"></i>
+                                  <i class="fa fa-star-o"></i>
+                              </div> */}
+                              <p>{item.price} đ</p>
+                          </div>
+                      )
+                    : null}
+            </>
+        );
     }
 }
-
-
 
 export default ProductItem;

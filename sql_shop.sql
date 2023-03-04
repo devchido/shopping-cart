@@ -1,31 +1,28 @@
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Nguyễn', 'Tú', '0915236452', 'ntu@gmail.com', '123456', '0', '0', '2019-02-01', '2023-01-01', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Nguyễn', 'Công', '0125485691', 'cong@gmail.com', '123456', '0', '0', '2020-05-01', '2023-02-01', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Nguyễn', 'Duy', '0362514852', 'duy@gmail.com', '123456', '0', '0', '2019-04-01', '2023-02-01', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trần ', 'Dũng', '0365214584', 'dung@gmail.com', '123456', '0', '0', '2019-04-01', '2023-02-01', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trần ', 'Hoàng', '0925416325', 'hoang@gmail.com', '123456', '0', '0', '2019-04-01', '2023-02-01', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trần ', 'Tú', '0825416325', 'tutu@gmail.com', '123456', '0', '0', '2019-04-01', '2023-02-01', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Lê', 'Linh', '0847152369', 'linh@gmail.com', '123456', '0', '0', '2019-04-01', '2023-02-01', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Lê', 'Hiền', '0352164852', 'hien@gmail.com', '123456', '0', '0', '2022-01-15', '2023-04-25', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Lê', 'Huyền', '0215364852', 'huyen@gmail.com', '123456', '0', '0', '2019-01-19', '2023-04-25', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Vũ', 'Cường', '0362514875', 'cuong@gmail.com', '123456', '0', '0', '2022-05-15', '2023-04-25', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Vũ', 'Thoa', '0825163425', 'thoa@gmail.com', '123456', '0', '0', '2019-05-25', '2023-04-25', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Vũ', 'Chiến', '0951426325', 'chien@gmail.com', '123456', '0', '0', '2019-05-25', '2023-04-25', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trịnh', 'Vũ', '0987985426', 'vuvu@gmail.com', '123456', '0', '0', '2019-05-25', '2023-04-18', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trịnh', 'Cường', '0325160514', 'tcuong@gmail.com', '123456', '0', '0', '2019-05-25', '2023-04-18', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trịnh', 'Quang', '0625142631', 'quang@gmail.com', '123456', '0', '0', '2020-09-16', '2023-04-18', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Hoàng', 'Linh', '0801526341', 'linh1@gmail.com', '123456', '0', '0', '2020-09-16', '2023-04-18', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Hoàng', 'Yến', '0976548123', 'yentato@gmail.com', '123456', '0', '0', '2020-09-16', '2023-01-19', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Hoàng', 'Cúc', '0351624851', 'cuc@gmail.com', '123456', '0', '0', '2020-09-16', '2023-01-19', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Lý', 'Long', '0315264875', 'longg@gmail.com', '123456', '0', '0', '2020-09-16', '2023-01-19', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Nguyễn', 'Trung', '0984513625', 'trung@gmail.com', '123456', '0', '0', '2023-02-22', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Vũ', 'Thái', '0847516327', 'vthai@gmail.com', '123456', '0', '0', '2023-02-22', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Lương', 'Vinh', '0874628139', 'lvinh@gmail.com', '123456', '0', '0', '2023-02-22', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trần', 'Minh', '0923615482', 'tminh@gmail.com', '123456', '0', '0', '2023-02-22', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Lương', 'Trang', '0985346127', 'ltrnag@gmail.com', '123456', '0', '0', '2021-09-27', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Nguyễn', 'Thiện', '0319274685', 'nthien@gmail.com', '123456', '0', '0', '2021-09-27', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Mai', 'Mạnh', '0926541532', 'mmanh@gmail.com', '123456', '0', '0', '2021-09-27', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Mai', 'Anh', '0954816215', 'anh@gmail.com', '123456', '0', '0', '2021-09-27', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Lý', 'Thủy', '0948527461', 'thu@gmail.com', '123456', '0', '0', '2021-09-27', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Phạm', 'Thúy', '0852163265', 'pthuy@gmail.com', '123456', '0', '0', '2021-09-27', '2023-05-10', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trịnh', 'Đức', '0325148751', 'duc@gmail.com', '123456', '0', '0', '2021-09-27', '2023-04-19', '0');
-INSERT INTO `shop`.`user` (`first_name`, `last_name`, `mobile`, `email`, `password`, `admin`, `vendor`, `registered_at`, `last_login`, `intro`) VALUES ('Trịnh', 'Tus', '0325148757', 'duc2@gmail.com', '123456', '0', '0', '2021-09-27', '2023-04-19', '0');
+SELECT * FROM shop.category;
+INSERT INTO `shop`.`category` (`id`, `content`, `slug`, `title`) VALUES ('1', 'Áo', 'ao', 'Áo');
+INSERT INTO `shop`.`category` (`id`, `content`, `slug`, `title`) VALUES ('2', 'Quần', 'quan', 'Quần');
+INSERT INTO `shop`.`category` (`id`, `content`, `slug`, `title`) VALUES ('3', 'Nam', 'nam', 'Nam');
+INSERT INTO `shop`.`category` (`id`, `content`, `slug`, `title`) VALUES ('4', 'Nữ', 'nu', 'Nữ');
+INSERT INTO `shop`.`category` (`id`, `content`, `slug`, `title`) VALUES ('5', 'Mũ', 'mu', 'Mũ');
+INSERT INTO `shop`.`category` (`id`, `content`, `slug`, `title`) VALUES ('6', 'Giày', 'giay', 'Giày');
+SELECT * FROM shop.product;
+INSERT INTO `shop`.`product` 
+	(`user_id`, `title`, `slug`, `summary`, `price`, `discount`, `quantity`, `created_at`, `content`) 
+VALUES 
+    ('1', 'Áo nam', 'ao-phong-nam', 'Áo phông nam', '200000', '20', '10', '2023-03-05 00:00:00', 'Áo phông dành cho nam');
+INSERT INTO `shop`.`product` 
+	(`user_id`, `title`, `slug`, `summary`, `price`, `discount`, `quantity`, `created_at`, `content`) 
+VALUES 
+    ('1', 'Áo nam', 'ao-phong-nu', 'Áo nữ', '200000', '20', '10', '2023-03-04 00:00:00', 'Áo phông dành cho nữ');
+INSERT INTO `shop`.`product` 
+	(`user_id`, `title`, `slug`, `summary`, `price`, `discount`, `quantity`, `created_at`, `content`) 
+VALUES 
+    ('1', 'Mũ lưỡi trai', 'mu-luoi-trai', 'Mũ lưỡi trai', '100000', '0', '10', '2023-03-05 00:00:00', 'Mũ Lưỡi trai');
+INSERT INTO `shop`.`product` 
+	(`user_id`, `title`, `slug`, `summary`, `price`, `discount`, `quantity`, `created_at`, `content`) 
+VALUES 
+    ('1', 'Quần LEGGING', 'quan-legging', 'Quần-LEGGING', '100000', '30', '100', '2023-03-05 00:00:00', 'Quần-LEGGING');
+INSERT INTO `shop`.`product` 
+	(`user_id`, `title`, `slug`, `summary`, `price`, `discount`, `quantity`, `created_at`, `content`) 
+VALUES 
+    ('1', 'Giày Nike Air Max 97 DM0027-001 Nam', 'giay-lifestyle-nam-nike-air-max-97-dm0027-001', 'Giày nam', '5279000', '0', '150', '2023-03-05 00:00:00', 'Giày Nike Air Max 97 DM0027-001 được thiết kế với chất liệu 28% Synthetic, 28% Textile và 44% Leather đáp ứng tốt và đảm bảo được các tiêu chí mềm, bền, mịn và đẹp');

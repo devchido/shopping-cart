@@ -1,15 +1,45 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
 
 class Navbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isLogin: localStorage.getItem("token") != null,
+            users: {},
         };
     }
+    componentDidMount() {
+        this.loadDataProfile();
+    }
+
+    loadDataProfile = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/user/info", requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                // console.log(result);
+                this.setState({ users: result });
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+    };
 
     render() {
         return (
@@ -29,18 +59,24 @@ class Navbar extends Component {
                                 <Link to="/products">Products</Link>
                             </li>
                             <li>
+                                <Link to="/category">Category</Link>
+                            </li>
+                            <li>
                                 <Link to="/not-found">About</Link>
                             </li>
                             <li>
                                 <Link to="/not-found">Contact</Link>
                             </li>
                             {this.state.isLogin ? (
-                                <>
-                                    <Link to = "/profile">
+                                <li>
+                                    <Link to="/profile">
                                         <i className="fa fa-user-circle" />
-                                        &nbsp;<span>User</span> &nbsp;
+                                        &nbsp;
+                                        <span>
+                                            {this.state.users.firstName} {this.state.users.lastName}
+                                        </span>
                                     </Link>
-                                </>
+                                </li>
                             ) : (
                                 <li>
                                     <Link to="/login">Login</Link>
@@ -67,8 +103,6 @@ class Navbar extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    cart: state.cart,
-});
 
-export default connect(mapStateToProps, {})(Navbar);
+
+export default Navbar;

@@ -57,6 +57,7 @@ nav ul li a:hover {
     color: #ff523b;
 }
 
+
 .active {
     color: #ff523b;
 }
@@ -783,10 +784,6 @@ form a {
     flex: 75%;
 }
 
-.address .col-50,
-.address .col-75 {
-    /* padding: 0 16px; */
-}
 
 .address .container {
     background-color: #f2f2f2;
@@ -956,4 +953,19 @@ form a {
         width: 30px;
         height: 30px;
     }
+}
+
+/* profile-page */
+.profile-page {
+    margin-top: 150px;
+}
+.profile-page .row .container {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+}
+.profile-page img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
 }

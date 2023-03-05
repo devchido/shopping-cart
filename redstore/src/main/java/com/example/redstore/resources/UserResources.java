@@ -83,6 +83,7 @@ public class UserResources {
         result.setLastName(SecurityUtils.getPrincipal().getLastName());
         result.setMobile(SecurityUtils.getPrincipal().getMobile());
         result.setEmail(SecurityUtils.getPrincipal().getEmail());
+        result.setPhotos(SecurityUtils.getPrincipal().getPhotos());
         return result;
     }
 

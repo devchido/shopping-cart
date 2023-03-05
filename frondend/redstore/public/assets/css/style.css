@@ -57,7 +57,6 @@ nav ul li a:hover {
     color: #ff523b;
 }
 
-
 .active {
     color: #ff523b;
 }
@@ -91,7 +90,7 @@ header {
 }
 
 header.sticky {
-    padding: 20px 100px;
+    padding: 15px 100px;
     background: #fff;
 }
 
@@ -176,6 +175,7 @@ header.sticky {
     max-width: 1080px;
     margin: auto;
     padding: 0 25px;
+    padding-top: 50px;
 }
 
 .col-4 {
@@ -193,13 +193,11 @@ header.sticky {
     margin-bottom: 50px;
     transition: transform 0.5s;
 }
-
+/* căn chỉnh ảnh sản phẩm (product item) */
 .col-4 img {
     width: 100%;
-    height: auto;
-    
+    height: 16rem;
 }
-
 
 .title {
     text-align: center;
@@ -255,9 +253,9 @@ h4 {
     transform: translateY(-5px);
     border-radius: 2%;
     border: 2px solid #ff523b;
-    -webkit-box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75);
-    box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.75);
 }
 
 /* offer */
@@ -506,8 +504,6 @@ select:focus {
     background-color: #ff523b;
     color: #fff;
 }
-
-
 
 /* .active{
     background-color: #ff523b;
@@ -788,7 +784,6 @@ form a {
     flex: 75%;
 }
 
-
 .address .container {
     background-color: #f2f2f2;
     padding: 5px 20px 15px 20px;
@@ -860,7 +855,7 @@ form a {
     }
     .col-2,
     .col-3,
-    .col-4, 
+    .col-4,
     .col-8 {
         flex-basis: 100%;
     }
@@ -904,61 +899,6 @@ form a {
     }
 }
 
-/* side-menu */
-.side-menu {
-    position: fixed;
-    background: #f05462;
-    width: 20vw;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-.side-menu .brand-name {
-    height: 10vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.side-menu a {
-    font-size: 24px;
-    padding: 10px 40px;
-    color: white;
-    display: flex;
-    align-items: center;
-}
-.side-menu a:hover {
-    background: white;
-    color: #f05462;
-}
-@media screen and (max-width: 1050px) {
-    .side-menu li {
-        font-size: 18px;
-    }
-}
-@media screen and (max-width: 940px) {
-    .side-menu li span {
-        display: none;
-    }
-    .side-menu {
-        align-items: center;
-    }
-    .side-menu li img {
-        width: 40px;
-        height: 40px;
-    }
-    .side-menu li:hover {
-        background: #f05462;
-        padding: 8px 38px;
-        border: 2px solid white;
-    }
-}
-@media screen and (max-width: 536px) {
-    .side-menu li img {
-        width: 30px;
-        height: 30px;
-    }
-}
-
 /* profile-page */
 .profile-page {
     margin-top: 150px;
@@ -974,3 +914,61 @@ form a {
     border-radius: 50%;
 }
 
+/*  */
+/*dropdown*/
+.dropbtn {
+    border: 1px solid #fff;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown span:hover,i:hover {
+    color: #ff523b;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    text-align: center;
+    /* justify-content: center; */
+    background-color: #f2f2f2;
+    border: 1px solid #d3d3d3;
+    border-radius: 15px;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  .dropdown-content p {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-radius: 15px;
+  }
+  .dropdown-content p:hover {background-color: #ffd6d6;}
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-radius: 15px;
+  }
+  
+  .dropdown-content a:hover {background-color: #ff523b}
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  /* .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+  } */
+
+.logoutItem{
+    background-color: #dbd5d5;
+}

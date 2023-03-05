@@ -70,14 +70,10 @@ public class ProductResources {
     public List<ProductDto> filter(@RequestParam(defaultValue = "") String id,
                                    @RequestParam(defaultValue = "") String users,
                                    @RequestParam(defaultValue = "") String title,
-                                   @RequestParam(defaultValue = "") String slug,
-                                   @RequestParam(defaultValue = "") String summary,
-                                   @RequestParam(defaultValue = "") String price,
-                                   @RequestParam(defaultValue = "") String discount,
-                                   @RequestParam(defaultValue = "") String quantity,
-                                   @RequestParam(defaultValue = "") String content
+                                   @RequestParam(defaultValue = "created_at DESC") String keyOrder,
+                                   @RequestParam(defaultValue = "") String keySearch
                                    ) {
-        List<ProductDto> dtos = productService.filter(id, users, title, slug, summary, price, discount, quantity,  content);
+        List<ProductDto> dtos = productService.filter(id, users, title, keySearch,  keyOrder);
         return dtos;
     }
 

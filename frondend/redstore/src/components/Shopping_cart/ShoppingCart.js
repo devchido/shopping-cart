@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CartProduct from './CartProduct';
 import Spinner from '../Common/Spinner';
-import Navbar from '../layouts/Navbar';
 
 class ShoppingCart extends Component {
     render() {
@@ -48,7 +47,6 @@ class ShoppingCart extends Component {
 
         return (
             <div>
-                <Navbar />
                 <div className="small-container cart-title">
                     <div className="row row-2">
                         <h2 className="title-2">Your Shopping Cart</h2>

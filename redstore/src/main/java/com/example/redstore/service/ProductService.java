@@ -83,11 +83,8 @@ public class ProductService {
 //        List<ProductDto> dtos = productMapper.toDo(entity);
 //        return dtos;
 //    }
-public List<ProductDto> filter(String id , String users, String title, String slug, String summary, String price,
-                               String discount, String quantity,
-                               String content) {
-    List<Product> entity = productRepository.filter(id, users, title, slug, summary, price, discount, quantity, content
-            );
+public List<ProductDto> filter(String id , String users, String title, String keySearch, String keyOrder) {
+    List<Product> entity = productRepository.filter(id, users, title, keySearch, keyOrder);
     List<ProductDto> dtos = productMapper.toDo(entity);
     return dtos;
 }

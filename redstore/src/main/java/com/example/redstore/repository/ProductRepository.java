@@ -39,26 +39,18 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     @Query(value = "SELECT t.* " +
             "FROM shop.product t " +
-            "WHERE id like concat( '%', :id ,'%') " +
+            "WHERE id like concat('%',:id, '%') " +
             "and user_id like concat('%', :users, '%')"+
             "and title like concat('%', :title, '%')" +
-            "and slug like concat('%', :slug, '%')"+
-            "and summary like concat('%', :summary, '%')"+
-            "and price like concat('%', :price, '%')"+
-            "and discount like concat('%', :discount, '%')"+
-            "and quantity like concat('%', :quantity, '%')"+
-            "and content like concat('%', :content, '%')"+
-            "ORDER BY updated_at DESC , created_at DESC "
+            "and content like concat('%', :keySearch, '%')"+
+//            "ORDER BY updated_at DESC , created_at DESC "
+            "ORDER BY :keyOrder "
             , nativeQuery = true)
     List<Product> filter(@Param("id") String id,
                          @Param("users") String users,
                          @Param("title") String title,
-                         @Param("slug") String slug,
-                         @Param("summary") String summary,
-                         @Param("price") String price,
-                         @Param("discount") String discount,
-                         @Param("quantity") String quantity,
-                         @Param("content") String content
+                         @Param("keySearch") String keySearch,
+                         @Param("keyOrder") String keyOrder
     );
     // find by sulg
     Optional<Product> findBySlug(String slug);

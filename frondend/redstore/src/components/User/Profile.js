@@ -65,9 +65,7 @@ class Profile extends Component {
                                 <br />
                                 <span>email: {this.state.user.email}</span>
                                 <br />
-                                <button className="btn" type="button" onClick={this.logout}>
-                                    <Link to={"/"}>Logout</Link>
-                                </button>
+                                
                             </div>
                         </div>
                     </div>

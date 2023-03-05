@@ -5,9 +5,6 @@ import ProductItem from "./products/ProductItem";
 import { getAllProducts } from "../../redux/actions/product.action";
 
 class Products extends Component {
-    
-    
-
     render() {
         return (
             <div>
@@ -23,7 +20,7 @@ class Products extends Component {
                         </select>
                     </div>
                     <div className="row">
-                    <ProductItem/>
+                        <ProductItem />
                     </div>
                     <div className="page-btn">
                         <span>&#x3c;&#x3c;</span>

@@ -56,6 +56,7 @@ public class AuthenticationService {
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
                 .mobile(dto.getMobile())
+                .photos(dto.getPhotos())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .role(Role.USER)
                 .build();

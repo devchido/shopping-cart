@@ -7,7 +7,7 @@ class ProductItem extends Component {
         };
     }
     componentDidMount() {
-        fetch("/product").then((resp) => {
+        fetch("/product/filter").then((resp) => {
             resp.json().then((result) => {
                 console.log(result);
                 this.setState({ products: result});
@@ -20,13 +20,12 @@ class ProductItem extends Component {
             <>
                 {this.state.products
                     ? this.state.products.map((item, i) => 
-                          <div class="col-4">
+                          <div className="col-4" >
                               <a href="#">
-                                  <img src="./assets/images/product-1.jpg" alt="" />
+                                  <img src={item.photos} alt="" />
                               </a>
-                              <a href="#">
                                   <h4>{item.title}</h4>
-                              </a>
+                              
                               <p></p>
                               {/* <div class="rating">
                                   <i class="fa fa-star"></i>

@@ -28,8 +28,8 @@ public class TransactionService {
 
         Transaction entity =  transactionMapper.toEntity(dto);
         // Set User
-        User userId = userRepository.findById(String.valueOf(dto.getUser())).orElse(null);
-        entity.setUser(userId);
+        User userId = userRepository.findById(String.valueOf(dto.getUsers())).orElse(null);
+        entity.setUsers(userId);
 
         // Set order (Nếu có order với id đó thì nhận id đó, nếu không thì truyền tham số null)
         Order orderId = orderRepository.findById(String.valueOf(dto.getOrder())).orElse(null);

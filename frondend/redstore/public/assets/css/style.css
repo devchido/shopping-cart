@@ -197,7 +197,9 @@ header.sticky {
 .col-4 img {
     width: 100%;
     height: auto;
+    
 }
+
 
 .title {
     text-align: center;
@@ -251,11 +253,11 @@ h4 {
 .col-4:hover {
     cursor: pointer;
     transform: translateY(-5px);
-    /* border-radius: 2%; */
-    /* border: 2px solid #ff523b; */
-    /* -webkit-box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75);
+    border-radius: 2%;
+    border: 2px solid #ff523b;
+    -webkit-box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75);
-    box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75); */
+    box-shadow: 10px 10px 20px 0px rgba(0,0,0,0.75);
 }
 
 /* offer */
@@ -504,6 +506,8 @@ select:focus {
     background-color: #ff523b;
     color: #fff;
 }
+
+
 
 /* .active{
     background-color: #ff523b;
@@ -969,3 +973,4 @@ form a {
     height: 300px;
     border-radius: 50%;
 }
+

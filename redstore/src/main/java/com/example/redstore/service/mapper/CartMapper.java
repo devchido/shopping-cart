@@ -15,7 +15,7 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
     public CartDto toDo(Cart entity) {
         CartDto dto = new CartDto();
         dto.setId(entity.getId());
-        dto.setUser(userMapper.toDo(entity.getUser()));
+        dto.setUsers(userMapper.toDo(entity.getUsers()));
 //        dto.setSessionId(entity.getSessionId());
         dto.setStatus(entity.getStatus());
         dto.setFirstName(entity.getFirstName());
@@ -38,7 +38,6 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
 
         // lấy kết quả từ biến ảo userId
 //        entity.setUser(userMapper.toEntity(dto.getUser()));
-//        entity.setSessionId(dto.getSessionId());
         entity.setStatus(dto.getStatus());
 //        entity.setFirstName(dto.getFirstName());
 //        entity.setLastName(dto.getLastName());

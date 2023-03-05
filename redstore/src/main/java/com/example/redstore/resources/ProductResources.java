@@ -54,4 +54,32 @@ public class ProductResources {
         headers.add("totalPages", String.valueOf(page.getTotalPages()));
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+
+//    @GetMapping("/filter")
+//    public List<ProductDto> filter(@RequestParam(defaultValue = "") String users,
+//                         @RequestParam(defaultValue = "") String title,
+//                         @RequestParam(defaultValue = "") String summary,
+//                         @RequestParam(defaultValue = "") String price,
+//                         @RequestParam(defaultValue = "") String discount,
+//                         @RequestParam(defaultValue = "") String createdAt
+//    ) {
+//        List<ProductDto> dtos = productService.filter(users, title, summary, price, discount, createdAt);
+//        return dtos;
+//    }
+    @GetMapping("/filter")
+    public List<ProductDto> filter(@RequestParam(defaultValue = "") String id,
+                                   @RequestParam(defaultValue = "") String users,
+                                   @RequestParam(defaultValue = "") String title,
+                                   @RequestParam(defaultValue = "") String slug,
+                                   @RequestParam(defaultValue = "") String summary,
+                                   @RequestParam(defaultValue = "") String price,
+                                   @RequestParam(defaultValue = "") String discount,
+                                   @RequestParam(defaultValue = "") String quantity,
+                                   @RequestParam(defaultValue = "") String content
+                                   ) {
+        List<ProductDto> dtos = productService.filter(id, users, title, slug, summary, price, discount, quantity,  content);
+        return dtos;
+    }
+
+
 }

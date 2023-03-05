@@ -33,7 +33,7 @@ public class CartService {
 
         Cart entity =  cartMapper.toEntity(dto);
         User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
-        entity.setUser(userId);
+        entity.setUsers(userId);
         // Set first name
         User userFirstName = userRepository.findByFirstName(dto.getFirstName()).orElse(null);
         entity.setFirstName(String.valueOf(userFirstName));

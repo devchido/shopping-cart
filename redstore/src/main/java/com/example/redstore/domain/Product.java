@@ -21,7 +21,7 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User users;
 
     @Column(name = "title", nullable = false, length = 75)
     private String title;

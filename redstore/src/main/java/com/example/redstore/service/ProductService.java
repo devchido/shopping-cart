@@ -32,14 +32,14 @@ public class ProductService {
     public void create(ProductDto dto) {
 
 
-
         // Kiểm tra trùng lặp của  slug trong product
         Optional<Product> productOptionalSlug = productRepository.findBySlug(dto.getSlug());
-        if (productOptionalSlug.isPresent()){
+        if (productOptionalSlug.isPresent()) {
             throw new RuntimeException("Slug: " + dto.getSlug() + " đã được sử dụng.");
-        };
+        }
+        ;
 
-        Product entity =  productMapper.toEntity(dto);
+        Product entity = productMapper.toEntity(dto);
 
         //Kiểm tra sự tồn tại của User sử dụng
 //        Optional<User> userOptionalId = userRepository.findById(String.valueOf(dto.getId()));
@@ -55,7 +55,7 @@ public class ProductService {
 
     // Edit user
     @Transactional
-    public void edit(Long id, ProductDto dto){
+    public void edit(Long id, ProductDto dto) {
         Product entity = productMapper.toEntity(dto);
         entity.setId(id);
         entity.setUpdatedAt(Instant.now());
@@ -70,25 +70,30 @@ public class ProductService {
         productRepository.deleteById(String.valueOf(id));
         System.out.println("Thực thi delete");
     }
+
     // get all
-    public List<ProductDto> findAll (){
+    public List<ProductDto> findAll() {
         List<Product> entity = productRepository.findAll();
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
     }
 
-//    public List<ProductDto> filter(
-//                                   @Param("user_id") String user_id,
-//                                   @Param("title") String title,
-//                                   @Param("summary") String summary,
-//                                   @Param("price") String price,
-//                                   @Param("discount") String discount){
-//        List<Product> entity = productRepository.filter( user_id, title, summary, price, discount);
+//    public List<ProductDto> filter(String users, String title, String summary, String price, String discount, String createdAt) {
+//        List<Product> entity = productRepository.filter(users, title, summary, price, discount, createdAt);
 //        List<ProductDto> dtos = productMapper.toDo(entity);
 //        return dtos;
 //    }
+public List<ProductDto> filter(String id , String users, String title, String slug, String summary, String price,
+                               String discount, String quantity,
+                               String content) {
+    List<Product> entity = productRepository.filter(id, users, title, slug, summary, price, discount, quantity, content
+            );
+    List<ProductDto> dtos = productMapper.toDo(entity);
+    return dtos;
+}
+
     @Transactional
-    public Page<ProductDto> findAllPage(Pageable pageable){
+    public Page<ProductDto> findAllPage(Pageable pageable) {
         return productRepository.findAll(pageable).map(productMapper::toDo);
     }
 }

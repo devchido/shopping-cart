@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 public class OrderDto {
     private Long id;
-    private UserDto user;
+    private UserDto users;
     // biến ảo nhận id của user
     private Long userId;
     private CartDto cart;

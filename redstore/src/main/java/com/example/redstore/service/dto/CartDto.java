@@ -11,19 +11,14 @@ import java.time.Instant;
 @Data
 public class CartDto {
     private Long id;
-    private UserDto user;
+    private UserDto users;
     private Long userId;
-//    private String sessionId;
-//    private String token;
     private Short status;
     private String firstName;
     private String lastName;
     private String mobile;
     private String email;
     private String line1;
-//    private String line2;
-//    private String ward;
-//    private String district;
     private String city;
     private String country;
     private Instant createdAt;

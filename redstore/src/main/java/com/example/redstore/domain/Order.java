@@ -15,7 +15,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User users;
 
     @Column(name = "cart_id")
     private Long cartId;

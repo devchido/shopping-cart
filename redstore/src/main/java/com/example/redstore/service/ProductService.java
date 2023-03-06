@@ -78,19 +78,26 @@ public class ProductService {
         return dtos;
     }
 
-//    public List<ProductDto> filter(String users, String title, String summary, String price, String discount, String createdAt) {
-//        List<Product> entity = productRepository.filter(users, title, summary, price, discount, createdAt);
+
+//    public List<ProductDto> filter(String id , String users, String title, String keySearch, String keyOrder) {
+//        List<Product> entity = productRepository.filter(id, users, title, keySearch, keyOrder);
 //        List<ProductDto> dtos = productMapper.toDo(entity);
 //        return dtos;
-//    }
-public List<ProductDto> filter(String id , String users, String title, String keySearch, String keyOrder) {
-    List<Product> entity = productRepository.filter(id, users, title, keySearch, keyOrder);
-    List<ProductDto> dtos = productMapper.toDo(entity);
-    return dtos;
+    public List<ProductDto> filter( String keySearch) {
+        List<Product> entity = productRepository.filter( keySearch);
+        List<ProductDto> dtos = productMapper.toDo(entity);
+        return dtos;
 }
 
     @Transactional
     public Page<ProductDto> findAllPage(Pageable pageable) {
         return productRepository.findAll(pageable).map(productMapper::toDo);
+    }
+
+    @Transactional
+    public List<ProductDto> findByUsers(Long users){
+        List<Product> entity = productRepository.findByUsers(users);
+        List<ProductDto> dtos = productMapper.toDo(entity);
+        return dtos;
     }
 }

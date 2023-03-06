@@ -39,7 +39,7 @@ public class ProductResources {
     }
 
     @GetMapping("")
-    public List<ProductDto> findAll(){
+    public List<ProductDto> findAll() {
         List<ProductDto> dtos = productService.findAll();
         return dtos;
     }
@@ -55,7 +55,7 @@ public class ProductResources {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-//    @GetMapping("/filter")
+    //    @GetMapping("/filter")
 //    public List<ProductDto> filter(@RequestParam(defaultValue = "") String users,
 //                         @RequestParam(defaultValue = "") String title,
 //                         @RequestParam(defaultValue = "") String summary,
@@ -66,14 +66,26 @@ public class ProductResources {
 //        List<ProductDto> dtos = productService.filter(users, title, summary, price, discount, createdAt);
 //        return dtos;
 //    }
+//    @GetMapping("/filter")
+//    public List<ProductDto> filter(@RequestParam(defaultValue = "") String id,
+//                                   @RequestParam(defaultValue = "") String users,
+//                                   @RequestParam(defaultValue = "") String title,
+//                                   @RequestParam(defaultValue = "created_at DESC") String keyOrder,
+//                                   @RequestParam(defaultValue = "") String keySearch
+//                                   ) {
+//        List<ProductDto> dtos = productService.filter(id, users, title, keySearch,  keyOrder);
+//        return dtos;
+//    }
     @GetMapping("/filter")
-    public List<ProductDto> filter(@RequestParam(defaultValue = "") String id,
-                                   @RequestParam(defaultValue = "") String users,
-                                   @RequestParam(defaultValue = "") String title,
-                                   @RequestParam(defaultValue = "created_at DESC") String keyOrder,
-                                   @RequestParam(defaultValue = "") String keySearch
-                                   ) {
-        List<ProductDto> dtos = productService.filter(id, users, title, keySearch,  keyOrder);
+    public List<ProductDto> filter(
+            @RequestParam(defaultValue = "") String keySearch
+    ) {
+        List<ProductDto> dtos = productService.filter( keySearch);
+        return dtos;
+    }
+    @GetMapping("/{users}")
+    public List<ProductDto> findByUsers(@PathVariable("users") Long users){
+        List<ProductDto> dtos = productService.findByUsers(users);
         return dtos;
     }
 

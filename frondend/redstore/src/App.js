@@ -13,10 +13,12 @@ import ShoppingCart from "./components/Shopping_cart/ShoppingCart";
 import SingleProduct from "./components/Products/SingleProduct";
 import Address from "./components/User/Address";
 import NotFound from "./components/Not-Found/NotFound";
-import Home from "./pages/home";
+// import Home from "./pages/home";
 import Profile from "./components/User/Profile";
 import Login from "./components/User/Login";
 import Register from "./components/User/Register";
+import Home from "./components/Home/Home";
+import ProductList from "./components/User/ProductList";
 
 function App() {
     return (
@@ -36,6 +38,7 @@ function App() {
                             <Route path="/user_address" element={<Address />} />
                             <Route path="/not-found" element={<NotFound />} />
                             <Route path="/profile" element={<Profile />} />
+                            <Route path="/my-product" element={<ProductList />} />
                         </Routes>
                         <Footer />
                     </Fragment>

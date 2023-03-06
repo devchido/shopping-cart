@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 import java.util.Optional;
+
 @CrossOrigin("*")
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
-
 
 
 //     Filter by id, user, title, type, sku, price, discount, quantity, shop
@@ -37,22 +37,35 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 //                      @Param("createdAt") String createdAt)
 //    ;
 
+    //    @Query(value = "SELECT t.* " +
+//            "FROM shop.product t " +
+//            "WHERE id like concat('%',:id, '%') " +
+//            "and user_id like concat('%', :users, '%')"+
+//            "and title like concat('%', :title, '%')" +
+//            "and content like concat('%', :keySearch, '%')"+
+//            "ORDER BY :keyOrder "
+////            "ORDER BY updated_at DESC , created_at DESC "
+//            , nativeQuery = true)
+//    List<Product> filter(@Param("id") String id,
+//                         @Param("users") String users,
+//                         @Param("title") String title,
+//                         @Param("keySearch") String keySearch,
+//                         @Param("keyOrder") String keyOrder
+//    );
     @Query(value = "SELECT t.* " +
             "FROM shop.product t " +
-            "WHERE id like concat('%',:id, '%') " +
-            "and user_id like concat('%', :users, '%')"+
-            "and title like concat('%', :title, '%')" +
-            "and content like concat('%', :keySearch, '%')"+
-//            "ORDER BY updated_at DESC , created_at DESC "
-            "ORDER BY :keyOrder "
+            "WHERE id like concat('%',:keySearch, '%') " +
+            "or user_id like concat('%', :keySearch, '%')" +
+            "or title like concat('%', :keySearch, '%')" +
+            "or content like concat('%', :keySearch, '%')"
             , nativeQuery = true)
-    List<Product> filter(@Param("id") String id,
-                         @Param("users") String users,
-                         @Param("title") String title,
-                         @Param("keySearch") String keySearch,
-                         @Param("keyOrder") String keyOrder
+    List<Product> filter(@Param("keySearch") String keySearch
     );
+
     // find by sulg
     Optional<Product> findBySlug(String slug);
 
+    @Query(value = "SELECT t.* FROM shop.product t " +
+            "        WHERE user_id = :users", nativeQuery = true)
+    List<Product> findByUsers(@Param("users") Long users);
 }

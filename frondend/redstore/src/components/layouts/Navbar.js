@@ -42,8 +42,10 @@ class Navbar extends Component {
                 throw new Error(response.status);
             })
             .then((result) => {
-                console.log(result);
+                // console.log(result);
                 this.setState({ users: result });
+                localStorage.setItem("users", result.id);
+                // console.log(this.state.userId);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -85,7 +87,7 @@ class Navbar extends Component {
                                 {this.state.users.photos ? (
                                     <img src={this.state.users.photos} style={{ width: "32px" }} class="dropbtn" />
                                 ) : (
-                                    <i className="fa fa-user-circle" style={{ fontSize: "18px"  }} />
+                                    <i className="fa fa-user-circle" style={{ fontSize: "28px"  }} />
                                 )}
                                 {this.state.openDropdown ? <DropDownProfile users={this.state.users} /> : null}
                                
@@ -112,5 +114,4 @@ class Navbar extends Component {
         );
     }
 }
-
 export default Navbar;

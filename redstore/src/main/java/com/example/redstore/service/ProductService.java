@@ -31,23 +31,15 @@ public class ProductService {
     @Transactional
     public void create(ProductDto dto) {
 
-
         // Kiểm tra trùng lặp của  slug trong product
+
         Optional<Product> productOptionalSlug = productRepository.findBySlug(dto.getSlug());
         if (productOptionalSlug.isPresent()) {
             throw new RuntimeException("Slug: " + dto.getSlug() + " đã được sử dụng.");
-        }
-        ;
-
+        };
         Product entity = productMapper.toEntity(dto);
-
-        //Kiểm tra sự tồn tại của User sử dụng
-//        Optional<User> userOptionalId = userRepository.findById(String.valueOf(dto.getId()));
-//        if (!userOptionalId.isPresent()){
-//            throw new RuntimeException("User với Id: " + dto.getId() + " không tồn tại.");
-//        };
-        // Create At - product
-//        Date now = new Date();
+        User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
+        entity.setUsers(userId);
         entity.setCreatedAt(Instant.now());
         productRepository.save(entity);
         System.out.println("Thực thi create");

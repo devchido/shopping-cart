@@ -50,7 +50,7 @@ public class UserResources {
         userService.delete(id);
     }
 
-    @GetMapping
+    @GetMapping("")
     public List<UserDto> findAll() {
 
         List<UserDto> dtos = userService.findAll();

@@ -28,7 +28,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
 //                các trang được truy cập sử dụng không cần đăng nhập
-                .requestMatchers("/api/v1/auth/**", "/product/**","/user/**")
+                .requestMatchers("/api/v1/auth/**", "/product/**","/user/**","/category/**","/order/**","/cart/**","/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -38,4 +38,11 @@ public class CartResources {
         List<CartDto> dtos = cartService.findAll();
         return dtos;
     }
+
+    // Hiển thị các giỏ hàng cart của user có id = userID
+    @GetMapping("/user/{userId}")
+    public List<CartDto> findAllByUserId(@PathVariable("userId") Long userId){
+        List<CartDto> dtos = cartService.findAllByUserId(userId);
+        return dtos;
+    }
 }

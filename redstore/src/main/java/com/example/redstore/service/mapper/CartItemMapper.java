@@ -12,7 +12,7 @@ import java.util.List;
 public class CartItemMapper implements EntityMapper<CartItemDto, CartItem> {
     @Autowired
     ProductMapper productMapper;
-//    @Autowired
+    @Autowired
     CartMapper cartMapper;
     @Override
     public CartItemDto toDo(CartItem entity) {
@@ -34,11 +34,12 @@ public class CartItemMapper implements EntityMapper<CartItemDto, CartItem> {
     public CartItem toEntity(CartItemDto dto) {
         CartItem entity = new CartItem();
         entity.setId(dto.getId());
+
         entity.setPrice(dto.getPrice());
         entity.setDiscount(dto.getDiscount());
         entity.setQuantity(dto.getQuantity());
         entity.setCreatedAt(dto.getCreatedAt());
-        entity.setUpdatedAt(dto.getUpdatedAt());
+//        entity.setUpdatedAt(dto.getUpdatedAt());
         entity.setContent(dto.getContent());
         return entity;
     }

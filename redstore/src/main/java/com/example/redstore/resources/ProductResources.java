@@ -55,27 +55,6 @@ public class ProductResources {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    //    @GetMapping("/filter")
-//    public List<ProductDto> filter(@RequestParam(defaultValue = "") String users,
-//                         @RequestParam(defaultValue = "") String title,
-//                         @RequestParam(defaultValue = "") String summary,
-//                         @RequestParam(defaultValue = "") String price,
-//                         @RequestParam(defaultValue = "") String discount,
-//                         @RequestParam(defaultValue = "") String createdAt
-//    ) {
-//        List<ProductDto> dtos = productService.filter(users, title, summary, price, discount, createdAt);
-//        return dtos;
-//    }
-//    @GetMapping("/filter")
-//    public List<ProductDto> filter(@RequestParam(defaultValue = "") String id,
-//                                   @RequestParam(defaultValue = "") String users,
-//                                   @RequestParam(defaultValue = "") String title,
-//                                   @RequestParam(defaultValue = "created_at DESC") String keyOrder,
-//                                   @RequestParam(defaultValue = "") String keySearch
-//                                   ) {
-//        List<ProductDto> dtos = productService.filter(id, users, title, keySearch,  keyOrder);
-//        return dtos;
-//    }
     @GetMapping("/filter")
     public List<ProductDto> filter(
             @RequestParam(defaultValue = "") String keySearch

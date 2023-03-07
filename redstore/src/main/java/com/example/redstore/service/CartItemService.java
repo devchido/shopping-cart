@@ -54,6 +54,13 @@ public class CartItemService {
     public void edit(Long id, CartItemDto dto){
         CartItem entity = cartItemMapper.toEntity(dto);
         entity.setId(id);
+        // Set product
+        Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
+        entity.setProduct(productId);
+        // Set cart
+        Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
+        entity.setCart(cartId);
+
         // Set update at
         entity.setUpdatedAt(Instant.now());
         cartItemRepository.save(entity);
@@ -68,9 +75,16 @@ public class CartItemService {
         System.out.println("Thực thi delete");
     }
     // get all
-    public List<CartItemDto> findAll (){
+    @Transactional
+    public List<CartItemDto> findAll(){
         List<CartItem> entity = cartItemRepository.findAll();
         List<CartItemDto> dtos = cartItemMapper.toDo(entity);
         return dtos;
+    }
+    public List<CartItemDto> findByCartId(Long cartId){
+        List<CartItem> entity = cartItemRepository.findByCartId(cartId);
+        List<CartItemDto> dtos = cartItemMapper.toDo(entity);
+        return dtos;
+
     }
 }

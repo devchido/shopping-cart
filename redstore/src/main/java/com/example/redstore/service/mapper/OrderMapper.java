@@ -39,21 +39,15 @@ public class OrderMapper implements EntityMapper<OrderDto, Order>{
     public Order toEntity(OrderDto dto) {
         Order entity = new Order();
         entity.setId(dto.getId());
-//        entity.setUser(userMapper.toEntity(dto.getUser()));
-//        entity.setCart(cartMapper.toEntity(dto.getCart()));
-//        entity.setToken(dto.getToken());
         entity.setStatus(dto.getStatus());
         entity.setSubTotal(dto.getSubTotal());
         entity.setItemDiscount(dto.getItemDiscount());
-
         entity.setTotal(dto.getTotal());
-
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setMobile(dto.getMobile());
         entity.setEmail(dto.getEmail());
         entity.setLine1(dto.getLine1());
-
         entity.setCity(dto.getCity());
         entity.setCountry(dto.getCity());
         entity.setCreatedAt(dto.getCreatedAt());

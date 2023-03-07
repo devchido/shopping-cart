@@ -32,20 +32,18 @@ public class CartService {
     public void create(CartDto dto) {
 
         Cart entity =  cartMapper.toEntity(dto);
+        // Set userId
         User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
         entity.setUsers(userId);
         // Set first name
-        User userFirstName = userRepository.findByFirstName(dto.getFirstName()).orElse(null);
-        entity.setFirstName(String.valueOf(userFirstName));
+
+        entity.setFirstName(userId.getFirstName());
         //Set Last Name
-        User userLastName = userRepository.findByLastName(dto.getLastName()).orElse(null);
-        entity.setLastName(String.valueOf(userLastName));
+        entity.setLastName(userId.getLastName());
         // Set Mobile
-        User userMobile = userRepository.findByMobile(dto.getMobile()).orElse(null);
-        entity.setMobile(String.valueOf(userMobile));
+        entity.setMobile(userId.getMobile());
         // Set Email
-        User userEmail = userRepository.findByEmail(dto.getEmail()).orElse(null);
-        entity.setEmail(String.valueOf(userEmail));
+        entity.setEmail(userId.getEmail());
         // Set create at
         entity.setCreatedAt(Instant.now());
         cartRepository.save(entity);
@@ -74,6 +72,12 @@ public class CartService {
     // get all
     public List<CartDto> findAll (){
         List<Cart> entity = cartRepository.findAll();
+        List<CartDto> dtos = cartMapper.toDo(entity);
+        return dtos;
+    }
+
+    public List<CartDto> findAllByUserId(Long userId) {
+        List<Cart> entity = cartRepository.findAllByUsersId(userId);
         List<CartDto> dtos = cartMapper.toDo(entity);
         return dtos;
     }

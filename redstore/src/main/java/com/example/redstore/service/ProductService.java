@@ -9,7 +9,9 @@ import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +67,7 @@ public class ProductService {
     }
 
     // get all
-    public List<ProductDto> findAll() {
+    public List<ProductDto> findAllProduct() {
         List<Product> entity = productRepository.findAll();
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
@@ -82,14 +85,39 @@ public class ProductService {
 }
 
     @Transactional
-    public Page<ProductDto> findAllPage(Pageable pageable) {
-        return productRepository.findAll(pageable).map(productMapper::toDo);
-    }
+    public Page<ProductDto> findAllProductPage(Pageable pageable) {
+        Page<Product> entities = productRepository.findAllProductPage(pageable);
+        Page<ProductDto> dtoPage = entities.map(new Function<Product, ProductDto>() {
+            @Override
+            public ProductDto apply(Product entity) {
+                ProductDto dto = new ProductDto();
+                return dto;
+            }
+        });
+        return dtoPage;
+    };
 
     @Transactional
     public List<ProductDto> findByUsers(Long users){
         List<Product> entity = productRepository.findByUsers(users);
         List<ProductDto> dtos = productMapper.toDo(entity);
+        return dtos;
+    }
+
+    public List<ProductDto> findProductsWithSorting(String field){
+        List<Product> entity = productRepository.findAll(Sort.by(Sort.Direction.ASC, field));
+        List<ProductDto> dtos = productMapper.toDo(entity);
+        return dtos;
+    }
+
+    public Page<ProductDto> findProductsWithPagination(int offset, int pageSize){
+        Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize)));
+        Page<ProductDto> dtos = products.map(productMapper::toDo);
+        return dtos;
+    }
+    public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field){
+        Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize).withSort(Sort.by(field))));
+        Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
 }

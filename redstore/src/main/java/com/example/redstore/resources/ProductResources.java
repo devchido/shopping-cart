@@ -2,6 +2,7 @@ package com.example.redstore.resources;
 
 import com.example.redstore.service.ProductService;
 import com.example.redstore.service.UserService;
+import com.example.redstore.service.dto.APIResponse;
 import com.example.redstore.service.dto.ProductDto;
 import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -38,22 +39,13 @@ public class ProductResources {
         productService.delete(id);
     }
 
-    @GetMapping("")
-    public List<ProductDto> findAll() {
-        List<ProductDto> dtos = productService.findAll();
+    @GetMapping("/findAllProduct")
+    public List<ProductDto> findAllProduct() {
+        List<ProductDto> dtos = productService.findAllProduct();
         return dtos;
     }
 
-    // http://localhost:8080/user/page?page=1&size=2
-    @GetMapping("/page")
-    public ResponseEntity<List<ProductDto>> findAllPage(Pageable pageable) {
-        Page<ProductDto> page = productService.findAllPage(pageable);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("total", String.valueOf(page.getTotalElements()));
-        headers.add("totalPages", String.valueOf(page.getTotalPages()));
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
 
     @GetMapping("/filter")
     public List<ProductDto> filter(
@@ -62,11 +54,32 @@ public class ProductResources {
         List<ProductDto> dtos = productService.filter( keySearch);
         return dtos;
     }
-    @GetMapping("/{users}")
+    @GetMapping("/user/{users}")
     public List<ProductDto> findByUsers(@PathVariable("users") Long users){
         List<ProductDto> dtos = productService.findByUsers(users);
         return dtos;
     }
 
+    //Tesst page
+    @GetMapping("")
+    private APIResponse<List<ProductDto>> getProduct(){
+        List<ProductDto> dtos = productService.findAllProduct();
+        return new APIResponse<>(dtos.size(), dtos);
+    }
+    @GetMapping("/{field}")
+    private APIResponse<List<ProductDto>> getProductsWithSort(@PathVariable String field){
+        List<ProductDto> dtos = productService.findProductsWithSorting(field);
+        return new APIResponse<>(dtos.size(), dtos);
+    }
+    @GetMapping("/pagination/{offset}/{pageSize}")
+    private APIResponse<Page<ProductDto>> getProductsWithPagination(@PathVariable int offset, @PathVariable int pageSize){
+        Page<ProductDto> dtos = productService.findProductsWithPagination(offset, pageSize);
+        return new APIResponse<>(dtos.getSize(), dtos);
+    }
 
+    @GetMapping("/paginationAndSort/{offset}/{pageSize}/{field}")
+    private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field){
+        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize, field);
+        return new APIResponse<>(dtos.getSize(), dtos);
+    }
 }

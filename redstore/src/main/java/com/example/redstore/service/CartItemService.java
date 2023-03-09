@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,12 +35,18 @@ public class CartItemService {
 
         CartItem entity =  cartItemMapper.toEntity(dto);
         // Set product
+        // Kiểm tra product đó trong list product có tồn tại hay không
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
         entity.setProduct(productId);
+
         // Set cart
         Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
         entity.setCart(cartId);
 
+        int quantity = productId.getQuantity() - entity.getQuantity();
+        productId.setQuantity((short) quantity);
+        productId.setUpdatedAt(Instant.now());
+        productRepository.save(productId);
         // Set active
         entity.setActive(true);
 
@@ -52,14 +59,26 @@ public class CartItemService {
     // Edit user
     @Transactional
     public void edit(Long id, CartItemDto dto){
+
+
+
         CartItem entity = cartItemMapper.toEntity(dto);
         entity.setId(id);
         // Set product
+        CartItem cartItem = cartItemRepository.findById(String.valueOf(id)).orElse(null);
+        // Kiểm tra product đó trong list product có tồn tại hay không
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
+
         entity.setProduct(productId);
         // Set cart
+        // Kiểm tra cart được chọn có tồn tại hay không
         Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
         entity.setCart(cartId);
+        // Set Quantity
+        int quantity = productId.getQuantity() + cartItem.getQuantity() - entity.getQuantity();
+        productId.setQuantity((short) quantity);
+        productId.setUpdatedAt(Instant.now());
+        productRepository.save(productId);
 
         // Set update at
         entity.setUpdatedAt(Instant.now());
@@ -71,11 +90,18 @@ public class CartItemService {
     // Delete user
     @Transactional
     public void delete(Long id) {
+        CartItem cartItem = cartItemRepository.findById(String.valueOf(id)).orElse(null);
+        Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
+
+        int quantity = productId.getQuantity() + cartItem.getQuantity();
+        productId.setQuantity((short) quantity);
+        productId.setUpdatedAt(Instant.now());
+        productRepository.save(productId);
         cartItemRepository.deleteById(String.valueOf(id));
         System.out.println("Thực thi delete");
     }
     // get all
-    @Transactional
+
     public List<CartItemDto> findAll(){
         List<CartItem> entity = cartItemRepository.findAll();
         List<CartItemDto> dtos = cartItemMapper.toDo(entity);

@@ -42,7 +42,7 @@ public class CartItemResources {
         return dtos;
     }
     // Hiển thị tất cả các item của giỏ hàng có id: cartId
-    @GetMapping("/{cartId}")
+    @GetMapping("/cart/{cartId}")
     public List<CartItemDto> findAllByCartId(@PathVariable("cartId") Long cartId){
         List<CartItemDto> dtos = cartItemService.findByCartId(cartId);
         return dtos;

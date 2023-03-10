@@ -5,9 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.Instant;
 
-/**
- * A DTO for the {@link com.example.redstore.domain.Cart} entity
- */
+
 @Data
 public class CartDto {
     private Long id;

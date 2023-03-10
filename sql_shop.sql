@@ -13,7 +13,7 @@ VALUES
 INSERT INTO `shop`.`product` 
 	(`user_id`, `title`, `slug`, `summary`, `price`, `discount`, `quantity`, `created_at`, `content`) 
 VALUES 
-    ('1', 'Áo nam', 'ao-phong-nu', 'Áo nữ', '200000', '20', '10', '2023-03-04 00:00:00', 'Áo phông dành cho nữ');
+    ('1', 'Áo nữ', 'ao-phong-nu', 'Áo nữ', '200000', '20', '10', '2023-03-04 00:00:00', 'Áo phông dành cho nữ');
 INSERT INTO `shop`.`product` 
 	(`user_id`, `title`, `slug`, `summary`, `price`, `discount`, `quantity`, `created_at`, `content`) 
 VALUES 

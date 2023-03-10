@@ -22,6 +22,20 @@ public class ProductResources {
 
     private final ProductService productService;
 
+    /*
+    http://localhost:8080/product
+    {
+        "userId": "1",
+        "title": "Áo nam",
+        "slug": "ao-phong-nam-1",
+        "summary": "Áo phông nam",
+        "price": "200000",
+        "discount": "20",
+        "quantity": "10",
+        "photos": "https://cf.shopee.vn/file/b04924adbab55d4b305d8b15a396a4ef",
+        "content": "Áo phông dành cho nam"
+    }
+     */
     @PostMapping("")
     public void create(@RequestBody ProductDto dto) {
         productService.create(dto);

@@ -2,8 +2,11 @@ package com.example.redstore.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
+
 @Data
 @Entity
 @Table(name = "`order`")
@@ -17,8 +20,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User users;
 
-    @Column(name = "cart_id")
-    private Long cartId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart carts;
 
     @Column(name = "status", nullable = false)
     private Short status;

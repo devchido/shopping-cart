@@ -8,11 +8,11 @@ import java.time.Instant;
 @Data
 public class OrderItemDto {
     private Long id;
-    private ProductDto product;
+    private ProductDto products;
 
     // Biến ảo id của product
     private Long productId;
-    private OrderDto order;
+    private OrderDto orders;
     // Biến ảo id của order
     private Long orderId;
     private String sku;

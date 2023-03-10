@@ -104,6 +104,7 @@ public class ProductService {
         return dtos;
     }
 
+    // Hiển thị list các product theo field
     public List<ProductDto> findProductsWithSorting(String field){
         List<Product> entity = productRepository.findAll(Sort.by(Sort.Direction.ASC, field));
         List<ProductDto> dtos = productMapper.toDo(entity);

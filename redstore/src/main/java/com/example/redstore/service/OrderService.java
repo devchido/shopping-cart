@@ -1,8 +1,12 @@
 package com.example.redstore.service;
 
+import com.example.redstore.domain.Cart;
 import com.example.redstore.domain.Order;
 import com.example.redstore.domain.Product;
+import com.example.redstore.domain.User;
+import com.example.redstore.repository.CartRepository;
 import com.example.redstore.repository.OrderRepository;
+import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.dto.OrderDto;
 import com.example.redstore.service.dto.ProductDto;
 import com.example.redstore.service.mapper.OrderMapper;
@@ -10,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -18,10 +23,78 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
     public List<OrderDto> findByUsers(Long users) {
         List<Order> entity = orderRepository.findByUsers(users);
         List<OrderDto> dtos = orderMapper.toDo(entity);
         return dtos;
     }
+    public List<OrderDto> findByCarts(Long carts) {
+        List<Order> entity = orderRepository.findByCarts(carts);
+        List<OrderDto> dtos = orderMapper.toDo(entity);
+        return dtos;
+    }
+
+    @Transactional
+    public void create(OrderDto dto){
+        Cart cart = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
+        Order entity = orderMapper.toEntity(dto);
+        // Set userId
+//        User user = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
+//        entity.setUsers(user);
+        //Set cart
+
+        entity.setCarts(cart);
+        // Set user từ giỏ hàng cart
+        entity.setUsers(cart.getUsers());
+        //Set các thông tin liên quan
+        entity.setFirstName(cart.getFirstName());
+        //Set Last Name
+        entity.setLastName(cart.getLastName());
+        // Set Mobile
+        entity.setMobile(cart.getMobile());
+        // Set Email
+        entity.setEmail(cart.getEmail());
+        // Set địa chỉ giao hàng
+        entity.setLine1(cart.getLine1());
+        entity.setCity(cart.getCity());
+        entity.setCountry(cart.getCountry());
+        entity.setContent(cart.getContent());
+        // Set create at
+        entity.setCreatedAt(Instant.now());
+        orderRepository.save(entity);
+        cart.setStatus((short) 1);
+        cartRepository.save(cart);
+    }
+    public void edit(Long id, OrderDto dto){
+
+        Order entity = orderMapper.toEntity(dto);
+        Order order = orderRepository.findById(String.valueOf(id)).orElse(null);
+        Cart cart = cartRepository.findById(String.valueOf(order.getCarts())).orElse(null);
+        //
+        entity.setId(order.getId());
+
+        entity.setCarts(order.getCarts());
+        // Set thông tin user
+        entity.setUsers(cart.getUsers());
+        entity.setFirstName(cart.getFirstName());
+        entity.setLastName(cart.getLastName());
+        entity.setMobile(cart.getMobile());
+        entity.setEmail(cart.getEmail());
+        // set update
+        entity.setUpdatedAt(Instant.now());
+        orderRepository.save(entity);
+    }
+
+    public List<OrderDto> findAll(){
+        List<Order> entity = orderRepository.findAll();
+        List<OrderDto> dtos = orderMapper.toDo(entity);
+        return dtos;
+
+    }
+
+
+
 }

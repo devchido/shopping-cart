@@ -150,7 +150,10 @@ CREATE TABLE `shop`.`order` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_order_user`
     FOREIGN KEY (`user_id`)
-    REFERENCES `shop`.`user` (`id`)
+    REFERENCES `shop`.`user` (`id`),
+  CONSTRAINT `fk_order_cart`
+	FOREIGN KEY (`cart_id`)
+    REFERENCES `shop`.`cart` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
     

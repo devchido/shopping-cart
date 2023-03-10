@@ -29,11 +29,11 @@ public class OrderItemService {
         OrderItem entity =  orderItemMapper.toEntity(dto);
         // Set product
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
-        entity.setProduct(productId);
+        entity.setProducts(productId);
 
         // Set order (Nếu có order với id đó thì nhận id đó, nếu không thì truyền tham số null)
-        Order orderId = orderRepository.findById(String.valueOf(dto.getOrder())).orElse(null);
-        entity.setOrder(orderId);
+        Order orderId = orderRepository.findById(String.valueOf(dto.getOrders())).orElse(null);
+        entity.setOrders(orderId);
 
         // Set create at
         entity.setCreatedAt(Instant.now());

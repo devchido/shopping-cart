@@ -16,23 +16,35 @@ import java.util.List;
 public class CartResources {
     private final CartService cartService;
 
+    // Tạo giỏ hàng cart mới
+    /*
+    {
+        "userId": "1",
+        "status": "0",
+        "line1": "Hiệp Thuận",
+        "city": "Hà Nội",
+        "country": "VN",
+        "content": "Test"
+    }
+     */
     @PostMapping("")
     public void create(@RequestBody CartDto dto) {
         cartService.create(dto);
     }
 
-    //edit
+    //edit giỏ hàng theo id
     @PutMapping("/{id}")
     public void edit(@RequestBody CartDto dto, @PathVariable("id") Long id) {
         cartService.edit(id, dto);
     }
 
-    //delete
+    // Xoá giỏ hàng
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         cartService.delete(id);
     }
 
+    // Hiển thị tất cả các giỏ hàng cart
     @GetMapping("")
     public List<CartDto> findAll(){
         List<CartDto> dtos = cartService.findAll();

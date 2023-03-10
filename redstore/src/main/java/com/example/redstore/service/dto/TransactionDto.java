@@ -9,7 +9,9 @@ import java.time.Instant;
 public class TransactionDto {
     private Long id;
     private UserDto users;
-    private OrderDto order;
+    private Long userId;
+    private OrderDto orders;
+    private Long orderId;
     private String code;
     private Short type;
     private Short mode;

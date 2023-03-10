@@ -33,10 +33,6 @@ public class UserResources {
         return dtos;
     }
 
-//    @PostMapping("")
-//    public void create(@RequestBody UserDto dto) {
-//        userService.create(dto);
-//    }
 
     //edit
     @PutMapping("/{id}")

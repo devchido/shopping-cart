@@ -33,7 +33,8 @@ public class SecurityConfiguration {
                         "/product/**",
                         "/category/**",
                         "/order/**",
-                        "/cart/**"
+                        "/cart/**",
+                        "/**"
                 )
                 .permitAll()
                 .anyRequest()

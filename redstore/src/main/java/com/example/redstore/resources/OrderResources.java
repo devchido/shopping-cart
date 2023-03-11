@@ -32,6 +32,12 @@ public class OrderResources {
         return dtos;
     }
 
+    @GetMapping("/createByCart")
+    public void createOrderByCart(@RequestParam("idCard") Long id) {
+        orderService.createOrderByCart(id);
+    }
+
+
     /*
     Hiển thị tất cả các order
 

@@ -8,6 +8,7 @@ import com.example.redstore.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,6 +83,7 @@ public class UserService {
 
     public UserDto getUserInformation(){
         User result = SecurityUtils.getPrincipal();
+        result.setPassword();
         UserDto dto = userMapper.toDo(result);
         return dto;
     }

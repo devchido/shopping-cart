@@ -998,7 +998,7 @@ table, th, td {
     z-index: 100000000000;
 }
 .modal_inner{
-    width: 400px;
+    width: 700px;
     position: relative;
     top: 50%;
     margin: auto;
@@ -1031,10 +1031,15 @@ table, th, td {
 }
 .modal_footer button {
     padding: 10px 20px;
+    margin: 5px;
     color: #fff;
     background: #ff523b;
     border-radius: 5px;
     border: none;
     outline: none;
     cursor: pointer;
+}
+.modal_footer button:hover {
+    
+    background: #f02222;
 }

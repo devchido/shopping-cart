@@ -2,6 +2,7 @@ package com.example.redstore.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
 @Data
@@ -13,7 +14,7 @@ public class OrderItem {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", nullable = false)
     private Product products;
 
@@ -31,7 +32,8 @@ public class OrderItem {
     private Short quantity;
 
     @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    @CreatedDate
+    private Instant createdAt = Instant.now();
 
     @Column(name = "updated_at")
     private Instant updatedAt;

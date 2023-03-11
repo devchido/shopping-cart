@@ -36,7 +36,8 @@ public class OrderItemService {
         entity.setOrders(orderId);
 
         // Set create at
-        entity.setCreatedAt(Instant.now());
+        //khong can nua
+//        entity.setCreatedAt(Instant.now());
         orderItemRepository.save(entity);
         System.out.println("Thực thi create");
     }

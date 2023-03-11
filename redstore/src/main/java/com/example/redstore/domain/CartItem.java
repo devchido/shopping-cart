@@ -1,5 +1,6 @@
 package com.example.redstore.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,7 +18,8 @@ public class CartItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnoreProperties(value = {"cartItem, users"})
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 

@@ -18,6 +18,15 @@ public class CartItemResources {
     private final CartItemService cartItemService;
 
     // Tạo item mới vào giỏ hàng cart
+    /*
+    {
+        "productId": "2",
+        "cartId": "2",
+        "quantity": 1,
+        "discount": "0",
+        "price": 5
+    }
+     */
     @PostMapping("")
     public void create(@RequestBody CartItemDto dto) {
         cartItemService.create(dto);

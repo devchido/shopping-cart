@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -57,7 +60,12 @@ public class Order {
     @Column(name = "country", length = 50)
     private String country;
 
+
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    Set<OrderItem> orderItemSet = new HashSet<>();
+
     @Column(name = "created_at", nullable = false)
+    @CreatedDate
     private Instant createdAt;
 
     @Column(name = "updated_at")

@@ -80,11 +80,6 @@ public class UserResources {
     ){
         return ResponseEntity.ok(service.updatePassUser(dto));
     }
-    @GetMapping({"/forAdmin"})
-    @PreAuthorize("hasRole('ADMIN')")
-    public String forAdmin(){
-        return "This URL is only accessible to admin";
-    }
     @GetMapping({"/forUser"})
     @PreAuthorize("hasRole('USER')")
     public String forUser(){

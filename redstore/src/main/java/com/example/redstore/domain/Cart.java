@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "cart")
@@ -16,6 +18,9 @@ public class Cart {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User users;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private Set<CartItem> cartItem;
 
     @Column(name = "status", nullable = false)
     private Short status;

@@ -912,6 +912,8 @@ form a {
 /* profile-page */
 .profile-page {
     margin-top: 150px;
+    padding: 50px 0;
+    background: radial-gradient(#fff, #ffd6d6);
 }
 .profile-page .row .container {
     display: grid;
@@ -985,3 +987,54 @@ form a {
 table, th, td {
     border:1px solid black;
   }
+
+/* popup */
+.modal{
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0.5);
+    z-index: 100000000000;
+}
+.modal_inner{
+    width: 400px;
+    position: relative;
+    top: 50%;
+    margin: auto;
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    transform: translate(0, -50%);
+}
+.modal_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #ff523b;
+    color: #fff;
+}
+.modal_header p {
+    color: #fff;
+}
+.modal_body {
+    padding: 15px;
+}
+.modal_body h2 {
+    color: #ff523b;
+    margin-bottom: 10px;
+}
+.modal_footer {
+    padding: 15px;
+    text-align: right;
+}
+.modal_footer button {
+    padding: 10px 20px;
+    color: #fff;
+    background: #ff523b;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Banner from "../layouts/Banner";
+import UserUpdate from "../Popup/UserUpdate";
 
 import Brands from "./Brands";
 import FeaturedCategories from "./FeaturedCategories";
@@ -12,6 +13,7 @@ class Home extends Component {
         return (
             <>
             {/* <Navbar /> */}
+            {/* <UserUpdate/> */}
                 <Banner />
                 {/* featured categories */}
                 <FeaturedCategories />

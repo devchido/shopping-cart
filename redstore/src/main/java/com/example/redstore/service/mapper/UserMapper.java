@@ -1,13 +1,16 @@
 package com.example.redstore.service.mapper;
 
+import com.example.redstore.domain.Role;
 import com.example.redstore.domain.User;
 import com.example.redstore.service.dto.UserDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
 public class UserMapper implements EntityMapper<UserDto, User> {
+
     @Override
     public UserDto toDo(User entity) {
         UserDto dto = new UserDto();
@@ -19,7 +22,8 @@ public class UserMapper implements EntityMapper<UserDto, User> {
         dto.setPassword(entity.getPassword());
         dto.setCreateAt(entity.getCreateAt());
         dto.setIntro(entity.getIntro());
-        entity.setProfile(entity.getProfile());
+        dto.setProfile(entity.getProfile());
+        dto.setRole(String.valueOf(entity.getRole()));
         return dto;
     }
 

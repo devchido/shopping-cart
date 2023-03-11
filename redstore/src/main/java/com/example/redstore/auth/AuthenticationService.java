@@ -1,6 +1,7 @@
 package com.example.redstore.auth;
 
 import com.example.redstore.config.JwtService;
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Role;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
@@ -49,17 +50,10 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse updateUser(UserDto dto, Long id){
-        var user = User.builder()
-                .id(id)
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .email(dto.getEmail())
-                .mobile(dto.getMobile())
-                .photos(dto.getPhotos())
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .role(Role.USER)
-                .build();
+    public AuthenticationResponse updatePassUser(UserDto dto){
+        var user = userRepository.findById(String.valueOf(SecurityUtils.getPrincipal().getId())).orElseThrow();
+//        user.setId(SecurityUtils.getPrincipal().getId());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         var saveUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(saveUser, jwtToken);

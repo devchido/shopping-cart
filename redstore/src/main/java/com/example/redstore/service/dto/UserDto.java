@@ -1,5 +1,6 @@
 package com.example.redstore.service.dto;
 
+import com.example.redstore.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,5 @@ public class UserDto {
     private String photos;
     private String intro;
     private String profile;
+    private String role;
 }

@@ -1,5 +1,7 @@
 package com.example.redstore.resources;
 
+import com.example.redstore.auth.AuthenticationResponse;
+import com.example.redstore.auth.AuthenticationService;
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 
@@ -21,6 +24,7 @@ import java.util.List;
 public class UserResources {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final AuthenticationService service;
 
     //cho nay lan sau de post lay dto nhe
     @GetMapping("/filter")
@@ -57,14 +61,6 @@ public class UserResources {
     @GetMapping("/page")
     public ResponseEntity<List<UserDto>> findAllPage(Pageable pageable) {
         Page<UserDto> page = userService.findAllPage(pageable);
-
-        /* cai nay chi tra ra list
-        muon co them total cua no thi co nhieu cach
-        cach 1:
-            tạo 1 DTO -> PageDTO có size và content ( content se la List<?>)
-        cach 2:
-            tra total tren header --> cach nay thi gon hon co ma phải cài them jhipster
-        */
         HttpHeaders headers = new HttpHeaders();
         headers.add("total", String.valueOf(page.getTotalElements()));
         headers.add("totalPages", String.valueOf(page.getTotalPages()));
@@ -73,16 +69,25 @@ public class UserResources {
 
     @GetMapping("/info")
     public UserDto getUserInformation() {
-        UserDto result = new UserDto();
-        result.setId(SecurityUtils.getPrincipal().getId());
-        result.setFirstName(SecurityUtils.getPrincipal().getFirstName());
-        result.setLastName(SecurityUtils.getPrincipal().getLastName());
-        result.setMobile(SecurityUtils.getPrincipal().getMobile());
-        result.setEmail(SecurityUtils.getPrincipal().getEmail());
-        result.setPhotos(SecurityUtils.getPrincipal().getPhotos());
-        return result;
+        return userService.getUserInformation();
     }
 
     // Page: Phân trang
 //    Pageable pageable = PageRequest.of(1, 10);
+    @PutMapping("/updatePassUser")
+    public ResponseEntity<AuthenticationResponse> updatePassUser(
+            @RequestBody UserDto dto
+    ){
+        return ResponseEntity.ok(service.updatePassUser(dto));
+    }
+    @GetMapping({"/forAdmin"})
+    @PreAuthorize("hasRole('ADMIN')")
+    public String forAdmin(){
+        return "This URL is only accessible to admin";
+    }
+    @GetMapping({"/forUser"})
+    @PreAuthorize("hasRole('USER')")
+    public String forUser(){
+        return "This URL is only accessible to user";
+    }
 }

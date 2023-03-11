@@ -1,5 +1,6 @@
 package com.example.redstore.service;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.dto.UserDto;
@@ -77,5 +78,11 @@ public class UserService {
     @Transactional
     public Page<UserDto> findAllPage(Pageable pageable){
         return userRepository.findAll(pageable).map(userMapper::toDo);
+    }
+
+    public UserDto getUserInformation(){
+        User result = SecurityUtils.getPrincipal();
+        UserDto dto = userMapper.toDo(result);
+        return dto;
     }
 }

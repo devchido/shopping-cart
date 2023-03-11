@@ -49,12 +49,7 @@ public class AuthenticationController {
     "profile": null
   }
    */
-  @PutMapping("/updateUser/{id}")
-  public ResponseEntity<AuthenticationResponse> updateUser(
-          @RequestBody UserDto dto, @PathVariable("id") Long id
-  ){
-    return ResponseEntity.ok(service.updateUser(dto, id));
-  }
+
 
 
 

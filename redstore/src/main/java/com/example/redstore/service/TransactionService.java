@@ -35,6 +35,7 @@ public class TransactionService {
         Order orderId = orderRepository.findById(String.valueOf(dto.getOrderId())).orElse(null);
         entity.setUsers(orderId.getUsers());
         entity.setOrder(orderId);
+        entity.setStatus((short) 0);
 
         // Set create at
         entity.setCreatedAt(Instant.now());
@@ -42,12 +43,18 @@ public class TransactionService {
         System.out.println("Thực thi create");
     }
 
-    // Edit user
+    // Edit by Transaction id
     @Transactional
     public void edit(Long id, TransactionDto dto){
         Transaction entity = transactionMapper.toEntity(dto);
-        entity.setId(id);
-
+        Transaction transaction = transactionRepository.findById(String.valueOf(id)).orElse(null);
+        entity.setId(transaction.getId());
+        // Giữ nguyên bản order
+        entity.setOrder(transaction.getOrder());
+        // Giữ nguyên user tạo transaction
+        entity.setUsers(transaction.getUsers());
+        // Giữ nguyên thời gian tạo
+        entity.setCreatedAt(transaction.getCreatedAt());
         // Set update at
         entity.setUpdatedAt(Instant.now());
         transactionRepository.save(entity);

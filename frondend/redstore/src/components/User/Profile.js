@@ -1,13 +1,23 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             user: {},
+            open: false,
         };
     }
+    handleOpen = () => {
+        this.setState({ open: true });
+        console.log(this.state.open);
+    };
+    handleClose = () => {
+        this.setState({ open: false });
+        console.log(this.state.open);
+    };
 
     componentDidMount() {
         this.loadDataProfile();
@@ -50,22 +60,47 @@ class Profile extends Component {
     render() {
         return (
             <>
-                
                 <div>
                     <div className="profile-page">
-                        
                         <div className="row">
                             <div className="container">
                                 <div>
                                     <img src="./assets/images/product-1.jpg" />
-                                    </div>
+                                </div>
                                 <span>
                                     Name: {this.state.user.firstName} {this.state.user.lastName}
                                 </span>
                                 <br />
                                 <span>email: {this.state.user.email}</span>
                                 <br />
-                                
+                                <button onClick={this.handleOpen}>Update</button>
+                                {this.state.open ? (
+                                    <>
+                                        <div className="modal">
+                                            <div className="modal_inner">
+                                                <div className="modal_header">
+                                                    <p>
+                                                        Update {this.state.user.firstName} {this.state.user.lastName}
+                                                    </p>
+                                                    <i class="fa fa-times" onClick={this.handleClose}></i>
+                                                </div>
+                                                
+                                                <div className="modal_body">
+                                                    <h2>Modal</h2>
+                                                    <TextField sx={{ margin:'15px auto'}} fullWidth label="First Name" />
+                                                    <TextField sx={{ margin:'15px auto'}} fullWidth label="First Name" />
+                                                    <TextField sx={{ margin:'15px auto'}} fullWidth label="First Name" />
+                                                    <TextField sx={{ margin:'15px auto'}} fullWidth label="First Name" />
+                                                    <TextField sx={{ margin:'15px auto'}} fullWidth label="First Name" />
+                                                    <TextField sx={{ margin:'15px auto'}} fullWidth label="First Name" />
+                                                </div>
+                                                <div className="modal_footer">
+                                                    <button onClick={this.handleClose}>Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : null}
                             </div>
                         </div>
                     </div>

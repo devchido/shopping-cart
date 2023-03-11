@@ -1,5 +1,6 @@
 package com.example.redstore.auth;
 
+import com.example.redstore.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

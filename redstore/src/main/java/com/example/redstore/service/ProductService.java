@@ -1,5 +1,6 @@
 package com.example.redstore.service;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Product;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.ProductRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,9 +41,11 @@ public class ProductService {
         Optional<Product> productOptionalSlug = productRepository.findBySlug(dto.getSlug());
         if (productOptionalSlug.isPresent()) {
             throw new RuntimeException("Slug: " + dto.getSlug() + " đã được sử dụng.");
-        };
+        }
+        ;
         Product entity = productMapper.toEntity(dto);
-        User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
+//        User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
+        User userId = SecurityUtils.getPrincipal();
         entity.setUsers(userId);
         entity.setCreatedAt(Instant.now());
         productRepository.save(entity);
@@ -52,18 +56,33 @@ public class ProductService {
     @Transactional
     public void edit(Long id, ProductDto dto) {
         Product entity = productMapper.toEntity(dto);
-        entity.setId(id);
-        entity.setUpdatedAt(Instant.now());
-        productRepository.save(entity);
+        Product product = productRepository.findById(String.valueOf(id)).orElseThrow();
+        if (SecurityUtils.getPrincipal() == product.getUsers()) {
+            entity.setId(product.getId());
+            entity.setUsers(product.getUsers());
+            entity.setUpdatedAt(Instant.now());
+            productRepository.save(entity);
+            System.out.println("Thực thi edit");
+        } else new String("Không thể edit");
 
-        System.out.println("Thực thi edit");
     }
+
 
     // Delete user
     @Transactional
     public void delete(Long id) {
-        productRepository.deleteById(String.valueOf(id));
-        System.out.println("Thực thi delete");
+        Product product = productRepository.findById(String.valueOf(id)).orElseThrow();
+        if (SecurityUtils.getPrincipal() == product.getUsers()) {
+            productRepository.deleteById(String.valueOf(id));
+            System.out.println("Thực thi delete");
+        } else new String("Không thể xoá");
+
+    }
+
+    public ProductDto findProductBySlug(String slug){
+        Product entity = productRepository.findProductBySlug(slug);
+        ProductDto dto = productMapper.toDo(entity);
+        return dto;
     }
 
     // get all
@@ -78,11 +97,22 @@ public class ProductService {
 //        List<Product> entity = productRepository.filter(id, users, title, keySearch, keyOrder);
 //        List<ProductDto> dtos = productMapper.toDo(entity);
 //        return dtos;
-    public List<ProductDto> filter( String keySearch) {
+
+    //    public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field){
+//        Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize).withSort(Sort.by(field))));
+//        Page<ProductDto> dtos = products.map(productMapper::toDo);
+//        return dtos;
+//    }
+//    public Page<ProductDto> filter(int offset, int pageSize, String field, String keySearch) {
+//        Page<Product> entity = productRepository.filter(keySearch,(PageRequest.of(offset, pageSize).withSort(Sort.Direction.ASC, field)));
+//        Page<ProductDto> dtos = entity.map(productMapper::toDo);
+//        return dtos;
+//    }
+    public List<ProductDto> filter(String keySearch) {
         List<Product> entity = productRepository.filter( keySearch);
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
-}
+    }
 
     @Transactional
     public Page<ProductDto> findAllProductPage(Pageable pageable) {
@@ -95,30 +125,39 @@ public class ProductService {
             }
         });
         return dtoPage;
-    };
+    }
+
+    ;
 
     @Transactional
-    public List<ProductDto> findByUsers(Long users){
-        List<Product> entity = productRepository.findByUsers(users);
+    public List<ProductDto> findByUsers(String title) {
+        User user = SecurityUtils.getPrincipal();
+        List<Product> entity = productRepository.findByUsers(user.getId(), title);
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
     }
 
     // Hiển thị list các product theo field
-    public List<ProductDto> findProductsWithSorting(String field){
-        List<Product> entity = productRepository.findAll(Sort.by(Sort.Direction.ASC, field));
+    public List<ProductDto> findProductsWithSorting(String field, String key) {
+        List<Product> entity = productRepository.findAll(Sort.by(Sort.Direction.valueOf(key), field));
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
     }
 
-    public Page<ProductDto> findProductsWithPagination(int offset, int pageSize){
+    public Page<ProductDto> findProductsWithPagination(int offset, int pageSize) {
         Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize)));
         Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
-    public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field){
+
+    public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field) {
         Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize).withSort(Sort.by(field))));
         Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
+
+//    public Page<ProductDto> filterAndPagination( int offset, int pageSize, String field, String keySearch){
+//        List<ProductDto> products = filter(keySearch);
+//        Page<ProductDto> pageProductDtos =
+//    }
 }

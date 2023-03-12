@@ -16,7 +16,7 @@ class Products extends Component {
         this.setState({shortData: e.target.value});
     }
     filter(key) {
-        console.warn(key);
+        // console.warn(key);
 
         fetch("/product/filter?keySearch=" + key ).then((data) => {
             data.json().then((resp) => {
@@ -63,7 +63,7 @@ class Products extends Component {
                         {this.state.searchData ? (
                             <>
                                 {this.state.searchData.map((item) => (
-                                    <div className="col-4">
+                                    <div className="col-4" style={{border: "1px"}}>
                                         <a href="#">
                                             <img src={item.photos} alt="" />
                                         </a>
@@ -78,7 +78,7 @@ class Products extends Component {
                                 {this.state.products
                                     ? this.state.products.map((item, i) => (
                                           <div className="col-4">
-                                              <Link to={"/singleProduct"}>
+                                              <Link to={`/single_product/${item.slug}`}>
                                                   <img src={item.photos} alt="" />
                                               </Link>
                                               <h4>{item.title}</h4>

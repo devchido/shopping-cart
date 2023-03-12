@@ -83,7 +83,7 @@ public class UserService {
 
     public UserDto getUserInformation(){
         User result = SecurityUtils.getPrincipal();
-        result.setPassword();
+//        result.setPassword();
         UserDto dto = userMapper.toDo(result);
         return dto;
     }

@@ -179,7 +179,9 @@ header.sticky {
 }
 
 .col-4 {
-    flex-basis: 25%;
+    border: 1px solid #c4baba;
+    border-radius: 5px;
+    flex-basis: 24.5%;
     padding: 10px;
     min-width: 200px;
     margin-bottom: 50px;
@@ -195,7 +197,7 @@ header.sticky {
 }
 /* căn chỉnh ảnh sản phẩm (product item) */
 .col-4 img {
-    max-width: 16rem;
+    width: 16rem;
     width: 100%;
     height: 16rem;
 }
@@ -1042,4 +1044,60 @@ table, th, td {
 .modal_footer button:hover {
     
     background: #f02222;
+}
+.my-product-page{
+    padding-block: 10rem;
+}
+.my-product-page th:last-child,td:last-child {
+    text-align: center;
+}
+.my-product-page td a {
+    color: #ff523b;
+    font-size: 14px;
+}
+.formAdd{
+    display: flex;
+}
+.formAdd-container{
+    background: radial-gradient(#fff, #ffd6d6);
+    width: 300px;
+    height: 450px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+.img-add{
+    margin: 2.5rem;
+    border-radius: 5px;
+}
+.img-add img{
+    height: 320px;
+    width: 320px;
+    border-radius: 5px;
+}
+.text-add{
+    margin: 2.5rem;
+    border-radius: 10px;
+}
+.number-add{
+    margin: 2.5rem;
+}
+.date-add{
+    margin: 2.5rem;
+    width: 300px;
+}
+.text-add input:focus{
+    border-color: #f02222;
+}
+.number-add input:focus{
+    border-color: #f02222;
+}
+.btn-add button{
+    color: #ff523b;
+    margin: 0 10px 10px  10px;
+}
+.btn-add button:hover{
+    color: #fff;
+    background: #ff523b;
 }

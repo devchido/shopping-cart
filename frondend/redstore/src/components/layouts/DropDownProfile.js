@@ -12,12 +12,10 @@ export class DropDownProfile extends Component {
         return (
             <>
                 <div class="dropdown-content">
-                    <p>
-                        {this.props.users.firstName} {this.props.users.lastName}
-                    </p>
 
 
-                    <Link to="/profile">Profile</Link>
+
+                    <Link to="/profile">{this.props.users.firstName} {this.props.users.lastName}</Link>
                     <Link to={""}>Link 2</Link>
                     <Link to={"/my-product"} >My Product</Link>
 

@@ -1,9 +1,9 @@
 package com.example.redstore.repository;
 
 import com.example.redstore.domain.Product;
-import com.example.redstore.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,16 +25,18 @@ public interface ProductRepository extends JpaRepository<Product, String> {
             "or title like concat('%', :keySearch, '%')" +
             "or content like concat('%', :keySearch, '%')"
             , nativeQuery = true)
-    List<Product> filter(@Param("keySearch") String keySearch
-    );
+    List<Product> filter(@Param("keySearch") String keySearch);
 
     // find by sulg
     Optional<Product> findBySlug(String slug);
 
     @Query(value = "SELECT t.* FROM shop.product t " +
-            "        WHERE user_id = :users", nativeQuery = true)
-    List<Product> findByUsers(@Param("users") Long users);
+            "        WHERE user_id = :users and title like concat('%', :title ,'%')", nativeQuery = true)
+    List<Product> findByUsers(@Param("users") Long users, @Param("title") String title);
 
     @Query(value = "select P from Product P ")
     Page<Product> findAllProductPage(Pageable pageable);
+
+    @Query(value = "select p.* from shop.product p where slug = :slug", nativeQuery = true)
+    Product findProductBySlug(@Param("slug") String Slug);
 }

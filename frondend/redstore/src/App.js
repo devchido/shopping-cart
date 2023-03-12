@@ -19,6 +19,7 @@ import Login from "./components/User/Login";
 import Register from "./components/User/Register";
 import Home from "./components/Home/Home";
 import ProductList from "./components/User/ProductList";
+import AddProduct from "./components/Products/products/AddProduct";
 
 function App() {
     return (
@@ -32,13 +33,15 @@ function App() {
                             <Route path="/products" element={<Products />} />
                             <Route path="/category" element={<NotFound />} />
                             <Route path="/shopping_cart" element={<ShoppingCart />} />
-                            <Route path="/single_product/:id" element={<SingleProduct />} />
+                            <Route path="/single_product/:slug" element={<SingleProduct />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/user_address" element={<Address />} />
                             <Route path="/not-found" element={<NotFound />} />
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/my-product" element={<ProductList />} />
+                            <Route path="/my-product/update/:id" element={<AddProduct/>}/>
+                            <Route path="/my-product/new-product" element={<AddProduct/>} />
                         </Routes>
                         <Footer />
                     </Fragment>

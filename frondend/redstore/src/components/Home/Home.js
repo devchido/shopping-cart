@@ -22,10 +22,10 @@ class Home extends Component {
                 {/* offer */}
                 <Offer />
                 {/* testimonial */}
-                <Testimonials />
+                {/* <Testimonials /> */}
                 {/* brands */}
 
-                <Brands />
+                {/* <Brands /> */}
             </>
         );
     }

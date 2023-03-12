@@ -1,74 +1,103 @@
-import React, { Component } from "react";
-import { Table } from "react-bootstrap";
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { height } from "@mui/system";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-export class ProductList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            userId: localStorage.getItem("users"),
-            products: null,
+function ProductList() {
+    const [product, setProduct] = useState();
+    const [open, setOpen] = useState(false);
+    const [title, setTitle] = useState("");
+    useEffect(() => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+        var raw = "";
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
         };
+        fetch("http://localhost:8080/product/user?title="+title, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                // console.log(result);
+                setProduct({ result });
+                console.log(product);
+            })
+            .catch((error) => console.log("error", error));
+    }, []);
+
+    const handleUpdate = (item) => {
+        console.log(item);
+        setOpen(true);
+    };
+    const handleDelete = (item) => {
+        console.log(item);
     }
 
-    componentDidMount() {
-        // console.log(this.state.userId);
-        this.loadDataProduct();
-        
-    }
-    loadDataProduct = () => {
-        fetch("/product/" + this.state.userId).then((resp) => {
-            resp.json().then((result) => {
-                console.log(result);
-                this.setState({ products: result });
-            });
-        });
-    }
-    render() {
-        return (
-            <div>
-                <br />
-                <br />
-                <br />
-                <br />
-                <div className="small-container">
+    return (
+        <>
+            <div className="my-product-page">
+                <div className="container">
                     <div className="row">
-                        <h2>My Product</h2>
-                        <>
-                        <Table>
                         
-                            <tr>
-                                <td>SST</td>
-                                <td>Images</td>
-                                <td>#Id</td>
-                                <td>Name</td>
-                                <td>Summary</td>
-                                <td>Price</td>
-                                <td>Discount</td>
-                                <td>Quantity</td>
-                            </tr>
-                            {this.state.products
-                                    ? this.state.products.map((item, i) => (
-                                        <tr>
-                                        <td>{i}</td>
-                                        <td><img src={item.photos} /></td>
-                                        <td>{item.id}</td>
-                                        <td>{item.title}</td>
-                                        <td>{item.summary}</td>
-                                        <td>{item.price}</td>
-                                        <td>{item.discount}</td>
-                                        <td>{item.quantity}</td>
-                                    </tr>
-                                      ))
-                                    : null}
-                        </Table>
-                        </>
+
+                    <TextField label="Search" id="fullWidth" style={{width: "50%", marginLeft: "auto"}} /> 
+                    <Button variant="outlined" style={{width: "10%", height: "3.5rem", marginRight: "auto"}}>Search</Button>
+                    <Button variant="outlined" style={{width: "10%", height: "3.5rem", marginLeft: "0"}}><Link to={"/my-product/new-product"}>Add</Link></Button>
+                       <br/><br/><br/><br/>
+                        <TableContainer>
+                            <Table aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center">STT</TableCell>
+                                        <TableCell align="center">Photo</TableCell>
+                                        <TableCell align="center">Title</TableCell>
+                                        <TableCell align="center">Price&nbsp;($)</TableCell>
+                                        <TableCell align="center">Discount&nbsp;(%)</TableCell>
+                                        <TableCell align="center">Quantity</TableCell>
+                                        <TableCell align="center">Action</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {product
+                                        ? product.result.map((item, i) => (
+                                              <TableRow>
+                                                  <TableCell align="center" width={"10px"}>
+                                                      {i + 1}
+                                                  </TableCell>
+                                                  <TableCell align="center">
+                                                      <img src={item.photos} />
+                                                  </TableCell>
+                                                  <TableCell align="center">{item.title}</TableCell>
+                                                  <TableCell align="center">{item.price}</TableCell>
+                                                  <TableCell align="center">{item.discount}%</TableCell>
+                                                  <TableCell align="center">{item.quantity}</TableCell>
+                                                  <TableCell align="center">
+                                                      <Button variant="outlined">
+                                                      <Link to={`/single_product/${item.slug}`} style={{color:"#000"}}>View</Link>
+                                                      </Button>
+                                                      <Button variant="outlined">
+                                                          <Link to={`/my-product/update/${item.id}`}>Update</Link>
+                                                      </Button>
+                                                      
+                                                      <Button variant="outlined" onClick={()=>handleDelete(item)}>Delete</Button>
+                                                  </TableCell>
+                                              </TableRow>
+                                          ))
+                                        : null}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </div>
                 </div>
-                <br/><br/><br/><br/><br/>
             </div>
-        );
-    }
+        </>
+    );
 }
-
-
 export default ProductList;

@@ -3,9 +3,7 @@ package com.example.redstore.service;
 import com.example.redstore.domain.*;
 import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.OrderDto;
-import com.example.redstore.service.dto.ProductDto;
 import com.example.redstore.service.mapper.CartItemMapOrderItemMapper;
-import com.example.redstore.service.mapper.CartItemMapper;
 import com.example.redstore.service.mapper.CartMapOrderMapper;
 import com.example.redstore.service.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -98,34 +97,61 @@ public class OrderService {
 
     }
 
-
+    /* todo: Chức năng order: khi thực hiện, một phiếu order mới được tạo ra,
+        các item từ bảng cart sẽ được lưu thành các orderItem
+        mỗi orer item đều chứa id của phiếu order để nhận diện.
+    */
     public void createOrderByCart(Long id) {
+
         Cart cart = cartRepository.findById(String.valueOf(id)).orElseThrow();
         // dùng tạm cách này vậy
         List<CartItem> cartItem = cartItemRepository.findByCartId(id);
 
         Order order = cartMapOrderMapper.toEntity(cart);
-
-
+        // todo: Lưu thông tin đính kèm của giỏ hàng
+        order.setFirstName(cart.getFirstName());
+        order.setLastName(cart.getLastName());
+        order.setMobile(cart.getMobile());
+        order.setEmail(cart.getEmail());
+        order.setLine1(cart.getLine1());
+        order.setCity(cart.getCity());
+        order.setCountry(cart.getCountry());
+        order.setContent(cart.getContent());
 
         //todo: Set các thuộc tính not null(làm sau)
         //viết như này mai sau tìm xem minh chua lam cai gi cho de
         order.setCreatedAt(Instant.now());
-        order.setItemDiscount(1F);
+        order.setItemDiscount(0F);
+        // tính Tổng giảm giá của các mặt hàng đặt hàng.
+
+        /*
+        Trạng thái của đơn đặt hàng có thể là :
+        Mới, Đã thanh toán, Đã thanh toán, Không thành công, Đã vận chuyển, Đã giao, Đã trả lại và Hoàn thành.
+         */
         order.setStatus((short) 0);
+        // tính Tổng giá của các Mục đặt hàng.
         order.setSubTotal((float) 0);
+        // Tổng giá của Đơn hàng đã bao gồm thuế và phí vận chuyển.
         order.setTotal((float) 0);
         // Lưu
-        orderRepository.save(order);
-
         List<OrderItem> orderItem = orderItemMapper.toEntity(cartItem);
+
         orderItem.forEach(orderItem1 -> {
             orderItem1.setOrders(order);
-            orderItem1.setDiscount(0f);
-            orderItem1.setPrice(0f);
-            orderItem1.setQuantity((short)0);
+            // todo: tính giá trị tổng đơn hàng
+            order.setSubTotal(order.getSubTotal() + orderItem1.getPrice()*orderItem1.getQuantity());
+            // todo: tính giá trị tổng tiền được giảm của đơn hàng
+            order.setItemDiscount(
+                    order.getItemDiscount() +
+                    ((orderItem1.getPrice() * orderItem1.getDiscount()) / 100) * orderItem1.getQuantity() );
+
 
         });
+        // todo: Tính giá trị tổng tiền của đơn hàng sau khi được giảm
+        order.setTotal(order.getSubTotal() - order.getItemDiscount());
+        orderRepository.save(order);
         orderItemRepository.saveAll(orderItem);
+        cart.setStatus((short)1);
+        cartRepository.save(cart);
     }
 }

@@ -18,6 +18,9 @@ public class CartItemMapOrderItemMapper implements EntityMapper<CartItem, OrderI
     public OrderItem toEntity(CartItem cartItem) {
         OrderItem orderItem = new OrderItem();
         orderItem.setProducts(cartItem.getProduct());
+        orderItem.setPrice(cartItem.getPrice());
+        orderItem.setDiscount(cartItem.getDiscount());
+        orderItem.setQuantity(cartItem.getQuantity());
         return orderItem;
     }
 

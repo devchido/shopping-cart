@@ -11,7 +11,7 @@ class Navbar extends Component {
         };
     }
     setOpen = () => {
-        if (this.state.openDropdown == true) {
+        if (this.state.openDropdown === true) {
             // console.log(this.state.openDropdown);
             this.setState({ openDropdown: false });
         } else {
@@ -34,7 +34,7 @@ class Navbar extends Component {
             redirect: "follow",
         };
 
-        fetch("/user/info", requestOptions)
+        fetch("/user/auth/info", requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -58,7 +58,7 @@ class Navbar extends Component {
                 <header>
                     <div className="logo">
                         <Link to={"/"}>
-                            <img src="./assets/images/logo.png " width="125px" />
+                            <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/logo.png" style={{width:"125px"}}  />
                         </Link>
                     </div>
                     <nav>
@@ -73,10 +73,13 @@ class Navbar extends Component {
                                 <Link to="/category">Category</Link>
                             </li>
                             <li>
-                                <Link to="/not-found">About</Link>
+                                <Link to="/cart-all">Cart - All</Link>
                             </li>
                             <li>
-                                <Link to="/not-found">Contact</Link>
+                                <Link to="/popup">popup</Link>
+                            </li>
+                            <li>
+                                <Link to="/not-found">Not found</Link>
                             </li>
                         </ul>
                     </nav>
@@ -103,7 +106,7 @@ class Navbar extends Component {
                     &nbsp;&nbsp;
 
                     <Link to="/shopping_cart">
-                        <img src="./assets/images/cart.png" width="30px" height="30px" alt="" />
+                        <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" width="30px" height="30px" alt="" />
                     </Link>
                     {/* <span className="badge badge-warning" id="lblCartCount">
                         123

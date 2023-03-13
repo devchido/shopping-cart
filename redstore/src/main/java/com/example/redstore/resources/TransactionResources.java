@@ -16,24 +16,24 @@ import java.util.List;
 public class TransactionResources {
     private final TransactionService transactionService;
 
-    @PostMapping("")
+    @PostMapping("/auth/create")
     public void create(@RequestBody TransactionDto dto) {
         transactionService.create(dto);
     }
 
     //edit
-    @PutMapping("/{id}")
+    @PutMapping("/auth/update/{id}")
     public void edit(@RequestBody TransactionDto dto, @PathVariable("id") Long id) {
         transactionService.edit(id, dto);
     }
 
     //delete
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/auth/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         transactionService.delete(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/auth/admin")
     public List<TransactionDto> findAll(){
         List<TransactionDto> dtos = transactionService.findAll();
         return dtos;

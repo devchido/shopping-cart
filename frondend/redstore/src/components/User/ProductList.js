@@ -1,5 +1,6 @@
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import { height } from "@mui/system";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -7,6 +8,7 @@ function ProductList() {
     const [product, setProduct] = useState();
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
+    const [key, setKey] = useState("");
     useEffect(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -17,7 +19,7 @@ function ProductList() {
             body: raw,
             redirect: "follow",
         };
-        fetch("http://localhost:8080/product/user?title="+title, requestOptions)
+        fetch("/product/auth/user?title=" + title, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -38,20 +40,47 @@ function ProductList() {
     };
     const handleDelete = (item) => {
         console.log(item);
-    }
-
+    };
+    const handleSearch = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+        var raw = "";
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+        };
+        fetch("/product/auth/user?title=" + key, requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                setProduct({ result });
+            })
+        
+    };
+        
     return (
         <>
             <div className="my-product-page">
                 <div className="container">
                     <div className="row">
-                        
-
-                    <TextField label="Search" id="fullWidth" style={{width: "50%", marginLeft: "auto"}} /> 
-                    <Button variant="outlined" style={{width: "10%", height: "3.5rem", marginRight: "auto"}}>Search</Button>
-                    <Button variant="outlined" style={{width: "10%", height: "3.5rem", marginLeft: "0"}}><Link to={"/my-product/new-product"}>Add</Link></Button>
-                       <br/><br/><br/><br/>
-                        <TableContainer>
+                        <TextField
+                            label="Search"
+                            id="fullWidth"
+                            style={{ width: "50%", marginLeft: "auto" }}
+                            onChange={(e) => setKey(e.target.value)}
+                        />
+                        <Button 
+                            variant="outlined" 
+                            style={{ width: "10%", height: "3.5rem", marginRight: "auto" }}
+                            onClick={()=> handleSearch()}
+                        >
+                            Search
+                        </Button>
+                        <Button variant="outlined" style={{ width: "10%", height: "3.5rem", marginLeft: "0" }}>
+                            <Link to={"/my-product/new-product"}>Add</Link>
+                        </Button>
+                        <TableContainer style={{ paddingTop: "15px" }}>
                             <Table aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -80,13 +109,17 @@ function ProductList() {
                                                   <TableCell align="center">{item.quantity}</TableCell>
                                                   <TableCell align="center">
                                                       <Button variant="outlined">
-                                                      <Link to={`/single_product/${item.slug}`} style={{color:"#000"}}>View</Link>
+                                                          <Link to={`/single_product/${item.slug}`} style={{ color: "#000" }}>
+                                                              View
+                                                          </Link>
                                                       </Button>
                                                       <Button variant="outlined">
                                                           <Link to={`/my-product/update/${item.id}`}>Update</Link>
                                                       </Button>
-                                                      
-                                                      <Button variant="outlined" onClick={()=>handleDelete(item)}>Delete</Button>
+
+                                                      <Button variant="outlined" onClick={() => handleDelete(item)}>
+                                                          Delete
+                                                      </Button>
                                                   </TableCell>
                                               </TableRow>
                                           ))

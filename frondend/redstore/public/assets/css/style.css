@@ -516,6 +516,15 @@ select:focus {
     background-color: #ff523b;
     color: #fff;
 }
+.product-user-name {
+    font-size: 12px;
+    color: #000;
+}
+.product-user-name:hover {
+    font-size: 15px;
+    color: #ff523b;
+}
+
 
 /* .active{
     background-color: #ff523b;
@@ -1094,8 +1103,15 @@ table, th, td {
     border-color: #f02222;
 }
 .btn-add button{
-    color: #ff523b;
+    color: #1976d2;
     margin: 0 10px 10px  10px;
+}
+.btn-add button a{
+    color: #1976d2;
+    font-size: 14px;    
+}
+.btn-add button a:hover {
+    color: #fff; 
 }
 .btn-add button:hover{
     color: #fff;

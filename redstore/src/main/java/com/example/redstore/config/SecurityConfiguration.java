@@ -30,11 +30,9 @@ public class SecurityConfiguration {
 //                các trang được truy cập sử dụng không cần đăng nhập
                 .requestMatchers(
                         "/api/v1/auth/**",
-                        "/product/**",
-                        "/category/**",
-                        "/order/**",
-                        "/cart/**",
-                        "/**"
+                        "/product/api/**",
+                        "/category/api/**",
+                        "/product-category/api/**"
                 )
                 .permitAll()
                 .anyRequest()

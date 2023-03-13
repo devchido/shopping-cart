@@ -17,41 +17,31 @@ import java.util.List;
 public class CartItemResources {
     private final CartItemService cartItemService;
 
-    // Tạo item mới vào giỏ hàng cart
-    /*
-    {
-        "productId": "2",
-        "cartId": "2",
-        "quantity": 1,
-        "discount": "0",
-        "price": 5
-    }
-     */
-    @PostMapping("")
+    @PostMapping("/auth")
     public void create(@RequestBody CartItemDto dto) {
         cartItemService.create(dto);
     }
 
     // edit: cập nhật item của giỏ hàng
-    @PutMapping("/{id}")
+    @PutMapping("/auth/{id}")
     public void edit(@RequestBody CartItemDto dto, @PathVariable("id") Long id) {
         cartItemService.edit(id, dto);
     }
 
     // delete: xoá item khỏi giỏ hàng
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/auth/{id}")
     public void delete(@PathVariable("id") Long id) {
         cartItemService.delete(id);
     }
 
     // Hiển thị tất cả các item của tất cả giỏ hàng
-    @GetMapping("")
+    @GetMapping("/auth")
     public List<CartItemDto> findAll(){
         List<CartItemDto> dtos = cartItemService.findAll();
         return dtos;
     }
     // Hiển thị tất cả các item của giỏ hàng có id: cartId
-    @GetMapping("/cart/{cartId}")
+    @GetMapping("/auth/cart/{cartId}")
     public List<CartItemDto> findAllByCartId(@PathVariable("cartId") Long cartId){
         List<CartItemDto> dtos = cartItemService.findByCartId(cartId);
         return dtos;

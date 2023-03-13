@@ -44,7 +44,7 @@ class Profile extends Component {
             redirect: "follow",
         };
 
-        fetch("/user/info", requestOptions)
+        fetch("/user/auth/info", requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -56,13 +56,7 @@ class Profile extends Component {
             })
             .catch((error) => {
                 console.log("error", error);
-                this.logout();
             });
-    };
-
-    logout = () => {
-        localStorage.removeItem("token");
-        window.location = "/login";
     };
 
     render() {

@@ -20,7 +20,7 @@ function SingleProduct() {
     //     redirect: "follow",
     // };
     useEffect(()=>{
-        fetch("/product/findProductBySlug/" + slug).then((resp) => {
+        fetch("/product/api/findProductBySlug/" + slug).then((resp) => {
             resp.json().then((result) => {
                 console.log(result);
                 setProduct({
@@ -39,24 +39,7 @@ function SingleProduct() {
         });
     },[])
 
-    // fetch("/product/findProductBySlug/" + slug, requestOptions)
-    //     .then((response) => response.text())
-    //     .then((result) => {
-    //         console.log(result);
-    //         setProduct({
-    //             id: result.id,
-    //             users: result.users,
-    //             title: result.title,
-    //             slug: result.slug,
-    //             summary:result.summary,
-    //             price: result.price,
-    //             discount: result.discount,
-    //             photos: result.photos,
-    //             quantity:result.quantity,
-    //             content: result.content,
-    //         });
-    //     })
-    //     .catch((error) => console.log("error", error));
+    
 
     return (
         <>

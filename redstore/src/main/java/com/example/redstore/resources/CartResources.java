@@ -27,32 +27,32 @@ public class CartResources {
         "content": "Test"
     }
      */
-    @PostMapping("")
+    @PostMapping("/auth")
     public void create(@RequestBody CartDto dto) {
         cartService.create(dto);
     }
 
     //edit giỏ hàng theo id
-    @PutMapping("/{id}")
+    @PutMapping("/auth/{id}")
     public void edit(@RequestBody CartDto dto, @PathVariable("id") Long id) {
         cartService.edit(id, dto);
     }
 
     // Xoá giỏ hàng
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/auth/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         cartService.delete(id);
     }
 
     // Hiển thị tất cả các giỏ hàng cart
-    @GetMapping("")
+    @GetMapping("/auth")
     public List<CartDto> findAll(){
         List<CartDto> dtos = cartService.findAll();
         return dtos;
     }
 
     // Hiển thị các giỏ hàng cart của user có id = userID
-    @GetMapping("/user/{userId}")
+    @GetMapping("/auth/{userId}")
     public List<CartDto> findAllByUserId(@PathVariable("userId") Long userId){
         List<CartDto> dtos = cartService.findAllByUserId(userId);
         return dtos;

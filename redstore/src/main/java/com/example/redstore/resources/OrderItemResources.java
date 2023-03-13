@@ -17,24 +17,24 @@ public class OrderItemResources {
     private final OrderItemService orderItemService;
 
 
-    @PostMapping("")
+    @PostMapping("/auth")
     public void create(@RequestBody OrderItemDto dto) {
         orderItemService.create(dto);
     }
 
     //edit
-    @PutMapping("/{id}")
+    @PutMapping("/auth/{id}")
     public void edit(@RequestBody OrderItemDto dto, @PathVariable("id") Long id) {
         orderItemService.edit(id, dto);
     }
 
     //delete
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/auth/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         orderItemService.delete(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/auth")
     public List<OrderItemDto> findAll(){
         List<OrderItemDto> dtos = orderItemService.findAll();
         return dtos;

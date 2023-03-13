@@ -17,24 +17,24 @@ public class CategoryResources {
 
     private final CategoryService categoryService;
 
-    @PostMapping("")
+    @PostMapping("/auth")
     public void create(@RequestBody CategoryDto dto) {
         categoryService.create(dto);
     }
 
     //edit
-    @PutMapping("/{id}")
+    @PutMapping("/auth/{id}")
     public void edit(@RequestBody CategoryDto dto, @PathVariable("id") Long id) {
         categoryService.edit(id, dto);
     }
 
     //delete
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/auth/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         categoryService.delete(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/api")
     public List<CategoryDto> findAll(){
         List<CategoryDto> dtos = categoryService.findAll();
         return dtos;

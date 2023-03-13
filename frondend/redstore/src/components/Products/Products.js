@@ -13,24 +13,24 @@ class Products extends Component {
     }
     handleChange(e) {
         console.log(e.target.value);
-        this.setState({shortData: e.target.value});
+        this.setState({ shortData: e.target.value });
     }
     filter(key) {
         // console.warn(key);
 
-        fetch("/product/filter?keySearch=" + key ).then((data) => {
+        fetch("/product/api/filter?keySearch=" + key).then((data) => {
             data.json().then((resp) => {
                 console.warn("resp", resp);
                 if (resp.length > 0) {
                     this.setState({ searchData: resp, noData: false });
                 } else {
-                    this.setState({ noData: true, searchData: null, products:null });
+                    this.setState({ noData: true, searchData: null, products: null });
                 }
             });
         });
     }
     componentDidMount() {
-        fetch("product/filter").then((resp) => {
+        fetch("product/api/filter").then((resp) => {
             resp.json().then((result) => {
                 console.log(result);
                 this.setState({ products: result });
@@ -45,8 +45,8 @@ class Products extends Component {
                         <h2>All Products</h2>
                         <div>
                             <input type={"text"} onChange={(event) => this.filter(event.target.value)} />
-                            <select value={this.state.shortData}  onChange={this.handleChange}>
-                                <option value={this.state.shortData} >Default Shorting</option>
+                            <select value={this.state.shortData} onChange={this.handleChange}>
+                                <option value={this.state.shortData}>Default Shorting</option>
                                 <option value={"created_at DESC"}>Short by new product</option>
                                 <option value={"updated_at DESC"}>Short by new product update</option>
                                 <option value={"price ASC"}>Short by price ASC</option>
@@ -55,7 +55,6 @@ class Products extends Component {
                                 <option value={"discount DESC"}>Short by discount DESC</option>
                                 <option value={"quantity ASC"}>Short by quantity ASC</option>
                                 <option value={"quantity DESC"}>Short by quantity DESC</option>
-                                
                             </select>
                         </div>
                     </div>
@@ -63,13 +62,15 @@ class Products extends Component {
                         {this.state.searchData ? (
                             <>
                                 {this.state.searchData.map((item) => (
-                                    <div className="col-4" style={{border: "1px"}}>
+                                    <div className="col-4" style={{ border: "1px" }}>
                                         <a href="#">
                                             <img src={item.photos} alt="" />
                                         </a>
                                         <h4>{item.title}</h4>
-
                                         <p>{item.price} đ</p>
+                                        <Link to={"#"} className={"product-user-name"}>
+                                            Cre: {item.users.firstName}&nbsp;{item.users.lastName}
+                                        </Link>
                                     </div>
                                 ))}
                             </>
@@ -82,10 +83,10 @@ class Products extends Component {
                                                   <img src={item.photos} alt="" />
                                               </Link>
                                               <h4>{item.title}</h4>
-
-                                              <p></p>
-                                              
                                               <p>{item.price} đ</p>
+                                              <Link to={"#"} className={"product-user-name"}>
+                                                  Cre: {item.users.firstName}&nbsp;{item.users.lastName}
+                                              </Link>
                                           </div>
                                       ))
                                     : null}

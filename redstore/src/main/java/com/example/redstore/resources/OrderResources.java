@@ -19,20 +19,20 @@ public class OrderResources {
 
     // Hiển thị các order của user
     /*
-    http://localhost:8080/order/u/1
+    http://localhost:8080/order/auth/u/1
      */
-    @GetMapping("/u/{users}")
+    @GetMapping("/auth/u/{users}")
     public List<OrderDto> findByUsers(@PathVariable("users") Long users){
         List<OrderDto> dtos = orderService.findByUsers(users);
         return dtos;
     }
-    @GetMapping("/c/{carts}")
+    @GetMapping("/auth/c/{carts}")
     public List<OrderDto> findByCarts(@PathVariable("carts") Long carts){
         List<OrderDto> dtos = orderService.findByCarts(carts);
         return dtos;
     }
 
-    @GetMapping("/createByCart")
+    @PostMapping("/auth/createByCart")
     public void createOrderByCart(@RequestParam("idCard") Long id) {
         orderService.createOrderByCart(id);
     }
@@ -42,7 +42,7 @@ public class OrderResources {
     Hiển thị tất cả các order
 
     */
-    @GetMapping("/findAll")
+    @GetMapping("/auth/findAll")
     public List<OrderDto> findAll(){
         List<OrderDto> dtos = orderService.findAll();
         return dtos;
@@ -59,7 +59,7 @@ public class OrderResources {
         "total": "0"
     }
      */
-    @PostMapping("")
+    @PostMapping("/auth/create")
     public void create(@RequestBody OrderDto dto){
         orderService.create(dto);
     }

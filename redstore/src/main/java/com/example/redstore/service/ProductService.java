@@ -79,6 +79,12 @@ public class ProductService {
 
     }
 
+    public ProductDto findByProductId(String id){
+        Product entity = productRepository.findById(id).orElse(null);
+        ProductDto dto = productMapper.toDo(entity);
+        return dto;
+    }
+
     public ProductDto findProductBySlug(String slug){
         Product entity = productRepository.findProductBySlug(slug);
         ProductDto dto = productMapper.toDo(entity);
@@ -128,6 +134,7 @@ public class ProductService {
     }
 
     ;
+
 
     @Transactional
     public List<ProductDto> findByUsers(String title) {

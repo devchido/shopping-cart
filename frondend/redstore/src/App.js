@@ -20,6 +20,9 @@ import Register from "./components/User/Register";
 import Home from "./components/Home/Home";
 import ProductList from "./components/User/ProductList";
 import AddProduct from "./components/Products/products/AddProduct";
+import UpdateProduct from "./components/Products/products/UpdateProduct";
+import CartProduct from "./components/Shopping_cart/CartProduct";
+import UserUpdate from "./components/Popup/UserUpdate";
 
 function App() {
     return (
@@ -40,8 +43,10 @@ function App() {
                             <Route path="/not-found" element={<NotFound />} />
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/my-product" element={<ProductList />} />
-                            <Route path="/my-product/update/:id" element={<AddProduct/>}/>
+                            <Route path="/my-product/update/:id" element={<UpdateProduct/>}/>
                             <Route path="/my-product/new-product" element={<AddProduct/>} />
+                            <Route path="/cart-all" element={<CartProduct/>} />
+                            <Route path="/popup" element={<UserUpdate/>} />
                         </Routes>
                         <Footer />
                     </Fragment>

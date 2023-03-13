@@ -50,7 +50,7 @@ export default class Login extends Component {
                 localStorage.setItem("token", result.token);
                 // console.log("true");
                 this.setState({ isLogin: true });
-                window.location = "/";
+                window.location = "/profile";
                 
                 
             })

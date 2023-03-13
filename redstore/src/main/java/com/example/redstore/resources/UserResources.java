@@ -27,7 +27,7 @@ public class UserResources {
     private final AuthenticationService service;
 
     //cho nay lan sau de post lay dto nhe
-    @GetMapping("/filter")
+    @GetMapping("/auth/admin/filter")
     List<UserDto> filter(@RequestParam(defaultValue = "") String id,
                          @RequestParam(defaultValue = "") String firstName,
                          @RequestParam(defaultValue = "") String lastName,
@@ -39,18 +39,18 @@ public class UserResources {
 
 
     //edit
-    @PutMapping("/{id}")
+    @PutMapping("/auth/edit/{id}")
     public void edit(@RequestBody UserDto dto, @PathVariable("id") Long id) {
         userService.edit(id, dto);
     }
 
     //delete
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/auth/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         userService.delete(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/auth/admin")
     public List<UserDto> findAll() {
 
         List<UserDto> dtos = userService.findAll();
@@ -58,7 +58,7 @@ public class UserResources {
     }
 
     // http://localhost:8080/user/page?page=1&size=2
-    @GetMapping("/page")
+    @GetMapping("/auth/admin/page")
     public ResponseEntity<List<UserDto>> findAllPage(Pageable pageable) {
         Page<UserDto> page = userService.findAllPage(pageable);
         HttpHeaders headers = new HttpHeaders();
@@ -67,20 +67,20 @@ public class UserResources {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    @GetMapping("/info")
+    @GetMapping("/auth/info")
     public UserDto getUserInformation() {
         return userService.getUserInformation();
     }
 
     // Page: Phân trang
 //    Pageable pageable = PageRequest.of(1, 10);
-    @PutMapping("/updatePassUser")
+    @PutMapping("/auth/updatePassUser")
     public ResponseEntity<AuthenticationResponse> updatePassUser(
             @RequestBody UserDto dto
     ){
         return ResponseEntity.ok(service.updatePassUser(dto));
     }
-    @GetMapping({"/forUser"})
+    @GetMapping({"/auth/forUser"})
     @PreAuthorize("hasRole('USER')")
     public String forUser(){
         return "This URL is only accessible to user";

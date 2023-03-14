@@ -931,7 +931,7 @@ form a {
     justify-content: center;
     justify-items: center;
 }
-.profile-page img {
+.profile-page .img-user {
     width: 300px;
     height: 300px;
     border-radius: 50%;
@@ -1116,4 +1116,16 @@ table, th, td {
 .btn-add button:hover{
     color: #fff;
     background: #ff523b;
+}
+.form-update{
+    width: 100%;
+}
+.form-update .img-update-user{
+    display: flex;
+    width: 70%;
+    margin: auto;
+}
+
+.form-update .input-text{
+    height: 100px;
 }

@@ -100,13 +100,13 @@ class Products extends Component {
                         ) : null}
                         {/* <ProductItem /> */}
                     </div>
-                    <div className="page-btn">
+                    {/* <div className="page-btn">
                         <span>&#x3c;&#x3c;</span>
                         <span>&#8592;</span>
                         <span>1</span>
                         <span>&#8594;</span>
                         <span>&#x3e;&#x3e;</span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );

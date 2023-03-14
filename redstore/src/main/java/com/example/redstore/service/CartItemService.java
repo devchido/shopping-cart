@@ -38,18 +38,18 @@ public class CartItemService {
         // Kiểm tra product đó trong list product có tồn tại hay không
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
         entity.setProduct(productId);
-
-        // Set cart
+        // Set thông tin cart item
         Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
         entity.setCart(cartId);
-
+        entity.setPrice(productId.getPrice());
+        entity.setDiscount(productId.getDiscount());
+        //
         int quantity = productId.getQuantity() - entity.getQuantity();
         productId.setQuantity((short) quantity);
         productId.setUpdatedAt(Instant.now());
         productRepository.save(productId);
         // Set active
         entity.setActive(true);
-
         // Set create at
         entity.setCreatedAt(Instant.now());
         cartItemRepository.save(entity);

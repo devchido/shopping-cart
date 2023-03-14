@@ -23,6 +23,7 @@ public class UserMapper implements EntityMapper<UserDto, User> {
         dto.setCreateAt(entity.getCreateAt());
         dto.setIntro(entity.getIntro());
         dto.setProfile(entity.getProfile());
+        dto.setPhotos(entity.getPhotos());
         dto.setRole(String.valueOf(entity.getRole()));
         return dto;
     }
@@ -39,6 +40,7 @@ public class UserMapper implements EntityMapper<UserDto, User> {
         entity.setCreateAt(dto.getCreateAt());
         entity.setIntro(dto.getIntro());
         entity.setProfile(dto.getProfile());
+        entity.setPhotos(dto.getPhotos());
         return entity;
     }
 

@@ -31,7 +31,7 @@ public class OrderResources {
         List<OrderDto> dtos = orderService.findByCarts(carts);
         return dtos;
     }
-
+    // Thực hiện order cho cart ?cart={id}
     @PostMapping("/auth/createByCart")
     public void createOrderByCart(@RequestParam("idCard") Long id) {
         orderService.createOrderByCart(id);
@@ -47,6 +47,7 @@ public class OrderResources {
         List<OrderDto> dtos = orderService.findAll();
         return dtos;
     }
+
 
 
     /*

@@ -81,10 +81,10 @@ public class UserService {
         return userRepository.findAll(pageable).map(userMapper::toDo);
     }
 
+    @Transactional
     public UserDto getUserInformation(){
-        User result = SecurityUtils.getPrincipal();
-//        result.setPassword();
-        UserDto dto = userMapper.toDo(result);
+        User entity = SecurityUtils.getPrincipal();
+        UserDto dto = userMapper.toDo(entity);
         return dto;
     }
 }

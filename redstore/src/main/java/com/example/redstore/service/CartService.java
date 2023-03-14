@@ -81,4 +81,10 @@ public class CartService {
         List<CartDto> dtos = cartMapper.toDo(entity);
         return dtos;
     }
+
+    public CartDto findMyCartById(String id) {
+        Cart entity = cartRepository.findById(id).orElse(null);
+        CartDto dto = cartMapper.toDo(entity);
+        return dto;
+    }
 }

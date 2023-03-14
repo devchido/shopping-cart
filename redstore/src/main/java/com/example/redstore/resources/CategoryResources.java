@@ -39,4 +39,5 @@ public class CategoryResources {
         List<CategoryDto> dtos = categoryService.findAll();
         return dtos;
     }
+
 }

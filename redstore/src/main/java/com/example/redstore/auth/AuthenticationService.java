@@ -49,6 +49,34 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+    /*
+    http://localhost:8080/user/auth/updateInfo
+    {
+        "firstName": "Tú",
+        "lastName": "Nguyễn",
+        "mobile": "0987654321",
+        "email": "tu@gmail.com",
+        "password": 1111,
+        "photos": "https://static.sangtacvietcdn.xyz/img/useravatar/user1036.gif?t=1650607808",
+        "intro": "Tú",
+        "profile": "RedStore"
+      }
+     */
+    public AuthenticationResponse updateInfo(UserDto dto){
+        var user = userRepository.findById(String.valueOf(SecurityUtils.getPrincipal().getId())).orElseThrow();
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setMobile(dto.getMobile());
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPhotos(dto.getPhotos());
+        user.setIntro(dto.getIntro());
+        user.setProfile(dto.getProfile());
+        var saveUser = userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        saveUserToken(saveUser, jwtToken);
+        return AuthenticationResponse.builder().token(jwtToken).build();
+    }
 
     public AuthenticationResponse updatePassUser(UserDto dto){
         var user = userRepository.findById(String.valueOf(SecurityUtils.getPrincipal().getId())).orElseThrow();

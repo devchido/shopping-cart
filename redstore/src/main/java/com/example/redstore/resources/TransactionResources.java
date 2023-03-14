@@ -38,4 +38,9 @@ public class TransactionResources {
         List<TransactionDto> dtos = transactionService.findAll();
         return dtos;
     }
+    @GetMapping("/auth/u/{userId}")
+    public TransactionDto findByUserId(@PathVariable String userId){
+        TransactionDto dto = transactionService.findByUserId(userId);
+        return dto;
+    }
 }

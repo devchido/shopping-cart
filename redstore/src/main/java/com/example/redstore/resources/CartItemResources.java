@@ -17,7 +17,7 @@ import java.util.List;
 public class CartItemResources {
     private final CartItemService cartItemService;
 
-    @PostMapping("/auth")
+    @PostMapping("/auth/create")
     public void create(@RequestBody CartItemDto dto) {
         cartItemService.create(dto);
     }

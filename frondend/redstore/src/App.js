@@ -23,6 +23,7 @@ import AddProduct from "./components/Products/products/AddProduct";
 import UpdateProduct from "./components/Products/products/UpdateProduct";
 import CartProduct from "./components/Shopping_cart/CartProduct";
 import UserUpdate from "./components/Popup/UserUpdate";
+import UpdateUser from "./components/User/UpdateUser";
 
 function App() {
     return (
@@ -47,6 +48,7 @@ function App() {
                             <Route path="/my-product/new-product" element={<AddProduct/>} />
                             <Route path="/cart-all" element={<CartProduct/>} />
                             <Route path="/popup" element={<UserUpdate/>} />
+                            <Route path="/profile/update" element={<UpdateUser/>} />
                         </Routes>
                         <Footer />
                     </Fragment>

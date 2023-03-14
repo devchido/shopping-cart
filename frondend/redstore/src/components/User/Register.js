@@ -38,7 +38,7 @@ class Register extends Component {
             body: raw,
             redirect: "follow",
         };
-
+        console.log(raw);
         fetch("/api/v1/auth/register", requestOptions)
             .then((response) => {
                 if (response.ok) {

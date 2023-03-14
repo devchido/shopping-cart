@@ -23,6 +23,7 @@ public class ProductResources {
     private final ProductService productService;
 
     /*
+    user đăng nhập thực hiện tạo sản phẩm mới
     http://localhost:8080/product
     {
         "userId": "1",
@@ -42,9 +43,33 @@ public class ProductResources {
     }
 
     //edit
+    /*
+    Người dùng thực hiện thay đổi thông tin sản phẩm họ đăng bán
+    {
+        "title": "Áo nam",
+        "slug": "ao-phong-nam-1",
+        "summary": "Áo phông nam",
+        "price": 200000.0,
+        "discount": 20.0,
+        "photos": "https://cf.shopee.vn/file/b04924adbab55d4b305d8b15a396a4ef",
+        "quantity": 50,
+        "updatedAt": null,
+        "endsAt": null,
+        "content": "Áo phông dành cho nam"
+    }
+     */
     @PutMapping("/auth/edit/{id}")
-    public void edit(@RequestBody ProductDto dto, @PathVariable("id") Long id) {
+    public void edit(@PathVariable String id,@RequestBody ProductDto dto) {
         productService.edit(id, dto);
+    }
+    /*
+    Hiển thị tất cả product của người dùng có id 1
+    http://localhost:8080/product/auth/1
+     */
+    @PostMapping("/auth/{id}")
+    public ProductDto findByProductId(@PathVariable String id){
+        ProductDto dto = productService.findByProductId(id);
+        return dto;
     }
 
     //delete
@@ -77,11 +102,6 @@ public class ProductResources {
         return dtos;
     }
 
-    @PostMapping("/auth/{id}")
-    public ProductDto findByProductId(@PathVariable String id){
-        ProductDto dto = productService.findByProductId(id);
-        return dto;
-    }
 
     //Tesst page
     @GetMapping("/api/page")

@@ -69,7 +69,8 @@ public class UserResources {
 
     @GetMapping("/auth/info")
     public UserDto getUserInformation() {
-        return userService.getUserInformation();
+        UserDto dto = userService.getUserInformation();
+        return dto;
     }
 
     // Page: Phân trang
@@ -80,9 +81,16 @@ public class UserResources {
     ){
         return ResponseEntity.ok(service.updatePassUser(dto));
     }
+    //test admin : false
     @GetMapping({"/auth/forUser"})
     @PreAuthorize("hasRole('USER')")
     public String forUser(){
         return "This URL is only accessible to user";
+    }
+
+    // Cập nhật thông tin người dùng
+    @PutMapping("/auth/updateInfo")
+    public ResponseEntity<AuthenticationResponse> updateInfo(@RequestBody UserDto dto){
+        return ResponseEntity.ok(service.updateInfo(dto));
     }
 }

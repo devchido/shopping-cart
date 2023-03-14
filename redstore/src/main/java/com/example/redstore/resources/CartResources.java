@@ -27,7 +27,7 @@ public class CartResources {
         "content": "Test"
     }
      */
-    @PostMapping("/auth")
+    @PostMapping("/auth/create")
     public void create(@RequestBody CartDto dto) {
         cartService.create(dto);
     }
@@ -56,5 +56,10 @@ public class CartResources {
     public List<CartDto> findAllByUserId(@PathVariable("userId") Long userId){
         List<CartDto> dtos = cartService.findAllByUserId(userId);
         return dtos;
+    }
+    @GetMapping("/auth/my-cart/{id}")
+    public CartDto findMyCartById(@PathVariable String id){
+        CartDto dto = cartService.findMyCartById(id);
+        return dto;
     }
 }

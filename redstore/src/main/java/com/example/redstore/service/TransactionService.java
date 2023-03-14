@@ -36,6 +36,7 @@ public class TransactionService {
         entity.setUsers(orderId.getUsers());
         entity.setOrder(orderId);
         entity.setStatus((short) 0);
+        entity.setContent(orderId.getContent());
 
         // Set create at
         entity.setCreatedAt(Instant.now());
@@ -73,5 +74,10 @@ public class TransactionService {
         List<Transaction> entity = transactionRepository.findAll();
         List<TransactionDto> dtos = transactionMapper.toDo(entity);
         return dtos;
+    }
+    public TransactionDto findByUserId(String userId){
+        Transaction entity = transactionRepository.findByUserId(userId);
+        TransactionDto dto = transactionMapper.toDo(entity);
+        return dto;
     }
 }

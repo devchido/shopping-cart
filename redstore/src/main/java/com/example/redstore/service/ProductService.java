@@ -33,6 +33,19 @@ public class ProductService {
     private final UserRepository userRepository;
 
     // Create new user
+    /*
+    http://localhost:8080/product/auth/create
+    {
+        "title": "Áo nam",
+        "slug": "ao-phong-nam-1",
+        "summary": "Áo phông nam",
+        "price": "200000",
+        "discount": "20",
+        "quantity": "10",
+        "photos": "https://cf.shopee.vn/file/b04924adbab55d4b305d8b15a396a4ef",
+        "content": "Áo phông dành cho nam"
+    }
+     */
     @Transactional
     public void create(ProductDto dto) {
 
@@ -44,22 +57,25 @@ public class ProductService {
         }
         ;
         Product entity = productMapper.toEntity(dto);
-//        User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
-        User userId = SecurityUtils.getPrincipal();
-        entity.setUsers(userId);
+        entity.setUsers(SecurityUtils.getPrincipal());
         entity.setCreatedAt(Instant.now());
         productRepository.save(entity);
         System.out.println("Thực thi create");
     }
 
     // Edit user
-    @Transactional
-    public void edit(Long id, ProductDto dto) {
-        Product entity = productMapper.toEntity(dto);
-        Product product = productRepository.findById(String.valueOf(id)).orElseThrow();
-        if (SecurityUtils.getPrincipal() == product.getUsers()) {
-            entity.setId(product.getId());
-            entity.setUsers(product.getUsers());
+
+    public void edit(String id, ProductDto dto) {
+        Product entity = productRepository.findById(id).orElse(null);
+        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+            entity.setTitle(dto.getTitle());
+            entity.setSlug(dto.getSlug());
+            entity.setSummary(dto.getSummary());
+            entity.setPrice(dto.getPrice());
+            entity.setDiscount(dto.getDiscount());
+            entity.setPhotos(dto.getPhotos());
+            entity.setQuantity(dto.getQuantity());
+            entity.setContent(dto.getContent());
             entity.setUpdatedAt(Instant.now());
             productRepository.save(entity);
             System.out.println("Thực thi edit");

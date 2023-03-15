@@ -5,7 +5,17 @@ import { Link, useParams } from "react-router-dom";
 export default function UpdateProduct() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
-    useEffect(()=>{
+    //
+    const [photos, setPhotos] = useState("");
+    const [title, setTitle] = useState("");
+    const [slug, setSlug] = useState("");
+    const [summary, setSummary] = useState("");
+    const [price, setPrice] = useState("");
+    const [discount, setDiscount] = useState("");
+    const [quantity, setQuantity] = useState("");
+    const [content, setContent] = useState("");
+    //
+    useEffect(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var raw = "";
@@ -25,10 +35,58 @@ export default function UpdateProduct() {
             .then((result) => {
                 console.log(result);
                 setProduct(result);
+                setTitle(result.title);
+                setSlug(result.slug);
+                setSummary(result.summary);
+                setPrice(result.price);
+                setDiscount(result.discount);
+                setQuantity(result.quantity);
+                setPhotos(result.photos);
+                setContent(result.content);
                 // console.log(product);
             })
             .catch((error) => console.log("error", error));
-    },[])
+    }, []);
+    
+    
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(title, slug, summary, price, discount, quantity, content, photos);
+        //
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            title: title,
+            slug: slug,
+            summary: summary,
+            price: price,
+            discount: discount,
+            quantity: quantity,
+            photos: photos,
+            content: content,
+        });
+
+        var requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+        };
+
+        fetch("/product/auth/edit/" + id, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                alert("true");
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
+    };
     const handleCancel = () => {
         setProduct(null);
     };
@@ -39,61 +97,93 @@ export default function UpdateProduct() {
                     <h2>Update product</h2>
                 </div>
                 <div className="formAdd-container" style={{ width: "100%" }}>
-                    <form>
-                        <div className="formAdd">
+                    <form onSubmit={handleSubmit}>
+                        <div className="formAdd row">
                             <div className="img-add">
-                                <img src={product.photos} />
-                                {/* bạn đặt tạm cái ảnh nào đấy vô, đường dẫn ấy */}
-                                {/* <label>
-                                    <input type="file"/>
-                                    <img src="" />
-                                </label> */}
+                                <img src={photos} />
+
+                                <input
+                                    type="text"
+                                    name="photos"
+                                    placeholder="Photos Link"
+                                    defaultValue={photos}
+                                    onChange={(e) => setPhotos(e.target.value)}
+                                />
                             </div>
                             <div className="text-add">
                                 <label>
                                     <h3>Title</h3>
-                                    <input type="text" placeholder="Title..." defaultValue={product.title} />
+                                    <input
+                                        type="text"
+                                        placeholder="Title..."
+                                        defaultValue={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                    />
                                 </label>
                                 <label>
                                     <h3>Slug</h3>
-                                    <input type="text" placeholder="Slug..." defaultValue={product.slug} />
+                                    <input
+                                        type="text"
+                                        placeholder="Slug..."
+                                        defaultValue={slug}
+                                        onChange={(e) => setSlug(e.target.value)}
+                                    />
                                 </label>
                                 <label>
                                     <h3>Summary</h3>
-                                    <input type="text" placeholder="Summary..." defaultValue={product.summary} />
+                                    <input
+                                        type="text"
+                                        placeholder="Summary..."
+                                        defaultValue={summary}
+                                        onChange={(e) => setSummary(e.target.value)}
+                                    />
                                 </label>
                             </div>
                             <div className="number-add">
                                 <label>
                                     <h3>Price</h3>
-                                    <input type="number" placeholder="Price?" defaultValue={product.price} />
+                                    <input
+                                        type="number"
+                                        placeholder="Price?"
+                                        defaultValue={price}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                    />
                                 </label>
                                 <label>
                                     <h3>Discount</h3>
-                                    <input type="number" placeholder="Discount?" defaultValue={product.discount} />
+                                    <input
+                                        type="number"
+                                        placeholder="Discount?"
+                                        defaultValue={discount}
+                                        onChange={(e) => setDiscount(e.target.value)}
+                                    />
                                 </label>
                                 <label>
                                     <h3>Quantity</h3>
-                                    <input type="number" placeholder="Quantity?" defaultValue={product.quantity} />
+                                    <input
+                                        type="number"
+                                        placeholder="Quantity?"
+                                        defaultValue={quantity}
+                                        onChange={(e) => setQuantity(e.target.value)}
+                                    />
                                 </label>
                             </div>
                             <div className="date-add">
-                                {/* <label>
-                                    <h3>CreatedAt</h3>
-                                    <input type="date" />
-                                </label>
-                                <label>
-                                    <h3>UpdateAt</h3>
-                                    <input type="date" />
-                                </label> */}
                                 <label>
                                     <h3>Content</h3>
-                                    <textarea style={{ height: "60%", width: "100%" }} defaultValue={product.content}></textarea>
+                                    <textarea
+                                        type="text"
+                                        placeholder="content . . ."
+                                        defaultValue={content}
+                                        onChange={(e) => setContent(e.target.value)}
+                                    ></textarea>
                                 </label>
                             </div>
                         </div>
                         <div className="btn-add">
-                            <Button variant="outlined">Save</Button>
+                            <Button type="submit" variant="outlined">
+                                Save
+                            </Button>
                             <Button variant="outlined" onClick={() => handleCancel}>
                                 <Link to={"/my-product"}>Cancel</Link>
                             </Button>

@@ -1065,36 +1065,52 @@ table, th, td {
     font-size: 14px;
 }
 .formAdd{
-    display: flex;
+    margin: 2rem;
 }
 .formAdd-container{
     background: radial-gradient(#fff, #ffd6d6);
-    width: 300px;
-    height: 450px;
+
     position: relative;
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 .img-add{
-    margin: 2.5rem;
+    margin: 1rem;
     border-radius: 5px;
+    width: 300px;
 }
 .img-add img{
-    height: 320px;
-    width: 320px;
+    height: 100%;
+    width: 100%;
     border-radius: 5px;
 }
 .text-add{
-    margin: 2.5rem;
+    width: 20%;
     border-radius: 10px;
+    min-width: 250px;
+    margin: 5px;
 }
 .number-add{
-    margin: 2.5rem;
+    
+    width: 20%;
+    min-width: 250px;
+    margin: 5px;
+}
+.number-add input{
+    text-align: right;
 }
 .date-add{
-    margin: 2.5rem;
-    width: 300px;
+    justify-content: center;
+    margin: auto;
+    width: 20%;
+    height: 400px;
+    min-width: 250px;
+}
+.date-add textarea {
+    width: 100%;
+    height: 80%;
+    font-size: 17px;
 }
 .text-add input:focus{
     border-color: #f02222;

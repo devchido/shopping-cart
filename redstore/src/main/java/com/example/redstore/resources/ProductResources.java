@@ -24,17 +24,16 @@ public class ProductResources {
 
     /*
     user đăng nhập thực hiện tạo sản phẩm mới
-    http://localhost:8080/product
+    http://localhost:8080/product/auth/create
     {
-        "userId": "1",
-        "title": "Áo nam",
-        "slug": "ao-phong-nam-1",
-        "summary": "Áo phông nam",
-        "price": "200000",
-        "discount": "20",
-        "quantity": "10",
-        "photos": "https://cf.shopee.vn/file/b04924adbab55d4b305d8b15a396a4ef",
-        "content": "Áo phông dành cho nam"
+        "title": "GIÀY SNEAKER CHỐNG BÁM NƯỚC",
+        "slug": "giay-sneaker-chong-tham-nuoc",
+        "summary": "GIÀY SNEAKER CHỐNG BÁM NƯỚC - LESS TIRING 28.5cm ĐEN",
+        "price": "599000",
+        "discount": "10",
+        "quantity": "300",
+        "photos": "https://img.muji.net/img/item/4550344414453_1260.jpg",
+        "content": "Sản phẩm sử dụng vải cotton chống bám nước, có thiết kế hỗ trợ chuyển động của chân."
     }
      */
     @PostMapping("/auth/create")

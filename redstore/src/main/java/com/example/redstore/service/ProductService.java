@@ -88,7 +88,7 @@ public class ProductService {
     @Transactional
     public void delete(Long id) {
         Product product = productRepository.findById(String.valueOf(id)).orElseThrow();
-        if (SecurityUtils.getPrincipal() == product.getUsers()) {
+        if (SecurityUtils.getPrincipal().getId() == product.getUsers().getId()) {
             productRepository.deleteById(String.valueOf(id));
             System.out.println("Thực thi delete");
         } else new String("Không thể xoá");

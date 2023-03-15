@@ -111,7 +111,7 @@ class Navbar extends Component {
                     {/* <span className="badge badge-warning" id="lblCartCount">
                         123
                     </span> */}
-                    <img src="./assets/images/menu.png" className="menu-icon" id="menu-icon" />
+                    <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/menu.png" className="menu-icon" id="menu-icon" />
                 </header>
             </div>
         );

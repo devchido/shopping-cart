@@ -68,7 +68,7 @@ public class AuthenticationService {
         user.setLastName(dto.getLastName());
         user.setMobile(dto.getMobile());
         user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPassword(SecurityUtils.getPrincipal().getPassword());
         user.setPhotos(dto.getPhotos());
         user.setIntro(dto.getIntro());
         user.setProfile(dto.getProfile());

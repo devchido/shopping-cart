@@ -39,7 +39,26 @@ function ProductList() {
         setOpen(true);
     };
     const handleDelete = (item) => {
-        console.log(item);
+        console.log(item.id);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "DELETE",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/product/auth/delete/" + item.id, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                alert("true");
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
     };
     const handleSearch = () => {
         var myHeaders = new Headers();
@@ -55,10 +74,9 @@ function ProductList() {
             .then((response) => response.json())
             .then((result) => {
                 setProduct({ result });
-            })
-        
+            });
     };
-        
+
     return (
         <>
             <div className="my-product-page">
@@ -70,10 +88,10 @@ function ProductList() {
                             style={{ width: "50%", marginLeft: "auto" }}
                             onChange={(e) => setKey(e.target.value)}
                         />
-                        <Button 
-                            variant="outlined" 
+                        <Button
+                            variant="outlined"
                             style={{ width: "10%", height: "3.5rem", marginRight: "auto" }}
-                            onClick={()=> handleSearch()}
+                            onClick={() => handleSearch()}
                         >
                             Search
                         </Button>

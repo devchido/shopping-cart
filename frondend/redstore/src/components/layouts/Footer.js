@@ -11,12 +11,12 @@ class Footer extends Component {
                                 <h3>Download Our App</h3>
                                 <p>Download App For Android and ios mobile phone.</p>
                                 <div className="app-logo">
-                                    <img src="assets/images/play-store.png" alt="" />
-                                    <img src="assets/images/app-store.png" alt="" />
+                                    <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/play-store.png" alt="" />
+                                    <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/app-store.png" alt="" />
                                 </div>
                             </div>
                             <div className="footer-col-2">
-                                <img src="assets/images/logo-white.png" alt="" />
+                                <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/logo-white.png" alt="" />
                                 <p>
                                     Our Purpose Is To Sustainably Make the Pleasure and Benefits of Sports
                                     Accessible to the Many.

@@ -79,7 +79,7 @@ class Products extends Component {
                                 {this.state.products
                                     ? this.state.products.map((item, i) => (
                                           <div className="col-4">
-                                              <Link to={`/single_product/${item.slug}`}>
+                                              <Link to={`/products/${item.slug}`}>
                                                   <img src={item.photos} alt="" />
                                               </Link>
                                               <h4>{item.title}</h4>

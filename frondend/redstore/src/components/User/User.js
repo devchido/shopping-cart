@@ -2,7 +2,7 @@ import { Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Profile() {
+export default function User() {
     const [user, setUser] = useState();
     useEffect(() => {
         var myHeaders = new Headers();
@@ -42,7 +42,7 @@ export default function Profile() {
                                         <img className="img-update-user" src={user.result.photos} />
                                         <div className="btn-add" style={{ width: "100%", textAlign: "center" }}>
                                         <Button variant="outlined">
-                                            <Link to={"/profile/update"}>Update</Link>
+                                            <Link to={"/user/update"}>Update</Link>
                                         </Button>
                                         </div>
                                         

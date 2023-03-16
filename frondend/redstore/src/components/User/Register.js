@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../layouts/Navbar";
-import Profile from "./Profile";
+import Profile from "./User";
 
 class Register extends Component {
     constructor(props) {
@@ -49,7 +49,7 @@ class Register extends Component {
             .then((result) => {
                 console.log(result);
                 localStorage.setItem("token", result.token);
-                window.location = "/";
+                window.location = "/login";
             })
             .catch((error) => {
                 console.log("error", error);

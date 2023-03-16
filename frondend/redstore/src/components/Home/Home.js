@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Banner from "../layouts/Banner";
-import UserUpdate from "../Popup/UserUpdate";
+import UserUpdate from "../Popup/Popup";
 
 import Brands from "./Brands";
 import FeaturedCategories from "./FeaturedCategories";

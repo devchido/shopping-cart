@@ -163,7 +163,7 @@ export default function AddProduct() {
                                 Save
                             </Button>
                             <Button variant="outlined" onClick={() => handleCancel}>
-                                <Link to={"/my-product"}>Cancel</Link>
+                                <Link to={"/shop-product"}>Cancel</Link>
                             </Button>
                         </div>
                     </form>

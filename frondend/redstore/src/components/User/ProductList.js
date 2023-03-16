@@ -96,7 +96,7 @@ function ProductList() {
                             Search
                         </Button>
                         <Button variant="outlined" style={{ width: "10%", height: "3.5rem", marginLeft: "0" }}>
-                            <Link to={"/my-product/new-product"}>Add</Link>
+                            <Link to={"/shop-product/new-product"}>Add</Link>
                         </Button>
                         <TableContainer style={{ paddingTop: "15px" }}>
                             <Table aria-label="simple table">
@@ -127,12 +127,12 @@ function ProductList() {
                                                   <TableCell align="center">{item.quantity}</TableCell>
                                                   <TableCell align="center">
                                                       <Button variant="outlined">
-                                                          <Link to={`/single_product/${item.slug}`} style={{ color: "#000" }}>
+                                                          <Link to={`/products/${item.slug}`} style={{ color: "#000" }}>
                                                               View
                                                           </Link>
                                                       </Button>
                                                       <Button variant="outlined">
-                                                          <Link to={`/my-product/update/${item.id}`}>Update</Link>
+                                                          <Link to={`/shop-product/update/${item.id}`}>Update</Link>
                                                       </Button>
 
                                                       <Button variant="outlined" onClick={() => handleDelete(item)}>

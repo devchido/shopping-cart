@@ -62,4 +62,10 @@ public class CartResources {
         CartDto dto = cartService.findMyCartById(id);
         return dto;
     }
+
+    @GetMapping("/auth/my-cart")
+    public List<CartDto> findUsersCart(){
+        List<CartDto> dtos = cartService.finUsersCart();
+        return dtos;
+    }
 }

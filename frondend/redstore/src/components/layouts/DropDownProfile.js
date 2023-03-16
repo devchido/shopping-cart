@@ -6,18 +6,18 @@ export class DropDownProfile extends Component {
 logout = () => {
     localStorage.removeItem("token");
     // window.location.reload();
-    window.location = "/";
+    window.location = "/login";
 };
     render() {
         return (
 <>
     <div class="dropdown-content">
 
-        <Link to="/profile">{this.props.users.firstName} {this.props.users.lastName}</Link>
+        <Link to="/user">{this.props.users.firstName} {this.props.users.lastName}</Link>
         <Link to={""}>Link 2</Link>
-        <Link to={"/my-product"} >My Product</Link>
+        <Link to={"/shop-product"} >My Shop</Link>
 
-        <Link to={"/"} onClick={this.logout}   className={"logoutItem"}>
+        <Link to={"/login"} onClick={this.logout}   className={"logoutItem"}>
             <i class="fa fa-sign-out"></i>Logout
         </Link>
     </div>

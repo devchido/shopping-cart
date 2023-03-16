@@ -12,10 +12,8 @@ class Navbar extends Component {
     }
     setOpen = () => {
         if (this.state.openDropdown === true) {
-            // console.log(this.state.openDropdown);
             this.setState({ openDropdown: false });
         } else {
-            // console.log(this.state.openDropdown);
             this.setState({ openDropdown: true });
         }
     };
@@ -42,13 +40,11 @@ class Navbar extends Component {
                 throw new Error(response.status);
             })
             .then((result) => {
-                // console.log(result);
                 this.setState({ users: result });
-                localStorage.setItem("users", result.id);
-                // console.log(this.state.userId);
             })
             .catch((error) => {
                 console.log("error", error);
+                localStorage.setItem("");
             });
     };
 
@@ -72,15 +68,15 @@ class Navbar extends Component {
                             <li>
                                 <Link to="/category">Category</Link>
                             </li>
-                            <li>
-                                <Link to="/cart-all">Cart - All</Link>
-                            </li>
-                            <li>
+                            {/* <li>
+                                <Link to="/cart">Cart</Link>
+                            </li> */}
+                            {/* <li>
                                 <Link to="/popup">popup</Link>
-                            </li>
-                            <li>
+                            </li> */}
+                            {/* <li>
                                 <Link to="/not-found">Not found</Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </nav>
                     {this.state.isLogin ? (
@@ -105,7 +101,7 @@ class Navbar extends Component {
                     )}
                     &nbsp;&nbsp;
 
-                    <Link to="/shopping_cart">
+                    <Link to="/cart">
                         <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" width="30px" height="30px" alt="" />
                     </Link>
                     {/* <span className="badge badge-warning" id="lblCartCount">

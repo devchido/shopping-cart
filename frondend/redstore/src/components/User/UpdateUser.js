@@ -36,7 +36,7 @@ export default function UpdateUser() {
                 setMobile(result.mobile);
                 setEmail(result.email);
                 setPhotos(result.photos);
-                if (photos === "") {
+                if (result.photos == null) {
                     setPhotos(
                         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU"
                     );
@@ -170,7 +170,7 @@ export default function UpdateUser() {
                                         Save
                                     </Button>
                                     <Button variant="outlined">
-                                        <Link to={"/profile"}>Cancel</Link>
+                                        <Link to={"/user"}>Cancel</Link>
                                     </Button>
                                 </div>
                             </form>

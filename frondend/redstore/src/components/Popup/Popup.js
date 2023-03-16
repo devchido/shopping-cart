@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class UserUpdate extends Component {
+export class Popup extends Component {
   render() {
     
     return (
@@ -25,4 +25,4 @@ export class UserUpdate extends Component {
   }
 }
 
-export default UserUpdate
+export default Popup

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Cart() {
-    const [id, setId] = useState(1);
+    
     const [cart, setCart] = useState();
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -25,6 +25,7 @@ export default function Cart() {
                 setIsLoading(false);
                 // Set data vào cart
                 setCart(result);
+                console.log(cart);
             })
             .catch((error) => console.log("error", error));
     }, []);
@@ -44,7 +45,7 @@ export default function Cart() {
                     ) : (
                         <>
                             {
-                                cart != null
+                                cart 
                                     ? //
                                       cart.map((item, i) => (
                                           <>
@@ -60,8 +61,8 @@ export default function Cart() {
                                                       <Link to={`/cart/${item.id}`}>
                                                           <div className="cart-detail">
                                                               <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" />
-                                                              <p>Create at:{item.createdAt}</p>
-                                                              <p>Update at:{item.updatedAt}</p>
+                                                              {/* <p>Create at:{item.createdAt}</p>
+                                                              <p>Update at:{item.updatedAt}</p> */}
                                                               <p>content: {item.content}</p>
                                                           </div>
                                                       </Link>

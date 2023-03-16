@@ -1,5 +1,6 @@
 package com.example.redstore.service;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Cart;
 import com.example.redstore.domain.CartItem;
 import com.example.redstore.domain.Product;
@@ -107,10 +108,16 @@ public class CartItemService {
         List<CartItemDto> dtos = cartItemMapper.toDo(entity);
         return dtos;
     }
+    // Get cart item with id cart
+    // todo: security user id = cart user id
     public List<CartItemDto> findByCartId(Long cartId){
-        List<CartItem> entity = cartItemRepository.findByCartId(cartId);
-        List<CartItemDto> dtos = cartItemMapper.toDo(entity);
-        return dtos;
-
+        Long userSecurityId = SecurityUtils.getPrincipal().getId();
+        Cart cartUser = cartRepository.findById(String.valueOf(cartId)).orElse(null);
+        if (userSecurityId == cartUser.getId()){
+            List<CartItem> entity = cartItemRepository.findByCartId(cartId);
+            List<CartItemDto> dtos = cartItemMapper.toDo(entity);
+            return dtos;
+        }
+        return null;
     }
 }

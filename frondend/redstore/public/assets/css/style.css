@@ -242,6 +242,15 @@ h4 {
     color: #555;
     font-weight: normal;
 }
+.small-container .row .col-4 h4{
+    overflow: hidden;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+}
+.small-container .row .col-4 h4:hover{
+    overflow: visible;
+    white-space: break-spaces; 
+}
 
 .col-4 p {
     font-size: 14px;
@@ -557,12 +566,13 @@ select:focus {
 }
 
 .single-product input {
-    width: 50px;
-    height: 40px;
+    width: 100px;
+    height: 35px;
     padding-left: 10px;
     font-size: 20px;
     margin-right: 10px;
     border: 1px solid #ff523b;
+    text-align: auto;
 }
 
 input:focus {
@@ -1158,7 +1168,7 @@ table, th, td {
     cursor: pointer;
 }
 .cart-page .new-cart-detail .fa {
-    font-size: 150px;
+    font-size: 100px;
     
 }
 .cart-page .new-cart-detail:hover {
@@ -1190,4 +1200,10 @@ table, th, td {
 .cart-page .cart-detail p{
     word-wrap: break-word;
     font-size: 14px;
+}
+.cart-page .cart-detail-table td, th{
+    border: none;
+}
+.cart-page .cart-detail-table{
+    border: none;
 }

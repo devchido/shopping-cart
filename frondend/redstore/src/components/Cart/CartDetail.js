@@ -1,104 +1,106 @@
-import React from "react";
+import { Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
-export default function () {
+export default function CartDetail() {
+    const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
+    const [cartDetail, setCartDetail] = useState();
+    
+    useEffect(() => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/cart-item/auth/cart/" + id, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                // console.log(result);
+                // Set trạng thái loading
+                setIsLoading(false);
+                // Set data vào cartDetail
+                setCartDetail(result);
+                
+
+            })
+            .catch((error) => console.log("error", error));
+    }, []);
+    
     return (
         <div>
             <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
                 <div className="container">
-
-                <h1>Cart detail: </h1>
+                    <h1 style={{ color: "#fff", fontSize: "30px" }}>
+                        Cart detail:
+                        {isLoading ? (
+                            <div>
+                                <h2>Loading . . . </h2>
+                            </div>
+                        ) : (
+                            <>{cartDetail ? cartDetail.content : null}</>
+                        )}
+                    </h1>
                 </div>
             </div>
             <div className="container cart-page">
-                <table>
+                <table className="cart-detail-table">
                     <tbody>
                         <tr>
                             <th>Product</th>
                             <th>Quantity</th>
+                            <th>Discount</th>
                             <th>Subtotal</th>
                         </tr>
-                        <tr>
-                            <td>
-                                <div className="cart-info">
-                                    <a href="product-details.html">
-                                        <img src="images/buy-1.jpg" alt="" />
-                                    </a>
-                                    <div>
-                                        <a href="product-details.html">
-                                            <p>Red Printed T-Shirt</p>
-                                        </a>
-                                        <small>Price: $50.00</small>
-                                        <br />
-                                        <a href="">Remove</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" defaultValue={1} />
-                            </td>
-                            <td>$50.00</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className="cart-info">
-                                    <a href="product-details.html">
-                                        <img src="images/buy-2.jpg" alt="" />
-                                    </a>
-                                    <div>
-                                        <a href="product-details.html">
-                                            <p>Red Printed T-Shirt</p>
-                                        </a>
-                                        <small>Price: $75.00</small>
-                                        <br />
-                                        <a href="">Remove</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" defaultValue={1} />
-                            </td>
-                            <td>$75.00</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className="cart-info">
-                                    <a href="product-details.html">
-                                        <img src="images/buy-3.jpg" alt="" />
-                                    </a>
-                                    <div>
-                                        <a href="product-details.html">
-                                            <p>Red Printed T-Shirt</p>
-                                        </a>
-                                        <small>Price: $75.00</small>
-                                        <br />
-                                        <a href="">Remove</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" defaultValue={1} />
-                            </td>
-                            <td>$75.00</td>
-                        </tr>
+                        {isLoading ? (
+                            <div>
+                                <h2>Loading . . . </h2>
+                            </div>
+                        ) : (
+                            <>
+                                {cartDetail
+                                    ? cartDetail.map((item) => (
+                                          <tr>
+                                              <td>
+                                                  <div className="cart-info">
+                                                      <Link to={`/products/${item.product.slug}`}>
+                                                          <img src={item.product.photos} alt="" />
+                                                      </Link>
+                                                      <div>
+                                                          <Link to={`/products/${item.product.slug}`}>
+                                                              <p>{item.product.title}</p>
+                                                          </Link>
+                                                          <small>Price: {item.price} vnd</small>
+                                                          <br />
+                                                          <a href="">Remove</a>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td>
+                                                  <input type="number" value={item.quantity} readOnly={false} />
+                                              </td>
+                                              <td>
+                                                  <input type="number" value={item.discount} readOnly={false} />
+                                              </td>
+                                              <td>{(item.price-(item.price * item.discount)/100) * item.quantity} vnd</td>
+                                          </tr>
+                                      ))
+                                    : null}
+                            </>
+                        )}
                     </tbody>
                 </table>
                 <div className="total-price">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Subtotal</td>
-                                <td>$200.00</td>
-                            </tr>
-                            <tr>
-                                <td>Tax</td>
-                                <td>$35.00</td>
-                            </tr>
-                            <tr>
-                                <td>Total</td>
-                                <td>$235.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <Button variant="contained" style={{background: "#ff523b"}}>Order now</Button>
                 </div>
             </div>
         </div>

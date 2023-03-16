@@ -63,9 +63,9 @@ class Products extends Component {
                             <>
                                 {this.state.searchData.map((item) => (
                                     <div className="col-4" style={{ border: "1px" }}>
-                                        <a href="#">
+                                        <Link to={`/products/${item.slug}`}>
                                             <img src={item.photos} alt="" />
-                                        </a>
+                                        </Link>
                                         <h4>{item.title}</h4>
                                         <p>{item.price} đ</p>
                                         <Link to={"#"} className={"product-user-name"}>

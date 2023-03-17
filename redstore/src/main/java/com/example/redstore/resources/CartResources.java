@@ -19,7 +19,7 @@ public class CartResources {
     // Tạo giỏ hàng cart mới
     /*
     {
-        "userId": "1",
+
         "status": "0",
         "line1": "Hiệp Thuận",
         "city": "Hà Nội",

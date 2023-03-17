@@ -113,7 +113,7 @@ public class CartItemService {
     public List<CartItemDto> findByCartId(Long cartId){
         Long userSecurityId = SecurityUtils.getPrincipal().getId();
         Cart cartUser = cartRepository.findById(String.valueOf(cartId)).orElse(null);
-        if (userSecurityId == cartUser.getId()){
+        if (userSecurityId == cartUser.getUsers().getId()){
             List<CartItem> entity = cartItemRepository.findByCartId(cartId);
             List<CartItemDto> dtos = cartItemMapper.toDo(entity);
             return dtos;

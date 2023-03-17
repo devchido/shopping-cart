@@ -4,9 +4,10 @@ import { Link, useParams } from "react-router-dom";
 
 export default function CartDetail() {
     const { id } = useParams();
+    console.log("cartId:", id);
     const [isLoading, setIsLoading] = useState(true);
     const [cartDetail, setCartDetail] = useState();
-    
+
     useEffect(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -25,17 +26,15 @@ export default function CartDetail() {
                 throw Error(response.status);
             })
             .then((result) => {
-                // console.log(result);
+                console.log(result);
                 // Set trạng thái loading
                 setIsLoading(false);
                 // Set data vào cartDetail
                 setCartDetail(result);
-                
-
             })
             .catch((error) => console.log("error", error));
     }, []);
-    
+
     return (
         <div>
             <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
@@ -91,7 +90,7 @@ export default function CartDetail() {
                                               <td>
                                                   <input type="number" value={item.discount} readOnly={false} />
                                               </td>
-                                              <td>{(item.price-(item.price * item.discount)/100) * item.quantity} vnd</td>
+                                              <td>{(item.price - (item.price * item.discount) / 100) * item.quantity} vnd</td>
                                           </tr>
                                       ))
                                     : null}
@@ -100,7 +99,9 @@ export default function CartDetail() {
                     </tbody>
                 </table>
                 <div className="total-price">
-                    <Button variant="contained" style={{background: "#ff523b"}}>Order now</Button>
+                    <Button variant="contained" style={{ background: "#ff523b" }}>
+                        Order now
+                    </Button>
                 </div>
             </div>
         </div>

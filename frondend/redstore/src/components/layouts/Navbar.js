@@ -23,6 +23,7 @@ class Navbar extends Component {
     }
 
     loadDataProfile = () => {
+        
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -44,7 +45,7 @@ class Navbar extends Component {
             })
             .catch((error) => {
                 console.log("error", error);
-                localStorage.setItem("");
+                localStorage.removeItem("token");
             });
     };
 

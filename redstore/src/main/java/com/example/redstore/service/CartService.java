@@ -34,17 +34,19 @@ public class CartService {
 
         Cart entity =  cartMapper.toEntity(dto);
         // Set userId
-        User userId = userRepository.findById(String.valueOf(dto.getUserId())).orElse(null);
-        entity.setUsers(userId);
-        // Set first name
+        User user = SecurityUtils.getPrincipal();
+        entity.setUsers(user);
 
-        entity.setFirstName(userId.getFirstName());
+        // Set trạng thái
+        entity.setStatus((short) 0);
+        // Set first name
+        entity.setFirstName(user.getFirstName());
         //Set Last Name
-        entity.setLastName(userId.getLastName());
+        entity.setLastName(user.getLastName());
         // Set Mobile
-        entity.setMobile(userId.getMobile());
+        entity.setMobile(user.getMobile());
         // Set Email
-        entity.setEmail(userId.getEmail());
+        entity.setEmail(user.getEmail());
         // Set create at
         entity.setCreatedAt(Instant.now());
         cartRepository.save(entity);

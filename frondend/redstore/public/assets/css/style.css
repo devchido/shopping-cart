@@ -16,6 +16,13 @@ body {
 li {
     cursor: pointer;
 }
+button:hover {
+    background: #ff523b !important;
+    color: #fff !important;
+}
+button a:hover {
+    color: #fff !important;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -1206,4 +1213,52 @@ table, th, td {
 }
 .cart-page .cart-detail-table{
     border: none;
+}
+.parent-modal-item .new-cart-detail{
+    width: 70%;
+    /* height: 100px; */
+    border-radius: 5px;
+    margin: 1rem;
+    border: 1px solid #c4baba;
+    text-align: center;
+    transition: transform 0.5s;
+    cursor: pointer;
+}
+.parent-modal-item .new-cart-detail .fa{ 
+    margin: auto;
+    font-size: 100px;
+}
+.parent-modal-item .new-cart-detail:hover { 
+    transform: translateY(-5px);
+    border-radius: 2%;
+    border: 2px solid #ff523b;
+}
+.parent-modal-item .cart-detail{
+    width: 70%;
+    /* height: 100px; */
+    border-radius: 5px;
+    margin: 1rem;
+    border: 1px solid #c4baba;
+    text-align: center;
+    transition: transform 0.5s;
+    cursor: pointer;
+}
+.parent-modal-item .cart-detail:hover{
+    transform: translateY(-5px);
+    border-radius: 2%;
+    border: 2px solid #ff523b;
+}
+.parent-modal-item .cart-detail img{ 
+    width: 60px;
+    
+    margin: 10px;
+}
+.parent-modal-item .col-5 p{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.parent-modal-item .col-5 p:hover{
+    overflow: visible;
+    white-space: break-spaces;
 }

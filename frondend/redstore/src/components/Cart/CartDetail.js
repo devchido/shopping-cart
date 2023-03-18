@@ -73,8 +73,8 @@ export default function CartDetail() {
         fetch("/cart-item/auth/" + item.id, requestOptions)
             .then((response) => response.text())
             .then((result) => {
-                console.log(result);
-                alert("true");
+                // console.log(result);
+                // alert("true");
                 loadDataCartDetail();
             })
             .catch((error) => {

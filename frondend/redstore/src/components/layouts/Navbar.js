@@ -1,38 +1,24 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import DropDownProfile from "./DropDownProfile";
-class Navbar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLogin: localStorage.getItem("token") != null,
-            users: {},
-            openDropdown: false,
-        };
-    }
-    setOpen = () => {
-        if (this.state.openDropdown === true) {
-            this.setState({ openDropdown: false });
-        } else {
-            this.setState({ openDropdown: true });
-        }
+
+function Navbar() {
+    const [isLogin, setIsLogin] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [users, setUsers] = useState();
+    const handleOpen = () => {
+        setOpen(!open);
     };
-
-    componentDidMount() {
-        this.loadDataProfile();
-    }
-
-    loadDataProfile = () => {
-        
+    useEffect(() => {
+        loadDataUser();
+    }, []);
+    const loadDataUser = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
         var requestOptions = {
             method: "GET",
             headers: myHeaders,
             redirect: "follow",
         };
-
         fetch("/user/auth/info", requestOptions)
             .then((response) => {
                 if (response.ok) {
@@ -41,21 +27,28 @@ class Navbar extends Component {
                 throw new Error(response.status);
             })
             .then((result) => {
-                this.setState({ users: result });
+                setIsLogin(true);
+                setUsers(result);
             })
             .catch((error) => {
                 console.log("error", error);
                 localStorage.removeItem("token");
             });
     };
-
-    render() {
-        return (
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location = "/login";
+    };
+    return (
+        <>
             <div>
                 <header>
                     <div className="logo">
                         <Link to={"/"}>
-                            <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/logo.png" style={{width:"125px"}}  />
+                            <img
+                                src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/logo.png"
+                                style={{ width: "125px" }}
+                            />
                         </Link>
                     </div>
                     <nav>
@@ -69,29 +62,37 @@ class Navbar extends Component {
                             <li>
                                 <Link to="/category">Category</Link>
                             </li>
-                            {/* <li>
-                                <Link to="/cart">Cart</Link>
-                            </li> */}
-                            {/* <li>
-                                <Link to="/popup">popup</Link>
-                            </li> */}
-                            {/* <li>
-                                <Link to="/not-found">Not found</Link>
-                            </li> */}
                         </ul>
                     </nav>
-                    {this.state.isLogin ? (
+                    {isLogin ? (
                         <>
-                            <div className="dropdown" onClick={this.setOpen}>
-                                {/*  */}
-                                {this.state.users.photos ? (
-                                    <img src={this.state.users.photos} style={{ width: "32px" }} class="dropbtn" />
-                                ) : (
-                                    <i className="fa fa-user-circle" style={{ fontSize: "28px"  }} />
-                                )}
-                                {this.state.openDropdown ? <DropDownProfile users={this.state.users} /> : null}
-                               
-                            </div>
+                            {users ? (
+                                <>
+                                    <div className="dropdown" onClick={handleOpen}>
+                                        {/*  */}
+                                        {users.photos ? (
+                                            <img src={users.photos} style={{ width: "32px" }} class="dropbtn" />
+                                        ) : (
+                                            <i className="fa fa-user-circle" style={{ fontSize: "28px" }} />
+                                        )}
+                                        {open ? (
+                                            <>
+                                                <div className="dropdown-content">
+                                                    <Link to="/user">
+                                                        {users.firstName} {users.lastName}
+                                                    </Link>
+                                                    <Link to={"/shop"}>User's Shop</Link>
+                                                    <Link to={"/shop/product"}>Shop Product</Link>
+
+                                                    <Link to={"/login"} onClick={handleLogout} className={"logoutItem"}>
+                                                        <i className="fa fa-sign-out"></i>Logout
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        ) : null}
+                                    </div>
+                                </>
+                            ) : null}
                         </>
                     ) : (
                         <ul>
@@ -101,17 +102,26 @@ class Navbar extends Component {
                         </ul>
                     )}
                     &nbsp;&nbsp;
-
                     <Link to="/cart">
-                        <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" width="30px" height="30px" alt="" />
+                        <img
+                            src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png"
+                            width="30px"
+                            height="30px"
+                            alt=""
+                        />
                     </Link>
                     {/* <span className="badge badge-warning" id="lblCartCount">
                         123
                     </span> */}
-                    <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/menu.png" className="menu-icon" id="menu-icon" />
+                    <img
+                        src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/menu.png"
+                        className="menu-icon"
+                        id="menu-icon"
+                    />
                 </header>
             </div>
-        );
-    }
+        </>
+    );
 }
+
 export default Navbar;

@@ -1,15 +1,15 @@
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
-import { height } from "@mui/system";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function ProductList() {
+function ShopProduct() {
     const [product, setProduct] = useState();
-    const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
-    const [key, setKey] = useState("");
     useEffect(() => {
+        loadDataProduct();
+    }, []);
+
+    const loadDataProduct = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var raw = "";
@@ -29,31 +29,24 @@ function ProductList() {
             .then((result) => {
                 // console.log(result);
                 setProduct({ result });
-                console.log(product);
+                // console.log(product);
             })
             .catch((error) => console.log("error", error));
-    }, []);
-
-    const handleUpdate = (item) => {
-        console.log(item);
-        setOpen(true);
-    };
+    }
     const handleDelete = (item) => {
-        console.log(item.id);
+        // console.log(item.id);
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
         var requestOptions = {
             method: "DELETE",
             headers: myHeaders,
             redirect: "follow",
         };
-
         fetch("/product/auth/delete/" + item.id, requestOptions)
             .then((response) => response.text())
             .then((result) => {
-                console.log(result);
-                alert("true");
+                // console.log(result);
+                // alert("true");
             })
             .catch((error) => {
                 console.log("error", error);
@@ -61,20 +54,7 @@ function ProductList() {
             });
     };
     const handleSearch = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        var raw = "";
-        var requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-        };
-        fetch("/product/auth/user?title=" + key, requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                setProduct({ result });
-            });
+        loadDataProduct();
     };
 
     return (
@@ -86,7 +66,7 @@ function ProductList() {
                             label="Search"
                             id="fullWidth"
                             style={{ width: "50%", marginLeft: "auto" }}
-                            onChange={(e) => setKey(e.target.value)}
+                            onChange={(e) => setTitle(e.target.value)}
                         />
                         <Button
                             variant="outlined"
@@ -96,7 +76,7 @@ function ProductList() {
                             Search
                         </Button>
                         <Button variant="outlined" style={{ width: "10%", height: "3.5rem", marginLeft: "0" }}>
-                            <Link to={"/shop-product/new-product"}>Add</Link>
+                            <Link to={"/shop/product/new-product"}>Add</Link>
                         </Button>
                         <TableContainer style={{ paddingTop: "15px" }}>
                             <Table aria-label="simple table">
@@ -114,7 +94,7 @@ function ProductList() {
                                 <TableBody>
                                     {product
                                         ? product.result.map((item, i) => (
-                                              <TableRow>
+                                              <TableRow key={item.id}>
                                                   <TableCell align="center" width={"10px"}>
                                                       {i + 1}
                                                   </TableCell>
@@ -132,7 +112,7 @@ function ProductList() {
                                                           </Link>
                                                       </Button>
                                                       <Button variant="outlined">
-                                                          <Link to={`/shop-product/update/${item.id}`}>Update</Link>
+                                                          <Link to={`/shop/product/update/${item.id}`}>Update</Link>
                                                       </Button>
 
                                                       <Button variant="outlined" onClick={() => handleDelete(item)}>
@@ -151,4 +131,4 @@ function ProductList() {
         </>
     );
 }
-export default ProductList;
+export default ShopProduct;

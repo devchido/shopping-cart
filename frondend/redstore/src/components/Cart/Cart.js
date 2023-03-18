@@ -16,7 +16,11 @@ const style = {
 export default function Cart() {
     const [cart, setCart] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const api = useEffect(() => {
+    useEffect(() => {
+        loadDataCart();
+    }, []);
+
+    const loadDataCart = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var requestOptions = {
@@ -37,10 +41,9 @@ export default function Cart() {
                 // Set data vào cart
                 setCart(result);
                 console.log(cart);
-                
             })
             .catch((error) => console.log("error", error));
-    });
+    };
 
     //
     const [open, setOpen] = React.useState(false);
@@ -76,7 +79,34 @@ export default function Cart() {
                 console.log(result);
                 alert("true");
                 handleClose();
-                
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
+    };
+    const [dropdown, setdropdown] = useState(false);
+    const openDropdown = () => {
+        setdropdown(!dropdown);
+    };
+    const handleDeleteCart = (item) => {
+        // alert(item.id);
+        setdropdown(false);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "DELETE",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/cart/auth/delete/" + item.id, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                // alert("true");
+                loadDataCart();
             })
             .catch((error) => {
                 console.log("error", error);
@@ -161,14 +191,38 @@ export default function Cart() {
                                             {/*  */}
                                             {cart.map((item, i) => (
                                                 <div className="col-5">
-                                                    <Link to={`/cart/${item.id}`}>
-                                                        <div className="cart-detail">
+                                                    <div className="cart-detail">
+                                                        <div
+                                                            className="dropdown"
+                                                            style={{ display: "flex", justifyContent: "right" }}
+                                                        >
+                                                            <i
+                                                                className="fa fa-ellipsis-v"
+                                                                style={{ padding: "10px" }}
+                                                                onClick={openDropdown}
+                                                            />
+
+                                                            {dropdown ? (
+                                                                <>
+                                                                    <div
+                                                                        className="dropdown-content"
+                                                                        style={{ margin: "35px 0" }}
+                                                                    >
+                                                                        <a onClick={()=> handleDeleteCart(item)}>
+                                                                            <i className="fa fa-times"></i>Remove
+                                                                        </a>
+                                                                    </div>
+                                                                </>
+                                                            ) : null}
+                                                        </div>
+                                                        <Link to={`/cart/${item.id}`}>
                                                             <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" />
                                                             {/* <p>Create at:{item.createdAt}</p>
                                                               <p>Update at:{item.updatedAt}</p> */}
+
                                                             <p>content: {item.content}</p>
-                                                        </div>
-                                                    </Link>
+                                                        </Link>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>

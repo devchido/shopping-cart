@@ -11,14 +11,14 @@ logout = () => {
     render() {
         return (
 <>
-    <div class="dropdown-content">
+    <div className="dropdown-content">
 
         <Link to="/user">{this.props.users.firstName} {this.props.users.lastName}</Link>
         <Link to={""}>Link 2</Link>
         <Link to={"/shop-product"} >My Shop</Link>
 
         <Link to={"/login"} onClick={this.logout}   className={"logoutItem"}>
-            <i class="fa fa-sign-out"></i>Logout
+            <i className="fa fa-sign-out"></i>Logout
         </Link>
     </div>
 </>

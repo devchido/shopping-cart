@@ -66,11 +66,15 @@ public class CartService {
         System.out.println("Thực thi edit");
     }
 
-    // Delete user
+    // Delete user's cart with cart's id
     @Transactional
-    public void delete(Long id) {
-        cartRepository.deleteById(String.valueOf(id));
-        System.out.println("Thực thi delete");
+    public void delete(String id) {
+        Cart entity = cartRepository.findById(id).orElse(null);
+        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()){
+            cartRepository.deleteById(String.valueOf(id));
+            System.out.println("Thực thi delete");
+        }
+
     }
     // get all
     public List<CartDto> findAll (){
@@ -85,10 +89,14 @@ public class CartService {
         return dtos;
     }
 
+    //
     public CartDto findMyCartById(String id) {
         Cart entity = cartRepository.findById(id).orElse(null);
-        CartDto dto = cartMapper.toDo(entity);
-        return dto;
+        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()){
+            CartDto dto = cartMapper.toDo(entity);
+            return dto;
+        }
+        return null;
     }
 
     public List<CartDto> finUsersCart() {

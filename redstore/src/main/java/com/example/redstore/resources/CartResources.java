@@ -40,7 +40,7 @@ public class CartResources {
 
     // Xoá giỏ hàng
     @DeleteMapping("/auth/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         cartService.delete(id);
     }
 
@@ -57,6 +57,9 @@ public class CartResources {
         List<CartDto> dtos = cartService.findAllByUserId(userId);
         return dtos;
     }
+
+    // get data cart có id?
+    // trong đó: id của user đăng nhập phải giống với id của user có trong thông tin của cart đó
     @GetMapping("/auth/my-cart/{id}")
     public CartDto findMyCartById(@PathVariable String id){
         CartDto dto = cartService.findMyCartById(id);

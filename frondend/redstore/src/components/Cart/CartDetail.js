@@ -7,8 +7,34 @@ export default function CartDetail() {
     console.log("cartId:", id);
     const [isLoading, setIsLoading] = useState(true);
     const [cartDetail, setCartDetail] = useState();
+    const [cart, setCart] = useState();
 
     useEffect(() => {
+        loadDataCart();
+        loadDataCartDetail();
+    }, []);
+    const loadDataCart = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+        var requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+        fetch("/cart/auth/my-cart/" + id, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                console.log(result);
+                setCart(result);
+            })
+            .catch((error) => console.log("error", error));
+    };
+    const loadDataCartDetail = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -17,7 +43,6 @@ export default function CartDetail() {
             headers: myHeaders,
             redirect: "follow",
         };
-
         fetch("/cart-item/auth/cart/" + id, requestOptions)
             .then((response) => {
                 if (response.ok) {
@@ -33,21 +58,37 @@ export default function CartDetail() {
                 setCartDetail(result);
             })
             .catch((error) => console.log("error", error));
-    }, []);
+    };
+    const handleDeleteCartItem = (item) => {
+        console.log(item.id);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
+        var requestOptions = {
+            method: "DELETE",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/cart-item/auth/" + item.id, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                alert("true");
+                loadDataCartDetail();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
+    };
     return (
         <div>
             <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
                 <div className="container">
                     <h1 style={{ color: "#fff", fontSize: "30px" }}>
-                        Cart detail:
-                        {isLoading ? (
-                            <div>
-                                <h2>Loading . . . </h2>
-                            </div>
-                        ) : (
-                            <>{cartDetail ? cartDetail.content : null}</>
-                        )}
+                        Cart:&nbsp;
+                        {isLoading ? <>Loading . . . </> : <>{cart ? <>{cart.content} </> : null}</>}
                     </h1>
                 </div>
             </div>
@@ -55,6 +96,7 @@ export default function CartDetail() {
                 <table className="cart-detail-table">
                     <tbody>
                         <tr>
+                            <th>Stt</th>
                             <th>Product</th>
                             <th>Quantity</th>
                             <th>Discount</th>
@@ -67,8 +109,9 @@ export default function CartDetail() {
                         ) : (
                             <>
                                 {cartDetail
-                                    ? cartDetail.map((item) => (
+                                    ? cartDetail.map((item,i) => (
                                           <tr>
+                                            <td>{i+1}</td>
                                               <td>
                                                   <div className="cart-info">
                                                       <Link to={`/products/${item.product.slug}`}>
@@ -80,7 +123,9 @@ export default function CartDetail() {
                                                           </Link>
                                                           <small>Price: {item.price} vnd</small>
                                                           <br />
-                                                          <a href="">Remove</a>
+                                                          <p className="item-delete" onClick={() => handleDeleteCartItem(item)}>
+                                                              Remove
+                                                          </p>
                                                       </div>
                                                   </div>
                                               </td>
@@ -90,7 +135,7 @@ export default function CartDetail() {
                                               <td>
                                                   <input type="number" value={item.discount} readOnly={false} />
                                               </td>
-                                              <td>{(item.price - (item.price * item.discount) / 100) * item.quantity} vnd</td>
+                                              <td align="right">{(item.price - (item.price * item.discount) / 100) * item.quantity} vnd</td>
                                           </tr>
                                       ))
                                     : null}

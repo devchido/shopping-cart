@@ -82,7 +82,7 @@ class Navbar extends Component {
                     </nav>
                     {this.state.isLogin ? (
                         <>
-                            <div class="dropdown" onClick={this.setOpen}>
+                            <div className="dropdown" onClick={this.setOpen}>
                                 {/*  */}
                                 {this.state.users.photos ? (
                                     <img src={this.state.users.photos} style={{ width: "32px" }} class="dropbtn" />

@@ -358,6 +358,7 @@ small {
     color: #8a8a8a;
     font-size: 14px;
     padding: 16px 0 20px;
+    
 }
 
 .footer p {
@@ -672,9 +673,10 @@ td input {
     padding: 5px;
 }
 
-td a {
+td .item-delete {
     color: #ff523b;
     font-size: 12px;
+    cursor: pointer;
 }
 
 td img {
@@ -698,9 +700,9 @@ td:last-child {
     text-align: right;
 }
 
-th:last-child {
+/* th:last-child {
     text-align: right;
-}
+} */
 
 .checkOut {
     margin: 0;
@@ -1074,9 +1076,9 @@ table, th, td {
 .my-product-page{
     padding-block: 10rem;
 }
-.my-product-page th:last-child,td:last-child {
+/* .my-product-page th:last-child,td:last-child {
     text-align: center;
-}
+} */
 .my-product-page td a {
     color: #ff523b;
     font-size: 14px;
@@ -1205,8 +1207,14 @@ table, th, td {
     
 }
 .cart-page .cart-detail p{
-    word-wrap: break-word;
-    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.cart-page .cart-detail p:hover{
+    overflow: visible;
+    white-space: break-spaces;
 }
 .cart-page .cart-detail-table td, th{
     border: none;

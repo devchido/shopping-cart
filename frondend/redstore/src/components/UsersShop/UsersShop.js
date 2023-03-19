@@ -13,29 +13,30 @@ function UsersShop() {
                 <div className="shop-page">
                     <div className="row">
                         <div className="col-5">
+                            <Link to={""}>
+                                <div className="col-item" style={{margin: "5px"}}>
+                                    <i class="fa fa-product-hunt" />
+                                    <p>Product manager</p>
+                                </div>
+                            </Link>
+                        </div>
+                        <div className="col-5">
                             <Link to={"/shop/product-cart"}>
                                 <div className="col-item">
                                     <i class="fa fa-shopping-cart" />
-                                    <p>Product Cart</p>
+                                    <p>ProductCart manager</p>
                                 </div>
                             </Link>
                         </div>
                         <div className="col-5">
-                            <Link>
+                            <Link to={"/shop/order"}>
                                 <div className="col-item">
-                                    <i class="fa fa-shopping-cart" />
-                                    <p>sdf</p>
+                                    <i class="fa fa-list-alt" />
+                                    <p>Order management</p>
                                 </div>
                             </Link>
                         </div>
-                        <div className="col-5">
-                            <Link>
-                                <div className="col-item">
-                                    <i class="fa fa-shopping-cart" />
-                                    <p>sdf</p>
-                                </div>
-                            </Link>
-                        </div>
+
                         <div className="col-5">
                             <Link>
                                 <div className="col-item">

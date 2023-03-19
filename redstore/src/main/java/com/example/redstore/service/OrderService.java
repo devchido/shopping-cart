@@ -1,5 +1,6 @@
 package com.example.redstore.service;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
 import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.OrderDto;
@@ -28,7 +29,8 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
     private final OrderItemRepository orderItemRepository;
 
-    public List<OrderDto> findByUsers(Long users) {
+    public List<OrderDto> findByUsers() {
+        Long users = SecurityUtils.getPrincipal().getId();
         List<Order> entity = orderRepository.findByUsers(users);
         List<OrderDto> dtos = orderMapper.toDo(entity);
         return dtos;

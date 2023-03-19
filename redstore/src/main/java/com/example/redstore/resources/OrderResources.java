@@ -17,15 +17,8 @@ public class OrderResources {
 
     private final OrderService orderService;
 
-    // Hiển thị các order của user
-    /*
-    http://localhost:8080/order/auth/u/1
-     */
-    @GetMapping("/auth/u/{users}")
-    public List<OrderDto> findByUsers(@PathVariable("users") Long users){
-        List<OrderDto> dtos = orderService.findByUsers(users);
-        return dtos;
-    }
+
+
     @GetMapping("/auth/c/{carts}")
     public List<OrderDto> findByCarts(@PathVariable("carts") Long carts){
         List<OrderDto> dtos = orderService.findByCarts(carts);
@@ -48,7 +41,16 @@ public class OrderResources {
         return dtos;
     }
 
+    /*
+    Hiển thị tất cả order của user đang đăng nhập???
+    http://localhost:8080/order/auth/u/1
 
+     */
+    @GetMapping("/auth/user")
+    public List<OrderDto> findByUsers(){
+        List<OrderDto> dtos = orderService.findByUsers();
+        return dtos;
+    }
 
     /*
     http://localhost:8080/order

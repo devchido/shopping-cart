@@ -88,10 +88,10 @@ public class CartItemService {
         System.out.println("Thực thi edit");
     }
 
-    // Delete user
+    // người mua thực hiện delete: xoá item khỏi giỏ hàng
     @Transactional
-    public void delete(Long id) {
-        CartItem cartItem = cartItemRepository.findById(String.valueOf(id)).orElse(null);
+    public void delete(String id) {
+        CartItem cartItem = cartItemRepository.findById(id).orElse(null);
         Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
 
         int quantity = productId.getQuantity() + cartItem.getQuantity();
@@ -100,6 +100,23 @@ public class CartItemService {
         productRepository.save(productId);
         cartItemRepository.deleteById(String.valueOf(id));
         System.out.println("Thực thi delete");
+    }
+    // Người bán thực hiện delete: xoá cart item của người người mua khỏi giỏ hàng của họ vì lý do nào đó
+    public void removeProductCartFromUser(String id) {
+        CartItem cartItem = cartItemRepository.findById(id).orElse(null);
+        Long userId = SecurityUtils.getPrincipal().getId();
+        // Check người thực hiện có phải là người quản lý sản phẩm đó không
+        if (userId == cartItem.getProduct().getUsers().getId()){
+            // get data của product được chọn by product's id from cartItem
+            Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
+            // Trả về dữ liệu cho sản phẩm sau khi xoá và lưu lại
+            int quantity = productId.getQuantity() + cartItem.getQuantity();
+            productId.setQuantity((short) quantity);
+            productId.setUpdatedAt(Instant.now());
+            productRepository.save(productId);
+            cartItemRepository.deleteById(id);
+        }
+
     }
     // get all
 
@@ -120,4 +137,13 @@ public class CartItemService {
         }
         return null;
     }
+
+    public List<CartItemDto> findCartItemByProductUserId() {
+        Long productUserId = SecurityUtils.getPrincipal().getId();
+        List<CartItem> entity = cartItemRepository.findCartItemByProductUserId(productUserId);
+        List<CartItemDto> dtos = cartItemMapper.toDo(entity);
+        return dtos;
+    }
+
+
 }

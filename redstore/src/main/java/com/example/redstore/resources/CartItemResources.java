@@ -28,12 +28,17 @@ public class CartItemResources {
         cartItemService.edit(id, dto);
     }
 
-    // delete: xoá item khỏi giỏ hàng
+    // người mua thực hiện delete: xoá item khỏi giỏ hàng
     @DeleteMapping("/auth/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         cartItemService.delete(id);
     }
+    // Người bán thực hiện delete: xoá cart item của người người mua khỏi giỏ hàng của họ vì lý do nào đó
 
+    @DeleteMapping("/auth/shop/product-cart/{id}")
+    public void removeProductCartFromUser(@PathVariable String id){
+        cartItemService.removeProductCartFromUser(id);
+    }
     // Hiển thị tất cả các item của tất cả giỏ hàng
     @GetMapping("/auth")
     public List<CartItemDto> findAll(){
@@ -44,6 +49,12 @@ public class CartItemResources {
     @GetMapping("/auth/cart/{cartId}")
     public List<CartItemDto> findAllByCartId(@PathVariable("cartId") Long cartId){
         List<CartItemDto> dtos = cartItemService.findByCartId(cartId);
+        return dtos;
+    }
+    // người bán quản lý hiện trạng các product được đặt trong giỏ hàng: (chỉ có thể xoá)
+    @GetMapping("/auth/shop/product-cart")
+    public List<CartItemDto> findCartItemByProductUserId(){
+        List<CartItemDto> dtos = cartItemService.findCartItemByProductUserId();
         return dtos;
     }
 }

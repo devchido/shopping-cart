@@ -79,6 +79,7 @@ export default function Cart() {
                 console.log(result);
                 alert("true");
                 handleClose();
+                loadDataCart();
             })
             .catch((error) => {
                 console.log("error", error);

@@ -34,6 +34,7 @@ import CartProduct from "./components/Shopping_cart/CartProduct";
 import CartDetail from "./components/Cart/CartDetail";
 import UsersShop from "./components/UsersShop/UsersShop";
 import ShopProductCart from "./components/UsersShop/ShopProductCart";
+import ShopOrder from "./components/UsersShop/ShopOrder";
 
 function App() {
     return (
@@ -69,6 +70,9 @@ function App() {
                             {/*  */}
                             <Route path="/shop/product-cart" element={<ShopProductCart/>} />
                             {/*  */}
+                            <Route path="/shop/order" element={<ShopOrder/>} />
+                            {/*  */}
+
                             <Route path="/*" element={<NotFound />} />
                         </Routes>
                         <Footer />

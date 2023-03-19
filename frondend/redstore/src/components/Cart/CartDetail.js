@@ -109,9 +109,9 @@ export default function CartDetail() {
                         ) : (
                             <>
                                 {cartDetail
-                                    ? cartDetail.map((item,i) => (
+                                    ? cartDetail.map((item, i) => (
                                           <tr>
-                                            <td>{i+1}</td>
+                                              <td>{i + 1}</td>
                                               <td>
                                                   <div className="cart-info">
                                                       <Link to={`/products/${item.product.slug}`}>
@@ -135,7 +135,9 @@ export default function CartDetail() {
                                               <td>
                                                   <input type="number" value={item.discount} readOnly={false} />
                                               </td>
-                                              <td align="right">{(item.price - (item.price * item.discount) / 100) * item.quantity} vnd</td>
+                                              <td align="right">
+                                                  {(item.price - (item.price * item.discount) / 100) * item.quantity} vnd
+                                              </td>
                                           </tr>
                                       ))
                                     : null}
@@ -143,7 +145,31 @@ export default function CartDetail() {
                         )}
                     </tbody>
                 </table>
-                <div className="total-price">
+                <div className="total-price row">
+                    <table>
+                        {cart ? (
+                            <>
+                                <tr>
+                                    <td>Địa Chỉ</td>
+                                    <td>{cart.line1}</td>
+                                </tr>
+                                <tr>
+                                    <td>City</td>
+                                    <td>{cart.city}</td>
+                                </tr>
+                                <tr>
+                                    <td>Country</td>
+                                    <td>{cart.country}</td>
+                                </tr>
+                                <tr>
+                                    <td>Content</td>
+                                    <td>{cart.content}</td>
+                                </tr>
+                            </>
+                        ) : null}
+                    </table>
+                </div>
+                <div style={{ textAlign: "right", marginTop: "1rem" }}>
                     <Button variant="contained" style={{ background: "#ff523b" }}>
                         Order now
                     </Button>

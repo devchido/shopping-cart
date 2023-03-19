@@ -693,7 +693,7 @@ td img {
 .total-price table {
     border-top: 3px solid #ff523b;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
 }
 
 td:last-child {
@@ -1284,4 +1284,7 @@ table, th, td {
 }
 .page .shop-page .col-item .fa {
     font-size: 100px;
+}
+.page .shop-product-cart-page{
+    margin: 3rem  auto 1rem auto;
 }

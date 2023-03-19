@@ -56,6 +56,9 @@ function SingleProduct() {
     };
     // Get data item product by slug
     useEffect(() => {
+        loadDataProduct();
+    }, []);
+    const loadDataProduct = () => {
         fetch("/product/api/findProductBySlug/" + slug).then((resp) => {
             resp.json().then((result) => {
                 // console.log(result);
@@ -63,7 +66,7 @@ function SingleProduct() {
                 setProduct(result);
             });
         });
-    }, []);
+    }
     // Xử lý sự kiện chọn giỏ hàng cần chọn để thêm item product
     const [cartId, setCartId] = useState({});
     const [quantity, setQuantity] = useState(1);
@@ -93,6 +96,7 @@ function SingleProduct() {
                 // console.log(result);
                 alert("true");
                 handleClose();
+                loadDataProduct();
                 
             })
             .catch((error) => {

@@ -153,7 +153,7 @@ public class OrderService {
         order.setTotal(order.getSubTotal() - order.getItemDiscount());
         orderRepository.save(order);
         orderItemRepository.saveAll(orderItem);
-        cart.setStatus((short)1);
+        cart.setStatus((short)2);
         cartRepository.save(cart);
     }
 }

@@ -13,7 +13,7 @@ function UsersShop() {
                 <div className="shop-page">
                     <div className="row">
                         <div className="col-5">
-                            <Link to={""}>
+                            <Link to={"/shop/product"}>
                                 <div className="col-item" style={{margin: "5px"}}>
                                     <i class="fa fa-product-hunt" />
                                     <p>Product manager</p>
@@ -31,7 +31,7 @@ function UsersShop() {
                         <div className="col-5">
                             <Link to={"/shop/order"}>
                                 <div className="col-item">
-                                    <i class="fa fa-list-alt" />
+                                    <i class="fa fa-file-text-o" />
                                     <p>Order management</p>
                                 </div>
                             </Link>

@@ -190,41 +190,56 @@ export default function Cart() {
                                                 </Modal>
                                             </div>
                                             {/*  */}
+
                                             {cart.map((item, i) => (
-                                                <div className="col-5">
-                                                    <div className="cart-detail">
-                                                        <div
-                                                            className="dropdown"
-                                                            style={{ display: "flex", justifyContent: "right" }}
-                                                        >
-                                                            <i
-                                                                className="fa fa-ellipsis-v"
-                                                                style={{ padding: "10px" }}
-                                                                onClick={openDropdown}
-                                                            />
+                                                <>
+                                                    {item.status == 0 || item.status == 1 ? (
+                                                        <div className="col-5">
+                                                            <div className="cart-detail">
+                                                                <div
+                                                                    className="dropdown"
+                                                                    style={{ display: "flex", justifyContent: "right" }}
+                                                                >
+                                                                    <i
+                                                                        className="fa fa-ellipsis-v"
+                                                                        style={{ padding: "10px" }}
+                                                                        onClick={openDropdown}
+                                                                    />
 
-                                                            {dropdown ? (
-                                                                <>
-                                                                    <div
-                                                                        className="dropdown-content"
-                                                                        style={{ margin: "35px 0" }}
-                                                                    >
-                                                                        <a onClick={()=> handleDeleteCart(item)}>
-                                                                            <i className="fa fa-times"></i>Remove
-                                                                        </a>
-                                                                    </div>
-                                                                </>
-                                                            ) : null}
+                                                                    {dropdown ? (
+                                                                        <>
+                                                                            <div
+                                                                                className="dropdown-content"
+                                                                                style={{ margin: "35px 0" }}
+                                                                            >
+                                                                                <a onClick={() => handleDeleteCart(item)}>
+                                                                                    <i className="fa fa-times"></i>Remove
+                                                                                </a>
+                                                                            </div>
+                                                                        </>
+                                                                    ) : null}
+                                                                </div>
+                                                                <Link to={`/cart/${item.id}`}>
+                                                                    <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" />
+
+                                                                    <p>content: {item.content}</p>
+                                                                    <p>
+                                                                        status:{" "}
+                                                                        {item.status == 0
+                                                                            ? "New"
+                                                                            : null || item.status == 1
+                                                                            ? "Cart"
+                                                                            : null || item.status == 2
+                                                                            ? "Order"
+                                                                            : null || item.status == 3
+                                                                            ? "Đã thanh toán"
+                                                                            : null}
+                                                                    </p>
+                                                                </Link>
+                                                            </div>
                                                         </div>
-                                                        <Link to={`/cart/${item.id}`}>
-                                                            <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" />
-                                                            {/* <p>Create at:{item.createdAt}</p>
-                                                              <p>Update at:{item.updatedAt}</p> */}
-
-                                                            <p>content: {item.content}</p>
-                                                        </Link>
-                                                    </div>
-                                                </div>
+                                                    ) : null}
+                                                </>
                                             ))}
                                         </div>
                                     </>

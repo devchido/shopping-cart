@@ -185,7 +185,7 @@ function SingleProduct() {
                                                                             {/* Hiện thị các user's cart */}
                                                                             {cart.map((item, i) => (
                                                                                 <>
-                                                                                    {/*  */}
+                                                                                    {item.status == 0 || item.status == 1 ? (
                                                                                     <div
                                                                                         className="col-5"
                                                                                         onClick={() => {
@@ -199,6 +199,7 @@ function SingleProduct() {
                                                                                             <p>content: {item.content}</p>
                                                                                         </div>
                                                                                     </div>
+                                                                                    ) : null}
                                                                                 </>
                                                                             ))}
                                                                         </div>

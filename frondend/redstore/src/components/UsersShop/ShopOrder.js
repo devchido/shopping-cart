@@ -11,7 +11,6 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography,
 } from "@mui/material";
 
 const style = {
@@ -27,7 +26,7 @@ const style = {
 };
 
 function ShopOrder() {
-    const [productCart, setProductCart] = useState();
+    const [productOrder, setProductOrder] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [itemRemove, setItemRemove] = useState();
@@ -52,7 +51,7 @@ function ShopOrder() {
             redirect: "follow",
         };
 
-        fetch("/cart-item/auth/shop/product-cart", requestOptions)
+        fetch("/order-item/auth/shop/order", requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -62,7 +61,7 @@ function ShopOrder() {
             .then((result) => {
                 console.log(result);
                 setIsLoading(false);
-                setProductCart(result);
+                setProductOrder(result);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -124,7 +123,8 @@ function ShopOrder() {
                                             <TableCell align="center">Price&nbsp;($)</TableCell>
                                             <TableCell align="center">Discount&nbsp;(%)</TableCell>
                                             <TableCell align="center">Quantity</TableCell>
-                                            <TableCell align="center">User's Order</TableCell>
+                                            {/* <TableCell align="center">User's Order</TableCell> */}
+                                            <TableCell align="center">Order id</TableCell>
                                             <TableCell align="center">Time</TableCell>
                                             <TableCell align="center">Action</TableCell>
                                         </TableRow>
@@ -136,22 +136,25 @@ function ShopOrder() {
                                             </div>
                                         ) : (
                                             <>
-                                                {productCart
-                                                    ? productCart.map((item, i) => (
+                                                {productOrder
+                                                    ? productOrder.map((item, i) => (
                                                           <TableRow>
                                                               <TableCell align="center" width={"10px"}>
                                                                   {/* {i + 1} */}
                                                                   {item.id}
                                                               </TableCell>
                                                               <TableCell align="center">
-                                                                  {<img src={item.product.photos} />}
+                                                                  {<img src={item.products.photos} />}
                                                               </TableCell>
-                                                              <TableCell align="center">{item.product.title}</TableCell>
+                                                              <TableCell align="center">{item.products.title}</TableCell>
                                                               <TableCell align="center">{item.price}</TableCell>
                                                               <TableCell align="center">{item.discount}</TableCell>
                                                               <TableCell align="center">{item.quantity}</TableCell>
+                                                              {/* <TableCell align="center">
+                                                                  {item.orders.firstName + " " + item.orders.lastName}
+                                                              </TableCell> */}
                                                               <TableCell align="center">
-                                                                  {item.cart.users.firstName + " " + item.cart.users.lastName}
+                                                                  {item.orders.id}
                                                               </TableCell>
 
                                                               <TableCell align="center">
@@ -160,7 +163,7 @@ function ShopOrder() {
                                                               <TableCell align="center">
                                                                   <Button variant="outlined">
                                                                       <Link
-                                                                          to={`/products/${item.product.slug}`}
+                                                                          to={`/products/${item.products.slug}`}
                                                                           style={{ color: "#000" }}
                                                                       >
                                                                           View
@@ -180,15 +183,15 @@ function ShopOrder() {
                                                                           {itemRemove ? (
                                                                               <>
                                                                                   <h2 id="parent-modal-title">
-                                                                                      Remove cart item from user's cart:{" "}
+                                                                                      Remove order item from user's cart:{" "}
                                                                                       {itemRemove.id}
                                                                                   </h2>
                                                                                   <p id="parent-modal-description">
-                                                                                      Remove cart item {itemRemove.product.title}{" "}
+                                                                                      Remove cart item {itemRemove.products.title}{" "}
                                                                                       from{" "}
-                                                                                      {item.cart.users.firstName +
+                                                                                      {item.orders.firstName +
                                                                                           " " +
-                                                                                          item.cart.users.lastName}
+                                                                                          item.orders.lastName}
                                                                                       's cart
                                                                                   </p>
 

@@ -1,5 +1,6 @@
 package com.example.redstore.service;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
 import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.CartItemDto;
@@ -64,6 +65,13 @@ public class OrderItemService {
     // get all
     public List<OrderItemDto> findAll (){
         List<OrderItem> entity = orderItemRepository.findAll();
+        List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
+        return dtos;
+    }
+
+    public List<OrderItemDto> findOrderItemByProductUserId() {
+        Long productUserId = SecurityUtils.getPrincipal().getId();
+        List<OrderItem> entity = orderItemRepository.findOrderItemByProductUserId(productUserId);
         List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
         return dtos;
     }

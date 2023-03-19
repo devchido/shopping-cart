@@ -18,15 +18,15 @@ public class OrderResources {
     private final OrderService orderService;
 
 
-
     @GetMapping("/auth/c/{carts}")
-    public List<OrderDto> findByCarts(@PathVariable("carts") Long carts){
+    public List<OrderDto> findByCarts(@PathVariable("carts") Long carts) {
         List<OrderDto> dtos = orderService.findByCarts(carts);
         return dtos;
     }
+
     // Thực hiện order cho cart ?cart={id}
     @PostMapping("/auth/createByCart")
-    public void createOrderByCart(@RequestParam("idCard") Long id) {
+    public void createOrderByCart(@RequestParam("idCart") Long id) {
         orderService.createOrderByCart(id);
     }
 
@@ -36,7 +36,7 @@ public class OrderResources {
 
     */
     @GetMapping("/auth/findAll")
-    public List<OrderDto> findAll(){
+    public List<OrderDto> findAll() {
         List<OrderDto> dtos = orderService.findAll();
         return dtos;
     }
@@ -47,7 +47,7 @@ public class OrderResources {
 
      */
     @GetMapping("/auth/user")
-    public List<OrderDto> findByUsers(){
+    public List<OrderDto> findByUsers() {
         List<OrderDto> dtos = orderService.findByUsers();
         return dtos;
     }
@@ -63,7 +63,9 @@ public class OrderResources {
     }
      */
     @PostMapping("/auth/create")
-    public void create(@RequestBody OrderDto dto){
+    public void create(@RequestBody OrderDto dto) {
         orderService.create(dto);
     }
+
+
 }

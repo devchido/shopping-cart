@@ -39,4 +39,13 @@ public class OrderItemResources {
         List<OrderItemDto> dtos = orderItemService.findAll();
         return dtos;
     }
+    /*
+    người bán quản lý hiện trạng các product được order
+    Hiển thị
+     */
+    @GetMapping("/auth/shop/order")
+    public List<OrderItemDto> findOrderItemByProductUserId(){
+        List<OrderItemDto> dtos = orderItemService.findOrderItemByProductUserId();
+        return dtos;
+    }
 }

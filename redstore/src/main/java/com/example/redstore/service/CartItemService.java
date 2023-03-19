@@ -34,13 +34,17 @@ public class CartItemService {
     @Transactional
     public void create(CartItemDto dto) {
 
-        CartItem entity =  cartItemMapper.toEntity(dto);
+        CartItem entity = cartItemMapper.toEntity(dto);
+        //Check có cart với id được thêm không? get data
+        Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
         // Set product
         // Kiểm tra product đó trong list product có tồn tại hay không
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
+
+        // Check product được chọn đã có trong giỏ hàng hay chưa?
+        //
         entity.setProduct(productId);
         // Set thông tin cart item
-        Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
         entity.setCart(cartId);
         entity.setPrice(productId.getPrice());
         entity.setDiscount(productId.getDiscount());
@@ -53,14 +57,18 @@ public class CartItemService {
         entity.setActive(true);
         // Set create at
         entity.setCreatedAt(Instant.now());
+        // Set dữ liệu cho cart
+        cartId.setStatus((short) 1);
+        // Save data
+        cartRepository.save(cartId);
         cartItemRepository.save(entity);
         System.out.println("Thực thi create");
+
     }
 
     // Edit user
     @Transactional
-    public void edit(Long id, CartItemDto dto){
-
+    public void edit(Long id, CartItemDto dto) {
 
 
         CartItem entity = cartItemMapper.toEntity(dto);
@@ -101,12 +109,13 @@ public class CartItemService {
         cartItemRepository.deleteById(String.valueOf(id));
         System.out.println("Thực thi delete");
     }
+
     // Người bán thực hiện delete: xoá cart item của người người mua khỏi giỏ hàng của họ vì lý do nào đó
     public void removeProductCartFromUser(String id) {
         CartItem cartItem = cartItemRepository.findById(id).orElse(null);
         Long userId = SecurityUtils.getPrincipal().getId();
         // Check người thực hiện có phải là người quản lý sản phẩm đó không
-        if (userId == cartItem.getProduct().getUsers().getId()){
+        if (userId == cartItem.getProduct().getUsers().getId()) {
             // get data của product được chọn by product's id from cartItem
             Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
             // Trả về dữ liệu cho sản phẩm sau khi xoá và lưu lại
@@ -120,17 +129,18 @@ public class CartItemService {
     }
     // get all
 
-    public List<CartItemDto> findAll(){
+    public List<CartItemDto> findAll() {
         List<CartItem> entity = cartItemRepository.findAll();
         List<CartItemDto> dtos = cartItemMapper.toDo(entity);
         return dtos;
     }
+
     // Get cart item with id cart
     // todo: security user id = cart user id
-    public List<CartItemDto> findByCartId(Long cartId){
+    public List<CartItemDto> findByCartId(Long cartId) {
         Long userSecurityId = SecurityUtils.getPrincipal().getId();
         Cart cartUser = cartRepository.findById(String.valueOf(cartId)).orElse(null);
-        if (userSecurityId == cartUser.getUsers().getId()){
+        if (userSecurityId == cartUser.getUsers().getId()) {
             List<CartItem> entity = cartItemRepository.findByCartId(cartId);
             List<CartItemDto> dtos = cartItemMapper.toDo(entity);
             return dtos;

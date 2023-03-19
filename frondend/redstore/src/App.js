@@ -35,6 +35,7 @@ import CartDetail from "./components/Cart/CartDetail";
 import UsersShop from "./components/UsersShop/UsersShop";
 import ShopProductCart from "./components/UsersShop/ShopProductCart";
 import ShopOrder from "./components/UsersShop/ShopOrder";
+import Order from "./components/Order/Order";
 
 function App() {
     return (
@@ -46,11 +47,15 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Home />}></Route>
                             {/*  */}
+                            <Route path="/products" element={<Products />} />
+                            <Route path="/products/:slug" element={<SingleProduct />} />
+                            {/*  */}
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             {/*  */}
-                            <Route path="/products" element={<Products />} />
-                            <Route path="/products/:slug" element={<SingleProduct />} />
+                            <Route path="/user" element={<User />} />
+                            <Route path="/user/update" element={<UpdateUser />} />
+                            
                             {/*  */}
                             <Route path="/category" element={<NotFound />} />
 
@@ -59,8 +64,7 @@ function App() {
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/cart/:id" element={<CartDetail />} />
                             {/*  */}
-                            <Route path="/user" element={<User />} />
-                            <Route path="/user/update" element={<UpdateUser />} />
+                            <Route path="/order" element={<Order/>} />
                             {/*  */}
                             <Route path="/shop" element={<UsersShop />} />
                             {/*  */}

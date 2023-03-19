@@ -82,6 +82,29 @@ export default function CartDetail() {
                 alert("false");
             });
     };
+    const handleOrderNow = () => {
+        alert(cart.id);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+        fetch("/order/auth/createByCart?idCart=" + cart.id, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                // alert("true");
+                loadDataCart();
+                loadDataCartDetail();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
+    };
     return (
         <div>
             <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
@@ -165,15 +188,51 @@ export default function CartDetail() {
                                     <td>Content</td>
                                     <td>{cart.content}</td>
                                 </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>
+                                        {cart.status == 0
+                                            ? "Mới"
+                                            : null || cart.status == 1
+                                            ? "Cart"
+                                            : null || cart.status == 2
+                                            ? "Order"
+                                            : null || cart.status == 3
+                                            ? "Đã thanh toán"
+                                            : null}
+                                    </td>
+                                </tr>
                             </>
                         ) : null}
                     </table>
                 </div>
-                <div style={{ textAlign: "right", marginTop: "1rem" }}>
-                    <Button variant="contained" style={{ background: "#ff523b" }}>
-                        Order now
-                    </Button>
-                </div>
+                {cart ? (
+                    <>
+                        {
+                            cart.status == 0 ? (
+                                <div style={{ textAlign: "right", marginTop: "1rem" }}>
+                                    <Button variant="contained" style={{ background: "#ff523b" }} >
+                                        <Link to={"/products"} style={{color: "#fff"}}>Go shopping now
+                                        </Link>
+                                        
+                                    </Button>
+                                </div>
+                            ) : null ||cart.status == 1 ? (
+                                <div style={{ textAlign: "right", marginTop: "1rem" }}>
+                                    <Button variant="contained" style={{ background: "#ff523b" }} onClick={handleOrderNow}>
+                                        Order now
+                                    </Button>
+                                </div>
+                            ) : null || cart.status != 1 ? (
+                                <div style={{ textAlign: "right", marginTop: "1rem" }}>
+                                    <Button variant="contained" style={{ background: "#ff523b" }}>
+                                        Dùng lại danh sách này
+                                    </Button>
+                                </div>
+                            ) : null
+                        }
+                    </>
+                ) : null}
             </div>
         </div>
     );

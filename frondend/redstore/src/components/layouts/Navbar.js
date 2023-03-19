@@ -54,10 +54,14 @@ function Navbar() {
                     <nav>
                         <ul id="MenuItems" className="menu-items nav">
                             <li>
-                                <Link to="/">Home</Link>
+                                <Link to="/" title="Home">
+                                    Home
+                                </Link>
                             </li>
                             <li>
-                                <Link to="/products">Products</Link>
+                                <Link to="/products" title="Products">
+                                    Products
+                                </Link>
                             </li>
                             <li>
                                 <Link to="/category">Category</Link>
@@ -71,16 +75,19 @@ function Navbar() {
                                     <div className="dropdown" onClick={handleOpen}>
                                         {/*  */}
                                         {users.photos ? (
-                                            <img src={users.photos} style={{ width: "32px" }} class="dropbtn" />
+                                            <img
+                                                src={users.photos}
+                                                style={{ width: "32px" }}
+                                                class="dropbtn"
+                                                title={users.firstName + " " + users.lastName}
+                                            />
                                         ) : (
                                             <i className="fa fa-user-circle" style={{ fontSize: "28px" }} />
                                         )}
                                         {open ? (
                                             <>
                                                 <div className="dropdown-content">
-                                                    <Link to="/user">
-                                                        {users.firstName} {users.lastName}
-                                                    </Link>
+                                                    <Link to="/user">{users.firstName + " " + users.lastName}</Link>
                                                     <Link to={"/shop"}>User's Shop</Link>
                                                     <Link to={"/shop/product"}>Shop Product</Link>
 
@@ -93,6 +100,21 @@ function Navbar() {
                                     </div>
                                 </>
                             ) : null}
+
+                            <Link to="/cart" title="Cart">
+                                <img
+                                    src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png"
+                                    width="30px"
+                                    height="30px"
+                                    alt=""
+                                />
+                            </Link>
+                            <Link to={"/order"} title="Order">
+                                <i class="fa fa-file-text-o" aria-hidden="true" style={{ fontSize: "26px" }} />
+                            </Link>
+                            {/* <span className="badge badge-warning" id="lblCartCount">
+                        123
+                    </span> */}
                         </>
                     ) : (
                         <ul>
@@ -101,18 +123,6 @@ function Navbar() {
                             </li>
                         </ul>
                     )}
-                    &nbsp;&nbsp;
-                    <Link to="/cart">
-                        <img
-                            src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png"
-                            width="30px"
-                            height="30px"
-                            alt=""
-                        />
-                    </Link>
-                    {/* <span className="badge badge-warning" id="lblCartCount">
-                        123
-                    </span> */}
                     <img
                         src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/menu.png"
                         className="menu-icon"

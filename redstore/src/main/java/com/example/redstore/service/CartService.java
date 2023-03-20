@@ -56,9 +56,18 @@ public class CartService {
     // Edit user
     @Transactional
     public void edit(Long id, CartDto dto){
-        Cart entity = cartMapper.toEntity(dto);
-        entity.setId(id);
-
+        Cart entity = cartRepository.findById(String.valueOf(id)).orElse(null);
+        // Cập nhật thông tin user
+        User user = userRepository.findById(String.valueOf(entity.getUsers().getId())).orElse(null);
+        entity.setFirstName(user.getFirstName());
+        entity.setLastName(user.getLastName());
+        entity.setMobile(user.getMobile());
+        entity.setEmail(user.getEmail());
+        // Cập nhật thông tin địa chỉ đơn hàng
+        entity.setLine1(dto.getLine1());
+        entity.setCity(dto.getCity());
+        entity.setCountry(dto.getCountry());
+        entity.setContent(dto.getContent());
         // Set update at
         entity.setUpdatedAt(Instant.now());
         cartRepository.save(entity);

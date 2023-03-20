@@ -36,6 +36,7 @@ import UsersShop from "./components/UsersShop/UsersShop";
 import ShopProductCart from "./components/UsersShop/ShopProductCart";
 import ShopOrder from "./components/UsersShop/ShopOrder";
 import Order from "./components/Order/Order";
+import OrderDetail from "./components/Order/OrderDetail";
 
 function App() {
     return (
@@ -65,6 +66,7 @@ function App() {
                             <Route path="/cart/:id" element={<CartDetail />} />
                             {/*  */}
                             <Route path="/order" element={<Order/>} />
+                            <Route path="/order/:id" element={<OrderDetail/>} />
                             {/*  */}
                             <Route path="/shop" element={<UsersShop />} />
                             {/*  */}

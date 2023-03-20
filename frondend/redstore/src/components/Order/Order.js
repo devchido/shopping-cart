@@ -134,7 +134,7 @@ function Order() {
                                                             <TableCell align="center">
                                                                 <Button variant="outlined">
                                                                     <Link
-                                                                        //   to={`/products/${item.products.slug}`}
+                                                                          to={`/order/${item.id}`}
                                                                         style={{ color: "#000" }}
                                                                     >
                                                                         View

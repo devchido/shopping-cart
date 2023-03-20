@@ -1,4 +1,16 @@
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Modal,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
+    Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const style = {
@@ -250,6 +262,72 @@ export default function Cart() {
                     )}
                 </div>
             </div>
+            <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
+                <div className="container">
+                    <h1>All my cart</h1>
+                </div>
+            </div>
+            <TableContainer className="container" style={{ paddingTop: "15px" }}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">STT</TableCell>
+                            <TableCell align="center">Address</TableCell>
+                            <TableCell align="center">City</TableCell>
+                            <TableCell align="center">Country</TableCell>
+                            <TableCell align="center">Content</TableCell>
+                            <TableCell align="center">Time</TableCell>
+                            <TableCell align="center">Status</TableCell>
+                            <TableCell align="center">Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {isLoading ? (
+                            <div className="row">
+                                <h2>Loading . . . </h2>
+                            </div>
+                        ) : (
+                            <>
+                                {cart
+                                    ? cart.map((item, i) => (
+                                          <TableRow>
+                                              <TableCell align="center" width={"10px"}>
+                                                  {i + 1}
+                                              </TableCell>
+                                              <TableCell align="center">{item.line1}</TableCell>
+                                              <TableCell align="center">{item.city}</TableCell>
+                                              <TableCell align="center">{item.country}</TableCell>
+                                              <TableCell align="center">{item.content}</TableCell>
+
+                                              <TableCell align="center">
+                                                  {item.updatedAt ? item.updatedAt : item.createdAt}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                  {item.status == 0
+                                                      ? "New"
+                                                      : null || item.status == 1
+                                                      ? "Cart"
+                                                      : null || item.status == 2
+                                                      ? "Order"
+                                                      : null || item.status == 3
+                                                      ? "Đã thanh toán"
+                                                      : null}
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                  <Button variant="outlined">
+                                                      <Link to={`/cart/${item.id}`} style={{ color: "#000" }}>
+                                                          View
+                                                      </Link>
+                                                  </Button>
+                                              </TableCell>
+                                          </TableRow>
+                                      ))
+                                    : null}
+                            </>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>
     );
 }

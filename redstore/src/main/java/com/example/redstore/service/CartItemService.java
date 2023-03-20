@@ -43,26 +43,44 @@ public class CartItemService {
 
         // Check product được chọn đã có trong giỏ hàng hay chưa?
         //
-        entity.setProduct(productId);
-        // Set thông tin cart item
-        entity.setCart(cartId);
-        entity.setPrice(productId.getPrice());
-        entity.setDiscount(productId.getDiscount());
-        //
-        int quantity = productId.getQuantity() - entity.getQuantity();
-        productId.setQuantity((short) quantity);
-        productId.setUpdatedAt(Instant.now());
-        productRepository.save(productId);
-        // Set active
-        entity.setActive(true);
-        // Set create at
-        entity.setCreatedAt(Instant.now());
-        // Set dữ liệu cho cart
-        cartId.setStatus((short) 1);
-        // Save data
-        cartRepository.save(cartId);
-        cartItemRepository.save(entity);
-        System.out.println("Thực thi create");
+        CartItem cartItem = cartItemRepository.findByProductAndCart(dto.getProductId(), dto.getCartId()).orElse(null);
+
+        if (cartItem != null){
+            // set thêm giá trị quantity : cartItem
+            cartItem.setQuantity((short) (cartItem.getQuantity() + entity.getQuantity()));
+            cartItem.setUpdatedAt(Instant.now());
+            cartId.setUpdatedAt(Instant.now());
+            cartItemRepository.save(cartItem);
+            // set giá trị : product
+            int quantity = productId.getQuantity() - entity.getQuantity();
+            productId.setQuantity((short) quantity);
+            productId.setUpdatedAt(Instant.now());
+            productRepository.save(productId);
+            System.out.println("Thực thi mua thêm lần nữa");
+        } else {
+            entity.setProduct(productId);
+            // Set thông tin cart item
+            entity.setCart(cartId);
+            entity.setPrice(productId.getPrice());
+            entity.setDiscount(productId.getDiscount());
+            //
+            int quantity = productId.getQuantity() - entity.getQuantity();
+            productId.setQuantity((short) quantity);
+            productId.setUpdatedAt(Instant.now());
+            productRepository.save(productId);
+            // Set active
+            entity.setActive(true);
+            // Set create at
+            entity.setCreatedAt(Instant.now());
+            // Set dữ liệu cho cart
+            cartId.setStatus((short) 1);
+            // Save data
+            cartRepository.save(cartId);
+            cartItemRepository.save(entity);
+            System.out.println("Thực thi create");
+        }
+
+
 
     }
 

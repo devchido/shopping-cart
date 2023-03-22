@@ -156,4 +156,13 @@ public class OrderService {
         cart.setStatus((short)2);
         cartRepository.save(cart);
     }
+
+    public OrderDto findOneById(String id) {
+        Order entity = orderRepository.findById(id).orElse(null);
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()){
+            OrderDto dto = orderMapper.toDo(entity);
+            return dto;
+        }
+        return null;
+    }
 }

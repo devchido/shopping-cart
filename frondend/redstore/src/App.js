@@ -66,7 +66,7 @@ function App() {
                             <Route path="/cart/:id" element={<CartDetail />} />
                             {/*  */}
                             <Route path="/order" element={<Order/>} />
-                            <Route path="/order/:id" element={<OrderDetail/>} />
+                            <Route path="/order/:orderId" element={<OrderDetail/>} />
                             {/*  */}
                             <Route path="/shop" element={<UsersShop />} />
                             {/*  */}

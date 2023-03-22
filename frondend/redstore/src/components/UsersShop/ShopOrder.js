@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-    Box,
-    Button,
-    Modal,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TextField,
-} from "@mui/material";
+import { Box, Button, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 
 const style = {
     position: "absolute",
@@ -30,18 +19,79 @@ function ShopOrder() {
     const [isLoading, setIsLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [itemRemove, setItemRemove] = useState();
+    const [statusItem, setStatusItem] = useState("");
+    const handleConfirmStatus = (item) => {
+        console.log("status: ",statusItem, "itemId", item.id);
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            status: "1",
+        });
+
+        var requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+        };
+
+        fetch("/order-item/auth/shop/order/orderItem/" + item.id, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                // alert("true");
+                loadDataProductOrder();
+                
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
+    }
+    const handleCancelStatus = (item) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            status: "0",
+        });
+
+        var requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+        };
+
+        fetch("/order-item/auth/shop/order/orderItem/" + item.id, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                // alert("true");
+                loadDataProductOrder();
+                
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
+    }
     const handleOpen = (item) => {
         setOpen(true);
-        setItemRemove(item );
+        setItemRemove(item);
         // alert(item.id);
     };
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
-        loadDataProductCart();
+        loadDataProductOrder();
     }, []);
 
-    const loadDataProductCart = () => {
+    const loadDataProductOrder = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -62,38 +112,19 @@ function ShopOrder() {
                 console.log(result);
                 setIsLoading(false);
                 setProductOrder(result);
+                setStatusItem(result.status);
             })
             .catch((error) => {
                 console.log("error", error);
             });
     };
-    const handleRemove = () => {
-        
-        // var myHeaders = new Headers();
-        // myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-        // var requestOptions = {
-        //     method: "DELETE",
-        //     headers: myHeaders,
-        //     redirect: "follow",
-        // };
-
-        // fetch("/cart-item/auth/shop/product-cart/" + itemRemove.id, requestOptions)
-        //     .then((response) => response.text())
-        //     .then((result) => {
-        //         console.log(result);
-        //         handleClose();
-        //         alert("true");
-        //         loadDataProductCart();
-        //     })
-        //     .catch((error) => console.log("error", error));
-    };
+    
     return (
         <div>
             <div className="page">
-                <div style={{ background: "#ff523b" }}>
+                <div>
                     <div className="container">
-                        <h1 style={{ color: "#fff" }}>Order management - Chưa làm </h1>
+                        <h1>Shop: Order management</h1>
                     </div>
                 </div>
                 <div className="container shop-product-cart-page">
@@ -117,15 +148,11 @@ function ShopOrder() {
                                 <Table aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center">STT</TableCell>
-                                            <TableCell align="center">Photo</TableCell>
-                                            <TableCell align="center">Title</TableCell>
-                                            <TableCell align="center">Price&nbsp;($)</TableCell>
-                                            <TableCell align="center">Discount&nbsp;(%)</TableCell>
-                                            <TableCell align="center">Quantity</TableCell>
-                                            {/* <TableCell align="center">User's Order</TableCell> */}
+                                            <TableCell align="center">Id</TableCell>
                                             <TableCell align="center">Order id</TableCell>
+                                            <TableCell align="center">Product item order</TableCell>
                                             <TableCell align="center">Time</TableCell>
+                                            <TableCell align="center">Item Status</TableCell>
                                             <TableCell align="center">Action</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -143,77 +170,56 @@ function ShopOrder() {
                                                                   {/* {i + 1} */}
                                                                   {item.id}
                                                               </TableCell>
+                                                              <TableCell align="center">{item.orders.id}</TableCell>
                                                               <TableCell align="center">
-                                                                  {<img src={item.products.photos} />}
-                                                              </TableCell>
-                                                              <TableCell align="center">{item.products.title}</TableCell>
-                                                              <TableCell align="center">{item.price}</TableCell>
-                                                              <TableCell align="center">{item.discount}</TableCell>
-                                                              <TableCell align="center">{item.quantity}</TableCell>
-                                                              {/* <TableCell align="center">
-                                                                  {item.orders.firstName + " " + item.orders.lastName}
-                                                              </TableCell> */}
-                                                              <TableCell align="center">
-                                                                  {item.orders.id}
+                                                                  <div className="cart-info">
+                                                                      <Link to={""}>
+                                                                          {<img src={item.products.photos} alt="" />}
+                                                                      </Link>
+                                                                      <div style={{textAlign: "start"}}>
+                                                                          <Link to={""}>
+                                                                              <p>{item.products.title}</p>
+                                                                          </Link>
+                                                                          <small>Price: {item.price} vnd</small>
+                                                                          <br />
+                                                                          <small>Discount: {item.discount} vnd</small>
+                                                                          <br />
+                                                                          <small>Quantity: {item.quantity}</small>
+                                                                          <br />
+                                                                          <p className="item-delete">Remove</p>
+                                                                      </div>
+                                                                  </div>
                                                               </TableCell>
 
                                                               <TableCell align="center">
                                                                   {item.updatedAt ? item.updatedAt : item.createdAt}
                                                               </TableCell>
                                                               <TableCell align="center">
-                                                                  <Button variant="outlined">
-                                                                      <Link
-                                                                          to={`/products/${item.products.slug}`}
-                                                                          style={{ color: "#000" }}
-                                                                      >
-                                                                          View
-                                                                      </Link>
-                                                                  </Button>
+                                                                  {item.status === 0
+                                                                      ? "Chờ xác nhận"
+                                                                      : null || item.status === 1
+                                                                      ? "Đã xác nhận"
+                                                                      : null || item.status === 2
+                                                                      ? "Đang vận chuyển"
+                                                                      : null || item.status === 3
+                                                                      ? "Thành công"
+                                                                      : null || item.status === null
+                                                                      ? "Chờ xác nhận"
+                                                                      : null}
+                                                              </TableCell>
+                                                              <TableCell align="center">
+                                                                  {item.status === 0 || item.status === null ? (
+                                                                      <Button variant="outlined" onClick={() => handleConfirmStatus(item)}>
+                                                                          Xác nhận
+                                                                      </Button>
+                                                                  ) : null}
+                                                                  {item.status !== 3 ? (
+                                                                      <Button variant="outlined" onClick={() => handleCancelStatus(item)}>
+                                                                          Cancel
+                                                                      </Button>
+                                                                  ) : null}
 
-                                                                  <Button variant="outlined" onClick={() => handleOpen(item)}>
-                                                                      Remove
-                                                                  </Button>
-                                                                  <Modal
-                                                                      open={open}
-                                                                      onClose={handleClose}
-                                                                      aria-labelledby="modal-modal-title"
-                                                                      aria-describedby="modal-modal-description"
-                                                                  >
-                                                                      <Box sx={style}>
-                                                                          {itemRemove ? (
-                                                                              <>
-                                                                                  <h2 id="parent-modal-title">
-                                                                                      Remove order item from user's cart:{" "}
-                                                                                      {itemRemove.id}
-                                                                                  </h2>
-                                                                                  <p id="parent-modal-description">
-                                                                                      Remove cart item {itemRemove.products.title}{" "}
-                                                                                      from{" "}
-                                                                                      {item.orders.firstName +
-                                                                                          " " +
-                                                                                          item.orders.lastName}
-                                                                                      's cart
-                                                                                  </p>
-
-                                                                                  <div style={{ textAlign: "right" }}>
-                                                                                      <Button
-                                                                                          variant="contained"
-                                                                                          onClick={() => handleRemove()}
-                                                                                      >
-                                                                                          Yes
-                                                                                      </Button>
-                                                                                      &nbsp;
-                                                                                      <Button
-                                                                                          variant="contained"
-                                                                                          onClick={handleClose}
-                                                                                      >
-                                                                                          Close
-                                                                                      </Button>
-                                                                                  </div>
-                                                                              </>
-                                                                          ) : null}
-                                                                      </Box>
-                                                                  </Modal>
+                                                                  
                                                               </TableCell>
                                                           </TableRow>
                                                       ))

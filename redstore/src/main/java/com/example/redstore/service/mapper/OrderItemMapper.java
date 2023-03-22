@@ -25,6 +25,7 @@ public class OrderItemMapper implements EntityMapper<OrderItemDto, OrderItem>{
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
         dto.setContent(entity.getContent());
+        dto.setStatus(entity.getStatus());
         return dto;
     }
 
@@ -39,6 +40,7 @@ public class OrderItemMapper implements EntityMapper<OrderItemDto, OrderItem>{
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
         entity.setContent(dto.getContent());
+        entity.setStatus(dto.getStatus());
         return entity;
     }
 

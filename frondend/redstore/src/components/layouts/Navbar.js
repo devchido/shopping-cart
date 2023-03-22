@@ -48,6 +48,7 @@ function Navbar() {
                             <img
                                 src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/logo.png"
                                 style={{ width: "125px" }}
+                                alt=""
                             />
                         </Link>
                     </div>
@@ -80,6 +81,7 @@ function Navbar() {
                                                 style={{ width: "32px" }}
                                                 class="dropbtn"
                                                 title={users.firstName + " " + users.lastName}
+                                                alt=""
                                             />
                                         ) : (
                                             <i className="fa fa-user-circle" style={{ fontSize: "28px" }} />
@@ -87,9 +89,9 @@ function Navbar() {
                                         {open ? (
                                             <>
                                                 <div className="dropdown-content">
-                                                    <Link to="/user">{users.firstName + " " + users.lastName}</Link>
-                                                    <Link to={"/shop"}>User's Shop</Link>
-                                                    <Link to={"/shop/product"}>Shop Product</Link>
+                                                    <Link to="/user"><i class="fa fa-user"/> {users.firstName + " " + users.lastName}</Link>
+                                                    <Link to={"/shop"}><i class="fa fa-shopping-cart"/> Shopping Cart</Link>
+                                                    <Link to={"/shop"}><i class="fa fa-building-o"/> User's Shop</Link>
 
                                                     <Link to={"/login"} onClick={handleLogout} className={"logoutItem"}>
                                                         <i className="fa fa-sign-out"></i>Logout
@@ -127,6 +129,7 @@ function Navbar() {
                         src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/menu.png"
                         className="menu-icon"
                         id="menu-icon"
+                        alt=""
                     />
                 </header>
             </div>

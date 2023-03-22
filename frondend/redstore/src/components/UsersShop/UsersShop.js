@@ -40,7 +40,7 @@ function UsersShop() {
                         <div className="col-5">
                             <Link>
                                 <div className="col-item">
-                                    <i class="fa fa-shopping-cart" />
+                                <i class="fa fa-truck" aria-hidden="true"></i>
                                     <p>sdf</p>
                                 </div>
                             </Link>
@@ -48,7 +48,7 @@ function UsersShop() {
                         <div className="col-5">
                             <Link>
                                 <div className="col-item">
-                                    <i class="fa fa-shopping-cart" />
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>
                                     <p>txt</p>
                                 </div>
                             </Link>

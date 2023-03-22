@@ -3,9 +3,7 @@ package com.example.redstore.service;
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
 import com.example.redstore.repository.*;
-import com.example.redstore.service.dto.CartItemDto;
 import com.example.redstore.service.dto.OrderItemDto;
-import com.example.redstore.service.mapper.CartItemMapper;
 import com.example.redstore.service.mapper.OrderItemMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class OrderItemService {
     @Transactional
     public void create(OrderItemDto dto) {
 
-        OrderItem entity =  orderItemMapper.toEntity(dto);
+        OrderItem entity = orderItemMapper.toEntity(dto);
         // Set product
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
         entity.setProducts(productId);
@@ -45,7 +43,7 @@ public class OrderItemService {
 
     // Edit user
     @Transactional
-    public void edit(Long id, OrderItemDto dto){
+    public void edit(Long id, OrderItemDto dto) {
         OrderItem entity = orderItemMapper.toEntity(dto);
         entity.setId(id);
 
@@ -62,8 +60,9 @@ public class OrderItemService {
         orderItemRepository.deleteById(String.valueOf(id));
         System.out.println("Thực thi delete");
     }
+
     // get all
-    public List<OrderItemDto> findAll (){
+    public List<OrderItemDto> findAll() {
         List<OrderItem> entity = orderItemRepository.findAll();
         List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
         return dtos;
@@ -74,5 +73,35 @@ public class OrderItemService {
         List<OrderItem> entity = orderItemRepository.findOrderItemByProductUserId(productUserId);
         List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
         return dtos;
+    }
+
+    public List<OrderItemDto> findOrderItemByOrderId(String orderDetail) {
+        Order order = orderRepository.findById(orderDetail).orElse(null);
+        List<OrderItem> entity = orderItemRepository.findOrderItemByOrderId(order.getId());
+        List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
+        return dtos;
+    }
+
+    public void confirmOrderItemsStatus(String id, OrderItemDto dto) {
+        OrderItem entity = orderItemRepository.findById(id).orElse(null);
+
+        entity.setStatus(dto.getStatus());
+
+        entity.setUpdatedAt(Instant.now());
+        orderItemRepository.save(entity);
+
+        System.out.println("Thực thi xác nhận status");
+        Order order = orderRepository.findById(String.valueOf(entity.getOrders().getId())).orElse(null);
+        OrderItem check = orderItemRepository.checkStatus(order.getId()).orElse(null);
+        if (check == null){
+            order.setStatus((short) 1);
+            orderRepository.save(order);
+            System.out.println("Order được xác nhận");
+        }else {
+            order.setStatus((short) 0);
+            orderRepository.save(order);
+            System.out.println("Order chưa được xác nhận");
+        }
+
     }
 }

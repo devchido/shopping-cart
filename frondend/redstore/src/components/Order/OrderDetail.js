@@ -15,12 +15,67 @@ const style = {
 };
 
 function OrderDetail() {
-    const { id } = useParams();
+    const { orderId } = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [orderDetail, setOrderDetail] = useState();
     const [order, setOrder] = useState();
-  return (
-    <div>
+    useEffect(() => {
+        loadDataOrderDetail();
+        loadDataOrder();
+    }, []);
+    const loadDataOrderDetail = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/order-item/auth/shop/order/" + orderId, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                console.log(result);
+                setIsLoading(false);
+                setOrderDetail(result);
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+    };
+    const loadDataOrder = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/order/auth/findOneById/" + orderId, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                // console.log(result);
+                setOrder(result);
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+    };
+    return (
+        <div>
             <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
                 <div className="container">
                     <h1 style={{ color: "#fff", fontSize: "30px" }}>
@@ -37,7 +92,8 @@ function OrderDetail() {
                             <th>Product</th>
                             <th>Quantity</th>
                             <th>Discount</th>
-                            <th>Subtotal</th>
+                            <th style={{textAlign: "center"}}>Subtotal</th>
+                            <th style={{textAlign: "center"}}>Status</th>
                         </tr>
                         {isLoading ? (
                             <div>
@@ -51,17 +107,18 @@ function OrderDetail() {
                                               <td>{i + 1}</td>
                                               <td>
                                                   <div className="cart-info">
-                                                      <Link to={`/products/${item.product.slug}`}>
-                                                          <img src={item.product.photos} alt="" />
+                                                      <Link to={`/products/${item.products.slug}`}>
+                                                          <img src={item.products.photos} alt="" />
                                                       </Link>
                                                       <div>
-                                                          <Link to={`/products/${item.product.slug}`}>
-                                                              <p>{item.product.title}</p>
+                                                          <Link to={`/products/${item.products.slug}`}>
+                                                              <p>{item.products.title}</p>
                                                           </Link>
                                                           <small>Price: {item.price} vnd</small>
                                                           <br />
-                                                          <p className="item-delete" 
-                                                        //   onClick={() => handleDeleteCartItem(item)}
+                                                          <p
+                                                              className="item-delete"
+                                                              //   onClick={() => handleDeleteCartItem(item)}
                                                           >
                                                               Remove
                                                           </p>
@@ -77,6 +134,17 @@ function OrderDetail() {
                                               <td align="right">
                                                   {(item.price - (item.price * item.discount) / 100) * item.quantity} vnd
                                               </td>
+                                              <td align="center">{item.status === 0
+                                                                      ? "Chờ xác nhận"
+                                                                      : null || item.status === 1
+                                                                      ? "Đã xác nhận"
+                                                                      : null || item.status === 2
+                                                                      ? "Đang vận chuyển"
+                                                                      : null || item.status === 3
+                                                                      ? "Thành công"
+                                                                      : null || item.status === null
+                                                                      ? "Chờ xác nhận"
+                                                                      : null}</td>
                                           </tr>
                                       ))
                                     : null}
@@ -87,7 +155,7 @@ function OrderDetail() {
                 <div className="total-price row">
                     <table>
                         {order ? (
-                            <>
+                            <tbody>
                                 <tr>
                                     <td>Địa Chỉ</td>
                                     <td>{order.line1}</td>
@@ -100,7 +168,7 @@ function OrderDetail() {
                                     <td>Country</td>
                                     <td>{order.country}</td>
                                 </tr>
-                                <tr>
+                                <tr style={{ borderBottom: "1px #000" }}>
                                     <td>Content</td>
                                     <td>{order.content}</td>
                                 </tr>
@@ -108,106 +176,106 @@ function OrderDetail() {
                                     <td>Status</td>
                                     <td>
                                         {order.status == 0
-                                            ? "Mới"
+                                            ? "Chờ xác nhận"
                                             : null || order.status == 1
-                                            ? "Cart"
+                                            ? "Đã xác nhận"
                                             : null || order.status == 2
-                                            ? "Order"
+                                            ? "Đang vận chuyển"
                                             : null || order.status == 3
-                                            ? "Đã thanh toán"
+                                            ? " "
+                                            : null || order.status == 4
+                                            ? ""
+                                            : null || order.status == 5
+                                            ? "Đã Huỷ"
+                                            : null || order.status == 6
+                                            ? "Thành Công"
                                             : null}
                                     </td>
                                 </tr>
-                            </>
+                            </tbody>
                         ) : null}
                     </table>
                 </div>
                 {/* button : update cart and . . . */}
                 <div style={{ textAlign: "right", marginTop: "1rem" }}>
-                    <Button variant="outlined" 
-                    // onClick={handleOpenUpdateCart}
-                    >Update cart</Button>&nbsp;&nbsp;
-                    <Modal
-                        // open={openUpdateCart}
-                        // onClose={handleCloseUpdateCart}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={style}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Update Cart
-                            </Typography>
-                            <TextField
-                                sx={{ margin: "15px auto" }}
-                                fullWidth
-                                name="line1"
-                                label="Địa chỉ"
-                                // defaultValue={line1}
-                                // onChange={(e) => setLine1(e.target.value)}
-                            />
-                            <TextField
-                                sx={{ margin: "15px auto" }}
-                                fullWidth
-                                name="city"
-                                label="City"
-                                // defaultValue={city}
-                                // onChange={(e) => setCity(e.target.value)}
-                            />
-                            <TextField
-                                sx={{ margin: "15px auto" }}
-                                fullWidth
-                                name="country"
-                                label="Country"
-                                // defaultValue={country}
-                                // onChange={(e) => setCountry(e.target.value)}
-                            />
-                            <TextField
-                                sx={{ margin: "15px auto" }}
-                                fullWidth
-                                name="content"
-                                label="Content"
-                                // defaultValue={content}
-                                // onChange={(e) => setContent(e.target.value)}
-                            />
-                            <div style={{ textAlign: "right" }}>
-                                <Button variant="contained" 
-                                // onClick={handleCloseUpdateCart}
-                                >
-                                    Close
-                                </Button>
-                                &nbsp;
-                                <Button variant="contained" 
-                                // onClick={handleUpdateCart}
-                                >
-                                    Save
-                                </Button>
-                            </div>
-                        </Box>
-                    </Modal>
-
                     {order ? (
                         <>
-                            {order.status == 0 ? (
-                                <Button variant="outlined" style={{ background: "#ff523b" }}>
-                                    <Link to={"/products"} style={{ color: "#fff" }}>
-                                        Go shopping now
-                                    </Link>
-                                </Button>
-                            ) : null || order.status == 1 ? (
-                                <Button variant="outlined" 
-                                // onClick={handleOrderNow}
-                                >
-                                    Order now
-                                </Button>
-                            ) : null || order.status != 1 ? (
-                                <Button variant="outlined">Dùng lại danh sách này</Button>
+                            {order.status === 1 || order.status === 3 ? (
+                                <>
+                                    <Button
+                                        variant="outlined"
+                                        // onClick={handleOpenUpdateCart}
+                                    >
+                                        Update cart
+                                    </Button>
+                                    &nbsp;&nbsp;
+                                    <Modal
+                                        // open={openUpdateCart}
+                                        // onClose={handleCloseUpdateCart}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                                Update Cart
+                                            </Typography>
+                                            <TextField
+                                                sx={{ margin: "15px auto" }}
+                                                fullWidth
+                                                name="line1"
+                                                label="Địa chỉ"
+                                                // defaultValue={line1}
+                                                // onChange={(e) => setLine1(e.target.value)}
+                                            />
+                                            <TextField
+                                                sx={{ margin: "15px auto" }}
+                                                fullWidth
+                                                name="city"
+                                                label="City"
+                                                // defaultValue={city}
+                                                // onChange={(e) => setCity(e.target.value)}
+                                            />
+                                            <TextField
+                                                sx={{ margin: "15px auto" }}
+                                                fullWidth
+                                                name="country"
+                                                label="Country"
+                                                // defaultValue={country}
+                                                // onChange={(e) => setCountry(e.target.value)}
+                                            />
+                                            <TextField
+                                                sx={{ margin: "15px auto" }}
+                                                fullWidth
+                                                name="content"
+                                                label="Content"
+                                                // defaultValue={content}
+                                                // onChange={(e) => setContent(e.target.value)}
+                                            />
+                                            <div style={{ textAlign: "right" }}>
+                                                <Button
+                                                    variant="contained"
+                                                    // onClick={handleCloseUpdateCart}
+                                                >
+                                                    Close
+                                                </Button>
+                                                &nbsp;
+                                                <Button
+                                                    variant="contained"
+                                                    // onClick={handleUpdateCart}
+                                                >
+                                                    Save
+                                                </Button>
+                                            </div>
+                                        </Box>
+                                    </Modal>
+                                </>
                             ) : null}
                         </>
                     ) : null}
                 </div>
             </div>
         </div>
-  )
+    );
 }
 
-export default OrderDetail
+export default OrderDetail;

@@ -124,7 +124,7 @@ function Order() {
                                                                     (
                                                                         item.status == 0 ? "Chờ xác nhận" : null ||
                                                                         item.status == 1 ? "Đã xác nhận" : null||
-                                                                        item.status == 2 ? "Đã thanh toán" : null ||
+                                                                        item.status == 2 ? "Đã thanh toán || Chờ nhận" : null ||
                                                                         item.status == 3 ? "Đang vận chuyển" : null||
                                                                         item.status == 4 ? "Đã giao" : null ||
                                                                         item.status == 5 ? "Huỷ" : null ||

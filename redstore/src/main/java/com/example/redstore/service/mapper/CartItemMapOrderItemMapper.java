@@ -4,6 +4,7 @@ import com.example.redstore.domain.CartItem;
 import com.example.redstore.domain.OrderItem;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class CartItemMapOrderItemMapper implements EntityMapper<CartItem, OrderI
         orderItem.setPrice(cartItem.getPrice());
         orderItem.setDiscount(cartItem.getDiscount());
         orderItem.setQuantity(cartItem.getQuantity());
+        orderItem.setStatus((short) 0);
+        orderItem.setContent(cartItem.getContent());
+        orderItem.setCreatedAt(Instant.now());
         return orderItem;
     }
 

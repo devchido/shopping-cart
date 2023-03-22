@@ -52,6 +52,12 @@ public class OrderResources {
         return dtos;
     }
 
+    @GetMapping("/auth/findOneById/{id}")
+    public OrderDto findOneById(@PathVariable String id){
+        OrderDto dto = orderService.findOneById(id);
+        return dto;
+    }
+
     /*
     http://localhost:8080/order
     {

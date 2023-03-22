@@ -40,12 +40,26 @@ public class OrderItemResources {
         return dtos;
     }
     /*
-    người bán quản lý hiện trạng các product được order
+    người bán quản lý
+    hiện trạng các product được order
     Hiển thị
      */
     @GetMapping("/auth/shop/order")
     public List<OrderItemDto> findOrderItemByProductUserId(){
         List<OrderItemDto> dtos = orderItemService.findOrderItemByProductUserId();
         return dtos;
+    }
+    /*
+    Hiển thị thông tin chi tiết của 1 phiếu order
+     */
+    @PostMapping("/auth/shop/order/{orderDetail}")
+    public List<OrderItemDto> findOrderItemByOrderId(@PathVariable String orderDetail){
+        List<OrderItemDto> dtos = orderItemService.findOrderItemByOrderId(orderDetail);
+        return dtos;
+    }
+    // Thay đổi trạng thái của phiếu order : status
+    @PutMapping("/auth/shop/order/orderItem/{id}")
+    public void confirmOrderItemsStatus(@PathVariable String id,@RequestBody OrderItemDto dto){
+        orderItemService.confirmOrderItemsStatus(id, dto);
     }
 }

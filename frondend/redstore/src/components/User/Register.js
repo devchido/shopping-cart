@@ -49,7 +49,7 @@ class Register extends Component {
             .then((result) => {
                 console.log(result);
                 localStorage.setItem("token", result.token);
-                window.location = "/login";
+                window.location = "/user";
             })
             .catch((error) => {
                 console.log("error", error);

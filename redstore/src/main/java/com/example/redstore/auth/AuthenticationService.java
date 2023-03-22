@@ -10,11 +10,13 @@ import com.example.redstore.token.Token;
 import com.example.redstore.token.TokenRepository;
 import com.example.redstore.token.TokenType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
@@ -125,4 +127,21 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
+//    @Bean
+//    public AuthenticationResponse tesstCreate() {
+//        var user1 = User.builder()
+//                .firstName("Admin")
+//                .lastName("admin")
+//                .email("admin@gmail.com")
+//                .mobile("09899899889")
+//                .createAt(Instant.now())
+//                .password(passwordEncoder.encode("Admin"))
+//                .role(Role.ADMIN).build();
+//        var savedUser = userRepository.save(user1);
+//        var jwtToken = jwtService.generateToken(user1);
+//        saveUserToken(savedUser, jwtToken);
+//        return AuthenticationResponse.builder()
+//                .token(jwtToken)
+//                .build();
+//    }
 }

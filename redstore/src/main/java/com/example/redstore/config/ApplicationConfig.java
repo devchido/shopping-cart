@@ -1,6 +1,8 @@
 package com.example.redstore.config;
 
+import com.example.redstore.auth.AuthenticationResponse;
 import com.example.redstore.repository.UserRepository;
+import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +30,6 @@ public class ApplicationConfig {
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
-//        authProvider.setPasswordEncoder(passwordEncoder());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -42,4 +43,6 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }

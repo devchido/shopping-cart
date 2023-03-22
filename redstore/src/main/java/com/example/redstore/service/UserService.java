@@ -22,6 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+
     // Filter user by: id, firstName, lastName, mobile, email
     public List<UserDto> filter(String id, String firstName, String lastName, String mobile, String email) {
         List<User> entity = userRepository.filter(id, firstName, lastName, mobile, email);

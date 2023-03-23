@@ -52,8 +52,11 @@ public class Product {
 
     @Column(name = "ends_at")
     private Instant endsAt;
+    @Column(name = "status")
+    private Short status;
 
     @Lob
     @Column(name = "content")
     private String content;
+
 }

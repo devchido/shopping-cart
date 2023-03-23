@@ -29,9 +29,9 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
     private final OrderItemRepository orderItemRepository;
 
-    public List<OrderDto> findByUsers() {
+    public List<OrderDto> findByUsers(String status) {
         Long users = SecurityUtils.getPrincipal().getId();
-        List<Order> entity = orderRepository.findByUsers(users);
+        List<Order> entity = orderRepository.findByUsers(users, status);
         List<OrderDto> dtos = orderMapper.toDo(entity);
         return dtos;
     }
@@ -164,5 +164,17 @@ public class OrderService {
             return dto;
         }
         return null;
+    }
+
+    public void cancelOrder(String id) {
+        Order entity = orderRepository.findById(id).orElse(null);
+        if (entity.getStatus() != 5){
+            entity.setStatus((short) 2);
+            orderRepository.save(entity);
+            Cart cart = cartRepository.findById(String.valueOf(entity.getCarts().getId())).orElse(null);
+            cart.setStatus((short) 1);
+            System.out.println("Thưc thi cancel order");
+        }
+
     }
 }

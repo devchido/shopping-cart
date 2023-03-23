@@ -1,91 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Button, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
-
-const style = {
-    position: "absolute",
-    top: "25%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-};
+import {  Button,  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 
 function ShopOrder() {
     const [productOrder, setProductOrder] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const [open, setOpen] = useState(false);
-    const [itemRemove, setItemRemove] = useState();
-    const [statusItem, setStatusItem] = useState("");
-    const handleConfirmStatus = (item) => {
-        console.log("status: ",statusItem, "itemId", item.id);
 
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-            status: "1",
-        });
-
-        var requestOptions = {
-            method: "PUT",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-        };
-
-        fetch("/order-item/auth/shop/order/orderItem/" + item.id, requestOptions)
-            .then((response) => response.text())
-            .then((result) => {
-                console.log(result);
-                // alert("true");
-                loadDataProductOrder();
-                
-            })
-            .catch((error) => {
-                console.log("error", error);
-                alert("false");
-            });
-    }
-    const handleCancelStatus = (item) => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-            status: "0",
-        });
-
-        var requestOptions = {
-            method: "PUT",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-        };
-
-        fetch("/order-item/auth/shop/order/orderItem/" + item.id, requestOptions)
-            .then((response) => response.text())
-            .then((result) => {
-                console.log(result);
-                // alert("true");
-                loadDataProductOrder();
-                
-            })
-            .catch((error) => {
-                console.log("error", error);
-                alert("false");
-            });
-    }
-    const handleOpen = (item) => {
-        setOpen(true);
-        setItemRemove(item);
-        // alert(item.id);
-    };
-    const handleClose = () => setOpen(false);
 
     useEffect(() => {
         loadDataProductOrder();
@@ -112,21 +32,16 @@ function ShopOrder() {
                 console.log(result);
                 setIsLoading(false);
                 setProductOrder(result);
-                setStatusItem(result.status);
             })
             .catch((error) => {
                 console.log("error", error);
             });
     };
-    
+
     return (
         <div>
-            <div className="page">
-                <div>
-                    <div className="container">
-                        <h1>Shop: Order management</h1>
-                    </div>
-                </div>
+            <div>
+                
                 <div className="container shop-product-cart-page">
                     <div>
                         <div className="row">
@@ -152,8 +67,6 @@ function ShopOrder() {
                                             <TableCell align="center">Order id</TableCell>
                                             <TableCell align="center">Product item order</TableCell>
                                             <TableCell align="center">Time</TableCell>
-                                            <TableCell align="center">Item Status</TableCell>
-                                            <TableCell align="center">Action</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -176,7 +89,7 @@ function ShopOrder() {
                                                                       <Link to={""}>
                                                                           {<img src={item.products.photos} alt="" />}
                                                                       </Link>
-                                                                      <div style={{textAlign: "start"}}>
+                                                                      <div style={{ textAlign: "start" }}>
                                                                           <Link to={""}>
                                                                               <p>{item.products.title}</p>
                                                                           </Link>
@@ -194,33 +107,8 @@ function ShopOrder() {
                                                               <TableCell align="center">
                                                                   {item.updatedAt ? item.updatedAt : item.createdAt}
                                                               </TableCell>
-                                                              <TableCell align="center">
-                                                                  {item.status === 0
-                                                                      ? "Chờ xác nhận"
-                                                                      : null || item.status === 1
-                                                                      ? "Đã xác nhận"
-                                                                      : null || item.status === 2
-                                                                      ? "Đang vận chuyển"
-                                                                      : null || item.status === 3
-                                                                      ? "Thành công"
-                                                                      : null || item.status === null
-                                                                      ? "Chờ xác nhận"
-                                                                      : null}
-                                                              </TableCell>
-                                                              <TableCell align="center">
-                                                                  {item.status === 0 || item.status === null ? (
-                                                                      <Button variant="outlined" onClick={() => handleConfirmStatus(item)}>
-                                                                          Xác nhận
-                                                                      </Button>
-                                                                  ) : null}
-                                                                  {item.status !== 3 ? (
-                                                                      <Button variant="outlined" onClick={() => handleCancelStatus(item)}>
-                                                                          Cancel
-                                                                      </Button>
-                                                                  ) : null}
 
-                                                                  
-                                                              </TableCell>
+                                                              
                                                           </TableRow>
                                                       ))
                                                     : null}

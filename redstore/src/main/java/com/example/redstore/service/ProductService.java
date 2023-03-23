@@ -59,6 +59,7 @@ public class ProductService {
         Product entity = productMapper.toEntity(dto);
         entity.setUsers(SecurityUtils.getPrincipal());
         entity.setCreatedAt(Instant.now());
+        entity.setStatus((short) 0);
         productRepository.save(entity);
         System.out.println("Thực thi create");
     }
@@ -107,9 +108,9 @@ public class ProductService {
         return dto;
     }
 
-    // get all
+    // get all product with status = 1
     public List<ProductDto> findAllProduct() {
-        List<Product> entity = productRepository.findAll();
+        List<Product> entity = productRepository.findProductByStatus();
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
     }

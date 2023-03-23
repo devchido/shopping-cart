@@ -4,14 +4,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import ShopProduct from "./ShopProduct";
-import ShopOrder from "./ShopOrder";
-//
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import LogoutIcon from "@mui/icons-material/Logout";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import StoreIcon from "@mui/icons-material/Store";
-import ShopProductCart from "./ShopProductCart";
+import UserManagement from "./UserManagement";
+import ProductManagement from "./ProductManagement";
+import OrderManagement from "./OrderManagement";
+import TransactionManagement from "./TransactionManagement";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -46,7 +42,7 @@ function a11yProps(index) {
     };
 }
 
-export default function UsersShop() {
+export default function Admin() {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -55,32 +51,26 @@ export default function UsersShop() {
 
     return (
         <div className="page">
-            <div>
-                <div className="container">
-                    <h1>Shop management</h1>
-                </div>
-            </div>
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs value={value} onChange={handleChange} centered aria-label="basic tabs example">
-                        <Tab icon={<StoreIcon />} iconPosition="start" label="Product" {...a11yProps(0)} />
-                        <Tab icon={<ShoppingBagIcon />} iconPosition="start" label="Cart" {...a11yProps(0)} />
-                        <Tab icon={<AssignmentIcon />} iconPosition="start" label="Order" {...a11yProps(1)} />
-                        {/* <Tab icon={<AssignmentIcon />} iconPosition="start" label="Transaction" {...a11yProps(2)} />
-                        <Tab icon={<StoreIcon />} iconPosition="start" label="null" {...a11yProps(3)} /> */}
+                        <Tab label="UserManagement" {...a11yProps(0)} />
+                        <Tab label="ProductManagement" {...a11yProps(1)} />
+                        <Tab label="OrderManagement" {...a11yProps(2)} />
+                        <Tab label="TransactionManagement" {...a11yProps(3)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <ShopProduct />
+                    <UserManagement />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <ShopProductCart />
+                    <ProductManagement/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <ShopOrder />
+                    <OrderManagement/>
                 </TabPanel>
                 <TabPanel value={value} index={3}>
-                    null 2
+                    <TransactionManagement/>
                 </TabPanel>
             </Box>
         </div>

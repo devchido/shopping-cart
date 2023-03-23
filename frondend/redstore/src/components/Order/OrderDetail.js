@@ -74,6 +74,28 @@ function OrderDetail() {
                 console.log("error", error);
             });
     };
+    const handleRemoveOrder = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/order/auth/cancel-order?id=" + orderId, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log(result);
+                alert("true");
+                loadDataOrder();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                alert("false");
+            });
+    };
     return (
         <div>
             <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
@@ -92,8 +114,7 @@ function OrderDetail() {
                             <th>Product</th>
                             <th>Quantity</th>
                             <th>Discount</th>
-                            <th style={{textAlign: "center"}}>Subtotal</th>
-                            <th style={{textAlign: "center"}}>Status</th>
+                            <th style={{ textAlign: "center" }}>Subtotal</th>
                         </tr>
                         {isLoading ? (
                             <div>
@@ -134,17 +155,6 @@ function OrderDetail() {
                                               <td align="right">
                                                   {(item.price - (item.price * item.discount) / 100) * item.quantity} vnd
                                               </td>
-                                              <td align="center">{item.status === 0
-                                                                      ? "Chờ xác nhận"
-                                                                      : null || item.status === 1
-                                                                      ? "Đã xác nhận"
-                                                                      : null || item.status === 2
-                                                                      ? "Đang vận chuyển"
-                                                                      : null || item.status === 3
-                                                                      ? "Thành công"
-                                                                      : null || item.status === null
-                                                                      ? "Chờ xác nhận"
-                                                                      : null}</td>
                                           </tr>
                                       ))
                                     : null}
@@ -178,17 +188,15 @@ function OrderDetail() {
                                         {order.status == 0
                                             ? "Chờ xác nhận"
                                             : null || order.status == 1
-                                            ? "Đã xác nhận"
+                                            ? "Không thành công"
                                             : null || order.status == 2
                                             ? "Đang vận chuyển"
                                             : null || order.status == 3
-                                            ? " "
+                                            ? "Đã giao"
                                             : null || order.status == 4
-                                            ? ""
+                                            ? "Đã trả lại"
                                             : null || order.status == 5
-                                            ? "Đã Huỷ"
-                                            : null || order.status == 6
-                                            ? "Thành Công"
+                                            ? "Hoàn thành"
                                             : null}
                                     </td>
                                 </tr>
@@ -200,74 +208,12 @@ function OrderDetail() {
                 <div style={{ textAlign: "right", marginTop: "1rem" }}>
                     {order ? (
                         <>
-                            {order.status === 1 || order.status === 3 ? (
+                            {order.status !== 6 ? (
                                 <>
-                                    <Button
-                                        variant="outlined"
-                                        // onClick={handleOpenUpdateCart}
-                                    >
-                                        Update cart
+                                    <Button variant="outlined" onClick={handleRemoveOrder}>
+                                        Cancel Order
                                     </Button>
                                     &nbsp;&nbsp;
-                                    <Modal
-                                        // open={openUpdateCart}
-                                        // onClose={handleCloseUpdateCart}
-                                        aria-labelledby="modal-modal-title"
-                                        aria-describedby="modal-modal-description"
-                                    >
-                                        <Box sx={style}>
-                                            <Typography id="modal-modal-title" variant="h6" component="h2">
-                                                Update Cart
-                                            </Typography>
-                                            <TextField
-                                                sx={{ margin: "15px auto" }}
-                                                fullWidth
-                                                name="line1"
-                                                label="Địa chỉ"
-                                                // defaultValue={line1}
-                                                // onChange={(e) => setLine1(e.target.value)}
-                                            />
-                                            <TextField
-                                                sx={{ margin: "15px auto" }}
-                                                fullWidth
-                                                name="city"
-                                                label="City"
-                                                // defaultValue={city}
-                                                // onChange={(e) => setCity(e.target.value)}
-                                            />
-                                            <TextField
-                                                sx={{ margin: "15px auto" }}
-                                                fullWidth
-                                                name="country"
-                                                label="Country"
-                                                // defaultValue={country}
-                                                // onChange={(e) => setCountry(e.target.value)}
-                                            />
-                                            <TextField
-                                                sx={{ margin: "15px auto" }}
-                                                fullWidth
-                                                name="content"
-                                                label="Content"
-                                                // defaultValue={content}
-                                                // onChange={(e) => setContent(e.target.value)}
-                                            />
-                                            <div style={{ textAlign: "right" }}>
-                                                <Button
-                                                    variant="contained"
-                                                    // onClick={handleCloseUpdateCart}
-                                                >
-                                                    Close
-                                                </Button>
-                                                &nbsp;
-                                                <Button
-                                                    variant="contained"
-                                                    // onClick={handleUpdateCart}
-                                                >
-                                                    Save
-                                                </Button>
-                                            </div>
-                                        </Box>
-                                    </Modal>
                                 </>
                             ) : null}
                         </>

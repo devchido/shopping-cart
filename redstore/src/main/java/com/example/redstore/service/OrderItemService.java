@@ -82,26 +82,4 @@ public class OrderItemService {
         return dtos;
     }
 
-    public void confirmOrderItemsStatus(String id, OrderItemDto dto) {
-        OrderItem entity = orderItemRepository.findById(id).orElse(null);
-
-        entity.setStatus(dto.getStatus());
-
-        entity.setUpdatedAt(Instant.now());
-        orderItemRepository.save(entity);
-
-        System.out.println("Thực thi xác nhận status");
-        Order order = orderRepository.findById(String.valueOf(entity.getOrders().getId())).orElse(null);
-        OrderItem check = orderItemRepository.checkStatus(order.getId()).orElse(null);
-        if (check == null){
-            order.setStatus((short) 1);
-            orderRepository.save(order);
-            System.out.println("Order được xác nhận");
-        }else {
-            order.setStatus((short) 0);
-            orderRepository.save(order);
-            System.out.println("Order chưa được xác nhận");
-        }
-
-    }
 }

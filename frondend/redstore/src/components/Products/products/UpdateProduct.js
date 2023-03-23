@@ -185,7 +185,7 @@ export default function UpdateProduct() {
                                 Save
                             </Button>
                             <Button variant="outlined" onClick={() => handleCancel}>
-                                <Link to={"/shop/product"}>Cancel</Link>
+                                <Link to={"/shop"}>Cancel</Link>
                             </Button>
                         </div>
                     </form>

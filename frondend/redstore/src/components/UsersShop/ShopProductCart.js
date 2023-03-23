@@ -11,7 +11,6 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography,
 } from "@mui/material";
 
 const style = {

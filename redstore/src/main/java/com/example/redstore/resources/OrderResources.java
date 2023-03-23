@@ -47,8 +47,8 @@ public class OrderResources {
 
      */
     @GetMapping("/auth/user")
-    public List<OrderDto> findByUsers() {
-        List<OrderDto> dtos = orderService.findByUsers();
+    public List<OrderDto> findByUsers(@RequestParam String status) {
+        List<OrderDto> dtos = orderService.findByUsers(status);
         return dtos;
     }
 
@@ -73,5 +73,12 @@ public class OrderResources {
         orderService.create(dto);
     }
 
+    /*
+    User thực hiện huỷ order wit order status!= 6
+     */
+    @PostMapping("/auth/cancel-order")
+    public void cancelOrder(@RequestParam String id){
+        orderService.cancelOrder(id);
+    }
 
 }

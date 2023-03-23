@@ -39,4 +39,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     @Query(value = "select p.* from shop.product p where slug = :slug", nativeQuery = true)
     Product findProductBySlug(@Param("slug") String Slug);
+    // Hiển thị tất cả các product có status =1 : trạng thái được hiển thị trên shop
+    @Query(value = "select p.* from shop.product p where status = 1", nativeQuery = true)
+    List<Product> findProductByStatus();
 }

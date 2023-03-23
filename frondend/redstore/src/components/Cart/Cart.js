@@ -128,7 +128,7 @@ export default function Cart() {
     };
     return (
         <>
-            <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
+            <div style={{ width: "100%", background: "#ff523b" }}>
                 <div className="container">
                     <h1>My cart</h1>
                 </div>

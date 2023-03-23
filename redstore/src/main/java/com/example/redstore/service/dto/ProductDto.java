@@ -33,6 +33,7 @@ public class ProductDto {
 
 
     private Instant endsAt;
+    private Short status;
 
 
     private String content;

@@ -1,8 +1,8 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
-import productReducer from './reducers/product.reducer';
-import cartReducer from './reducers/cart.reducer';
+
+
 
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -13,8 +13,6 @@ const initialState = {};
 const middleware = [thunk];
 
 const reducer = combineReducers({
-    product: productReducer,
-    cart: cartReducer
 });
 
 const persistConfig = {

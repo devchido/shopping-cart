@@ -144,4 +144,11 @@ public class AuthenticationService {
 //                .token(jwtToken)
 //                .build();
 //    }
+    // set ADMIN
+//    @Bean
+//    public void updateAdmin(){
+//        var user = userRepository.findByEmail("tu@gmail.com").orElse(null);
+//        user.setRole(Role.ADMIN);
+//        userRepository.save(user);
+//    }
 }

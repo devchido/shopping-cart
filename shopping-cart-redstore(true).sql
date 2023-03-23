@@ -167,7 +167,6 @@ CREATE TABLE `shop`.`order_item` (
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NULL DEFAULT NULL,
-  `status` SMALLINT(6) NULL DEFAULT 0,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_order_item_product`

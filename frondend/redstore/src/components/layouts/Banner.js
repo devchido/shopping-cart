@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 class Banner extends Component {
     render() {
@@ -14,7 +13,7 @@ class Banner extends Component {
                             Success isn't always about greatness. It's about consistency. Consistent hard work gains success.
                             Greatness will come.
                         </p>
-                        <a href="" className="btn">Explore Now &#8594;</a>
+                        {/* <a href="" className="btn">Explore Now &#8594;</a> */}
                     </div>
                     <div className="col-2">
                         <img src="assets/images/image1.png" alt="" className=''/>

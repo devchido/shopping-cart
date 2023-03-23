@@ -30,8 +30,7 @@ public class OrderItem {
 
     @Column(name = "quantity", nullable = false)
     private Short quantity;
-    @Column(name = "status")
-    private Short status = (short) 0;
+
 
     @Column(name = "created_at", nullable = false)
     @CreatedDate

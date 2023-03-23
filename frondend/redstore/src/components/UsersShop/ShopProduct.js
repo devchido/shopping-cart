@@ -59,7 +59,7 @@ function ShopProduct() {
 
     return (
         <>
-            <div className="my-product-page">
+            <div >
                 <div className="container">
                     <div className="row">
                         <TextField

@@ -37,6 +37,7 @@ import ShopProductCart from "./components/UsersShop/ShopProductCart";
 import ShopOrder from "./components/UsersShop/ShopOrder";
 import Order from "./components/Order/Order";
 import OrderDetail from "./components/Order/OrderDetail";
+import Admin from "./components/Admin/Admin";
 
 function App() {
     return (
@@ -56,7 +57,8 @@ function App() {
                             {/*  */}
                             <Route path="/user" element={<User />} />
                             <Route path="/user/update" element={<UpdateUser />} />
-                            
+                            {/* */}
+                            <Route path="/shopping-cart" element={<ShoppingCart />} />
                             {/*  */}
                             <Route path="/category" element={<NotFound />} />
 
@@ -77,6 +79,8 @@ function App() {
                             <Route path="/shop/product-cart" element={<ShopProductCart/>} />
                             {/*  */}
                             <Route path="/shop/order" element={<ShopOrder/>} />
+                            {/*  */}
+                            <Route path= "/admin" element={<Admin />} />
                             {/*  */}
 
                             <Route path="/*" element={<NotFound />} />

@@ -1,112 +1,82 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import CartProduct from './CartProduct';
-import Spinner from '../Common/Spinner';
+import * as React from "react";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Order from "../Order/Order";
+import Cart from "../Cart/Cart";
+//icons
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import StoreIcon from "@mui/icons-material/Store";
 
-class ShoppingCart extends Component {
-    render() {
-        const { cartItem, loading } = this.props.cart;
-        let productRow;
-        let checkoutbtn = true;
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
 
-        if (cartItem === null || loading) {
-            productRow = <Spinner />
-        } else {
-            if (cartItem.length > 0) {
-                productRow = cartItem.map(cartItems => (
-                    <CartProduct cartItem={cartItems} />
-                ))
-            } else {
-                productRow = (<tr> <h4>Your Shopping Cart is empty</h4></tr>);
-                checkoutbtn = false;
-            }
-        }
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
 
-        let cartSubTotal = [];
-        if (cartItem) {
-            cartItem.map(cartItem => {
-                let discount_price;
-                discount_price = ((cartItem.productDetails.price * cartItem.productDetails.discount) / 100);
-                discount_price = cartItem.productDetails.price - discount_price;
-                let productTotal = discount_price * cartItem.itemCount;
-                cartSubTotal.push(productTotal);
-            })
-        } else {
-            productRow = (<tr> <h4>Your Shopping Cart is empty</h4></tr>);
-            checkoutbtn = false;
-        }
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
 
-        let cartSubTotalPrice = 0;
-        cartSubTotal.map(price => cartSubTotalPrice = cartSubTotalPrice + price);
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
+    };
+}
 
-        let tax = 35;
+export default function ShopppingCart() {
+    const [value, setValue] = React.useState(0);
 
-        let totalPrice = cartSubTotalPrice + tax;
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
-        return (
-            <div>
-                <div className="small-container cart-title">
-                    <div className="row row-2">
-                        <h2 className="title-2">Your Shopping Cart</h2>
-                        <Link to="/">
-                            <p>Go To Store</p>
-                        </Link>
-                    </div>
-                </div>
-                <div className="small-container cart-page">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>MRP</th>
-                                <th>Amount</th>
-                            </tr>
-                            {productRow}
-                        </tbody>
-                    </table>
-
-                    <div className="total-price">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>SubTotal</td>
-                                    <td>Rs. {~~cartSubTotalPrice}/-</td>
-                                </tr>
-                                <tr>
-                                    <td>Tax</td>
-                                    <td>Rs. 35/-</td>
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
-                                    <td>Rs. {~~totalPrice}/-</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div className="checkOut">
-                    {checkoutbtn ? (
-                        <Link to="/user_address" className="btn" >Check Out</Link>
-                    ) : (
-                            <Link to="/products" className="btn" >Shop Now</Link>
-                        )}
-
+    return (
+        <div className="page">
+             <div>
+                <div className="container">
+                    <h1>My Shopping cart</h1>
                 </div>
             </div>
-        )
-    }
+            <Box sx={{ width: "100%" }}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <Tabs value={value} onChange={handleChange} centered aria-label="basic tabs example">
+                        <Tab icon={<ShoppingBagIcon/>} iconPosition="start" label="Cart" {...a11yProps(0)} />
+                        <Tab icon={<AssignmentIcon/>} iconPosition="start" label="Order" {...a11yProps(1)} />
+                        <Tab label="Item Three" {...a11yProps(2)} />
+                    </Tabs>
+                </Box>
+                <TabPanel value={value} index={0}>
+                    <Cart/>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                <Order />
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                    Item Three
+                </TabPanel>
+            </Box>
+        </div>
+    );
 }
-
-ShoppingCart.propTypes = {
-    cart: PropTypes.object.isRequired,
-}
-
-const mapStateToProps = state => ({
-    cart: state.cart
-});
-
-
-export default connect(mapStateToProps, {})(ShoppingCart);

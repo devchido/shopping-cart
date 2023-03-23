@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import StoreIcon from "@mui/icons-material/Store";
 
 function Navbar() {
     const [isLogin, setIsLogin] = useState(false);
@@ -68,6 +72,15 @@ function Navbar() {
                                 <Link to="/category">Category</Link>
                             </li>
                         </ul>
+                        {users ? (
+                            users.role === "ADMIN" ? (
+                                <ul>
+                                    <li>
+                                        <Link to={"/admin"}>Trang Admin</Link>
+                                    </li>
+                                </ul>
+                            ) : null
+                        ) : null}
                     </nav>
                     {isLogin ? (
                         <>
@@ -89,12 +102,42 @@ function Navbar() {
                                         {open ? (
                                             <>
                                                 <div className="dropdown-content">
-                                                    <Link to="/user"><i class="fa fa-user"/> {users.firstName + " " + users.lastName}</Link>
-                                                    <Link to={"/shop"}><i class="fa fa-shopping-cart"/> Shopping Cart</Link>
-                                                    <Link to={"/shop"}><i class="fa fa-building-o"/> User's Shop</Link>
-
+                                                    {/* User */}
+                                                    <Link to="/user">{users.firstName + " " + users.lastName}</Link>
+                                                    <hr />
+                                                    {/* Kênh shopping cart của user */}
+                                                    <Link to="/cart" title="Cart">
+                                                        <ShoppingBagIcon style={{ marginBottom: "-5px" }} /> Cart
+                                                    </Link>
+                                                    <Link to={"/order"} title="Order">
+                                                        <AssignmentIcon style={{ marginBottom: "-6px" }} /> Order
+                                                    </Link>
+                                                    <Link to={"/shopping-cart"}>Shopping Cart</Link>
+                                                    <hr />
+                                                    {/* Kênh cửa hàng của user */}
+                                                    {/* <Link to={"/shop/product"}>
+                                                        <StoreIcon style={{ marginBottom: "-6px" }} />
+                                                        Product manager
+                                                    </Link>
+                                                    <Link to={"/shop/product-cart"}>
+                                                        <ShoppingBagIcon style={{ marginBottom: "-5px" }} />
+                                                        ProductCart manager
+                                                    </Link>
+                                                    <Link to={"/shop/order"}>
+                                                        <AssignmentIcon style={{ marginBottom: "-6px" }} />
+                                                        Order manager
+                                                    </Link>
+                                                    <Link>
+                                                        <i class="fa fa-truck" aria-hidden="true"></i>
+                                                        sdf
+                                                    </Link> */}
+                                                    <Link to={"/shop"}>
+                                                        <i class="fa fa-building-o" /> User's Shop
+                                                    </Link>
+                                                    <hr />
                                                     <Link to={"/login"} onClick={handleLogout} className={"logoutItem"}>
-                                                        <i className="fa fa-sign-out"></i>Logout
+                                                        <LogoutIcon style={{ marginBottom: "-6px" }} />
+                                                        Logout
                                                     </Link>
                                                 </div>
                                             </>
@@ -103,17 +146,6 @@ function Navbar() {
                                 </>
                             ) : null}
 
-                            <Link to="/cart" title="Cart">
-                                <img
-                                    src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png"
-                                    width="30px"
-                                    height="30px"
-                                    alt=""
-                                />
-                            </Link>
-                            <Link to={"/order"} title="Order">
-                                <i class="fa fa-file-text-o" aria-hidden="true" style={{ fontSize: "26px" }} />
-                            </Link>
                             {/* <span className="badge badge-warning" id="lblCartCount">
                         123
                     </span> */}

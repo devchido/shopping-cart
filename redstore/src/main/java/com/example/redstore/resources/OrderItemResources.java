@@ -57,9 +57,5 @@ public class OrderItemResources {
         List<OrderItemDto> dtos = orderItemService.findOrderItemByOrderId(orderDetail);
         return dtos;
     }
-    // Thay đổi trạng thái của phiếu order : status
-    @PutMapping("/auth/shop/order/orderItem/{id}")
-    public void confirmOrderItemsStatus(@PathVariable String id,@RequestBody OrderItemDto dto){
-        orderItemService.confirmOrderItemsStatus(id, dto);
-    }
+
 }

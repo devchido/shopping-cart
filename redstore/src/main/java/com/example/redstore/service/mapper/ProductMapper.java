@@ -28,6 +28,7 @@ public class ProductMapper implements EntityMapper<ProductDto, Product>{
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
         dto.setEndsAt(entity.getEndsAt());
+        dto.setStatus(entity.getStatus());
         dto.setContent(entity.getContent());
         return dto;
     }
@@ -47,6 +48,7 @@ public class ProductMapper implements EntityMapper<ProductDto, Product>{
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
         entity.setEndsAt(dto.getEndsAt());
+        entity.setStatus(dto.getStatus());
         entity.setContent(dto.getContent());
         return entity;
     }

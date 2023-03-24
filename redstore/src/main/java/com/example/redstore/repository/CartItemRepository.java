@@ -14,14 +14,15 @@ import java.util.Optional;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, String> {
     List<CartItem> findByCartId(Long cartId);
+    String db = "railway";
 
 
-    @Query(value = "SELECT ci.* FROM shop.cart_item ci " +
-            " join shop.product p on ci.product_id = p.id " +
+    @Query(value = "SELECT ci.* FROM "+ db +".cart_item ci " +
+            " join "+ db +".product p on ci.product_id = p.id " +
             " where p.user_id = :productUserId", nativeQuery = true)
     List<CartItem> findCartItemByProductUserId(Long productUserId);
 
 
-    @Query(value = "Select ci.* from shop.cart_item ci where product_id = :product and cart_id = :cart", nativeQuery = true)
+    @Query(value = "Select ci.* from "+ db +".cart_item ci where product_id = :product and cart_id = :cart", nativeQuery = true)
     Optional<CartItem> findByProductAndCart(Long product, Long cart);
 }

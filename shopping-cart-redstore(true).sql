@@ -46,6 +46,7 @@ CREATE TABLE `shop`.`product` (
   `quantity` SMALLINT(6) NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NULL DEFAULT NULL,
+  `status` SMALLINT(6) NOT NULL DEFAULT 0,
   `ends_at` DATETIME NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),

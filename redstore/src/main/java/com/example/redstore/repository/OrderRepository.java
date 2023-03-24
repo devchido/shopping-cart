@@ -11,11 +11,12 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
-    @Query(value = "SELECT t.* FROM shop.order t " +
+    String db = "railway";
+    @Query(value = "SELECT t.* FROM "+ db +".order t " +
             "        WHERE user_id = :users and status like concat( :status )", nativeQuery = true)
     List<Order> findByUsers(@Param("users") Long users, @Param("status") String status) ;
 
-    @Query(value = "SELECT t.* FROM shop.order t " +
+    @Query(value = "SELECT t.* FROM "+ db +".order t " +
             "        WHERE cart_id = :carts", nativeQuery = true)
     List<Order> findByCarts(@Param("carts") Long carts);
 }

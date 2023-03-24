@@ -180,6 +180,12 @@ public class ProductService {
         return dtos;
     }
 
+    public List<ProductDto> filterProduct() {
+        List<Product> entity = productRepository.findAll();
+        List<ProductDto> dtos = productMapper.toDo(entity);
+        return dtos;
+    }
+
 //    public Page<ProductDto> filterAndPagination( int offset, int pageSize, String field, String keySearch){
 //        List<ProductDto> products = filter(keySearch);
 //        Page<ProductDto> pageProductDtos =

@@ -130,4 +130,9 @@ public class ProductResources {
         ProductDto dto = productService.findProductBySlug(slug);
         return dto;
     }
+    @GetMapping("/auth/admin/filter")
+    public List<ProductDto> filterProduct(){
+        List<ProductDto> dtos = productService.filterProduct();
+        return dtos;
+    }
 }

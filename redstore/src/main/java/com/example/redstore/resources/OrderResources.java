@@ -35,8 +35,8 @@ public class OrderResources {
     Hiển thị tất cả các order
 
     */
-    @GetMapping("/auth/findAll")
-    public List<OrderDto> findAll() {
+    @GetMapping("/auth/admin/filter")
+    public List<OrderDto> filter() {
         List<OrderDto> dtos = orderService.findAll();
         return dtos;
     }

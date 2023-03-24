@@ -38,8 +38,12 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
                 //test phân quyền truy cập
-                .requestMatchers("/user/auth/forUser/**").hasAnyAuthority("USER", "ADMIN")
-                .requestMatchers("/user/auth/forAdmin").hasAnyAuthority("ADMIN")
+//                .requestMatchers("/user/auth/forUser/**").hasAnyAuthority("USER", "ADMIN")
+                .requestMatchers("/user/auth/admin/**").hasAnyAuthority("ADMIN")
+                .requestMatchers("/product/auth/admin/**").hasAnyAuthority("ADMIN")
+                .requestMatchers("/order/auth/admin/**").hasAnyAuthority("ADMIN")
+                .requestMatchers("/transaction/auth/admin/**").hasAnyAuthority("ADMIN")
+                .requestMatchers("/category/auth/**").hasAnyAuthority("ADMIN")
                 //
                 .anyRequest()
                 .authenticated()

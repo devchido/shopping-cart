@@ -16,7 +16,7 @@ class Banner extends Component {
                         {/* <a href="" className="btn">Explore Now &#8594;</a> */}
                     </div>
                     <div className="col-2">
-                        <img src="assets/images/image1.png" alt="" className=''/>
+                        <img src="assets/images/image1.png" alt="" />
                     </div>
                 </div>
                     </div>

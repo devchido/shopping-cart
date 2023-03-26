@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, String> {
-    String db = "railway";
+    String db = "shop";
     @Query(value = "SELECT oi.* FROM "+ db +".order_item oi " +
             " join "+ db +".product p on oi.product_id = p.id " +
             " where p.user_id = :productUserId", nativeQuery = true)

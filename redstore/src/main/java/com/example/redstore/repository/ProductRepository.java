@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
 
-    String db = "railway";
+    String db = "shop";
     @Query(value = "SELECT t.* " +
             "FROM "+ db +".product t " +
             "WHERE id like concat('%',:keySearch, '%') " +

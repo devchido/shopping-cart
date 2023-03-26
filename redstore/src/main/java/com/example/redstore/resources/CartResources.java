@@ -68,8 +68,8 @@ public class CartResources {
 
     // get all cart - Security user
     @GetMapping("/auth/my-cart")
-    public List<CartDto> findUsersCart(){
-        List<CartDto> dtos = cartService.finUsersCart();
+    public List<CartDto> findUsersCart(@RequestParam String status){
+        List<CartDto> dtos = cartService.findUsersCart(status);
         return dtos;
     }
 

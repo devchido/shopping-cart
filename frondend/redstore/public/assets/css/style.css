@@ -90,10 +90,10 @@ header {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 18px 100px;
+    padding: 5px 8%;
     align-items: center;
-    background: rgb(255, 255, 255);
-    z-index: 1;
+    background: #fff;
+    z-index: 2;
 }
 
 /* header.sticky {
@@ -1271,7 +1271,7 @@ table, th, td {
     white-space: break-spaces;
 }
 .page{
-    margin-top: 120px;
+    margin-top: 5rem;
     min-height: 400px;
 }
 .page .shop-page{

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
-    String db = "railway";
+    String db = "shop";
     @Query(value = "Select t.* from "+ db +".transaction t where user_id = :userId", nativeQuery = true)
     Transaction findByUserId(@Param("userId") String userId);
 }

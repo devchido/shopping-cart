@@ -59,6 +59,7 @@ public class ProductService {
         Product entity = productMapper.toEntity(dto);
         entity.setUsers(SecurityUtils.getPrincipal());
         entity.setCreatedAt(Instant.now());
+        entity.setUpdatedAt(Instant.now());
         entity.setStatus((short) 0);
         productRepository.save(entity);
         System.out.println("Thực thi create");
@@ -180,10 +181,23 @@ public class ProductService {
         return dtos;
     }
 
-    public List<ProductDto> filterProduct() {
-        List<Product> entity = productRepository.findAll();
+    public List<ProductDto> filterProduct(String sort, String field) {
+        List<Product> entity = productRepository.findAll(Sort.by(Sort.Direction.valueOf(sort), field));
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
+    }
+
+    public void setStatusProduct(String id) {
+        Product entity = productRepository.findById(id).orElse(null);
+        if (entity.getStatus() == 1){
+            entity.setStatus((short) 0);
+            productRepository.save(entity);
+            System.out.println("Ẩn product");
+        } else {
+            entity.setStatus((short) 1);
+            productRepository.save(entity);
+            System.out.println("Hiện product");
+        }
     }
 
 //    public Page<ProductDto> filterAndPagination( int offset, int pageSize, String field, String keySearch){

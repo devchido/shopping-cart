@@ -34,8 +34,8 @@ public class TransactionResources {
     }
 
     @GetMapping("/auth/admin")
-    public List<TransactionDto> findAll(){
-        List<TransactionDto> dtos = transactionService.findAll();
+    public List<TransactionDto> findAll(@RequestParam("field") String field){
+        List<TransactionDto> dtos = transactionService.findAll(field);
         return dtos;
     }
     @GetMapping("/auth/u/{userId}")

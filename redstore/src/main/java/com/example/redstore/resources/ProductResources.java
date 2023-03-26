@@ -131,8 +131,13 @@ public class ProductResources {
         return dto;
     }
     @GetMapping("/auth/admin/filter")
-    public List<ProductDto> filterProduct(){
-        List<ProductDto> dtos = productService.filterProduct();
+    public List<ProductDto> filterProduct(@RequestParam String sort, @RequestParam String field){
+        List<ProductDto> dtos = productService.filterProduct(sort, field);
         return dtos;
+    }
+    // Quản lý trạng thái status của các product: ẩn || hiện trên hệ thống
+    @PutMapping("/auth/admin/setStatus")
+    public void setStatusProduct(@RequestParam("id") String id){
+        productService.setStatusProduct(id);
     }
 }

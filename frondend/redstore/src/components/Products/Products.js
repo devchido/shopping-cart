@@ -61,14 +61,14 @@ class Products extends Component {
                     <div className="row">
                         {this.state.searchData ? (
                             <>
-                                {this.state.searchData.map((item) => (
-                                    <div className="col-4" style={{ border: "1px" }}>
-                                        <Link to={`/products/${item.slug}`}>
-                                            <img src={item.photos} alt="" />
+                                {this.state.searchData.map((item,i) => (
+                                    <div  className="col-4" style={{ border: "1px" }} key={i} >
+                                        <Link to={`/products/${item.slug}`} >
+                                            <img src={item.photos} alt=""  />
                                         </Link>
-                                        <h4>{item.title}</h4>
-                                        <p>{item.price} đ</p>
-                                        <Link to={"#"} className={"product-user-name"}>
+                                        <h4 >{item.title}</h4>
+                                        <p >{item.price} đ</p>
+                                        <Link  to={"#"} className={"product-user-name"}>
                                             Cre: {item.users.firstName}&nbsp;{item.users.lastName}
                                         </Link>
                                     </div>
@@ -77,8 +77,8 @@ class Products extends Component {
                         ) : (
                             <>
                                 {this.state.products
-                                    ? this.state.products.map((item, i) => (
-                                          <div className="col-4">
+                                    ? this.state.products.map((item,i) => (
+                                          <div className="col-4" key={i}>
                                               <Link to={`/products/${item.slug}`}>
                                                   <img src={item.photos} alt="" />
                                               </Link>

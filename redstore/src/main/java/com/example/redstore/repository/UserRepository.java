@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
-    String db = "railway";
+    String db = "shop";
     // Filter by id, first_name, last_name, mobile, email
     @Query(value = "SELECT * from "+ db +".user as U " +
             "         where U.id like concat('%', :id,'%') " +

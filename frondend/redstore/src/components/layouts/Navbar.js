@@ -92,7 +92,7 @@ function Navbar() {
                                             <img
                                                 src={users.photos}
                                                 style={{ width: "32px" }}
-                                                class="dropbtn"
+                                                className="dropbtn"
                                                 title={users.firstName + " " + users.lastName}
                                                 alt=""
                                             />
@@ -106,12 +106,12 @@ function Navbar() {
                                                     <Link to="/user">{users.firstName + " " + users.lastName}</Link>
                                                     <hr />
                                                     {/* Kênh shopping cart của user */}
-                                                    <Link to="/cart" title="Cart">
+                                                    {/* <Link to="/cart" title="Cart">
                                                         <ShoppingBagIcon style={{ marginBottom: "-5px" }} /> Cart
                                                     </Link>
                                                     <Link to={"/order"} title="Order">
                                                         <AssignmentIcon style={{ marginBottom: "-6px" }} /> Order
-                                                    </Link>
+                                                    </Link> */}
                                                     <Link to={"/shopping-cart"}>Shopping Cart</Link>
                                                     <hr />
                                                     {/* Kênh cửa hàng của user */}
@@ -132,7 +132,7 @@ function Navbar() {
                                                         sdf
                                                     </Link> */}
                                                     <Link to={"/shop"}>
-                                                        <i class="fa fa-building-o" /> User's Shop
+                                                        <i className="fa fa-building-o" /> User's Shop
                                                     </Link>
                                                     <hr />
                                                     <Link to={"/login"} onClick={handleLogout} className={"logoutItem"}>

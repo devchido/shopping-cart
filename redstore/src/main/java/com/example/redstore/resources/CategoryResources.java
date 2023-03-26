@@ -39,5 +39,10 @@ public class CategoryResources {
         List<CategoryDto> dtos = categoryService.findAll();
         return dtos;
     }
+    @GetMapping("/api/filter")
+    public List<CategoryDto> filter(@RequestParam String title){
+        List<CategoryDto> dtos = categoryService.filter(title);
+        return dtos;
+    }
 
 }

@@ -8,6 +8,7 @@ import UserManagement from "./UserManagement";
 import ProductManagement from "./ProductManagement";
 import OrderManagement from "./OrderManagement";
 import TransactionManagement from "./TransactionManagement";
+import Category from "./Category";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -54,10 +55,11 @@ export default function Admin() {
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs value={value} onChange={handleChange} centered aria-label="basic tabs example">
-                        <Tab label="UserManagement" {...a11yProps(0)} />
-                        <Tab label="ProductManagement" {...a11yProps(1)} />
-                        <Tab label="OrderManagement" {...a11yProps(2)} />
-                        <Tab label="TransactionManagement" {...a11yProps(3)} />
+                        <Tab label="User" {...a11yProps(0)} />
+                        <Tab label="Product" {...a11yProps(1)} />
+                        <Tab label="Category" {...a11yProps(2)} />
+                        <Tab label="Order" {...a11yProps(3)} />
+                        <Tab label="Transaction" {...a11yProps(4)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -67,12 +69,16 @@ export default function Admin() {
                     <ProductManagement/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <OrderManagement/>
+                    <Category/>
                 </TabPanel>
                 <TabPanel value={value} index={3}>
+                    <OrderManagement/>
+                </TabPanel>
+                <TabPanel value={value} index={4}>
                     <TransactionManagement/>
                 </TabPanel>
             </Box>
         </div>
     );
 }
+

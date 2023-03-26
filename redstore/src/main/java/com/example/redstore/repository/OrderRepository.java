@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
-    String db = "railway";
+    String db = "shop";
     @Query(value = "SELECT t.* FROM "+ db +".order t " +
             "        WHERE user_id = :users and status like concat( :status )", nativeQuery = true)
     List<Order> findByUsers(@Param("users") Long users, @Param("status") String status) ;

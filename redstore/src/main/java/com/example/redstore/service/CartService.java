@@ -12,6 +12,7 @@ import com.example.redstore.service.dto.ProductDto;
 import com.example.redstore.service.mapper.CartMapper;
 import com.example.redstore.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +39,7 @@ public class CartService {
         entity.setUsers(user);
 
         // Set trạng thái
-        entity.setStatus((short) 0);
+        entity.setStatus((short) 1);
         // Set first name
         entity.setFirstName(user.getFirstName());
         //Set Last Name
@@ -49,6 +50,7 @@ public class CartService {
         entity.setEmail(user.getEmail());
         // Set create at
         entity.setCreatedAt(Instant.now());
+        entity.setUpdatedAt(Instant.now());
         cartRepository.save(entity);
         System.out.println("Thực thi create");
     }
@@ -108,9 +110,9 @@ public class CartService {
         return null;
     }
 
-    public List<CartDto> finUsersCart() {
+    public List<CartDto> findUsersCart(String status) {
         Long userId = SecurityUtils.getPrincipal().getId();
-        List<Cart> entity = cartRepository.findUsersCart(userId);
+        List<Cart> entity = cartRepository.findUsersCart(userId,status);
         List<CartDto> dtos = cartMapper.toDo(entity);
         return dtos;
     }

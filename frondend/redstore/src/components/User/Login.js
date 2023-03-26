@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
 
-
-
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -20,8 +18,6 @@ export default class Login extends Component {
     // navigate = useNavigate();
 
     login = () => {
-
-        
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -51,8 +47,6 @@ export default class Login extends Component {
                 // console.log("true");
                 this.setState({ isLogin: true });
                 window.location = "/user";
-                
-                
             })
             .catch((error) => {
                 console.log("error", error);
@@ -63,7 +57,7 @@ export default class Login extends Component {
     render() {
         return (
             <>
-            {/* <Navbar /> */}
+                {/* <Navbar /> */}
                 <div class="account-page">
                     <div class="container">
                         <div class="row">
@@ -79,20 +73,17 @@ export default class Login extends Component {
                                 <div class="form-container ">
                                     <div class="form-btn ">
                                         <span id="loginTab">Login</span>
-                                        <span id="regTab"><Link to={"/register"} >Register </Link></span>
+                                        <span id="regTab">
+                                            <Link to={"/register"}>Register </Link>
+                                        </span>
                                     </div>
-                                        <form id="loginForm">
-                                            <input type="text" name="email" placeholder="Email" onChange={this.setParams} />
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                placeholder="Password"
-                                                onChange={this.setParams}
-                                            />
-                                            <button className="btn" type="button" onClick={this.login}>
-                                                login
-                                            </button>
-                                        </form>
+                                    <form id="loginForm">
+                                        <input type="text" name="email" placeholder="Email" onChange={this.setParams} />
+                                        <input type="password" name="password" placeholder="Password" onChange={this.setParams} />
+                                        <button className="btn" type="button" onClick={this.login}>
+                                            login
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

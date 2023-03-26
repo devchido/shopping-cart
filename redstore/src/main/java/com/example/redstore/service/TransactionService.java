@@ -7,6 +7,7 @@ import com.example.redstore.service.dto.TransactionDto;
 import com.example.redstore.service.mapper.OrderItemMapper;
 import com.example.redstore.service.mapper.TransactionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,8 +71,8 @@ public class TransactionService {
         System.out.println("Thực thi delete");
     }
     // get all
-    public List<TransactionDto> findAll (){
-        List<Transaction> entity = transactionRepository.findAll();
+    public List<TransactionDto> findAll (String field){
+        List<Transaction> entity = transactionRepository.findAll(Sort.by(Sort.Direction.DESC,field));
         List<TransactionDto> dtos = transactionMapper.toDo(entity);
         return dtos;
     }

@@ -57,4 +57,10 @@ public class CategoryService {
         List<CategoryDto> dtos = categoryMapper.toDo(entity);
         return dtos;
     }
+
+    public List<CategoryDto> filter(String title) {
+        List<Category> entity = categoryRepository.filter(title);
+        List<CategoryDto> dtos = categoryMapper.toDo(entity);
+        return dtos;
+    }
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, String> {
     List<CartItem> findByCartId(Long cartId);
-    String db = "railway";
+    String db = "shop";
 
 
     @Query(value = "SELECT ci.* FROM "+ db +".cart_item ci " +

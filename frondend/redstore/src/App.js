@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from "react";
-import { BrowserRouter, BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { Fragment } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import './App.css';
 //Redux
 import { Provider } from "react-redux";
@@ -30,7 +30,6 @@ import Cart from "./components/Cart/Cart";
 import ShoppingCart from "./components/Shopping_cart/ShoppingCart";
 import Address from "./components/User/Address";
 
-import CartProduct from "./components/Shopping_cart/CartProduct";
 import CartDetail from "./components/Cart/CartDetail";
 import UsersShop from "./components/UsersShop/UsersShop";
 import ShopProductCart from "./components/UsersShop/ShopProductCart";
@@ -82,7 +81,6 @@ function App() {
                             {/*  */}
                             <Route path= "/admin" element={<Admin />} />
                             {/*  */}
-
                             <Route path="/*" element={<NotFound />} />
                         </Routes>
                         <Footer />

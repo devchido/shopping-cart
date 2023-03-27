@@ -143,7 +143,7 @@ function ShopProductCart() {
                                                               {item.id}
                                                           </TableCell>
                                                           <TableCell align="center">
-                                                              {<img src={item.product.photos} />}
+                                                              {<img src={item.product.photos} alt="" />}
                                                           </TableCell>
                                                           <TableCell align="center">{item.product.title}</TableCell>
                                                           <TableCell align="center">{item.price}</TableCell>

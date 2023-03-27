@@ -34,8 +34,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
             "        WHERE user_id = :users and title like concat('%', :title ,'%')", nativeQuery = true)
     List<Product> findByUsers(@Param("users") Long users, @Param("title") String title);
 
-    @Query(value = "select P from Product P ")
-    Page<Product> findAllProductPage(Pageable pageable);
+    @Query(value = "select * from " + db + ".product  where title like concat('%', :title , '%') and status = 1", nativeQuery = true)
+    Page<Product> findAllProductPage(String title, Pageable pageable);
 
     @Query(value = "select p.* from "+ db +".product p where slug = :slug", nativeQuery = true)
     Product findProductBySlug(@Param("slug") String Slug);

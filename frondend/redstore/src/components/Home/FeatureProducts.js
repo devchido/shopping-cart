@@ -13,7 +13,7 @@ class FeatureProducts extends Component {
 
         return (
             <div className="row">
-        <div className="col-4">
+        <div className="product-item col-4">
             <a href="product-details.html">
                 <img src="./assets/images/product-1.jpg" alt="" />
             </a>
@@ -29,7 +29,7 @@ class FeatureProducts extends Component {
             </div>
             <p>$50.00</p>
         </div>
-        <div className="col-4">
+        <div className="product-item col-4">
             <a href="product-details.html">
                 <img src="./assets/images/product-2.jpg" alt="" />
             </a>
@@ -45,7 +45,7 @@ class FeatureProducts extends Component {
             </div>
             <p>$50.00</p>
         </div>
-        <div className="col-4">
+        <div className="product-item col-4">
             <a href="product-details.html">
                 <img src="./assets/images/product-3.jpg" alt="" />
             </a>
@@ -61,7 +61,7 @@ class FeatureProducts extends Component {
             </div>
             <p>$50.00</p>
         </div>
-        <div className="col-4">
+        <div className="product-item col-4">
             <a href="product-details.html">
                 <img src="./assets/images/product-4.jpg" alt="" />
             </a>

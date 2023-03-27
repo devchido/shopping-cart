@@ -132,17 +132,17 @@ function Order() {
                                                   {moment(item.updatedAt).format('LLL')}
                                               </TableCell>
                                               <TableCell align="center">
-                                                  {item.status == 0
+                                                  {item.status === 0
                                                       ? "Chờ xác nhận"
-                                                      : null || item.status == 1
+                                                      : null || item.status === 1
                                                       ? "Không thành công"
-                                                      : null || item.status == 2
+                                                      : null || item.status === 2
                                                       ? "Đang vận chuyển"
-                                                      : null || item.status == 3
+                                                      : null || item.status === 3
                                                       ? "Đã giao"
-                                                      : null || item.status == 4
+                                                      : null || item.status === 4
                                                       ? "Đã trả lại"
-                                                      : null || item.status == 5
+                                                      : null || item.status === 5
                                                       ? "Hoàn thành"
                                                       : null}
                                               </TableCell>

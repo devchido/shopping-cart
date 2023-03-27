@@ -36,8 +36,8 @@ public class OrderResources {
 
     */
     @GetMapping("/auth/admin/filter")
-    public List<OrderDto> filter() {
-        List<OrderDto> dtos = orderService.findAll();
+    public List<OrderDto> filter(@RequestParam String status) {
+        List<OrderDto> dtos = orderService.filter(status);
         return dtos;
     }
 
@@ -76,9 +76,17 @@ public class OrderResources {
     /*
     User thực hiện huỷ order wit order status!= 6
      */
-    @PostMapping("/auth/cancel-order")
+    @PutMapping("/auth/admin/cancel-order")
     public void cancelOrder(@RequestParam String id){
         orderService.cancelOrder(id);
     }
+    /*
+    Thực hiện xác nhận order -> vận chuyển
+     */
+    @PutMapping("/auth/admin/confirm-order")
+    public void confirmOrder(@RequestParam String id, @RequestParam String status){
+        orderService.confirmOrder(id, status);
+    }
+
 
 }

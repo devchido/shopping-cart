@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../layouts/Navbar";
-import Profile from "./User";
 
 class Register extends Component {
     constructor(props) {
@@ -58,7 +56,7 @@ class Register extends Component {
     };
 
     checkRegister = () => {
-        if (this.state.password != this.state.repassword) {
+        if (this.state.password !== this.state.repassword) {
             alert("You did not enter the same new password twice. Please re-enter your password.");
             return false;
         } else {

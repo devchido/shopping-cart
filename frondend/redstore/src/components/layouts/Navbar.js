@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import LogoutIcon from "@mui/icons-material/Logout";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import StoreIcon from "@mui/icons-material/Store";
+// import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+// import AssignmentIcon from "@mui/icons-material/Assignment";
+// import StoreIcon from "@mui/icons-material/Store";
 
 function Navbar() {
     const [isLogin, setIsLogin] = useState(false);
@@ -13,7 +13,9 @@ function Navbar() {
         setOpen(!open);
     };
     useEffect(() => {
-        loadDataUser();
+        if(localStorage.getItem("token") !== null){
+            loadDataUser();
+        }
     }, []);
     const loadDataUser = () => {
         var myHeaders = new Headers();

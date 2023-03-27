@@ -139,22 +139,6 @@ public class ProductService {
     }
 
     @Transactional
-    public Page<ProductDto> findAllProductPage(Pageable pageable) {
-        Page<Product> entities = productRepository.findAllProductPage(pageable);
-        Page<ProductDto> dtoPage = entities.map(new Function<Product, ProductDto>() {
-            @Override
-            public ProductDto apply(Product entity) {
-                ProductDto dto = new ProductDto();
-                return dto;
-            }
-        });
-        return dtoPage;
-    }
-
-    ;
-
-
-    @Transactional
     public List<ProductDto> findByUsers(String title) {
         User user = SecurityUtils.getPrincipal();
         List<Product> entity = productRepository.findByUsers(user.getId(), title);
@@ -175,11 +159,26 @@ public class ProductService {
         return dtos;
     }
 
+//    public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field) {
+//        Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC,field))));
+//        Page<ProductDto> dtos = products.map(productMapper::toDo);
+//        return dtos;
+//    }
+
+    // todo: test page
+    public Page<ProductDto> findProductsWithPaginationAndSorting(String title, int offset, int pageSize, String field ) {
+        Page<Product> products = productRepository.findAllProductPage(title,(PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC,field))));
+        Page<ProductDto> dtos = products.map(productMapper::toDo);
+        return dtos;
+    }
+
+    /* test
     public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field) {
         Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize).withSort(Sort.by(field))));
         Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
+     */
 
     public List<ProductDto> filterProduct(String sort, String field) {
         List<Product> entity = productRepository.findAll(Sort.by(Sort.Direction.valueOf(sort), field));

@@ -5,9 +5,6 @@ import { Link } from "react-router-dom";
 function ShopProduct() {
     const [product, setProduct] = useState();
     const [title, setTitle] = useState("");
-    useEffect(() => {
-        loadDataProduct();
-    }, []);
 
     const loadDataProduct = () => {
         var myHeaders = new Headers();
@@ -32,7 +29,7 @@ function ShopProduct() {
                 // console.log(product);
             })
             .catch((error) => console.log("error", error));
-    }
+    };
     const handleDelete = (item) => {
         // console.log(item.id);
         var myHeaders = new Headers();
@@ -56,10 +53,12 @@ function ShopProduct() {
     const handleSearch = () => {
         loadDataProduct();
     };
-
+    useEffect(() => {
+        loadDataProduct();
+    }, []);
     return (
         <>
-            <div >
+            <div>
                 <div className="container">
                     <div className="row">
                         <TextField
@@ -99,7 +98,7 @@ function ShopProduct() {
                                                       {i + 1}
                                                   </TableCell>
                                                   <TableCell align="center">
-                                                      <img src={item.photos} />
+                                                      <img src={item.photos} alt="" />
                                                   </TableCell>
                                                   <TableCell align="center">{item.title}</TableCell>
                                                   <TableCell align="center">{item.price}</TableCell>

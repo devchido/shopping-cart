@@ -39,7 +39,7 @@ export default function User() {
                             {user ? (
                                 <>
                                     <div className="col-3">
-                                        <img className="img-update-user" src={user.result.photos} />
+                                        <img className="img-update-user" src={user.result.photos} alt="" />
                                         <div className="btn-add" style={{ width: "100%", textAlign: "center" }}>
                                         <Button variant="outlined">
                                             <Link to={"/user/update"}>Update</Link>

@@ -58,15 +58,16 @@ public class ProductResources {
     }
      */
     @PutMapping("/auth/edit/{id}")
-    public void edit(@PathVariable String id,@RequestBody ProductDto dto) {
+    public void edit(@PathVariable String id, @RequestBody ProductDto dto) {
         productService.edit(id, dto);
     }
+
     /*
     Hiển thị tất cả product của người dùng có id 1
     http://localhost:8080/product/auth/1
      */
     @PostMapping("/auth/{id}")
-    public ProductDto findByProductId(@PathVariable String id){
+    public ProductDto findByProductId(@PathVariable String id) {
         ProductDto dto = productService.findByProductId(id);
         return dto;
     }
@@ -84,19 +85,19 @@ public class ProductResources {
     }
 
 
-
     @GetMapping("/api/filter")
-    public List<ProductDto> filter(@RequestParam(defaultValue = "") String keySearch){
+    public List<ProductDto> filter(@RequestParam(defaultValue = "") String keySearch) {
         List<ProductDto> dtos = productService.filter(keySearch);
         return dtos;
     }
-//    @GetMapping("/paginationAndSort/{offset}/{pageSize}/{field}")
+
+    //    @GetMapping("/paginationAndSort/{offset}/{pageSize}/{field}")
 //    private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field){
 //        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize, field);
 //        return new APIResponse<>(dtos.getSize(), dtos);
 //    }
     @PostMapping("/auth/user")
-    public List<ProductDto> findByUsers(@RequestParam(value = "") String title){
+    public List<ProductDto> findByUsers(@RequestParam(value = "") String title) {
         List<ProductDto> dtos = productService.findByUsers(title);
         return dtos;
     }
@@ -104,40 +105,58 @@ public class ProductResources {
 
     //Tesst page
     @GetMapping("/api/page")
-    private APIResponse<List<ProductDto>> getProduct(){
+    private APIResponse<List<ProductDto>> getProduct() {
         List<ProductDto> dtos = productService.findAllProduct();
         return new APIResponse<>(dtos.size(), dtos);
     }
+
     @GetMapping("/api/{field}/{key}")
-    private APIResponse<List<ProductDto>> getProductsWithSort(@PathVariable String field, @PathVariable String key){
+    private APIResponse<List<ProductDto>> getProductsWithSort(@PathVariable String field, @PathVariable String key) {
         List<ProductDto> dtos = productService.findProductsWithSorting(field, key);
         return new APIResponse<>(dtos.size(), dtos);
     }
+
     @GetMapping("/api/pagination/{offset}/{pageSize}")
-    private APIResponse<Page<ProductDto>> getProductsWithPagination(@PathVariable int offset, @PathVariable int pageSize){
+    private APIResponse<Page<ProductDto>> getProductsWithPagination(@PathVariable int offset, @PathVariable int pageSize) {
         Page<ProductDto> dtos = productService.findProductsWithPagination(offset, pageSize);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
 
+//    @GetMapping("/api/paginationAndSort/{offset}/{pageSize}/{field}")
+//    private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field){
+//        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize, field);
+//        return new APIResponse<>(dtos.getSize(), dtos);
+//    }
+
+    // todo: test page
+
     @GetMapping("/api/paginationAndSort/{offset}/{pageSize}/{field}")
-    private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field){
-        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize, field);
+    private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(
+            @RequestParam String title,
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @PathVariable String field) {
+        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(title, offset, pageSize, field);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
 
+
+    //
     @GetMapping("/api/findProductBySlug/{slug}")
-    public ProductDto findProductBySlug(@PathVariable String slug){
+    public ProductDto findProductBySlug(@PathVariable String slug) {
         ProductDto dto = productService.findProductBySlug(slug);
         return dto;
     }
+
     @GetMapping("/auth/admin/filter")
-    public List<ProductDto> filterProduct(@RequestParam String sort, @RequestParam String field){
+    public List<ProductDto> filterProduct(@RequestParam String sort, @RequestParam String field) {
         List<ProductDto> dtos = productService.filterProduct(sort, field);
         return dtos;
     }
+
     // Quản lý trạng thái status của các product: ẩn || hiện trên hệ thống
     @PutMapping("/auth/admin/setStatus")
-    public void setStatusProduct(@RequestParam("id") String id){
+    public void setStatusProduct(@RequestParam("id") String id) {
         productService.setStatusProduct(id);
     }
 }

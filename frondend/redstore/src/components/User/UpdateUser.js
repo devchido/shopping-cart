@@ -15,7 +15,6 @@ export default function UpdateUser() {
     useEffect(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        var raw = "";
         var requestOptions = {
             method: "GET",
             headers: myHeaders,
@@ -96,7 +95,7 @@ export default function UpdateUser() {
                             <form onSubmit={handleSubmit}>
                                 <div className="row">
                                     <div className="col-3">
-                                        <img className="img-update-user" src={photos} />
+                                        <img className="img-update-user" src={photos} alt="" />
                                         <TextField
                                             sx={{ margin: "15px auto" }}
                                             fullWidth

@@ -35,6 +35,7 @@ public class OrderService {
         List<OrderDto> dtos = orderMapper.toDo(entity);
         return dtos;
     }
+
     public List<OrderDto> findByCarts(Long carts) {
         List<Order> entity = orderRepository.findByCarts(carts);
         List<OrderDto> dtos = orderMapper.toDo(entity);
@@ -42,7 +43,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void create(OrderDto dto){
+    public void create(OrderDto dto) {
         Cart cart = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
         Order entity = orderMapper.toEntity(dto);
         // Set userId
@@ -68,11 +69,13 @@ public class OrderService {
         entity.setContent(cart.getContent());
         // Set create at
         entity.setCreatedAt(Instant.now());
+        entity.setUpdatedAt(Instant.now());
         orderRepository.save(entity);
         cart.setStatus((short) 1);
         cartRepository.save(cart);
     }
-    public void edit(Long id, OrderDto dto){
+
+    public void edit(Long id, OrderDto dto) {
 
         Order entity = orderMapper.toEntity(dto);
         Order order = orderRepository.findById(String.valueOf(id)).orElse(null);
@@ -92,11 +95,17 @@ public class OrderService {
         orderRepository.save(entity);
     }
 
-    public List<OrderDto> findAll(){
+    public List<OrderDto> findAll() {
         List<Order> entity = orderRepository.findAll();
         List<OrderDto> dtos = orderMapper.toDo(entity);
         return dtos;
 
+    }
+
+    public List<OrderDto> filter(String status) {
+        List<Order> entity = orderRepository.filter(status);
+        List<OrderDto> dtos = orderMapper.toDo(entity);
+        return dtos;
     }
 
     /* todo: Chức năng order: khi thực hiện, một phiếu order mới được tạo ra,
@@ -122,7 +131,7 @@ public class OrderService {
 
         //todo: Set các thuộc tính not null(làm sau)
         //viết như này mai sau tìm xem minh chua lam cai gi cho de
-        order.setCreatedAt(Instant.now());
+        order.setCreatedAt(Instant.now());order.setUpdatedAt(Instant.now());
         order.setItemDiscount(0F);
         // tính Tổng giảm giá của các mặt hàng đặt hàng.
 
@@ -141,11 +150,11 @@ public class OrderService {
         orderItem.forEach(orderItem1 -> {
             orderItem1.setOrders(order);
             // todo: tính giá trị tổng đơn hàng
-            order.setSubTotal(order.getSubTotal() + orderItem1.getPrice()*orderItem1.getQuantity());
+            order.setSubTotal(order.getSubTotal() + orderItem1.getPrice() * orderItem1.getQuantity());
             // todo: tính giá trị tổng tiền được giảm của đơn hàng
             order.setItemDiscount(
                     order.getItemDiscount() +
-                    ((orderItem1.getPrice() * orderItem1.getDiscount()) / 100) * orderItem1.getQuantity() );
+                            ((orderItem1.getPrice() * orderItem1.getDiscount()) / 100) * orderItem1.getQuantity());
 
 
         });
@@ -153,23 +162,34 @@ public class OrderService {
         order.setTotal(order.getSubTotal() - order.getItemDiscount());
         orderRepository.save(order);
         orderItemRepository.saveAll(orderItem);
-        cart.setStatus((short)2);
+        cart.setStatus((short) 2);
         cartRepository.save(cart);
     }
 
     public OrderDto findOneById(String id) {
         Order entity = orderRepository.findById(id).orElse(null);
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()){
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
             OrderDto dto = orderMapper.toDo(entity);
             return dto;
         }
         return null;
     }
 
+    public void confirmOrder(String id, String status) {
+        Order entity = orderRepository.findById(id).orElse(null);
+        if(entity.getStatus() != 1){
+            entity.setStatus(Short.valueOf(status));
+            entity.setUpdatedAt(Instant.now());
+            orderRepository.save(entity);
+            System.out.println("Thưc thi confirm order");
+        }
+    }
+
     public void cancelOrder(String id) {
         Order entity = orderRepository.findById(id).orElse(null);
-        if (entity.getStatus() != 5){
-            entity.setStatus((short) 2);
+        if (entity.getStatus() != 5 && entity.getStatus() != 1) {
+            entity.setStatus((short) 1);
+            entity.setUpdatedAt(Instant.now());
             orderRepository.save(entity);
             Cart cart = cartRepository.findById(String.valueOf(entity.getCarts().getId())).orElse(null);
             cart.setStatus((short) 1);

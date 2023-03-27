@@ -1,5 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import {
+    Box,
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 //icon
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -74,7 +88,6 @@ function ProductManagement() {
                 // onChange={(e) => setTitle(e.target.value)}
             />
 
-            
             <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Sort</InputLabel>
@@ -162,18 +175,20 @@ function ProductManagement() {
                                               </TableCell>
 
                                               <TableCell align="center">
-                                                  {item.updatedAt ? moment(item.updatedAt).format('LLL') : moment(item.createdAt).format('LLL')}
+                                                  {item.updatedAt
+                                                      ? moment(item.updatedAt).format("LLL")
+                                                      : moment(item.createdAt).format("LLL")}
                                               </TableCell>
                                               {item.status === 0 ? (
                                                   <TableCell align="center">
                                                       <Button variant="outlined" onClick={() => handleSetStatusProduct(item)}>
-                                                          <VisibilityIcon />
+                                                          <VisibilityOffIcon />
                                                       </Button>
                                                   </TableCell>
                                               ) : (
                                                   <TableCell align="center">
                                                       <Button variant="outlined" onClick={() => handleSetStatusProduct(item)}>
-                                                          <VisibilityOffIcon />
+                                                          <VisibilityIcon />
                                                       </Button>
                                                   </TableCell>
                                               )}

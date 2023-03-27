@@ -1,116 +1,100 @@
-import React, { Component } from "react";
+import * as React from "react";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 
-class Products extends Component {
-    constructor() {
-        super();
-        this.state = {
-            searchData: null,
-            noData: false,
-            products: null,
-        };
-        this.handleChange = this.handleChange.bind(this);
-    }
-    handleChange(e) {
-        console.log(e.target.value);
-        this.setState({ shortData: e.target.value });
-    }
-    filter(key) {
-        // console.warn(key);
+function Products() {
+    // Khai báo
+    const [page, setPage] = React.useState(1);
+    // product data
+    const [product, setProduct] = React.useState();
+    // size của 1 page
+    const [pageSize, setPageSize] = React.useState(8);
+    // sort by filde
+    const [field, setField] = React.useState("id");
+    // thứ tự của page
+    const [offset, setOffset] = React.useState(0);
+    // tổng số product
+    const [totalElements, setTotalElements] = React.useState();
+    // Tổng số trang
+    const [totalPages, setTotalPages] = React.useState();
+    // key search
+    const [title, setTitle] = React.useState("");
 
-        fetch("/product/api/filter?keySearch=" + key).then((data) => {
-            data.json().then((resp) => {
-                console.warn("resp", resp);
-                if (resp.length > 0) {
-                    this.setState({ searchData: resp, noData: false });
-                } else {
-                    this.setState({ noData: true, searchData: null, products: null });
-                }
-            });
-        });
-    }
-    componentDidMount() {
-        fetch("product/api/filter").then((resp) => {
+    // Sự kiện
+    const handleChange = (event, value) => {
+        setPage(value);
+        setOffset(value - 1);
+        loadDataProduct();
+    };
+    const handleTitleChange = (event, value) => {
+        setTitle(value);
+        loadDataProduct();
+    };
+
+    const loadDataProduct = () => {
+        fetch("product/api/paginationAndSort/" + offset + "/" + pageSize + "/" + field + "?title=" + title).then((resp) => {
             resp.json().then((result) => {
                 console.log(result);
-                this.setState({ products: result });
+                setProduct(result.response.content);
+                setTotalElements(result.response.totalElements);
+                setTotalPages(result.response.totalPages);
             });
         });
-    }
-    render() {
-        return (
-            <div>
-                <div className="small-container">
-                    <div className="row row-2">
-                        <h2>All Products</h2>
-                        <div>
-                            <input type={"text"} onChange={(event) => this.filter(event.target.value)} />
-                            <select value={this.state.shortData} onChange={this.handleChange}>
-                                <option value={this.state.shortData}>Default Shorting</option>
-                                <option value={"created_at DESC"}>Short by new product</option>
-                                <option value={"updated_at DESC"}>Short by new product update</option>
-                                <option value={"price ASC"}>Short by price ASC</option>
-                                <option value={"price DESC"}>Short by price DESC</option>
-                                <option value={"discount ASC"}>Short by discount ASC</option>
-                                <option value={"discount DESC"}>Short by discount DESC</option>
-                                <option value={"quantity ASC"}>Short by quantity ASC</option>
-                                <option value={"quantity DESC"}>Short by quantity DESC</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="row">
-                        {this.state.searchData ? (
-                            <>
-                                {this.state.searchData.map((item,i) => (
-                                    <div  className="col-4" style={{ border: "1px" }} key={i} >
-                                        <Link to={`/products/${item.slug}`} >
-                                            <img src={item.photos} alt=""  />
-                                        </Link>
-                                        <h4 >{item.title}</h4>
-                                        <p >{item.price} đ</p>
-                                        <Link  to={"#"} className={"product-user-name"}>
-                                            Cre: {item.users.firstName}&nbsp;{item.users.lastName}
-                                        </Link>
-                                    </div>
-                                ))}
-                            </>
-                        ) : (
-                            <>
-                                {this.state.products
-                                    ? this.state.products.map((item,i) => (
-                                          <div className="col-4" key={i}>
-                                              <Link to={`/products/${item.slug}`}>
-                                                  <img src={item.photos} alt="" />
-                                              </Link>
-                                              <h4>{item.title}</h4>
-                                              <p>{item.price} đ</p>
-                                              <Link to={"#"} className={"product-user-name"}>
-                                                  Cre: {item.users.firstName}&nbsp;{item.users.lastName}
-                                              </Link>
-                                          </div>
-                                      ))
-                                    : null}
-                            </>
-                        )}
-                        {this.state.noData ? (
-                            <div style={{ margin: "150px" }}>
-                                <h1 className="display-4">Not Found</h1>
-                                <p>Sorry, please search again</p>
-                            </div>
-                        ) : null}
-                        {/* <ProductItem /> */}
-                    </div>
-                    {/* <div className="page-btn">
-                        <span>&#x3c;&#x3c;</span>
-                        <span>&#8592;</span>
-                        <span>1</span>
-                        <span>&#8594;</span>
-                        <span>&#x3e;&#x3e;</span>
-                    </div> */}
+    };
+    React.useEffect(() => {
+        loadDataProduct();
+    }, [page, offset]);
+    return (
+        <div>
+            <div className="container page">
+                <h2>All Products</h2>
+                <br />
+                <div className="row">
+                    <TextField
+                        label="Search"
+                        id="fullWidth"
+                        style={{ width: "50%", marginLeft: "auto" }}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <Button
+                        variant="outlined"
+                        style={{ width: "10%", height: "3.5rem", marginRight: "auto" }}
+                        onClick={() => loadDataProduct()}
+                    >
+                        Search
+                    </Button>
+                </div>
+                <br />
+
+                <div className="row">
+                    {product ? (
+                        <>
+                            {product.map((item, i) => (
+                                <div className="product-item col-4" style={{ border: "1px" }} key={i}>
+                                    <Link to={`/products/${item.slug}`}>
+                                        <img src={item.photos} alt="" />
+                                    </Link>
+                                    <h4>{item.title}</h4>
+                                    <p>{item.price} đ</p>
+                                    <Link to={"#"} className={"product-user-name"}>
+                                        Cre: {item.users.firstName}&nbsp;{item.users.lastName}
+                                    </Link>
+                                </div>
+                            ))}
+                        </>
+                    ) : null}
+                </div>
+                <div className="row">
+                    <Stack spacing={2}>
+                        {/* <Typography>Page: {page}</Typography> */}
+                        <Pagination count={totalPages} page={page} onChange={handleChange} />
+                    </Stack>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default Products;

@@ -8,7 +8,6 @@ import ShopProduct from "./ShopProduct";
 import ShopOrder from "./ShopOrder";
 //
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import LogoutIcon from "@mui/icons-material/Logout";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import StoreIcon from "@mui/icons-material/Store";
 import ShopProductCart from "./ShopProductCart";
@@ -66,8 +65,7 @@ export default function UsersShop() {
                         <Tab icon={<StoreIcon />} iconPosition="start" label="Product" {...a11yProps(0)} />
                         <Tab icon={<ShoppingBagIcon />} iconPosition="start" label="Cart" {...a11yProps(0)} />
                         <Tab icon={<AssignmentIcon />} iconPosition="start" label="Order" {...a11yProps(1)} />
-                        {/* <Tab icon={<AssignmentIcon />} iconPosition="start" label="Transaction" {...a11yProps(2)} />
-                        <Tab icon={<StoreIcon />} iconPosition="start" label="null" {...a11yProps(3)} /> */}
+                        
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>

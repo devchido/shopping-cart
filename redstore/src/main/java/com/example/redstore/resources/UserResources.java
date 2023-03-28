@@ -27,6 +27,9 @@ public class UserResources {
     private final AuthenticationService service;
 
     //cho nay lan sau de post lay dto nhe
+    /*
+    http://localhost:8080/user/auth/admin/filter?id=&firstName=&lastName=&mobile=&email=
+     */
     @GetMapping("/auth/admin/filter")
     List<UserDto> filter(@RequestParam(defaultValue = "") String id,
                          @RequestParam(defaultValue = "") String firstName,

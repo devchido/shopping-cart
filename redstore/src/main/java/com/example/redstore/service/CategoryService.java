@@ -40,6 +40,9 @@ public class CategoryService {
     public void edit(Long id, CategoryDto dto) {
         Category entity = categoryMapper.toEntity(dto);
         entity.setId(id);
+        entity.setTitle(dto.getTitle());
+        entity.setSlug(dto.getSlug());
+        entity.setContent(dto.getContent());
         categoryRepository.save(entity);
         System.out.println("Thực thi edit");
     }

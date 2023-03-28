@@ -19,8 +19,6 @@ public class CartResources {
     // Tạo giỏ hàng cart mới
     /*
     {
-
-        "status": "0",
         "line1": "Hiệp Thuận",
         "city": "Hà Nội",
         "country": "VN",
@@ -33,6 +31,14 @@ public class CartResources {
     }
 
     //edit giỏ hàng theo id
+    /*
+    {
+        line1: line1,
+        city: city,
+        country: country,
+        content: content,
+    }
+     */
     @PutMapping("/auth/{id}")
     public void edit(@RequestBody CartDto dto, @PathVariable("id") Long id) {
         cartService.edit(id, dto);

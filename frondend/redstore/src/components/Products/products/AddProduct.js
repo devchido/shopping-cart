@@ -34,6 +34,7 @@ export default function AddProduct() {
             quantity: quantity,
             photos: photos,
             content: content,
+            // categoryId: 1
         });
 
         var requestOptions = {

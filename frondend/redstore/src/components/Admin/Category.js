@@ -101,7 +101,7 @@ function Category() {
     return (
         <div className="row">
             <TextField
-                label="Search (Chưa làm)"
+                label="Search title"
                 id="fullWidth"
                 style={{ width: "50%", marginLeft: "auto" }}
                 onChange={(e) => setTitle(e.target.value)}

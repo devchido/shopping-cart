@@ -1,8 +1,12 @@
 package com.example.redstore.service;
 
 import com.example.redstore.config.SecurityUtils;
+import com.example.redstore.domain.Category;
 import com.example.redstore.domain.Product;
+import com.example.redstore.domain.ProductCategory;
 import com.example.redstore.domain.User;
+import com.example.redstore.repository.CategoryRepository;
+import com.example.redstore.repository.ProductCategoryRepository;
 import com.example.redstore.repository.ProductRepository;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.dto.ProductDto;
@@ -29,6 +33,8 @@ import java.util.function.Function;
 @Transactional
 public class ProductService {
     public final ProductRepository productRepository;
+    public final ProductCategoryRepository productCategoryRepository;
+    public final CategoryRepository categoryRepository;
     public final ProductMapper productMapper;
     private final UserRepository userRepository;
 
@@ -62,6 +68,18 @@ public class ProductService {
         entity.setUpdatedAt(Instant.now());
         entity.setStatus((short) 0);
         productRepository.save(entity);
+        // add category cho product
+        if (dto.getCategoryId() != null){
+            Optional<Category> category = categoryRepository.findById(dto.getCategoryId());
+            if(category.isPresent()){
+                ProductCategory productCategory = new ProductCategory();
+                productCategory.setProduct(entity);
+                productCategory.setCategory(category.get());
+                productCategoryRepository.save(productCategory);
+                System.out.println("Thực thi thêm category cho product");
+            }
+        }
+
         System.out.println("Thực thi create");
     }
 

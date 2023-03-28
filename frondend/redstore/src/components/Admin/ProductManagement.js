@@ -111,12 +111,12 @@ function ProductManagement() {
             </Box>
             <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Sort</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Direction</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={sort}
-                        label="Sort"
+                        label="Direction"
                         onChange={handleChangeSort}
                     >
                         <MenuItem value={"ASC"}>ASC</MenuItem>

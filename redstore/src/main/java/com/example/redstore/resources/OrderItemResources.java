@@ -57,5 +57,4 @@ public class OrderItemResources {
         List<OrderItemDto> dtos = orderItemService.findOrderItemByOrderId(orderDetail);
         return dtos;
     }
-
 }

@@ -148,6 +148,9 @@ public class ProductResources {
         return dto;
     }
 
+    /*
+    /product/auth/admin/filter?sort={column}&field={Direction: phương hướng}
+     */
     @GetMapping("/auth/admin/filter")
     public List<ProductDto> filterProduct(@RequestParam String sort, @RequestParam String field) {
         List<ProductDto> dtos = productService.filterProduct(sort, field);

@@ -35,7 +35,7 @@ function SingleProduct() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch("/cart/auth/my-cart", requestOptions)
+        fetch("/cart/auth/my-cart?status=1", requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -120,7 +120,7 @@ function SingleProduct() {
                             <>
                                 <div className="row">
                                     <div className="col-2">
-                                        <img src={product.photos} width="100%" id="ProductImg" />
+                                        <img src={product.photos} alt="" width="100%" id="ProductImg" />
                                     </div>
                                     <div className="col-2">
                                         <p>
@@ -128,7 +128,7 @@ function SingleProduct() {
                                         </p>
                                         <h1>{product.title}</h1>
                                         {/* Khi product có sự kiện hạ giá thì hiện sự thay đối giá của product */}
-                                        {product.discount != 0 ? (
+                                        {product.discount !== 0 ? (
                                             <>
                                                 <h4>
                                                     Price:{" "}
@@ -185,7 +185,7 @@ function SingleProduct() {
                                                                             {/* Hiện thị các user's cart */}
                                                                             {cart.map((item, i) => (
                                                                                 <>
-                                                                                    {item.status == 0 || item.status == 1 ? (
+                                                                                    {item.status === 0 || item.status === 1 ? (
                                                                                     <div
                                                                                         className="col-5"
                                                                                         onClick={() => {
@@ -194,7 +194,7 @@ function SingleProduct() {
                                                                                         }}
                                                                                     >
                                                                                         <div className="cart-detail">
-                                                                                            <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" />
+                                                                                            <img src="https://raw.githubusercontent.com/devchido/frontend-ecommerce-website/main/images/cart.png" alt="" />
 
                                                                                             <p>content: {item.content}</p>
                                                                                         </div>

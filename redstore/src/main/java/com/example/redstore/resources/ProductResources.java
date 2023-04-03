@@ -91,11 +91,6 @@ public class ProductResources {
         return dtos;
     }
 
-    //    @GetMapping("/paginationAndSort/{offset}/{pageSize}/{field}")
-//    private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field){
-//        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize, field);
-//        return new APIResponse<>(dtos.getSize(), dtos);
-//    }
     @PostMapping("/auth/user")
     public List<ProductDto> findByUsers(@RequestParam(value = "") String title) {
         List<ProductDto> dtos = productService.findByUsers(title);
@@ -121,7 +116,7 @@ public class ProductResources {
         Page<ProductDto> dtos = productService.findProductsWithPagination(offset, pageSize);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
-
+    // get page api not filter: chỉ get all
 //    @GetMapping("/api/paginationAndSort/{offset}/{pageSize}/{field}")
 //    private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field){
 //        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize, field);
@@ -132,7 +127,7 @@ public class ProductResources {
 
     @GetMapping("/api/paginationAndSort/{offset}/{pageSize}/{field}")
     private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(
-            @RequestParam String title,
+            @RequestParam(value = "title", defaultValue = "") String title,
             @PathVariable int offset,
             @PathVariable int pageSize,
             @PathVariable String field) {
@@ -161,5 +156,12 @@ public class ProductResources {
     @PutMapping("/auth/admin/setStatus")
     public void setStatusProduct(@RequestParam("id") String id) {
         productService.setStatusProduct(id);
+    }
+
+    // sản phẩm mới nhất
+    @GetMapping("/api/lastest-product")
+    public List<ProductDto> lastestProduct(@RequestParam String field){
+        List<ProductDto> dtos = productService.lastestProduct(field);
+        return dtos;
     }
 }

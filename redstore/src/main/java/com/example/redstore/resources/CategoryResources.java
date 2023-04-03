@@ -44,5 +44,9 @@ public class CategoryResources {
         List<CategoryDto> dtos = categoryService.filter(title);
         return dtos;
     }
-
+    @GetMapping("/api/single-product-category")
+    public CategoryDto singleProductCategory(@RequestParam String field){
+        CategoryDto dto = categoryService.singleProductCategory(field);
+        return dto;
+    }
 }

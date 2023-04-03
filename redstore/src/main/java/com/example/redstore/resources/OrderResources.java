@@ -24,7 +24,7 @@ public class OrderResources {
         return dtos;
     }
 
-    // Thực hiện order cho cart ?cart={id}
+    // Thực hiện order cho cart ?idCart={id}
     @PostMapping("/auth/createByCart")
     public void createOrderByCart(@RequestParam("idCart") Long id) {
         orderService.createOrderByCart(id);

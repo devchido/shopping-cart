@@ -217,6 +217,12 @@ public class ProductService {
         }
     }
 
+    public List<ProductDto> lastestProduct(String field) {
+        List<Product> entity = productRepository.lastestProduct(field);
+        List<ProductDto> dtos = productMapper.toDo(entity);
+        return dtos;
+    }
+
 //    public Page<ProductDto> filterAndPagination( int offset, int pageSize, String field, String keySearch){
 //        List<ProductDto> products = filter(keySearch);
 //        Page<ProductDto> pageProductDtos =

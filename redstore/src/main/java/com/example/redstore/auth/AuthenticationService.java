@@ -40,6 +40,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .mobile(request.getMobile())
+                .photos("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU")
                 .createAt(new Date().toInstant())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
@@ -71,6 +72,7 @@ public class AuthenticationService {
         user.setMobile(dto.getMobile());
         user.setEmail(dto.getEmail());
         user.setPassword(SecurityUtils.getPrincipal().getPassword());
+
         user.setPhotos(dto.getPhotos());
         user.setIntro(dto.getIntro());
         user.setProfile(dto.getProfile());
@@ -151,4 +153,14 @@ public class AuthenticationService {
 //        user.setRole(Role.ADMIN);
 //        userRepository.save(user);
 //    }
+
+    /*
+    Admin: Cập nhật quyền cho user
+     */
+    public void updateRoleUser(String userId,String role){
+        var user = userRepository.findById(userId).orElse(null);
+        user.setRole(Role.valueOf(role));
+
+        userRepository.save(user);
+    }
 }

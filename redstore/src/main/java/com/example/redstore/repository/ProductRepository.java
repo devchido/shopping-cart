@@ -42,4 +42,12 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     // Hiển thị tất cả các product có status =1 : trạng thái được hiển thị trên shop
     @Query(value = "select p.* from "+ db +".product p where status = 1", nativeQuery = true)
     List<Product> findProductByStatus();
+
+    @Query(value = "select  p.* from "+ db +".product p " +
+            " join "+ db+".product_category pc on p.id = pc.product_id " +
+            " join "+ db +".category c on c.id = pc.category_id" +
+            " where status = 1 and c.slug like concat('%',:field,'%') " +
+            " order by updated_at DESC " +
+            " limit 8", nativeQuery = true)
+    List<Product> lastestProduct(@Param("field") String field);
 }

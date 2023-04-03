@@ -44,6 +44,10 @@ public class SecurityConfiguration {
                 .requestMatchers("/order/auth/admin/**").hasAnyAuthority("ADMIN")
                 .requestMatchers("/transaction/auth/admin/**").hasAnyAuthority("ADMIN")
                 .requestMatchers("/category/auth/**").hasAnyAuthority("ADMIN")
+                // phân quyền create, edit, delete product
+                .requestMatchers("/product/auth/create").hasAnyAuthority("USER_SHOP","ADMIN")
+                .requestMatchers("/product/auth/edit/**").hasAnyAuthority("USER_SHOP","ADMIN")
+                .requestMatchers("/product/auth/delete/**").hasAnyAuthority("USER_SHOP","ADMIN")
                 //
                 .anyRequest()
                 .authenticated()

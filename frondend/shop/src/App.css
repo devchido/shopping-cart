@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+a {
+  text-decoration: none !important;
+}
+.navbar a {
+  color: inherit;
+  font-family: "monospace",
+}
+.navbar a:hover{
+  color: #ff523b !important;
+}
+.banner{
+  background: radial-gradient(#fff, #dadada);
+}
+.footer {
+  margin-top: 5rem;
+}
+.menu-setting a {
+  color: #000;
+}

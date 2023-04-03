@@ -170,9 +170,9 @@ export default function CartDetail() {
     }
     return (
         <div>
-            <div style={{ width: "100%", background: "#ff523b", marginTop: "8rem" }}>
+            <div style={{ width: "100%", marginTop: "8rem" }}>
                 <div className="container">
-                    <h1 style={{ color: "#fff", fontSize: "30px" }}>
+                    <h1>
                         Cart:&nbsp;
                         {isLoading ? <>Loading . . . </> : <>{cart ? <>{cart.content} </> : null}</>}
                     </h1>
@@ -254,13 +254,13 @@ export default function CartDetail() {
                                 <tr>
                                     <td>Status</td>
                                     <td>
-                                        {cart.status == 0
+                                        {cart.status === 0
                                             ? "Mới"
-                                            : null || cart.status == 1
+                                            : null || cart.status === 1
                                             ? "Cart"
-                                            : null || cart.status == 2
+                                            : null || cart.status === 2
                                             ? "Order"
-                                            : null || cart.status == 3
+                                            : null || cart.status === 3
                                             ? "Đã thanh toán"
                                             : null}
                                     </td>
@@ -332,17 +332,17 @@ export default function CartDetail() {
 
                     {cart ? (
                         <>
-                            {cart.status == 0 ? (
+                            {cart.status === 0 ? (
                                 <Button variant="outlined" style={{ background: "#ff523b" }}>
                                     <Link to={"/products"} style={{ color: "#fff" }}>
                                         Go shopping now
                                     </Link>
                                 </Button>
-                            ) : null || cart.status == 1 ? (
+                            ) : null || cart.status === 1 ? (
                                 <Button variant="outlined" onClick={handleOrderNow}>
                                     Order now
                                 </Button>
-                            ) : null || cart.status != 1 ? (
+                            ) : null || cart.status !== 1 ? (
                                 <Button variant="outlined">Dùng lại danh sách này</Button>
                             ) : null}
                         </>

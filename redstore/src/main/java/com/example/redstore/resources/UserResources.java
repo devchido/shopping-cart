@@ -55,7 +55,6 @@ public class UserResources {
 
     @GetMapping("/auth/admin")
     public List<UserDto> findAll() {
-
         List<UserDto> dtos = userService.findAll();
         return dtos;
     }
@@ -90,6 +89,12 @@ public class UserResources {
     @PutMapping("/auth/updateInfo")
     public ResponseEntity<AuthenticationResponse> updateInfo(@RequestBody UserDto dto){
         return ResponseEntity.ok(service.updateInfo(dto));
+    }
+
+    // Admin: Cập nhật quyền cho user
+    @PutMapping("/auth/admin/role/{userId}")
+    public void updateRoleUser(@PathVariable String userId, @RequestParam String role){
+        service.updateRoleUser(userId, role);
     }
 
 //    test admin : false

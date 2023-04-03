@@ -38,4 +38,5 @@ public class ProductCategoryResources {
         List<ProductCategoryDto> dtos = productCategoryService.findAll();
         return dtos;
     }
+
 }

@@ -28,6 +28,7 @@ public class OrderService {
     private final CartItemMapOrderItemMapper orderItemMapper;
     private final CartItemRepository cartItemRepository;
     private final OrderItemRepository orderItemRepository;
+    private final TransactionRepository transactionRepository;
 
     public List<OrderDto> findByUsers(String status) {
         Long users = SecurityUtils.getPrincipal().getId();
@@ -178,9 +179,23 @@ public class OrderService {
     public void confirmOrder(String id, String status) {
         Order entity = orderRepository.findById(id).orElse(null);
         if(entity.getStatus() != 1){
+
             entity.setStatus(Short.valueOf(status));
             entity.setUpdatedAt(Instant.now());
             orderRepository.save(entity);
+            if (Short.valueOf(status) == 2){
+                Transaction transaction = new Transaction();
+                transaction.setOrder(entity);
+                transaction.setUsers(entity.getUsers());
+                transaction.setType((short) 0);
+                transaction.setMode((short) 0);
+                transaction.setStatus((short) 0);
+                transaction.setContent(entity.getContent());
+                transaction.setCreatedAt(Instant.now());
+                transaction.setUpdatedAt(Instant.now());
+                transactionRepository.save(transaction);
+                System.out.println("Tạo transaction");
+            }
             System.out.println("Thưc thi confirm order");
         }
     }

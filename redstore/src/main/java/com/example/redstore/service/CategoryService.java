@@ -66,4 +66,10 @@ public class CategoryService {
         List<CategoryDto> dtos = categoryMapper.toDo(entity);
         return dtos;
     }
+
+    public CategoryDto singleProductCategory(String field) {
+        Category entity = categoryRepository.singleProductCategory(field).orElse(null);
+        CategoryDto dto = categoryMapper.toDo(entity);
+        return dto;
+    }
 }

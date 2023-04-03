@@ -133,9 +133,12 @@ function Navbar() {
                                                         <i class="fa fa-truck" aria-hidden="true"></i>
                                                         sdf
                                                     </Link> */}
+                                                    {
+                                                        users.role === "ADMIN" || users.role === "USER_SHOP" ?  
                                                     <Link to={"/shop"}>
                                                         <i className="fa fa-building-o" /> User's Shop
-                                                    </Link>
+                                                    </Link> : null
+                                                    }
                                                     <hr />
                                                     <Link to={"/login"} onClick={handleLogout} className={"logoutItem"}>
                                                         <LogoutIcon style={{ marginBottom: "-6px" }} />

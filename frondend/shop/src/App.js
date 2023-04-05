@@ -14,6 +14,8 @@ import Admin from "./Components/Admin/Admin";
 import UpdateProfile from "./Components/User/UpdateProfile";
 import Test from "./Components/Test/Test";
 import ScrollToTop from "react-scroll-to-top";
+import Carts from "./Components/Shopping/Carts";
+import CartDetail from "./Components/Shopping/CartDetail";
 //
 
 //
@@ -38,6 +40,11 @@ function App(props) {
                 <Route path="/profile" element={<Profile />}></Route>
                 {/* Update profile */}
                 <Route path="/profile/update" element={<UpdateProfile />}></Route>
+                {/* Carts: Trang quản lý các giỏ hảng */}
+                <Route path="/carts" element= {<Carts/>}></Route>
+                {/* carts/:id : chi tiết giỏ hàng */}
+                <Route path="/carts/:id" element= {<CartDetail/>}></Route>
+                {/*  */}
                 {/* Tabs */}
                 <Route path="/tabs" element={<VerticalTabs />}></Route>
                 {/* test */}

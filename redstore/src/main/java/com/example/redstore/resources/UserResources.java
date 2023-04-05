@@ -23,7 +23,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserResources {
     private final UserService userService;
-    private final UserRepository userRepository;
     private final AuthenticationService service;
 
     //cho nay lan sau de post lay dto nhe
@@ -96,6 +95,8 @@ public class UserResources {
     public void updateRoleUser(@PathVariable String userId, @RequestParam String role){
         service.updateRoleUser(userId, role);
     }
+
+
 
 //    test admin : false
     @GetMapping({"/auth/forUser"})

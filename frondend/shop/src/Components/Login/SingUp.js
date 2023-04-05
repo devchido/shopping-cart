@@ -11,22 +11,124 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-
+//
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { Alert } from "@mui/material";
 
 const theme = createTheme();
 
 export default function SignUp() {
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMsg, setSnackbarMsg] = React.useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+
+    const snackbarClose = () => {
+        setSnackbarOpen(false);
+    };
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
+            firstName: data.get("firstName"),
+            lastName: data.get("lastName"),
             email: data.get("email"),
+            mobile: data.get("mobile"),
             password: data.get("password"),
         });
+        if (
+            data.get("firstName") === "" ||
+            data.get("lastName") === "" ||
+            data.get("email") === "" ||
+            data.get("mobile") === "" ||
+            data.get("password") === ""
+        ) {
+            setSnackbarOpen(true);
+            setSnackbarSeverity("error");
+            setSnackbarMsg("Thông tin không đầy đủ!");
+        } else {
+            fetch("/api/v1/auth/check-email?email=" + data.get("email")).then((resp) => {
+                resp.text().then((result) => {
+                    // console.log(result);
+                    if (result === "") {
+                        fetch("/api/v1/auth/check-mobile?mobile=" + data.get("mobile")).then((resp) => {
+                            resp.text().then((result) => {
+                                // console.log(result);
+                                if (result === "") {
+                                    var myHeaders = new Headers();
+                                    myHeaders.append("Content-Type", "application/json");
+
+                                    var raw = JSON.stringify({
+                                        firstName: data.get("firstName"),
+                                        lastName: data.get("lastName"),
+                                        email: data.get("email"),
+                                        mobile: data.get("mobile"),
+                                        password: data.get("password"),
+                                    });
+
+                                    var requestOptions = {
+                                        method: "POST",
+                                        headers: myHeaders,
+                                        body: raw,
+                                        redirect: "follow",
+                                    };
+                                    console.log(raw);
+                                    fetch("/api/v1/auth/register", requestOptions)
+                                        .then((response) => {
+                                            if (response.ok) {
+                                                return response.json();
+                                            }
+                                            throw Error(response.status);
+                                        })
+                                        .then((result) => {
+                                            console.log(result);
+                                            localStorage.setItem("token", result.token);
+                                            window.location = "/user";
+                                        })
+                                        .catch((error) => {
+                                            setSnackbarOpen(true);
+                                            setSnackbarSeverity("error");
+                                            setSnackbarMsg("False");
+                                        });
+                                } else {
+                                    setSnackbarOpen(true);
+                                    setSnackbarSeverity("error");
+                                    setSnackbarMsg(result);
+                                }
+                            });
+                        });
+                    } else {
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity("error");
+                        setSnackbarMsg(result);
+                    }
+                });
+            });
+        }
     };
+    const checkEmail = () => {};
 
     return (
         <ThemeProvider theme={theme}>
+            <Snackbar
+                sx={{ marginTop: "50px" }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={snackbarClose}
+            >
+                <Alert
+                    severity={`${snackbarSeverity}`}
+                    action={[
+                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                >
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -67,14 +169,10 @@ export default function SignUp() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                />
+                                <TextField required fullWidth id="email" label="Email" name="email" autoComplete="email" />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField required fullWidth id="mobile" label="Mobile" name="mobile" autoComplete="mobile" />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField

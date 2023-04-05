@@ -61,7 +61,7 @@ function Profile() {
                                         <Link
                                             to={"/profile/update"}
                                             type="button"
-                                            className="btn btn-outline-dark"
+                                            className="btn btn-dark border"
                                             data-mdb-ripple-color="dark"
                                             style={{ zIndex: 1 }}
                                         >

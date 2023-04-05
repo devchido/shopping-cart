@@ -214,14 +214,17 @@ function Navbar(props) {
                                         ) : null}
 
                                         <hr />
+                                        <Link to={"/"} >
+                                        
                                         <MenuItem onClick={handleCloseUserMenu}>
                                             <Typography textAlign="center" onClick={handleLogout}>
                                                 Logout
                                             </Typography>
                                         </MenuItem>
+                                        </Link>
                                     </Menu>
                                     <Tooltip title={"Shopping Cart"}>
-                                        <Link to={"/shopping-cart"}>
+                                        <Link to={"/carts"}>
                                             <IconButton sx={{ p: 0, width: "50px" }}>
                                                 <ShoppingCartIcon style={{ color: "white", fontSize: "30px" }} />
                                             </IconButton>

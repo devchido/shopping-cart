@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 function LastestProduct() {
-    const [product, setProduct] = React.useState();
+    const [product, setProduct] = React.useState([]);
 
     const [loading, setLoading] = React.useState(false);
 
@@ -21,12 +21,7 @@ function LastestProduct() {
     const ShowProducts = () => {
         return (
             <>
-                <div className="buttons d-flex justify-content-center mb-5 pb-5">
-                    <button className="btn btn-outline-dark me-2">All</button>
-                    <button className="btn btn-outline-dark me-2">Thời trang</button>
-                    <button className="btn btn-outline-dark me-2">Gia dụng</button>
-                </div>
-                {product ? (
+                {/* {product ? ( */}
                     <>
                         {product.map((item, i) => {
                             return (
@@ -47,7 +42,7 @@ function LastestProduct() {
                             );
                         })}
                     </>
-                ) : null}
+                {/* ) : null} */}
             </>
         );
     };

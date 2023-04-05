@@ -9,25 +9,42 @@ import SingUp from "./Components/Login/SingUp";
 import SingleProduct from "./Components/Product/SingleProduct";
 import Footer from "./Components/Layout/Footer";
 import Profile from "./Components/User/Profile";
+import VerticalTabs from "./Components/Layout/VerticalTabs";
+import Admin from "./Components/Admin/Admin";
+import UpdateProfile from "./Components/User/UpdateProfile";
+import Test from "./Components/Test/Test";
+import ScrollToTop from "react-scroll-to-top";
+//
 
-function App() {
+//
+function App(props) {
     return (
         <Fragment>
             <Navbar />
+            <ScrollToTop smooth />
             <Routes>
                 {/* Home */}
                 <Route path="/" element={<Home />}></Route>
+                {/* Admin */}
+                <Route path="/admin" element={<Admin />}></Route>
                 {/* Product */}
                 <Route path="/product" element={<Product />}></Route>
                 {/* Singer Product */}
-                <Route path="/product/:slug" element={<SingleProduct/>}></Route>
+                <Route path="/product/:slug" element={<SingleProduct />}></Route>
                 {/* Login */}
                 <Route path="/singin" element={<SingIn />}></Route>
                 <Route path="/singup" element={<SingUp />}></Route>
                 {/* Profile */}
                 <Route path="/profile" element={<Profile />}></Route>
+                {/* Update profile */}
+                <Route path="/profile/update" element={<UpdateProfile />}></Route>
+                {/* Tabs */}
+                <Route path="/tabs" element={<VerticalTabs />}></Route>
+                {/* test */}
+                <Route path="/test" element={<Test />}></Route>
             </Routes>
-            <Footer/>
+
+            <Footer />
         </Fragment>
     );
 }

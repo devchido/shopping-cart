@@ -4,7 +4,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Profile from "../User/Profile";
-import ProductsManager from "./ProductsManager";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -15,11 +14,10 @@ function TabPanel(props) {
             hidden={value !== index}
             id={`vertical-tabpanel-${index}`}
             aria-labelledby={`vertical-tab-${index}`}
-            className=" w-100"
             {...other}
         >
             {value === index && (
-                <div className="p-4 ">
+                <div className="p-3">
                     <>{children}</>
                 </div>
             )}
@@ -40,7 +38,7 @@ function a11yProps(index) {
     };
 }
 
-function Admin() {
+export default function VerticalTabs() {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -55,17 +53,21 @@ function Admin() {
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, borderColor: "divider", minWidth: "6rem" }}
+                sx={{ borderRight: 1, borderColor: "divider", width: "auto" }}
             >
-                <Tab label="Quản lý user" {...a11yProps(0)} />
-                <Tab label="Quản lý product" {...a11yProps(1)} />
-                <Tab label="Quản lý Order" {...a11yProps(2)} />
+                <Tab label="Item One" {...a11yProps(0)} />
+                <Tab label="Item Two" {...a11yProps(1)} />
+                <Tab label="Item Three" {...a11yProps(2)} />
+                <Tab label="Item Four" {...a11yProps(3)} />
+                <Tab label="Item Five" {...a11yProps(4)} />
+                <Tab label="Item Six" {...a11yProps(5)} />
+                <Tab label="Item Seven" {...a11yProps(6)} />
             </Tabs>
-            <TabPanel className={"w-100 "} value={value} index={0}>
-                Quản lý user
+            <TabPanel className={"w-100"} value={value} index={0}>
+                Item one
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <ProductsManager/>
+                Item Two
             </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three
@@ -73,8 +75,15 @@ function Admin() {
             <TabPanel value={value} index={3}>
                 Item Four
             </TabPanel>
+            <TabPanel value={value} index={4}>
+                Item Five
+            </TabPanel>
+            <TabPanel value={value} index={5}>
+                Item Six
+            </TabPanel>
+            <TabPanel value={value} index={6}>
+                Item Seven
+            </TabPanel>
         </Box>
     );
 }
-
-export default Admin;

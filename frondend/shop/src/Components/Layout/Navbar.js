@@ -13,9 +13,13 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+// 
+
+
 
 //
-function Navbar() {
+function Navbar(props) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [user, setUser] = React.useState({});
@@ -72,7 +76,7 @@ function Navbar() {
         loadDataUser();
     }, []);
     return (
-        <AppBar position="static" className="navbar p-0">
+        <AppBar position="static" className="navbar p-0 ">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     {/* Toàn màn hình */}
@@ -180,25 +184,56 @@ function Navbar() {
                                         className="menu-setting"
                                     >
                                         {/* "Profile", "Account", "Dashboard", "Logout" */}
-                                        <MenuItem onClick={handleCloseUserMenu}>
-                                            <Link to={"/profile"} textAlign="center">Account</Link>
-                                        </MenuItem>
-                                        <MenuItem onClick={handleCloseUserMenu}>
-                                            <Link textAlign="center">Dashboard</Link>
-                                        </MenuItem>
-                                        <hr/>
-                                        <MenuItem onClick={handleCloseUserMenu}>
-                                            <Link textAlign="center" onClick={handleLogout}>
-                                                Logout
+                                        <Link to={"/profile"}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center">Account</Typography>
+                                            </MenuItem>
+                                        </Link>
+                                        <Link to={"/dashboard"}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center">Dashboard</Typography>
+                                            </MenuItem>
+                                        </Link>
+                                        <Link to={"/tabs"}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center">Tabs</Typography>
+                                            </MenuItem>
+                                        </Link>
+                                        <Link to={"/test"}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center">Test</Typography>
+                                            </MenuItem>
+                                        </Link>
+                                        <hr />
+                                        {user.role === "ADMIN" ? (
+                                            <Link to={"/admin"}>
+                                                <MenuItem onClick={handleCloseUserMenu}>
+                                                    <Typography textAlign="center">Admin</Typography>
+                                                </MenuItem>
                                             </Link>
+                                        ) : null}
+
+                                        <hr />
+                                        <MenuItem onClick={handleCloseUserMenu}>
+                                            <Typography textAlign="center" onClick={handleLogout}>
+                                                Logout
+                                            </Typography>
                                         </MenuItem>
                                     </Menu>
+                                    <Tooltip title={"Shopping Cart"}>
+                                        <Link to={"/shopping-cart"}>
+                                            <IconButton sx={{ p: 0, width: "50px" }}>
+                                                <ShoppingCartIcon style={{ color: "white", fontSize: "30px" }} />
+                                            </IconButton>
+                                        </Link>
+                                    </Tooltip>
                                 </>
                             </>
                         )}
                     </Box>
                 </Toolbar>
             </Container>
+            
         </AppBar>
     );
 }

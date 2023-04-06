@@ -16,6 +16,7 @@ import Test from "./Components/Test/Test";
 import ScrollToTop from "react-scroll-to-top";
 import Carts from "./Components/Shopping/Carts";
 import CartDetail from "./Components/Shopping/CartDetail";
+import CartAdd from "./Components/Shopping/CartAdd";
 //
 
 //
@@ -44,6 +45,8 @@ function App(props) {
                 <Route path="/carts" element= {<Carts/>}></Route>
                 {/* carts/:id : chi tiết giỏ hàng */}
                 <Route path="/carts/:id" element= {<CartDetail/>}></Route>
+                {/* carts/add-cart : Thêm giỏ hàng mới */}
+                <Route path="/carts/add-cart" element= {<CartAdd/>}></Route>
                 {/*  */}
                 {/* Tabs */}
                 <Route path="/tabs" element={<VerticalTabs />}></Route>

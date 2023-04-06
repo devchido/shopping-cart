@@ -72,8 +72,10 @@ public class CartItemService {
             entity.setActive(true);
             // Set create at
             entity.setCreatedAt(Instant.now());
+            entity.setUpdatedAt(Instant.now());
             // Set dữ liệu cho cart
             cartId.setStatus((short) 1);
+            cartId.setUpdatedAt(Instant.now());
             // Save data
             cartRepository.save(cartId);
             cartItemRepository.save(entity);

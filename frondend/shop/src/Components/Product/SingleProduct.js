@@ -12,7 +12,7 @@ function SingleProduct() {
     const [category, setCategory] = useState([]);
     const [cart, setCart] = React.useState([]);
     const [loading, setLoading] = useState(false);
-    const [quantity, setQuantity] = React.useState("1");
+    const [quantity, setQuantity] = React.useState(0);
     //Drawer
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
@@ -75,28 +75,60 @@ function SingleProduct() {
                 <div className="col-md-6">
                     <h4 className="text-uppercase test-black-50">{category.title}</h4>
                     <h1 className="display-5">{product.title}</h1>
-                    {/* <p className="lead">
-                        Rating
-                        <i className="fa fa-star"></i>
-                    </p> */}
-                    <h3 className="display-6 fw-bold my-4">{product.price} vnd</h3>
+                    <p className="lead">Hiện còn: {product.quantity}</p>
+                    {product.discount === 0 ? (
+                        <>
+                            <h3 className="display-6 fw-bold my-4">{product.price} vnd</h3>
+                        </>
+                    ) : (
+                        <>
+                            <p className="lead">
+                                Giá: <del>{product.price} vnd</del>
+                            </p>
+                            <h3 className="display-6 fw-bold my-4">
+                                <span className="lead">Chỉ còn:</span> {product.price} vnd
+                            </h3>
+                        </>
+                    )}
+
                     <p className="lead">{product.content}</p>
                     <div className=" d-flex  my-3">
-                        <IconButton sx={{ mx: 1 }}>
-                            <RemoveIcon />
+                        <IconButton
+                            sx={{ mx: 1 }}
+                            onClick={() => {
+                                if (quantity > 0) {
+                                    setQuantity(i => i- 1);
+                                }
+                            }}
+                        >
+                            <RemoveIcon className="text-danger" />
                         </IconButton>
                         <input
                             style={{ width: "4rem" }}
                             min={0}
+                            max={product.quantity}
                             name="quantity"
+                            value={quantity}
                             defaultValue={quantity}
                             type="number"
                             className="form-control form-control-sm"
-                            onChange={(e) => setQuantity(e.target.value)}
+                            onChange={(e) => {
+                                if (e.target.value < 0) {
+                                    setQuantity(0);
+                                } else if (e.target.value > product.quantity) {
+                                    setQuantity(product.quantity);
+                                } else {
+                                    setQuantity(e.target.value);
+                                }
+                            }}
                         />
 
-                        <IconButton sx={{ mx: 1 }}>
-                            <AddIcon />
+                        <IconButton sx={{ mx: 1 }} onClick={() => {
+                                if (quantity < product.quantity) {
+                                    setQuantity(i => i+1);
+                                }
+                            }}>
+                            <AddIcon className="text-primary" />
                         </IconButton>
                     </div>
 
@@ -105,8 +137,14 @@ function SingleProduct() {
                             <button
                                 className="btn btn-outline-dark"
                                 onClick={() => {
-                                    setIsDrawerOpen(true);
-                                    loadDataCart();
+                                    if (quantity <= 0) {
+                                        setSnackbarOpen(true);
+                                        setSnackbarSeverity("error");
+                                        setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
+                                    } else {
+                                        setIsDrawerOpen(true);
+                                        loadDataCart();
+                                    }
                                 }}
                             >
                                 Buy Now

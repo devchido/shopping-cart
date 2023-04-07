@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
@@ -10,16 +11,40 @@ import { IconButton } from "@mui/material";
 //
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Snackbar } from "@mui/material";
+//
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 function CartDetail() {
     const { id } = useParams();
     const [cart, setCart] = React.useState({});
     const [cartDetail, setCartDetail] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
+    const [cartItem, setCartItem] = React.useState();
+    const [quantity, setQuantity] = React.useState(0);
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    //
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = (item) => {
+        console.log(item);
+        setOpen(true);
+        setCartItem(item);
+        setQuantity(item.quantity);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setCartItem();
+        setQuantity();
+    };
 
     const snackbarClose = () => {
         setSnackbarOpen(false);
@@ -42,7 +67,7 @@ function CartDetail() {
                 throw Error(response.status);
             })
             .then((result) => {
-                console.log("cart-item", result);
+                // console.log("cart-item", result);
                 setLoading(false);
                 setCartDetail(result);
             })
@@ -64,11 +89,12 @@ function CartDetail() {
                 throw Error(response.status);
             })
             .then((result) => {
-                console.log("cart", result);
+                // console.log("cart", result);
                 setCart(result);
             })
             .catch((error) => console.log("error", error));
     };
+
 
     const ShowCartItem = () => {
         return (
@@ -86,34 +112,34 @@ function CartDetail() {
                                         <strong className="text-primary">{item.product.title}</strong>
                                     </p>
                                     <h6 style={{ color: "#9e9e9e" }}>Giảm giá: {item.product.discount}%</h6>
-                                    <div className="d-flex justify-content-between">
-                                        <p className="fw-bold mt-3">{item.product.price}vnd</p>
+                                    <div className="row justify-content-between">
+                                        <p className="fw-bold col-auto">{item.product.price}vnd</p>
 
-                                        <div className=" d-flex justify-content-center">
-                                            <IconButton sx={{ mx: 1 }}>
-                                                <RemoveIcon />
-                                            </IconButton>
+                                        <div className=" d-flex col-auto">
                                             <input
                                                 style={{ width: "4rem" }}
-                                                min={0}
-                                                name="quantity"
                                                 defaultValue={item.quantity}
                                                 type="number"
                                                 className="form-control form-control-sm"
+                                                readOnly
                                             />
 
-                                            <IconButton sx={{ mx: 1 }}>
-                                                <AddIcon />
+                                            <IconButton sx={{ mx: 1 }} title="Sửa" onClick={() => handleClickOpen(item)}>
+                                                <BorderColorIcon className="text-primary" />
                                             </IconButton>
                                         </div>
                                     </div>
                                     <hr />
                                     <div className="d-flex justify-content-between">
-                                        <IconButton className="text-danger me-1 mb-2" title="remove">
+                                        <IconButton
+                                            className="text-danger me-1 m-2"
+                                            onClick={() => handleDelete(item)}
+                                            title="remove"
+                                        >
                                             <DeleteIcon />
                                         </IconButton>
                                         <Link to={`/product/${item.product.slug}`}>
-                                            <IconButton className="text-primary mb-2" title="view">
+                                            <IconButton className="text-primary m-2" title="view">
                                                 <VisibilityIcon />
                                             </IconButton>
                                         </Link>
@@ -289,6 +315,70 @@ function CartDetail() {
                 setSnackbarMsg("False");
             });
     };
+    const handleDelete = (item) => {
+        console.log(item.id);
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "DELETE",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/cart-item/auth/" + item.id, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Thành công.");
+                loadDataCartDetail();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("False");
+            });
+    };
+    const handleRepair = () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/cart-item/auth/" + cartItem.id+ "?quantity="+quantity, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                handleClose();
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Cập nhật số lượng đặt hàng cho item ");
+                loadDataCartDetail();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                handleClose();
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Lỗi sửa quantity");
+            });
+    }
     React.useEffect(() => {
         setLoading(true);
         loadDataCart();
@@ -314,6 +404,67 @@ function CartDetail() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                {cartItem ? (
+                    <>
+                        <DialogTitle id="alert-dialog-title">{cartItem.product.title}</DialogTitle>
+                        
+                        <DialogContent className="d-flex justify-content-center" >
+                        <IconButton
+                            sx={{ mx: 1 }}
+                            onClick={() => {
+                                if (quantity > 0) {
+                                    setQuantity((i) => i - 1);
+                                }
+                            }}
+                        >
+                            <RemoveIcon className="text-danger" />
+                        </IconButton>
+                        <input
+                            style={{ width: "4rem" }}
+                            min={1}
+                            max={cartItem.product.quantity}
+                            name="quantity"
+                            value={quantity}
+                            type="number"
+                            className="form-control form-control-sm"
+                            onChange={(e) => {
+                                if (e.target.value < 0) {
+                                    setQuantity(0);
+                                } else if (e.target.value > cartItem.product.quantity) {
+                                    setQuantity(cartItem.product.quantity);
+                                } else {
+                                    setQuantity(e.target.value);
+                                }
+                            }}
+                        />
+
+                        <IconButton
+                            sx={{ mx: 1 }}
+                            onClick={() => {
+                                if (quantity < cartItem.product.quantity) {
+                                    setQuantity((i) => (i+1));
+                                }
+                            }}
+                        >
+                            <AddIcon className="text-primary" />
+                        </IconButton>
+                            
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Huỷ</Button>
+                            <Button onClick={handleRepair} autoFocus>
+                                Lưu
+                            </Button>
+                        </DialogActions>
+                    </>
+                ) : null}
+            </Dialog>
             <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container h-100 py-5">
                     <div className="row d-flex justify-content-center align-items-center h-100">
@@ -323,7 +474,7 @@ function CartDetail() {
                                     <div className="row">
                                         <div className="col-lg-6 px-5 py-4">
                                             <div className="d-flex justify-content-between">
-                                                <h3 className="mb-5 pt-2  fw-bold text-uppercase">Your products</h3>
+                                                <h3 className="mb-5 pt-2  fw-bold text-uppercase">Cart: {cart.id}</h3>
                                                 <p className="pt-3  fw-bold text-uppercase">Item: {cartDetail.length}</p>
                                             </div>
                                             {loading ? <Loading /> : <ShowCartItem />}

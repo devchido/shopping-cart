@@ -45,7 +45,7 @@ public class CartItemService {
         //
         CartItem cartItem = cartItemRepository.findByProductAndCart(dto.getProductId(), dto.getCartId()).orElse(null);
 
-        if (cartItem != null){
+        if (cartItem != null) {
             // set thêm giá trị quantity : cartItem
             cartItem.setQuantity((short) (cartItem.getQuantity() + entity.getQuantity()));
             cartItem.setUpdatedAt(Instant.now());
@@ -83,50 +83,50 @@ public class CartItemService {
         }
 
 
-
     }
 
-    // Edit user
+    // Edit quantity của cart Item
     @Transactional
-    public void edit(Long id, CartItemDto dto) {
+    public void edit(Long id, Short quantity) {
 
-
-        CartItem entity = cartItemMapper.toEntity(dto);
-        entity.setId(id);
-        // Set product
-        CartItem cartItem = cartItemRepository.findById(String.valueOf(id)).orElse(null);
-        // Kiểm tra product đó trong list product có tồn tại hay không
-        Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
-
-        entity.setProduct(productId);
-        // Set cart
-        // Kiểm tra cart được chọn có tồn tại hay không
-        Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
-        entity.setCart(cartId);
-        // Set Quantity
-        int quantity = productId.getQuantity() + cartItem.getQuantity() - entity.getQuantity();
-        productId.setQuantity((short) quantity);
-        productId.setUpdatedAt(Instant.now());
-        productRepository.save(productId);
-
-        // Set update at
-        entity.setUpdatedAt(Instant.now());
-        cartItemRepository.save(entity);
-
-        System.out.println("Thực thi edit");
+        // get data cartItem
+        CartItem cartItem = cartItemRepository.findById(String.valueOf(id)).
+                orElseThrow(() -> new RuntimeException("Không thấy cartItem"));
+        // get data cart của cartItem
+        Cart cart = cartRepository.findById(String.valueOf(cartItem.getCart().getId())).
+                orElseThrow(() -> new RuntimeException("Không thấy ct của cartItem"));
+        // get data product của cartItem đó
+        Product product = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).
+                orElseThrow(() -> new RuntimeException("Không thấy product của cartItem"));
+        // set số lượng sản phẩm của product = tổng còn lại cộng với sô lượng hiện có của cartItem rồi tất cả trừ đi số sản phẩm sửa lại
+        int quantityProduct = product.getQuantity() + cartItem.getQuantity() - quantity;
+        product.setQuantity((short) quantityProduct);
+        product.setUpdatedAt(Instant.now());
+        // set số lượng sản phẩm trong giỏ hàng
+        cartItem.setQuantity(quantity);
+        // cập nhật thời gian cập nhật cart
+        cart.setUpdatedAt(Instant.now());
+        // lưu lại thông tin của product và cartItem
+        productRepository.save(product);
+        cartItemRepository.save(cartItem);
+        cartRepository.save(cart);
+        System.out.println("Thực thi cập nhật quantity cho cartItem");
     }
 
     // người mua thực hiện delete: xoá item khỏi giỏ hàng
     @Transactional
     public void delete(String id) {
-        CartItem cartItem = cartItemRepository.findById(id).orElse(null);
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow();
         Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
-
+        Cart cart = cartRepository.findById(String.valueOf(cartItem.getCart().getId())).orElseThrow();
         int quantity = productId.getQuantity() + cartItem.getQuantity();
         productId.setQuantity((short) quantity);
         productId.setUpdatedAt(Instant.now());
+        cart.setUpdatedAt(Instant.now());
+        cartRepository.save(cart);
         productRepository.save(productId);
-        cartItemRepository.deleteById(String.valueOf(id));
+        cartItemRepository.deleteById(id);
+
         System.out.println("Thực thi delete");
     }
 

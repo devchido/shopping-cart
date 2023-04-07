@@ -68,7 +68,7 @@ public class CategoryService {
     }
 
     public CategoryDto singleProductCategory(String field) {
-        Category entity = categoryRepository.singleProductCategory(field).orElse(null);
+        Category entity = categoryRepository.singleProductCategory(field).orElseThrow(() -> new RuntimeException("sản phẩm không có category"));
         CategoryDto dto = categoryMapper.toDo(entity);
         return dto;
     }

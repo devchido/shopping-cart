@@ -24,8 +24,8 @@ public class CartItemResources {
 
     // edit: cập nhật item của giỏ hàng
     @PutMapping("/auth/{id}")
-    public void edit(@RequestBody CartItemDto dto, @PathVariable("id") Long id) {
-        cartItemService.edit(id, dto);
+    public void edit(@RequestParam Short quantity, @PathVariable("id") Long id) {
+        cartItemService.edit(id, quantity);
     }
 
     // người mua thực hiện delete: xoá item khỏi giỏ hàng
@@ -57,4 +57,6 @@ public class CartItemResources {
         List<CartItemDto> dtos = cartItemService.findCartItemByProductUserId();
         return dtos;
     }
+
+
 }

@@ -2,8 +2,10 @@ package com.example.redstore.service;
 
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Cart;
+import com.example.redstore.domain.CartItem;
 import com.example.redstore.domain.Product;
 import com.example.redstore.domain.User;
+import com.example.redstore.repository.CartItemRepository;
 import com.example.redstore.repository.CartRepository;
 import com.example.redstore.repository.ProductRepository;
 import com.example.redstore.repository.UserRepository;
@@ -28,12 +30,15 @@ public class CartService {
     public final CartMapper cartMapper;
 
     private final UserRepository userRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CartItemService cartItemService;
+    private final ProductRepository productRepository;
 
     // Create new user
     @Transactional
     public void create(CartDto dto) {
 
-        Cart entity =  cartMapper.toEntity(dto);
+        Cart entity = cartMapper.toEntity(dto);
         // Set userId
         User user = SecurityUtils.getPrincipal();
         entity.setUsers(user);
@@ -57,7 +62,7 @@ public class CartService {
 
     // Edit user
     @Transactional
-    public void edit(Long id, CartDto dto){
+    public void edit(Long id, CartDto dto) {
         Cart entity = cartRepository.findById(String.valueOf(id)).orElse(null);
         // Cập nhật thông tin user
         User user = userRepository.findById(String.valueOf(entity.getUsers().getId())).orElse(null);
@@ -80,15 +85,44 @@ public class CartService {
     // Delete user's cart with cart's id
     @Transactional
     public void delete(String id) {
-        Cart entity = cartRepository.findById(id).orElse(null);
-        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()){
-            cartRepository.deleteById(String.valueOf(id));
-            System.out.println("Thực thi delete");
+        Cart entity = cartRepository.findById(id).orElseThrow();
+        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+            if (entity.getStatus() == 1) {
+                //
+                List<CartItem> cartItemList = cartItemRepository.findByCartId(Long.valueOf(id));
+                //
+                if (cartItemList.toArray().length > 0) {
+                    //
+                    cartItemList.forEach(cartItem -> {
+//                        cartItemRepository.deleteById(String.valueOf(cartItem.getId()));
+                        System.out.println("Xoá cart item id=  "+ cartItem.getId() + "product title " + cartItem.getProduct().getTitle());
+                        // set thông tin cho product
+                        Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElseThrow();
+                        Cart cart = cartRepository.findById(String.valueOf(cartItem.getCart().getId())).orElseThrow();
+                        int quantity = productId.getQuantity() + cartItem.getQuantity();
+                        productId.setQuantity((short) quantity);
+                        productId.setUpdatedAt(Instant.now());
+                        productRepository.save(productId);
+                        // sau khi xoá cartitem thì cập nhật thông tin cho cart
+                        cart.setUpdatedAt(Instant.now());
+                        cartRepository.save(cart);
+                        // Sau cùng là xoá cart item
+                        cartItemRepository.deleteById(String.valueOf(cartItem.getId()));
+                    });
+                    //
+//                    cartRepository.deleteById(id);
+                    System.out.println("Thực thi delete cho cart có item");
+                } else {
+                    //
+                    cartRepository.deleteById(id);
+                    System.out.println("Thực thi delete cho cart không có item");
+                }
+            }
         }
-
     }
+
     // get all
-    public List<CartDto> findAll (){
+    public List<CartDto> findAll() {
         List<Cart> entity = cartRepository.findAll();
         List<CartDto> dtos = cartMapper.toDo(entity);
         return dtos;
@@ -103,7 +137,7 @@ public class CartService {
     //
     public CartDto findMyCartById(String id) {
         Cart entity = cartRepository.findById(id).orElse(null);
-        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()){
+        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
             CartDto dto = cartMapper.toDo(entity);
             return dto;
         }
@@ -112,7 +146,7 @@ public class CartService {
 
     public List<CartDto> findUsersCart(String status) {
         Long userId = SecurityUtils.getPrincipal().getId();
-        List<Cart> entity = cartRepository.findUsersCart(userId,status);
+        List<Cart> entity = cartRepository.findUsersCart(userId, status);
         List<CartDto> dtos = cartMapper.toDo(entity);
         return dtos;
     }

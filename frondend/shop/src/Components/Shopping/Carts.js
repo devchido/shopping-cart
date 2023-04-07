@@ -4,8 +4,9 @@ import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 //
 import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { IconButton } from "@mui/material";
+import { Alert, IconButton, Snackbar } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
@@ -14,6 +15,14 @@ function Carts() {
     const [loading, setLoading] = React.useState(false);
     const [cart, setCart] = React.useState([]);
     const [status, setStatus] = React.useState("1");
+    //
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMsg, setSnackbarMsg] = React.useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    //
+    const snackbarClose = () => {
+        setSnackbarOpen(false);
+    };
     // const navigation = useNavigate();
     const loadDataCart = () => {
         setLoading(true);
@@ -124,7 +133,12 @@ function Carts() {
                                                         <VisibilityIcon />
                                                     </IconButton>
                                                 </Link>
-                                                <IconButton sx={{ m: 1 }} className="text-danger" title="Remove">
+                                                <IconButton
+                                                    sx={{ m: 1 }}
+                                                    className="text-danger"
+                                                    title="Remove"
+                                                    onClick={() => handleDeleteCart(item)}
+                                                >
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </div>
@@ -139,6 +153,38 @@ function Carts() {
                 )}
             </>
         );
+    };
+    const handleDeleteCart = (item) => {
+        console.log(item.id);
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "DELETE",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/cart/auth/delete/" + item.id, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Thành công.");
+                loadDataCart();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("False");
+            });
     };
     // Chưa cần đến search
     // const ShowSearch = () => {
@@ -161,6 +207,24 @@ function Carts() {
 
     return (
         <div>
+            <Snackbar
+                sx={{ marginTop: "50px" }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={snackbarClose}
+            >
+                <Alert
+                    severity={`${snackbarSeverity}`}
+                    action={[
+                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                >
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
             <section className="h-100" style={{ backgroundColor: "#eee" }}>
                 <div className="container h-100 py-5">
                     <div className="row d-flex justify-content-center align-items-center h-100">

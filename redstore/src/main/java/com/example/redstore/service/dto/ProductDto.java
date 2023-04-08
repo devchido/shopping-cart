@@ -24,5 +24,5 @@ public class ProductDto {
     private Instant endsAt;
     private Short status;
     private String content;
-    private String categoryId;
+    private String category;
 }

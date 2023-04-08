@@ -14,9 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-// 
-
-
+//
 
 //
 function Navbar(props) {
@@ -204,6 +202,16 @@ function Navbar(props) {
                                                 <Typography textAlign="center">Test</Typography>
                                             </MenuItem>
                                         </Link>
+                                        {user.role === "USER_SHOP" || user.role === "ADMIN" ? (
+                                            <div>
+                                                <hr />
+                                                <Link to={"/manage/create-products"}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">Create Products</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                            </div>
+                                        ) : null}
                                         <hr />
                                         {user.role === "ADMIN" ? (
                                             <Link to={"/admin"}>
@@ -214,13 +222,12 @@ function Navbar(props) {
                                         ) : null}
 
                                         <hr />
-                                        <Link to={"/"} >
-                                        
-                                        <MenuItem onClick={handleCloseUserMenu}>
-                                            <Typography textAlign="center" onClick={handleLogout}>
-                                                Logout
-                                            </Typography>
-                                        </MenuItem>
+                                        <Link to={"/"}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center" onClick={handleLogout}>
+                                                    Logout
+                                                </Typography>
+                                            </MenuItem>
                                         </Link>
                                     </Menu>
                                     <Tooltip title={"Shopping Cart"}>
@@ -236,7 +243,6 @@ function Navbar(props) {
                     </Box>
                 </Toolbar>
             </Container>
-            
         </AppBar>
     );
 }

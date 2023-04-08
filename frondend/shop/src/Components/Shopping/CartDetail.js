@@ -102,14 +102,14 @@ function CartDetail() {
                 {cartDetail.length > 0 ? (
                     <>
                         {cartDetail.map((item, i) => (
-                            <div className="d-flex align-items-center mb-4 " key={i}>
+                            <div className="d-flex align-items-center mb-4  " key={i}>
                                 <div className="flex-shrink-0 me-2">
-                                    <img src={item.product.photos} className="img-fluid" style={{ width: 200 }} alt="" />
+                                    <img src={item.product.photos} className="img-fluid" style={{ width: 200, height: 210 }} alt="" />
                                 </div>
                                 <div className="flex-grow-1 ms-3 col-lg-5 col-md-6 mb-lg-0">
                                     {/* Data */}
                                     <p>
-                                        <strong className="text-primary">{item.product.title}</strong>
+                                        <strong className="text-dark blockquote text-capitalize">{item.product.title}</strong>
                                     </p>
                                     <h6 style={{ color: "#9e9e9e" }}>Giảm giá: {item.product.discount}%</h6>
                                     <div className="row justify-content-between">
@@ -475,7 +475,7 @@ function CartDetail() {
                                         <div className="col-lg-6 px-5 py-4">
                                             <div className="d-flex justify-content-between">
                                                 <h3 className="mb-5 pt-2  fw-bold text-uppercase">Cart: {cart.id}</h3>
-                                                <p className="pt-3  fw-bold text-uppercase">Item: {cartDetail.length}</p>
+                                                <p className="pt-3  fw-bold ">{cartDetail.length} items</p>
                                             </div>
                                             {loading ? <Loading /> : <ShowCartItem />}
 
@@ -498,9 +498,9 @@ function CartDetail() {
                                                 <ShowDataCart />
                                                 <div className="d-flex justify-content-between">
                                                     <span className="fw-bold mt-1">
-                                                        <Link to={"/carts"} style={{ fontSize: "24px" }}>
+                                                        <Link to={"/carts"} style={{ fontSize: "24px" } } className="text-dark">
                                                             <ChevronLeftIcon
-                                                                className="text-primary me-0 pb-1 "
+                                                                className="text-dark me-0 pb-1 "
                                                                 title="View"
                                                                 sx={{ fontSize: "40px" }}
                                                             />
@@ -508,14 +508,14 @@ function CartDetail() {
                                                         </Link>
                                                     </span>
                                                     <span>
-                                                        <button type="submit" className="btn btn-outline-primary btn-block  ">
+                                                        <button type="submit" className="btn btn-outline-dark btn-block  ">
                                                             Cập nhật
                                                         </button>
                                                     </span>
                                                     <span>
                                                         <button
                                                             type="button"
-                                                            className="btn btn-primary btn-block"
+                                                            className="btn btn-dark btn-block"
                                                             onClick={handleOrderNow}
                                                         >
                                                             Order now

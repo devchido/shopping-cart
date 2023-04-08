@@ -83,10 +83,10 @@ function SingleProduct() {
                     ) : (
                         <>
                             <p className="lead">
-                                Giá: <del>{product.price} vnd</del>
+                                Giá: <del className="text-danger">{product.price} vnd</del>
                             </p>
                             <h3 className="display-6 fw-bold my-4">
-                                <span className="lead">Chỉ còn:</span> {product.price} vnd
+                                <span className="lead">Chỉ còn:</span> {product.price - (product.price * product.discount) / 100} vnd
                             </h3>
                         </>
                     )}
@@ -97,7 +97,7 @@ function SingleProduct() {
                             sx={{ mx: 1 }}
                             onClick={() => {
                                 if (quantity > 0) {
-                                    setQuantity(i => i- 1);
+                                    setQuantity((i) => i - 1);
                                 }
                             }}
                         >
@@ -123,11 +123,14 @@ function SingleProduct() {
                             }}
                         />
 
-                        <IconButton sx={{ mx: 1 }} onClick={() => {
+                        <IconButton
+                            sx={{ mx: 1 }}
+                            onClick={() => {
                                 if (quantity < product.quantity) {
-                                    setQuantity(i => i+1);
+                                    setQuantity((i) => i + 1);
                                 }
-                            }}>
+                            }}
+                        >
                             <AddIcon className="text-primary" />
                         </IconButton>
                     </div>

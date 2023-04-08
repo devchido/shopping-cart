@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Alert, IconButton, Snackbar } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Snackbar } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
@@ -15,10 +15,24 @@ function Carts() {
     const [loading, setLoading] = React.useState(false);
     const [cart, setCart] = React.useState([]);
     const [status, setStatus] = React.useState("1");
+    const [dialogItem, setDialogItem] = React.useState();
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    //
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = (item) => {
+        // console.log(item);
+        setOpen(true);
+        setDialogItem(item);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setDialogItem();
+    };
     //
     const snackbarClose = () => {
         setSnackbarOpen(false);
@@ -45,7 +59,7 @@ function Carts() {
                 setLoading(false);
                 // Set data vào cart
                 setCart(result);
-                console.log(result);
+                // console.log(result);
             })
             .catch((error) => console.log("error", error));
     };
@@ -137,7 +151,7 @@ function Carts() {
                                                     sx={{ m: 1 }}
                                                     className="text-danger"
                                                     title="Remove"
-                                                    onClick={() => handleDeleteCart(item)}
+                                                    onClick={() => handleClickOpen(item)}
                                                 >
                                                     <DeleteIcon />
                                                 </IconButton>
@@ -154,8 +168,8 @@ function Carts() {
             </>
         );
     };
-    const handleDeleteCart = (item) => {
-        console.log(item.id);
+    const handleDeleteCart = () => {
+        // console.log("delete: " +dialogItem.id);
 
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -166,7 +180,7 @@ function Carts() {
             redirect: "follow",
         };
 
-        fetch("/cart/auth/delete/" + item.id, requestOptions)
+        fetch("/cart/auth/delete/" + dialogItem.id, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.status;
@@ -176,14 +190,16 @@ function Carts() {
             .then((result) => {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
-                setSnackbarMsg("Thành công.");
+                setSnackbarMsg("Đã xoá giỏ hàng.");
+                handleClose();
                 loadDataCart();
             })
             .catch((error) => {
                 console.log("error", error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
-                setSnackbarMsg("False");
+                setSnackbarMsg("Thực hiện xoá không thành công!");
+                handleClose();
             });
     };
     // Chưa cần đến search
@@ -225,6 +241,31 @@ function Carts() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                {dialogItem ? (
+                    <>
+                        <DialogTitle id="alert-dialog-title">Xoá giỏ hàng?</DialogTitle>
+                        
+                        <DialogContent className="d-flex justify-content-center" >
+                        <DialogContentText>
+                            Bạn có chắc là muốn xoá giỏ hàng: {dialogItem.id} này không?
+                        </DialogContentText>
+                            
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Không</Button>
+                            <Button onClick={handleDeleteCart} autoFocus>
+                                Xoá
+                            </Button>
+                        </DialogActions>
+                    </>
+                ) : null}
+            </Dialog>
             <section className="h-100" style={{ backgroundColor: "#eee" }}>
                 <div className="container h-100 py-5">
                     <div className="row d-flex justify-content-center align-items-center h-100">

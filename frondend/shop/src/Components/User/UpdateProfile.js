@@ -135,15 +135,15 @@ export default function UpdateProfile() {
                         <div className="col-md-8">
                             <div className="p-3 py-5">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <div className="d-flex flex-row align-items-center back">
-                                        <i className="fa fa-long-arrow-left mr-1 mb-1" />
-                                        <h6>
-                                            <Link to={"/profile"} style={{ color: "#212529" }}>
+                                    <div className="d-flex flex-row align-items-center back blockquote">
+                                        <i className="fa fa-long-arrow-left mr-1 mt-1" />
+                                        <h6 className="blockquote">
+                                            <Link to={"/profile"} className="text-dark">
                                                 Back
                                             </Link>
                                         </h6>
                                     </div>
-                                    <h6 className="text-right">Edit Profile</h6>
+                                    <h6 className="text-right blockquote text-capitalize">Edit Profile</h6>
                                 </div>
                                 <div className="row mt-2">
                                     <div className="col-md-6">

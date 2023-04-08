@@ -69,8 +69,8 @@ public class ProductService {
         entity.setStatus((short) 0);
         productRepository.save(entity);
         // add category cho product
-        if (dto.getCategoryId() != null){
-            Optional<Category> category = categoryRepository.findById(dto.getCategoryId());
+        if (dto.getCategory() != null){
+            Optional<Category> category = categoryRepository.findBySlug(dto.getCategory());
             if(category.isPresent()){
                 ProductCategory productCategory = new ProductCategory();
                 productCategory.setProduct(entity);

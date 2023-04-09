@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 //
 
 //
@@ -232,8 +233,15 @@ function Navbar(props) {
                                     </Menu>
                                     <Tooltip title={"Shopping Cart"}>
                                         <Link to={"/carts"}>
-                                            <IconButton sx={{ p: 0, width: "50px" }}>
+                                            <IconButton sx={{ p: 0, ml: 1 }}>
                                                 <ShoppingCartIcon style={{ color: "white", fontSize: "30px" }} />
+                                            </IconButton>
+                                        </Link>
+                                    </Tooltip>
+                                    <Tooltip title={"Order"}>
+                                        <Link to={"/orders"}>
+                                            <IconButton sx={{ p: 0, ml: 1 }}>
+                                                <AssignmentIcon style={{ color: "white", fontSize: "30px" }} />
                                             </IconButton>
                                         </Link>
                                     </Tooltip>

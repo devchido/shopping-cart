@@ -6,6 +6,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
+import { VND } from "../Unity/VND";
 function SingleProduct() {
     const { slug } = useParams();
     const [product, setProduct] = useState([]);
@@ -50,7 +51,7 @@ function SingleProduct() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch("/cart/auth/my-cart?status=1", requestOptions)
+        fetch("/cart/auth/my-cart?status=0", requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -78,15 +79,15 @@ function SingleProduct() {
                     <p className="lead">Hiện còn: {product.quantity}</p>
                     {product.discount === 0 ? (
                         <>
-                            <h3 className="display-6 fw-bold my-4">{product.price} vnd</h3>
+                            <h3 className="display-6 fw-bold my-4">{VND.format(product.price)} </h3>
                         </>
                     ) : (
                         <>
                             <p className="lead">
-                                Giá: <del className="text-danger">{product.price} vnd</del>
+                                Giá: <del className="text-danger">{VND.format(product.price)} </del>
                             </p>
                             <h3 className="display-6 fw-bold my-4">
-                                <span className="lead">Chỉ còn:</span> {product.price - (product.price * product.discount) / 100} vnd
+                                <span className="lead">Chỉ cần: </span>{VND.format(product.price - (product.price * product.discount) / 100)} 
                             </h3>
                         </>
                     )}

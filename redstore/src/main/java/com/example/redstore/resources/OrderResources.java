@@ -76,7 +76,7 @@ public class OrderResources {
     /*
     User thực hiện huỷ order wit order status!= 6
      */
-    @PutMapping("/auth/admin/cancel-order")
+    @PutMapping("/auth/cancel-order")
     public void cancelOrder(@RequestParam String id){
         orderService.cancelOrder(id);
     }

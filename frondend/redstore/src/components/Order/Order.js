@@ -80,7 +80,7 @@ function Order() {
                         <MenuItem value={0}>Chờ xác nhận</MenuItem>
                         <MenuItem value={1}>Không thành công</MenuItem>
                         <MenuItem value={2}>Đang vận chuyển</MenuItem>
-                        <MenuItem value={3}>Đã giao</MenuItem>
+                        <MenuItem value={3}>Đang giao</MenuItem>
                         <MenuItem value={4}>Đã trả lại</MenuItem>
                         <MenuItem value={5}>Hoàn thành</MenuItem>
                     </Select>

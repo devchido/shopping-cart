@@ -1,8 +1,14 @@
-import React from "react";
+import * as React from "react";
 //
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 //
+import HomeIcon from "@mui/icons-material/Home";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import WidgetsIcon from "@mui/icons-material/Widgets";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
+import ErrorIcon from "@mui/icons-material/Error";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -20,10 +26,17 @@ import {
 import { Link } from "react-router-dom";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
+// LabTabs
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+//
 
-function Carts() {
+function Orders() {
     const [loading, setLoading] = React.useState(false);
-    const [cart, setCart] = React.useState([]);
+    const [order, setOrder] = React.useState([]);
     const [dialogItem, setDialogItem] = React.useState();
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -31,7 +44,40 @@ function Carts() {
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
     //
     const [open, setOpen] = React.useState(false);
+    //
+    const [status, setStatus] = React.useState("0");
+    // LabTabs
+    const [value, setValue] = React.useState("0");
 
+    const handleChange = (event, newValue) => {
+        setLoading(true);
+        setStatus(newValue);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+        var requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("/order/auth/user?status=" + newValue, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                console.log(result);
+                setLoading(false);
+                setOrder(result);
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+    };
+    //
     const handleClickOpen = (item) => {
         // console.log(item);
         setOpen(true);
@@ -46,30 +92,31 @@ function Carts() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-    const loadDataCart = () => {
-        setLoading(true);
+    const loadDataOrder = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
         var requestOptions = {
             method: "GET",
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch("/cart/auth/my-cart?status=0", requestOptions)
+
+        fetch("/order/auth/user?status=" + status, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
                 }
-                throw Error(response.status);
+                throw new Error(response.status);
             })
             .then((result) => {
-                // Set trạng thái loading
+                console.log(result);
                 setLoading(false);
-                // Set data vào cart
-                setCart(result);
-                // console.log(result);
+                setOrder(result);
             })
-            .catch((error) => console.log("error", error));
+            .catch((error) => {
+                console.log("error", error);
+            });
     };
     const Loading = () => {
         return (
@@ -80,58 +127,40 @@ function Carts() {
             </Stack>
         );
     };
-    React.useEffect(() => {
-        loadDataCart();
-    }, []);
-    const handleAddCart = () => {
-        if (cart.length >= 5){
-            setSnackbarOpen(true);
-                setSnackbarSeverity("error");
-                setSnackbarMsg("Số giỏ hàng không được quá 5!");
-        } else {
-
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-            myHeaders.append("Content-Type", "application/json");
-            var raw = JSON.stringify({
-                country: "Việt Nam",
-            })
-            var requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-            };
-    
-            fetch("/cart/auth/create", requestOptions)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.status;
-                    }
-                    throw new Error(response.status);
-                })
-                .then((result) => {
-                    console.log(result);
-                    setSnackbarOpen(true);
-                    setSnackbarSeverity("success");
-                    setSnackbarMsg("Thành công.");
-                    loadDataCart();
-                })
-                .catch((error) => {
-                    console.log("error", error);
-                    setSnackbarOpen(true);
-                    setSnackbarSeverity("error");
-                    setSnackbarMsg("False");
-                });
-        }
+    const LabTabs = () => {
+        return (
+            <Box sx={{ width: "100%", typography: "body1", mb: 5 }}>
+                <TabContext value={status}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }} >
+                        <TabList onChange={handleChange} aria-label="lab API tabs example"  variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile>
+                            <Tab icon={<AssignmentIcon />} iconPosition="start" label="Chờ xử lý" value="0" />
+                            <Tab icon={<WidgetsIcon />} iconPosition="start" label="Đang vận chuyển" value="2" />
+                            <Tab icon={<LocalShippingIcon />} iconPosition="start" label="Đang giao" value="3" />
+                            <Tab icon={<HomeIcon />} iconPosition="start" label="Đã nhận" value="5" />
+                            <Tab icon={<ErrorIcon />} iconPosition="start" label="Đã huỷ" value="1" />
+                            <Tab icon={<AssignmentReturnIcon />} iconPosition="start" label="Hoàn tiền/Trả lại" value="4" />
+                        </TabList>
+                    </Box>
+                    {/* <TabPanel value="0">Item One</TabPanel>
+                    <TabPanel value="2">Item Two</TabPanel>
+                    <TabPanel value="3">Item Three</TabPanel>
+                    <TabPanel value="4">Item Four</TabPanel> */}
+                </TabContext>
+            </Box>
+        );
     };
-    const ShowCarts = () => {
+    React.useEffect(() => {
+        setLoading(true);
+        loadDataOrder();
+    }, [status]);
+
+    const ShowOrders = () => {
         return (
             <>
-                {/* Thông tin cart */}
-                {cart.length > 0 ? (
+                {/* Thông tin order */}
+                {order.length > 0 ? (
                     <>
-                        {cart.map((item, i) => {
+                        {order.map((item, i) => {
                             return (
                                 <div className="card rounded-3 mb-4" key={i}>
                                     <div className="card-body p-4">
@@ -139,7 +168,7 @@ function Carts() {
                                             {/* 1 */}
                                             <div className="col-md-5 col-lg-5 col-xl-5">
                                                 <p className="lead fw-normal mb-2 ">
-                                                    <span className="text-muted">Cart :</span> {item.id}
+                                                    <span className="text-muted">Order :</span> {item.id}
                                                 </p>
                                                 <p>
                                                     <span className="text-muted">Line: </span>
@@ -159,18 +188,24 @@ function Carts() {
 
                                             {/* 3 */}
                                             <div className="col-md-5 col-lg-4 col-xl-4 offset-lg-1">
-                                                {/* <h5 className="mb-0 text-nowrap">
-                                                    Status:{" "}
-                                                    {item.status === 0
-                                                        ? "New"
-                                                        : null || item.status === 1
-                                                        ? "Cart"
-                                                        : null || item.status === 2
-                                                        ? "Order"
-                                                        : null || item.status === 3
-                                                        ? "Đã thanh toán"
-                                                        : null}
-                                                </h5> */}
+                                                <p>
+                                                    <span className="text-muted">
+                                                        Trạng thái:{" "}
+                                                        {item.status === 0
+                                                            ? "Chờ xác nhận"
+                                                            : null || item.status === 1
+                                                            ? "Không thành công"
+                                                            : null || item.status === 2
+                                                            ? "Đang vận chuyển"
+                                                            : null || item.status === 3
+                                                            ? "Đã giao"
+                                                            : null || item.status === 4
+                                                            ? "Đã trả lại"
+                                                            : null || item.status === 5
+                                                            ? "Hoàn thành"
+                                                            : null}
+                                                    </span>
+                                                </p>
                                                 <span>
                                                     <span className="text-muted">Created At: </span>
                                                     {format(parseISO(item.createdAt), "dd-MM-yyyy")}
@@ -188,20 +223,10 @@ function Carts() {
                                             </div>
                                             {/* 4 */}
                                             <div className="col-md-2 col-lg-2 col-xl-2 text-end justify-content-end d-flex">
-                                                <Link to={`/carts/${item.id}`}>
-                                                    <IconButton sx={{ m: 1 }} className="text-primary" title="View">
-                                                        {/* <DeleteIcon /> */}
-                                                        <VisibilityIcon />
-                                                    </IconButton>
+                                                <Link to={`/orders/${item.id}`}>
+                                                    <button className="btn btn-outline-dark">Xem chi tiết</button>
                                                 </Link>
-                                                <IconButton
-                                                    sx={{ m: 1 }}
-                                                    className="text-danger"
-                                                    title="Remove"
-                                                    onClick={() => handleClickOpen(item)}
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -215,40 +240,7 @@ function Carts() {
             </>
         );
     };
-    const handleDeleteCart = () => {
-        // console.log("delete: " +dialogItem.id);
 
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-        var requestOptions = {
-            method: "DELETE",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-
-        fetch("/cart/auth/delete/" + dialogItem.id, requestOptions)
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Đã xoá giỏ hàng " + dialogItem.id + "!");
-                handleClose();
-                loadDataCart();
-            })
-            .catch((error) => {
-                console.log("error", error);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("error");
-                setSnackbarMsg("Thực hiện xoá không thành công!");
-                handleClose();
-            });
-    };
     // Chưa cần đến search
     // const ShowSearch = () => {
     //     return (
@@ -303,7 +295,7 @@ function Carts() {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Không</Button>
-                            <Button onClick={handleDeleteCart} autoFocus>
+                            <Button onClick={handleClose} autoFocus>
                                 Xoá
                             </Button>
                         </DialogActions>
@@ -313,25 +305,24 @@ function Carts() {
             <section className="h-100" style={{ backgroundColor: "#eee" }}>
                 <div className="container h-100 py-5">
                     <div className="row d-flex justify-content-center align-items-center h-100">
-                        <div className="col-10">
+                        <div className="col-11">
                             <div className="d-flex justify-content-between align-items-center mb-4">
-                                <h3 className="fw-normal mb-0 text-black">My shopping Cart</h3>
+                                <h3 className="fw-normal mb-0 text-black">Order</h3>
                                 <div>
                                     <p className="mb-0">
-                                        {/* chuyển đến --> Add Cart form */}
-                                        {/* <Link to={"/carts/add-cart"}>
-                                            <button type="button" className="btn btn-outline-primary btn-block ">
-                                                Add Cart
-                                            </button>
-                                        </Link> */}
-                                        {/* Tạo cart mới ngay */}
-                                        <button className="btn btn-outline-primary btn-block " onClick={handleAddCart}>
-                                            Add Cart
-                                        </button>
+                                        <span className="text-muted">Sort by:</span>{" "}
+                                        <span className="text-body">
+                                            price
+                                            
+                                        </span>
                                     </p>
                                 </div>
                             </div>
-                            {loading ? <Loading /> : <ShowCarts />}
+                            {/* LabTabs start */}
+                            <LabTabs />
+                            {/* LabTabs end */}
+
+                            {loading ? <Loading /> : <ShowOrders />}
                         </div>
                     </div>
                 </div>
@@ -340,4 +331,4 @@ function Carts() {
     );
 }
 
-export default Carts;
+export default Orders;

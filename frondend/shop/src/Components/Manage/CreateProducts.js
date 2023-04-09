@@ -1,8 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 //
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-//
+
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider, createTheme } from "@mui/material";
@@ -201,11 +200,11 @@ function CreateProduct() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
-            <section className="h-100 gradient-custom">
+            <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
                     <form onSubmit={handleSubmit}>
                         <div className="row d-flex justify-content-center my-4">
-                            <div className="col-md-7">
+                            <div className="col-lg-7 ">
                                 <div className="card mb-4">
                                     <div className="card-header py-3">
                                         <h5 className="mb-0 text-capitalize">Thông tin sản phẩm</h5>
@@ -218,7 +217,7 @@ function CreateProduct() {
                                                 name="title"
                                                 type="text"
                                                 className="form-control text-right w-75  word-wrap"
-                                                autoFocus
+                                                
                                             />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
@@ -274,8 +273,25 @@ function CreateProduct() {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="card mb-4 ">
+                                    <div className="card-header py-3">
+                                        <h5 className="mb-0">Loại Sản Phẩm</h5>
+                                    </div>
+                                    <div className="card-body">
+                                        <div className="form-group">
+                                            <select className="form-control" name="category">
+                                                <option value={""}>Chọn thể loại</option>
+                                                {category.map((item, i) => (
+                                                    <option value={item.slug} key={i}>
+                                                        {item.title}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-lg-4">
                                 <div className="card mb-4">
                                     <div className="card-header py-3">
                                         <h5 className="mb-0 text-capitalize">Ảnh sản phẩm</h5>
@@ -301,30 +317,16 @@ function CreateProduct() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card mb-4 ">
-                                    <div className="card-header py-3">
-                                        <h5 className="mb-0">Loại Sản Phẩm</h5>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="form-group">
-                                            <select className="form-control" name="category">
-                                                <option value={""}>Chọn thể loại</option>
-                                                {category.map((item, i) => (
-                                                    <option value={item.slug} key={i}>
-                                                        {item.title}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className=" mb-4 ">
-                                    <div className="d-flex justify-content-between">
+
+                                <div className="card mb-4 card-body ">
+                                    <div className="d-flex form-group justify-content-between">
+                                        <Link to={"/manage"}>
+                                            <button type="button" className="btn btn-dark btn-block ">
+                                                Cancel
+                                            </button>
+                                        </Link>
                                         <button type="reset" className="btn btn-dark btn-block ">
                                             Reset
-                                        </button>
-                                        <button type="" className="btn btn-dark btn-block ">
-                                            Cancel
                                         </button>
                                         <button type="submit" className="btn btn-dark btn-block ">
                                             Create

@@ -29,6 +29,7 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
     private final OrderItemRepository orderItemRepository;
     private final TransactionRepository transactionRepository;
+    private final ProductRepository productRepository;
 
     public List<OrderDto> findByUsers(String status) {
         Long users = SecurityUtils.getPrincipal().getId();
@@ -132,7 +133,8 @@ public class OrderService {
 
         //todo: Set các thuộc tính not null(làm sau)
         //viết như này mai sau tìm xem minh chua lam cai gi cho de
-        order.setCreatedAt(Instant.now());order.setUpdatedAt(Instant.now());
+        order.setCreatedAt(Instant.now());
+        order.setUpdatedAt(Instant.now());
         order.setItemDiscount(0F);
         // tính Tổng giảm giá của các mặt hàng đặt hàng.
 
@@ -163,7 +165,7 @@ public class OrderService {
         order.setTotal(order.getSubTotal() - order.getItemDiscount());
         orderRepository.save(order);
         orderItemRepository.saveAll(orderItem);
-        cart.setStatus((short) 2);
+        cart.setStatus((short) 1);
         cartRepository.save(cart);
     }
 
@@ -178,12 +180,12 @@ public class OrderService {
 
     public void confirmOrder(String id, String status) {
         Order entity = orderRepository.findById(id).orElse(null);
-        if(entity.getStatus() != 1){
+        if (entity.getStatus() != 1) {
 
             entity.setStatus(Short.valueOf(status));
             entity.setUpdatedAt(Instant.now());
             orderRepository.save(entity);
-            if (Short.valueOf(status) == 2){
+            if (Short.valueOf(status) == 2) {
                 Transaction transaction = new Transaction();
                 transaction.setOrder(entity);
                 transaction.setUsers(entity.getUsers());
@@ -201,14 +203,34 @@ public class OrderService {
     }
 
     public void cancelOrder(String id) {
-        Order entity = orderRepository.findById(id).orElse(null);
-        if (entity.getStatus() != 5 && entity.getStatus() != 1) {
-            entity.setStatus((short) 1);
-            entity.setUpdatedAt(Instant.now());
-            orderRepository.save(entity);
-            Cart cart = cartRepository.findById(String.valueOf(entity.getCarts().getId())).orElse(null);
-            cart.setStatus((short) 1);
-            System.out.println("Thưc thi cancel order");
+        Order entity = orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy thông tin order: "+id));
+        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+            System.out.println("đúng người sở hữu");
+            // Nếu đơn hàng không phải ở trạng thái hoàn thành hay đã huỷ thì thực hiện
+            if (entity.getStatus() != 5 && entity.getStatus() != 1) {
+                // Set order data
+                entity.setStatus((short) 1);
+                entity.setUpdatedAt(Instant.now());
+                orderRepository.save(entity);
+                // Set data product : trả lại số lượng hàng đã order
+                List<OrderItem> orderItemList = orderItemRepository.findOrderItemByOrderId(entity.getId());
+                // Xét từng item tìm được và trả lại số hàng đã order
+                orderItemList.forEach(orderItem -> {
+                    System.out.println("Thực hiện hoàn trả số lượn hàng cho product có id: " + orderItem.getProducts().getId() +
+                            "và có title: " + orderItem.getProducts().getTitle() + " với số lượng: " + orderItem.getQuantity());
+                    // Tìm kiếm sản phẩm trên hệ thống
+                    Product product = productRepository.findById(String.valueOf(orderItem.getProducts().getId())).orElseThrow();
+                    // set data cho product
+                    int quantity = product.getQuantity() + orderItem.getQuantity();
+                    product.setQuantity((short) quantity);
+                    product.setUpdatedAt(Instant.now());
+                    // lưu lại thông tin thay đổi
+                    productRepository.save(product);
+                });
+
+                System.out.println("Thưc thi cancel order");
+            }
+
         }
 
     }

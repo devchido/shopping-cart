@@ -44,7 +44,7 @@ public class CartService {
         entity.setUsers(user);
 
         // Set trạng thái
-        entity.setStatus((short) 1);
+        entity.setStatus((short) 0);
         // Set first name
         entity.setFirstName(user.getFirstName());
         //Set Last Name
@@ -87,7 +87,7 @@ public class CartService {
     public void delete(String id) {
         Cart entity = cartRepository.findById(id).orElseThrow();
         if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
-            if (entity.getStatus() == 1) {
+            if (entity.getStatus() == 0) {
                 //
                 List<CartItem> cartItemList = cartItemRepository.findByCartId(Long.valueOf(id));
                 //

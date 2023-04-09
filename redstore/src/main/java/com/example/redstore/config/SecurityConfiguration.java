@@ -48,7 +48,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/product/auth/create").hasAnyAuthority("USER_SHOP","ADMIN")
                 .requestMatchers("/product/auth/edit/**").hasAnyAuthority("USER_SHOP","ADMIN")
                 .requestMatchers("/product/auth/delete/**").hasAnyAuthority("USER_SHOP","ADMIN")
-                //
+
                 .anyRequest()
                 .authenticated()
                 .and()

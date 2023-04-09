@@ -95,57 +95,64 @@ function CartDetail() {
             .catch((error) => console.log("error", error));
     };
 
-
     const ShowCartItem = () => {
         return (
             <div>
                 {cartDetail.length > 0 ? (
                     <>
                         {cartDetail.map((item, i) => (
-                            <div className="d-flex align-items-center mb-4  " key={i}>
-                                <div className="flex-shrink-0 me-2">
-                                    <img src={item.product.photos} className="img-fluid" style={{ width: 200, height: 210 }} alt="" />
-                                </div>
-                                <div className="flex-grow-1 ms-3 col-lg-5 col-md-6 mb-lg-0">
-                                    {/* Data */}
-                                    <p>
-                                        <strong className="text-dark blockquote text-capitalize">{item.product.title}</strong>
-                                    </p>
-                                    <h6 style={{ color: "#9e9e9e" }}>Giảm giá: {item.product.discount}%</h6>
-                                    <div className="row justify-content-between">
-                                        <p className="fw-bold col-auto">{item.product.price}vnd</p>
+                            <>
+                                <div className="d-flex align-items-center mb-4  " key={i}>
+                                    <div className="flex-shrink-0 me-2">
+                                        <img
+                                            src={item.product.photos}
+                                            className="img-fluid"
+                                            style={{ width: 200, height: 210 }}
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="flex-grow-1 ms-3 col-lg-5 col-md-6 mb-lg-0">
+                                        {/* Data */}
+                                        <p>
+                                            <strong className="text-dark blockquote text-capitalize">{item.product.title}</strong>
+                                        </p>
+                                        <h6 style={{ color: "#9e9e9e" }}>Giảm giá: {item.product.discount}%</h6>
+                                        <div className="row justify-content-between">
+                                            <p className="fw-bold col-auto">{item.product.price}vnd</p>
 
-                                        <div className=" d-flex col-auto">
-                                            <input
-                                                style={{ width: "4rem" }}
-                                                defaultValue={item.quantity}
-                                                type="number"
-                                                className="form-control form-control-sm"
-                                                readOnly
-                                            />
+                                            <div className=" d-flex col-auto">
+                                                <input
+                                                    style={{ width: "4rem" }}
+                                                    defaultValue={item.quantity}
+                                                    type="number"
+                                                    className="form-control form-control-sm"
+                                                    readOnly
+                                                />
 
-                                            <IconButton sx={{ mx: 1 }} title="Sửa" onClick={() => handleClickOpen(item)}>
-                                                <BorderColorIcon className="text-primary" />
+                                                <IconButton sx={{ mx: 1 }} title="Sửa" onClick={() => handleClickOpen(item)}>
+                                                    <BorderColorIcon className="text-primary" />
+                                                </IconButton>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="d-flex justify-content-between">
+                                            <IconButton
+                                                className="text-danger me-1 m-2"
+                                                onClick={() => handleDelete(item)}
+                                                title="remove"
+                                            >
+                                                <DeleteIcon />
                                             </IconButton>
+                                            <Link to={`/product/${item.product.slug}`}>
+                                                <IconButton className="text-primary m-2" title="view">
+                                                    <VisibilityIcon />
+                                                </IconButton>
+                                            </Link>
                                         </div>
                                     </div>
-                                    <hr />
-                                    <div className="d-flex justify-content-between">
-                                        <IconButton
-                                            className="text-danger me-1 m-2"
-                                            onClick={() => handleDelete(item)}
-                                            title="remove"
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <Link to={`/product/${item.product.slug}`}>
-                                            <IconButton className="text-primary m-2" title="view">
-                                                <VisibilityIcon />
-                                            </IconButton>
-                                        </Link>
-                                    </div>
                                 </div>
-                            </div>
+                                <hr className="mb-4" style={{ height: 2, backgroundColor: "#1266f1", opacity: 1 }} />
+                            </>
                         ))}
                     </>
                 ) : (
@@ -282,38 +289,50 @@ function CartDetail() {
             });
     };
     const handleOrderNow = () => {
-        alert(cart.id);
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-        var requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-        fetch("/order/auth/createByCart?idCart=" + cart.id, requestOptions)
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
-                console.log(result);
-                // alert("true");
-                loadDataCart();
-                loadDataCartDetail();
-                //
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Thành công.");
-            })
-            .catch((error) => {
-                console.log("error", error);
+        // alert(cartDetail.length);
+        if (cartDetail.length === 0) {
+            setSnackbarOpen(true);
+            setSnackbarSeverity("error");
+            setSnackbarMsg("Giỏ hàng chưa có sản phẩm nào!");
+        } else {
+            if (cart.line1 === "" || cart.city === "" || cart.country === "") {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
-                setSnackbarMsg("False");
-            });
+                setSnackbarMsg("Thông tin giỏ hàng không hợp lệ!");
+            } else {
+                var myHeaders = new Headers();
+                myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+                var requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    redirect: "follow",
+                };
+                fetch("/order/auth/createByCart?idCart=" + cart.id, requestOptions)
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.status;
+                        }
+                        throw new Error(response.status);
+                    })
+                    .then((result) => {
+                        console.log(result);
+                        // alert("true");
+                        loadDataCart();
+                        loadDataCartDetail();
+                        //
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity("success");
+                        setSnackbarMsg("Thành công.");
+                    })
+                    .catch((error) => {
+                        console.log("error", error);
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity("error");
+                        setSnackbarMsg("False");
+                    });
+            }
+        }
     };
     const handleDelete = (item) => {
         console.log(item.id);
@@ -357,7 +376,7 @@ function CartDetail() {
             redirect: "follow",
         };
 
-        fetch("/cart-item/auth/" + cartItem.id+ "?quantity="+quantity, requestOptions)
+        fetch("/cart-item/auth/" + cartItem.id + "?quantity=" + quantity, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.status;
@@ -365,8 +384,8 @@ function CartDetail() {
                 throw new Error(response.status);
             })
             .then((result) => {
-                setSnackbarOpen(true);
                 handleClose();
+                setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Cập nhật số lượng đặt hàng cho item ");
                 loadDataCartDetail();
@@ -378,7 +397,7 @@ function CartDetail() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Lỗi sửa quantity");
             });
-    }
+    };
     React.useEffect(() => {
         setLoading(true);
         loadDataCart();
@@ -413,48 +432,47 @@ function CartDetail() {
                 {cartItem ? (
                     <>
                         <DialogTitle id="alert-dialog-title">{cartItem.product.title}</DialogTitle>
-                        
-                        <DialogContent className="d-flex justify-content-center" >
-                        <IconButton
-                            sx={{ mx: 1 }}
-                            onClick={() => {
-                                if (quantity > 0) {
-                                    setQuantity((i) => i - 1);
-                                }
-                            }}
-                        >
-                            <RemoveIcon className="text-danger" />
-                        </IconButton>
-                        <input
-                            style={{ width: "4rem" }}
-                            min={1}
-                            max={cartItem.product.quantity}
-                            name="quantity"
-                            value={quantity}
-                            type="number"
-                            className="form-control form-control-sm"
-                            onChange={(e) => {
-                                if (e.target.value < 0) {
-                                    setQuantity(0);
-                                } else if (e.target.value > cartItem.product.quantity) {
-                                    setQuantity(cartItem.product.quantity);
-                                } else {
-                                    setQuantity(e.target.value);
-                                }
-                            }}
-                        />
 
-                        <IconButton
-                            sx={{ mx: 1 }}
-                            onClick={() => {
-                                if (quantity < cartItem.product.quantity) {
-                                    setQuantity((i) => (i+1));
-                                }
-                            }}
-                        >
-                            <AddIcon className="text-primary" />
-                        </IconButton>
-                            
+                        <DialogContent className="d-flex justify-content-center">
+                            <IconButton
+                                sx={{ mx: 1 }}
+                                onClick={() => {
+                                    if (quantity > 0) {
+                                        setQuantity((i) => i - 1);
+                                    }
+                                }}
+                            >
+                                <RemoveIcon className="text-danger" />
+                            </IconButton>
+                            <input
+                                style={{ width: "4rem" }}
+                                min={1}
+                                max={cartItem.product.quantity}
+                                name="quantity"
+                                value={quantity}
+                                type="number"
+                                className="form-control form-control-sm"
+                                onChange={(e) => {
+                                    if (e.target.value < 0) {
+                                        setQuantity(0);
+                                    } else if (e.target.value > cartItem.product.quantity) {
+                                        setQuantity(cartItem.product.quantity);
+                                    } else {
+                                        setQuantity(e.target.value);
+                                    }
+                                }}
+                            />
+
+                            <IconButton
+                                sx={{ mx: 1 }}
+                                onClick={() => {
+                                    if (quantity < cartItem.product.quantity) {
+                                        setQuantity((i) => i + 1);
+                                    }
+                                }}
+                            >
+                                <AddIcon className="text-primary" />
+                            </IconButton>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Huỷ</Button>
@@ -471,16 +489,16 @@ function CartDetail() {
                         <div className="col">
                             <div className="card shopping-cart" style={{ borderRadius: 15 }}>
                                 <div className="card-body text-black">
-                                    <div className="row">
-                                        <div className="col-lg-6 px-5 py-4">
-                                            <div className="d-flex justify-content-between">
-                                                <h3 className="mb-5 pt-2  fw-bold text-uppercase">Cart: {cart.id}</h3>
-                                                <p className="pt-3  fw-bold ">{cartDetail.length} items</p>
-                                            </div>
-                                            {loading ? <Loading /> : <ShowCartItem />}
+                                    {cart.status === 0 ? (
+                                        <div className="row">
+                                            <div className="col-lg-6 px-5 py-4">
+                                                <div className="d-flex justify-content-between">
+                                                    <h3 className="mb-5 pt-2  fw-bold text-uppercase">Cart: {cart.id}</h3>
+                                                    <p className="pt-3  fw-bold ">{cartDetail.length} item</p>
+                                                </div>
+                                                {loading ? <Loading /> : <ShowCartItem />}
 
-                                            <hr className="mb-4" style={{ height: 2, backgroundColor: "#1266f1", opacity: 1 }} />
-                                            <div className="d-flex justify-content-between px-x">
+                                                {/* <div className="d-flex justify-content-between px-x">
                                                 <p className="fw-bold">Discount:</p>
                                                 <p className="fw-bold">95$</p>
                                             </div>
@@ -490,41 +508,54 @@ function CartDetail() {
                                             >
                                                 <h5 className="fw-bold mb-0">Total:</h5>
                                                 <h5 className="fw-bold mb-0">2261$</h5>
+                                            </div> */}
+                                            </div>
+                                            <div className="col-lg-6 px-5 py-4">
+                                                <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">Thông tin</h3>
+                                                <form onSubmit={handleSubmit} className="mb-5">
+                                                    <ShowDataCart />
+                                                    <div className="d-flex justify-content-between">
+                                                        <span className="fw-bold mt-1">
+                                                            <Link
+                                                                to={"/carts"}
+                                                                style={{ fontSize: "24px" }}
+                                                                className="text-dark"
+                                                            >
+                                                                <ChevronLeftIcon
+                                                                    className="text-dark me-0 pb-1 "
+                                                                    title="View"
+                                                                    sx={{ fontSize: "40px" }}
+                                                                />
+                                                                Back
+                                                            </Link>
+                                                        </span>
+                                                        {cart.status === 0 ? (
+                                                            <>
+                                                                <span>
+                                                                    <button
+                                                                        type="submit"
+                                                                        className="btn btn-outline-dark btn-block  "
+                                                                    >
+                                                                        Cập nhật
+                                                                    </button>
+                                                                </span>
+
+                                                                <span>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-dark btn-block"
+                                                                        onClick={handleOrderNow}
+                                                                    >
+                                                                        Order now
+                                                                    </button>
+                                                                </span>
+                                                            </>
+                                                        ) : null}
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        <div className="col-lg-6 px-5 py-4">
-                                            <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">Thông tin</h3>
-                                            <form onSubmit={handleSubmit} className="mb-5">
-                                                <ShowDataCart />
-                                                <div className="d-flex justify-content-between">
-                                                    <span className="fw-bold mt-1">
-                                                        <Link to={"/carts"} style={{ fontSize: "24px" } } className="text-dark">
-                                                            <ChevronLeftIcon
-                                                                className="text-dark me-0 pb-1 "
-                                                                title="View"
-                                                                sx={{ fontSize: "40px" }}
-                                                            />
-                                                            Back
-                                                        </Link>
-                                                    </span>
-                                                    <span>
-                                                        <button type="submit" className="btn btn-outline-dark btn-block  ">
-                                                            Cập nhật
-                                                        </button>
-                                                    </span>
-                                                    <span>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-dark btn-block"
-                                                            onClick={handleOrderNow}
-                                                        >
-                                                            Order now
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    ) : <div>Not Found!</div>}
                                 </div>
                             </div>
                         </div>

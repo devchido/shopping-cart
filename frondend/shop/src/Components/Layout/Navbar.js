@@ -206,7 +206,13 @@ function Navbar(props) {
                                         {user.role === "USER_SHOP" || user.role === "ADMIN" ? (
                                             <div>
                                                 <hr />
-                                                <Link to={"/manage/create-products"}>
+                                                <Link to={`/management/${"list-products"}`}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">Product Management</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                
+                                                <Link to={"/management/create-products"}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
                                                         <Typography textAlign="center">Create Products</Typography>
                                                     </MenuItem>

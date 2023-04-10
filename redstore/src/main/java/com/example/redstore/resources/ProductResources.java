@@ -96,6 +96,17 @@ public class ProductResources {
         List<ProductDto> dtos = productService.findByUsers(title);
         return dtos;
     }
+    @GetMapping("/auth/user/{offset}/{pageSize}/{field}")
+    private APIResponse<Page<ProductDto>> filterUsersProducts(
+            @RequestParam(value = "title", defaultValue = "") String title,
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @PathVariable String field,
+            @RequestParam(value = "status", defaultValue = "") String status,
+            @RequestParam String sort) {
+        Page<ProductDto> dtos = productService.filterUsersProducts(title, offset, pageSize, field, status, sort);
+        return new APIResponse<>(dtos.getSize(), dtos);
+    }
 
 
     //Tesst page

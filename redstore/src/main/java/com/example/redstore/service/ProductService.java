@@ -189,6 +189,15 @@ public class ProductService {
         Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
+    // todo: filterUsersProducts
+    public Page<ProductDto> filterUsersProducts(String title, int offset, int pageSize, String field, String status, String sort ) {
+        Page<Product> products = productRepository.filterUsersProducts(title,
+                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort),field))),
+
+                String.valueOf(SecurityUtils.getPrincipal().getId()),status);
+        Page<ProductDto> dtos = products.map(productMapper::toDo);
+        return dtos;
+    }
 
     /* test
     public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field) {

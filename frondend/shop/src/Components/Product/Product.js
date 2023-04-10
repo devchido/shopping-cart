@@ -103,6 +103,8 @@ function Product() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setPage(1);
+        setOffset(0);
         loadDataProduct();
     };
     return (

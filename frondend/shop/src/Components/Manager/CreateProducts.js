@@ -202,6 +202,7 @@ function CreateProduct() {
             </Snackbar>
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
+                            <p className="lead" style={{fontWeight: "500"}}>Tạo sản phẩm mới</p>
                     <form onSubmit={handleSubmit}>
                         <div className="row d-flex justify-content-center my-4">
                             <div className="col-lg-7 ">
@@ -320,7 +321,7 @@ function CreateProduct() {
 
                                 <div className="card mb-4 card-body ">
                                     <div className="d-flex form-group justify-content-between">
-                                        <Link to={"/manage"}>
+                                        <Link to={"/management/list-products"}>
                                             <button type="button" className="btn btn-dark btn-block ">
                                                 Cancel
                                             </button>

@@ -11,12 +11,12 @@ import UpdateProfile from "../User/UpdateProfile";
 import Carts from "../Shopping/Carts";
 import CartDetail from "../Shopping/CartDetail";
 import CartAdd from "../Shopping/CartAdd";
-import CreateProducts from "../Manage/CreateProducts"
+import CreateProducts from "../Manager/CreateProducts"
 import VerticalTabs from "../Layout/VerticalTabs";
 import Test from "../Test/Test"
 import Orders from "../Order/Orders";
 import OrderDetail from "../Order/OrderDetail";
-import Manage from "../Manage/Manage";
+import ListProducts from "../Manager/ListProducts";
 
 function Router() {
     return (
@@ -45,10 +45,10 @@ function Router() {
             {/* Orders */}
             <Route path="/orders" element={<Orders/>}></Route>
             <Route path="/orders/:id" element={<OrderDetail/>}></Route>
-            {/* Manage: Trang quản lý của user */}
-            <Route path= "/manage" element={<Manage/>}></Route>
+            {/* Manage: Trang quản lý product của user */}
+            <Route path= "/management/list-products" element={<ListProducts/>}></Route>
             {/* Created Product: Tạo sản phẩm mới */}
-            <Route path="manage/create-products" element={<CreateProducts />}></Route>
+            <Route path="management/create-products" element={<CreateProducts />}></Route>
             {/* Tabs */}
             <Route path="/tabs" element={<VerticalTabs />}></Route>
             {/* test */}

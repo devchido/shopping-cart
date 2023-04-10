@@ -36,7 +36,9 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     @Query(value = "select * from " + db + ".product  where title like concat('%', :title , '%') and status = 1", nativeQuery = true)
     Page<Product> findAllProductPage(String title, Pageable pageable);
-
+    // lọc sản phẩm của user đang đăng nhập
+    @Query(value = "select * from " + db + ".product  where user_id = :userId and title like concat('%', :title , '%') and status like concat('%', :status , '%') ", nativeQuery = true)
+    Page<Product> filterUsersProducts(String title, Pageable pageable, String userId, String status);
     @Query(value = "select p.* from "+ db +".product p where slug = :slug", nativeQuery = true)
     Product findProductBySlug(@Param("slug") String Slug);
     // Hiển thị tất cả các product có status =1 : trạng thái được hiển thị trên shop

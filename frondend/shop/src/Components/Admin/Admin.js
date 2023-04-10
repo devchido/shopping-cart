@@ -4,8 +4,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Profile from "../User/Profile";
-import ProductsManager from "./ProductsManager";
-
+import ProductManagement from "./ProductManagement";
+// có thể xem để test nav
+// Nested List
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -65,7 +66,7 @@ function Admin() {
                 Quản lý user
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <ProductsManager/>
+                <ProductManagement/>
             </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three

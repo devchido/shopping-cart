@@ -40,9 +40,7 @@ function OrderDetail() {
 
     //
     const [open, setOpen] = React.useState(false);
-    const isStepFailed = (step) => {
-        return step === 1;
-    };
+    
 
     const handleClickOpen = (item) => {
         console.log(item);

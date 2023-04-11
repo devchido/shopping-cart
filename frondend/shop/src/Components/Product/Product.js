@@ -12,7 +12,7 @@ function Product() {
     // product data
     const [product, setProduct] = React.useState([]);
     // size của 1 page
-    const [pageSize, setPageSize] = React.useState(8);
+    const [pageSize, setPageSize] = React.useState(12);
     // sort by filde
     const [field, setField] = React.useState("id");
     // thứ tự của page
@@ -59,8 +59,8 @@ function Product() {
                             return (
                                 <div className="col-lg-3 col-md-4 col-sm-6 mb-4 col-auto " key={i}>
                                     <div className="card h-100 text-center p-2 " style={{ maxWidth: "330px" }}>
-                                        <img src={item.photos} className="card-img-top" alt={item.title} height="250px" />
-                                        <div className="card-body" title={item.title}>
+                                        <img src={item.photos} className="card-img-top" title={item.title} alt={item.title} height="250px" />
+                                        <div className="card-body">
                                             <div className="mask">
                                                 <div className="d-flex justify-content-center h-100">
                                                     <h5>
@@ -112,7 +112,6 @@ function Product() {
             <div className="container my-4 py-5">
                 <div className="row">
                     <div className="col-12 mb-3 d-flex justify-content-center">
-                        
                         <Paper
                             component="form"
                             onSubmit={handleSubmit}
@@ -120,7 +119,7 @@ function Product() {
                             sx={{ p: "4px 8px" }}
                         >
                             <InputBase
-                                sx={{ ml: 1, flex: 1,fontSize: 18, }}
+                                sx={{ ml: 1, flex: 1, fontSize: 18 }}
                                 placeholder="Search products"
                                 name="title"
                                 value={title}
@@ -146,7 +145,24 @@ function Product() {
                     <div className="container d-flex justify-content-center">
                         <Stack spacing={2}>
                             {/* <Typography>Page: {page}</Typography> */}
-                            <Pagination count={totalPages} page={page} onChange={handleChange} />
+                            <Pagination
+                                // Tổng số items
+                                count={totalPages}
+                                // Số page hiện tại
+                                page={page}
+                                // Xử lý chuyển page
+                                onChange={handleChange}
+                                // định dạng nút bấm
+                                variant="outlined"
+                                // màu nút bấm
+                                color="primary"
+                                // Kiểm xoát số nút bấm 2 bên khi đang ở page giữa. ví dụ là xuất hiện nút : 1 2 . . . 6 . . . 11 12
+                                boundaryCount={1}
+                                // Hiện nút bấm trở về trang đầu tiên
+                                showFirstButton
+                                // Hiện nút bấm trở về trang cuối cùng
+                                showLastButton
+                            />
                         </Stack>
                     </div>
                 </div>

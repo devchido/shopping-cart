@@ -87,12 +87,13 @@ function SingleProduct() {
                                 Giá: <del className="text-danger">{VND.format(product.price)} </del>
                             </p>
                             <h3 className="display-6 fw-bold my-4">
-                                <span className="lead">Chỉ cần: </span>{VND.format(product.price - (product.price * product.discount) / 100)} 
+                                <span className="lead">Chỉ cần: </span>
+                                {VND.format(product.price - (product.price * product.discount) / 100)}
                             </h3>
                         </>
                     )}
 
-                    <p className="lead">{product.content}</p>
+                    <p className="">{product.summary}</p>
                     <div className=" d-flex  my-3">
                         <IconButton
                             sx={{ mx: 1 }}
@@ -159,6 +160,21 @@ function SingleProduct() {
                             </Link>
                         </>
                     ) : null}
+                </div>
+                <div className="d-flex justify-content-center my-4">
+
+                    <div className="card mb-4 w-100">
+                        <div className="card-header py-3">
+                            <h5 className="mb-0 text-capitalize">Thông tin chi tiết</h5>
+                        </div>
+                        <div className="card-body">
+                            <p>
+
+                            <strong><pre >{product.content}</pre></strong>
+                            </p>
+                        </div>
+                    </div>
+                
                 </div>
             </>
         );

@@ -1,10 +1,10 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Avatar, CardHeader, TableFooter, TextField } from "@mui/material";
+import { Autocomplete, Avatar, CardHeader, Stack, TableFooter, TextField } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,13 +13,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 //Icon
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Snackbar } from "@mui/material";
-import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 //item menu
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -36,27 +36,31 @@ function ListProducts() {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+
     // Trang hiện tại của page
     const [page, setPage] = React.useState(0);
-    // Số sản phẩm được hiển thị
 
+    // Số sản phẩm được hiển thị
     const [pageSize, setPageSize] = React.useState(10);
     const [field, setField] = React.useState("id");
     const [totalElements, setTotalElements] = React.useState("");
     const [title, setTitle] = React.useState("");
-    const [sort, setSort] = React.useState("ASC")
+    const [sort, setSort] = React.useState("ASC");
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        loadDataProduct();
     };
 
     const handleChangePageSize = (event) => {
         setPageSize(parseInt(event.target.value, 10));
         setPage(0);
+        loadDataProduct();
     };
     const navigation = useNavigate();
     const handleChange = (event) => {
         setStatus(event.target.value);
+        loadDataProduct();
     };
     //
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -92,9 +96,6 @@ function ListProducts() {
                 console.log("product", result);
                 setProduct(result.response.content);
                 setTotalElements(result.response.totalElements);
-                // setSnackbarOpen(true);
-                // setSnackbarSeverity("success");
-                // setSnackbarMsg("Thành công.");
             })
             .catch((error) => {
                 console.log("error", error);
@@ -103,14 +104,15 @@ function ListProducts() {
                 setSnackbarMsg("error!");
             });
     };
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        setPage(0)
+        setPage(0);
         loadDataProduct();
-    }
+    };
     React.useEffect(() => {
         loadDataProduct();
-    }, []);
+    }, [page, pageSize, status]);
     return (
         <div>
             <Snackbar
@@ -144,7 +146,11 @@ function ListProducts() {
                                 </div>
                             </div>
                             <div className="card mb-4">
-                                <Box component="form" onSubmit={handleSubmit} className="card-body d-flex justify-content-between">
+                                <Box
+                                    component="form"
+                                    onSubmit={handleSubmit}
+                                    className="card-body d-flex justify-content-between"
+                                >
                                     <FormControl className="px-2">
                                         <Select
                                             inputProps={{ "aria-label": "Without label" }}
@@ -160,10 +166,18 @@ function ListProducts() {
                                         </Select>
                                     </FormControl>
                                     <FormControl className="col-lg-8 col-auto px-2">
-                                        <TextField id="outlined-basic" name="title" label="Search" variant="outlined" onChange={(e)=> setTitle(e.target.value)} />
+                                        <TextField
+                                            id="outlined-basic"
+                                            name="title"
+                                            label="Search"
+                                            variant="outlined"
+                                            onChange={(e) => setTitle(e.target.value)}
+                                        />
                                     </FormControl>
                                     <FormControl className="col-auto px-2">
-                                        <button type="submit" className="btn btn-outline-dark h-100">Search</button>
+                                        <button type="submit" className="btn btn-outline-dark h-100">
+                                            Search
+                                        </button>
                                     </FormControl>
                                 </Box>
                             </div>
@@ -174,71 +188,102 @@ function ListProducts() {
                                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell  className="text-nowrap">Id</TableCell>
-                                                        <TableCell  className="text-nowrap">Sản phẩm</TableCell>
-                                                        <TableCell  className="text-nowrap" align="right">Giá (₫)</TableCell>
-                                                        <TableCell  className="text-nowrap" align="right">Giảm giá (%)</TableCell>
-                                                        <TableCell  className="text-nowrap" align="right">Số lượng</TableCell>
-                                                        <TableCell  className="text-nowrap">Created At</TableCell>
-                                                        <TableCell  className="text-nowrap">Updated At</TableCell>
-                                                        <TableCell  className="text-nowrap">Status</TableCell>
-                                                        <TableCell  className="text-nowrap" align="center">Action</TableCell>
+                                                        <TableCell className="text-nowrap">Id</TableCell>
+                                                        <TableCell className="text-nowrap">Sản phẩm</TableCell>
+                                                        <TableCell className="text-nowrap" align="right">
+                                                            Giá (₫)
+                                                        </TableCell>
+                                                        <TableCell className="text-nowrap" align="right">
+                                                            Giảm giá (%)
+                                                        </TableCell>
+                                                        <TableCell className="text-nowrap" align="right">
+                                                            Số lượng
+                                                        </TableCell>
+                                                        <TableCell className="text-nowrap">Created At</TableCell>
+                                                        <TableCell className="text-nowrap">Updated At</TableCell>
+                                                        <TableCell className="text-nowrap" align="center">
+                                                            Status
+                                                        </TableCell>
+                                                        <TableCell className="text-nowrap" align="center">
+                                                            Action
+                                                        </TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {product.map((item, i) => (
-                                                        <TableRow
-                                                            key={item.id}
-                                                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                        >
-                                                            <TableCell component="th" scope="row">
-                                                                {item.id}
-                                                            </TableCell>
-                                                            <TableCell >
-                                                                <CardHeader
-                                                                    avatar={
-                                                                        <Avatar
-                                                                            alt="Remy Sharp"
-                                                                            src={item.photos}
-                                                                            variant="rounded"
-                                                                        />
-                                                                    
-                                                                    }
-                                                                    style={{minWidth: "200px", maxWidth: "400px"}}
-                                                                    title={item.title}
-                                                                    sx={{ p: 0 }}
-                                                                />
-                                                            </TableCell>
+                                                    {product.length > 0 ? (
+                                                        product.map((item, i) => (
+                                                            <TableRow
+                                                                key={item.id}
+                                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                            >
+                                                                <TableCell component="th" scope="row">
+                                                                    {item.id}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <CardHeader
+                                                                        avatar={
+                                                                            <Avatar
+                                                                                alt="Remy Sharp"
+                                                                                src={item.photos}
+                                                                                variant="rounded"
+                                                                            />
+                                                                        }
+                                                                        style={{ minWidth: "200px", maxWidth: "400px" }}
+                                                                        title={item.title}
+                                                                        sx={{ p: 0 }}
+                                                                    />
+                                                                </TableCell>
 
-                                                            <TableCell align="right">{VND.format(item.price)}</TableCell>
-                                                            <TableCell align="right">{item.discount}(%)</TableCell>
-                                                            <TableCell align="right">{item.quantity}</TableCell>
-                                                            <TableCell className="text-nowrap">
-                                                                {format(parseISO(item.createdAt), "dd-MM-yyyy")}
-                                                            </TableCell>
-                                                            <TableCell className="text-nowrap">
-                                                                {formatDistanceToNow(new Date(item.updatedAt), {
-                                                                    locale: vi,
-                                                                    addSuffix: true,
-                                                                })}
-                                                            </TableCell>
-                                                            <TableCell className="text-nowrap" align="center">
-                                                                {item.status}
-                                                            </TableCell>
-                                                            <TableCell align="center" className="d-flex">
-                                                                
-                                                                <IconButton color="primary" >
-                                                                    <CalendarViewMonthIcon  />
-                                                                </IconButton>
-                                                                <IconButton color="success">
-                                                                    <BorderColorIcon  />
-                                                                </IconButton>
-                                                                <IconButton color="error">
-                                                                    <DeleteIcon  />
-                                                                </IconButton>
+                                                                <TableCell align="right">{VND.format(item.price)}</TableCell>
+                                                                <TableCell align="right">{item.discount}(%)</TableCell>
+                                                                <TableCell align="right">{item.quantity}</TableCell>
+                                                                <TableCell className="text-nowrap">
+                                                                    {format(parseISO(item.createdAt), "dd-MM-yyyy")}
+                                                                </TableCell>
+                                                                <TableCell className="text-nowrap">
+                                                                    {formatDistanceToNow(new Date(item.updatedAt), {
+                                                                        locale: vi,
+                                                                        addSuffix: true,
+                                                                    })}
+                                                                </TableCell>
+                                                                <TableCell className="text-nowrap" align="center">
+                                                                    {item.status === 0 ? (
+                                                                        <span className="badge bg-warning ms-2">
+                                                                            Chờ xét duyệt
+                                                                        </span>
+                                                                    ) : (
+                                                                        <span className="badge bg-primary ms-2">
+                                                                            Đã xét duyệt
+                                                                        </span>
+                                                                    )}
+                                                                </TableCell>
+                                                                <TableCell align="center" className="d-flex">
+                                                                    <Link to={`/product/${item.slug}`}>
+                                                                        <IconButton color="primary">
+                                                                            <CalendarViewMonthIcon />
+                                                                        </IconButton>
+                                                                    </Link>
+                                                                    <Link to={`/management/update-product/${item.id}`}>
+                                                                    <IconButton color="success">
+                                                                        <BorderColorIcon />
+                                                                    </IconButton>
+                                                                    </Link>
+                                                                    <IconButton color="error">
+                                                                        <DeleteIcon />
+                                                                    </IconButton>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))
+                                                    ) : (
+                                                        <TableRow>
+                                                            {/* Khi không có sản phẩm */}
+                                                            <TableCell colSpan={"100%"}>
+                                                                <Stack sx={{ width: "100%" }} spacing={2}>
+                                                                    <Alert severity="info">No Data !</Alert>
+                                                                </Stack>
                                                             </TableCell>
                                                         </TableRow>
-                                                    ))}
+                                                    )}
                                                 </TableBody>
                                             </Table>
                                         </TableContainer>
@@ -246,10 +291,10 @@ function ListProducts() {
                                 </Box>
                                 <div className="mt-2 d-flex justify-content-end">
                                     <TablePagination
-                                        count={totalElements}
+                                        count={Number(totalElements)}
+                                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: Number(totalElements) }]}
                                         page={page}
                                         component="div"
-                                        
                                         onPageChange={handleChangePage}
                                         rowsPerPage={pageSize}
                                         onRowsPerPageChange={handleChangePageSize}

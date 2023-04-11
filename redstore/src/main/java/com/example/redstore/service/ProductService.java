@@ -69,9 +69,9 @@ public class ProductService {
         entity.setStatus((short) 0);
         productRepository.save(entity);
         // add category cho product
-        if (dto.getCategory() != null){
+        if (dto.getCategory() != null) {
             Optional<Category> category = categoryRepository.findBySlug(dto.getCategory());
-            if(category.isPresent()){
+            if (category.isPresent()) {
                 ProductCategory productCategory = new ProductCategory();
                 productCategory.setProduct(entity);
                 productCategory.setCategory(category.get());
@@ -97,6 +97,24 @@ public class ProductService {
             entity.setQuantity(dto.getQuantity());
             entity.setContent(dto.getContent());
             entity.setUpdatedAt(Instant.now());
+            if (dto.getCategory() != null) {
+                Optional<Category> category = categoryRepository.findBySlug(dto.getCategory());
+                if (category.isPresent()) {
+                    ProductCategory check = productCategoryRepository.findByProductId(entity.getId()).orElse(null);
+                    if (check != null){
+                        check.setCategory(category.get());
+                        productCategoryRepository.save(check);
+                        System.out.println("thay đổi category cho product có id= "+entity.getId() );
+                    } else {
+
+                        ProductCategory productCategory = new ProductCategory();
+                        productCategory.setProduct(entity);
+                        productCategory.setCategory(category.get());
+                        productCategoryRepository.save(productCategory);
+                        System.out.println("Thực thi thêm category cho product có id= "+entity.getId());
+                    }
+                }
+            }
             productRepository.save(entity);
             System.out.println("Thực thi edit");
         } else new String("Không thể edit");
@@ -115,13 +133,17 @@ public class ProductService {
 
     }
 
-    public ProductDto findByProductId(String id){
+    public ProductDto findByProductId(String id) {
         Product entity = productRepository.findById(id).orElse(null);
         ProductDto dto = productMapper.toDo(entity);
+//        Optional<ProductCategory> productCategory = productCategoryRepository.findByProductId(entity.getId());
+//        if (productCategory.isPresent()) {
+//            dto.setCategory(String.valueOf(productCategory.get().getId()));
+//        }
         return dto;
     }
 
-    public ProductDto findProductBySlug(String slug){
+    public ProductDto findProductBySlug(String slug) {
         Product entity = productRepository.findProductBySlug(slug);
         ProductDto dto = productMapper.toDo(entity);
         return dto;
@@ -151,7 +173,7 @@ public class ProductService {
 //        return dtos;
 //    }
     public List<ProductDto> filter(String keySearch) {
-        List<Product> entity = productRepository.filter( keySearch);
+        List<Product> entity = productRepository.filter(keySearch);
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
     }
@@ -183,18 +205,19 @@ public class ProductService {
 //        return dtos;
 //    }
 
-    // todo: test page
-    public Page<ProductDto> findProductsWithPaginationAndSorting(String title, int offset, int pageSize, String field ) {
-        Page<Product> products = productRepository.findAllProductPage(title,(PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC,field))));
+    // todo: findProductsWithPaginationAndSorting - lọc tất cả các product được đăng bán ở dạng page
+    public Page<ProductDto> findProductsWithPaginationAndSorting(String title, int offset, int pageSize, String field) {
+        Page<Product> products = productRepository.findAllProductPage(title, (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field))));
         Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
-    // todo: filterUsersProducts
-    public Page<ProductDto> filterUsersProducts(String title, int offset, int pageSize, String field, String status, String sort ) {
-        Page<Product> products = productRepository.filterUsersProducts(title,
-                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort),field))),
 
-                String.valueOf(SecurityUtils.getPrincipal().getId()),status);
+    // todo: filterUsersProducts - lọc tất cả các product của user đang đăng nhập ở dạng page
+    public Page<ProductDto> filterUsersProducts(String title, int offset, int pageSize, String field, String status, String sort) {
+        Page<Product> products = productRepository.filterUsersProducts(title,
+                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+
+                String.valueOf(SecurityUtils.getPrincipal().getId()), status);
         Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
@@ -215,7 +238,7 @@ public class ProductService {
 
     public void setStatusProduct(String id) {
         Product entity = productRepository.findById(id).orElse(null);
-        if (entity.getStatus() == 1){
+        if (entity.getStatus() == 1) {
             entity.setStatus((short) 0);
             productRepository.save(entity);
             System.out.println("Ẩn product");

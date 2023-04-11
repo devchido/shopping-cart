@@ -36,12 +36,12 @@ public class ProductResources {
         "content": "Sản phẩm sử dụng vải cotton chống bám nước, có thiết kế hỗ trợ chuyển động của chân."
     }
      */
-    @PostMapping("/auth/create")
+    @PostMapping("/auth")
     public void create(@RequestBody ProductDto dto) {
         productService.create(dto);
     }
 
-    //edit
+    //edit by id
     /*
     Người dùng thực hiện thay đổi thông tin sản phẩm họ đăng bán
     {
@@ -57,23 +57,22 @@ public class ProductResources {
         "content": "Áo phông dành cho nam"
     }
      */
-    @PutMapping("/auth/edit/{id}")
+    @PutMapping("/auth/{id}")
     public void edit(@PathVariable String id, @RequestBody ProductDto dto) {
         productService.edit(id, dto);
     }
 
     /*
-    Hiển thị tất cả product của người dùng có id 1
-    http://localhost:8080/product/auth/1
+    find product by id
      */
-    @PostMapping("/auth/{id}")
+    @GetMapping("/auth/{id}")
     public ProductDto findByProductId(@PathVariable String id) {
         ProductDto dto = productService.findByProductId(id);
         return dto;
     }
 
-    //delete
-    @DeleteMapping("/auth/delete/{id}")
+    //delete by id
+    @DeleteMapping("/auth/{id}")
     public void delete(@PathVariable("id") Long id) {
         productService.delete(id);
     }
@@ -91,11 +90,13 @@ public class ProductResources {
         return dtos;
     }
 
-    @PostMapping("/auth/user")
+
+    @GetMapping("/auth/user")
     public List<ProductDto> findByUsers(@RequestParam(value = "") String title) {
         List<ProductDto> dtos = productService.findByUsers(title);
         return dtos;
     }
+    // todo: filterUsersProducts - lọc tất cả các product của user đang đăng nhập ở dạng page
     @GetMapping("/auth/user/{offset}/{pageSize}/{field}")
     private APIResponse<Page<ProductDto>> filterUsersProducts(
             @RequestParam(value = "title", defaultValue = "") String title,

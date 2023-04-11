@@ -1,30 +1,69 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 //
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider, createTheme } from "@mui/material";
 const theme = createTheme();
-function CreateProduct() {
+function UpdateProduct() {
+    const { id } = useParams();
+    const [product, setProduct] = React.useState({});
+    const [productCategory, setProductCategory] = React.useState({});
     const [category, setCategory] = React.useState([]);
 
-    const [newImage, setNewImage] = React.useState(
-        "https://nghikhangmy.vn/wp-content/themes/webchuan-ecom1/images/default-image.jpg"
-    );
+    const [newImage, setNewImage] = React.useState({});
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
-    const navigation = useNavigate();
 
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-    const handleLogout = () => {
-        localStorage.removeItem("token");
+    const loadDataProduct = () => {
+        fetch(`/product/auth/${id}`, {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                console.log("product", result);
+                setProduct(result);
+                setNewImage(result.photos);
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Load product error!");
+            });
+        // product category
+        fetch(`/product-category/api/${id}`)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                console.log("product-category", result);
+                setProductCategory(result.category);
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Load product-category error!");
+            });
     };
-
     const loadDataCategory = () => {
         fetch("/category/api/filter?title= ")
             .then((response) => {
@@ -34,7 +73,7 @@ function CreateProduct() {
                 throw new Error(response.status);
             })
             .then((result) => {
-                console.log(result);
+                // console.log(result);
                 setCategory(result);
             })
             .catch((error) => {
@@ -43,26 +82,15 @@ function CreateProduct() {
     };
 
     React.useEffect(() => {
+        loadDataProduct();
         loadDataCategory();
     }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            title: data.get("title"),
-            slug: data.get("slug"),
-            summary: data.get("summary"),
-            price: data.get("price"),
-            discount: data.get("discount"),
-            quantity: data.get("quantity"),
-            photos: data.get("photos"),
-            content: data.get("content"),
-            category: data.get("category"),
-        });
-
         if (
-            data.get("category") === "" ||
+            // data.get("category") === "" ||
             data.get("title") === "" ||
             data.get("slug") === "" ||
             data.get("summary") === "" ||
@@ -79,11 +107,11 @@ function CreateProduct() {
             setSnackbarOpen(true);
             setSnackbarSeverity("success");
             setSnackbarMsg("Thông tin đầy đủ!");
-            fetch("/product/auth", {
-                method: "POST",
+            fetch(`/product/auth/${id}`, {
+                method: "PUT",
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
                     "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("token"),
                 },
                 body: JSON.stringify({
                     title: data.get("title"),
@@ -107,24 +135,16 @@ function CreateProduct() {
                     console.log(result);
                     setSnackbarOpen(true);
                     setSnackbarSeverity("success");
-                    setSnackbarMsg("Thành công.");
-                    fetch("/product/api/findProductBySlug/" + data.get("slug")).then((resp) => {
-                        resp.json().then((result) => {
-                            // console.log(result);
-                            navigation(`/management/update-product/${result.id}`);
-                        });
-                    });
-                    
+                    setSnackbarMsg("Cập nhật Thành công.");
                 })
                 .catch((error) => {
                     console.log("error", error);
                     setSnackbarOpen(true);
                     setSnackbarSeverity("error");
-                    setSnackbarMsg("False");
+                    setSnackbarMsg("Cập nhật False");
                 });
         }
     };
-
     return (
         <div>
             <Snackbar
@@ -148,14 +168,21 @@ function CreateProduct() {
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
                     <p className="lead" style={{ fontWeight: "500" }}>
-                        Tạo sản phẩm mới
+                        Cập nhật sản phẩm
                     </p>
                     <form onSubmit={handleSubmit}>
                         <div className="row d-flex justify-content-center my-4">
                             <div className="col-lg-7 ">
                                 <div className="card mb-4">
-                                    <div className="card-header py-3">
+                                    <div className="card-header d-flex justify-content-between py-3">
                                         <h5 className="mb-0 text-capitalize">Thông tin sản phẩm</h5>
+                                        
+                                            {product.status === 0 ? (
+                                                <span className="badge bg-warning text-capitalize ms-2">Chờ xét duyệt</span>
+                                            ) : (
+                                                <span className="badge bg-primary text-capitalize ms-2">Đã xét duyệt</span>
+                                            )}
+                                        
                                     </div>
                                     <div className="card-body">
                                         <div className="form-outline d-flex justify-content-between mt-4">
@@ -164,36 +191,49 @@ function CreateProduct() {
                                                 id="form1"
                                                 name="title"
                                                 type="text"
+                                                defaultValue={product.title}
                                                 className="form-control text-right w-75  word-wrap"
                                             />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Slug</label>
-                                            <input id="form1" name="slug" type="text" className="form-control w-75" />
+                                            <input
+                                                id="form1"
+                                                name="slug"
+                                                type="text"
+                                                defaultValue={product.slug}
+                                                className="form-control w-75"
+                                            />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Summary</label>
-                                            <input id="form1" name="summary" type="text" className="form-control w-75" />
+                                            <input
+                                                id="form1"
+                                                name="summary"
+                                                type="text"
+                                                defaultValue={product.summary}
+                                                className="form-control w-75"
+                                            />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
-                                            <label className="form-label">Giá</label>
+                                            <label className="form-label">Giá (₫)</label>
                                             <input
                                                 id="form1"
                                                 name="price"
                                                 type="number"
                                                 min={0}
-                                                defaultValue={0}
+                                                defaultValue={product.price}
                                                 className="form-control w-50"
                                             />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
-                                            <label className="form-label">Giảm giá</label>
+                                            <label className="form-label">Giảm giá (%)</label>
                                             <input
                                                 id="form1"
                                                 name="discount"
                                                 type="number"
                                                 min={0}
-                                                defaultValue={0}
+                                                defaultValue={product.discount}
                                                 className="form-control w-50"
                                             />
                                         </div>
@@ -204,7 +244,7 @@ function CreateProduct() {
                                                 name="quantity"
                                                 type="number"
                                                 min={0}
-                                                defaultValue={0}
+                                                defaultValue={product.quantity}
                                                 className="form-control w-50"
                                             />
                                         </div>
@@ -214,6 +254,7 @@ function CreateProduct() {
                                                 id="form1"
                                                 name="content"
                                                 type="text"
+                                                defaultValue={product.content}
                                                 rows={3}
                                                 className="form-control w-75"
                                             />
@@ -227,7 +268,9 @@ function CreateProduct() {
                                     <div className="card-body">
                                         <div className="form-group">
                                             <select className="form-control" name="category">
-                                                <option value={""}>Chọn thể loại</option>
+                                                <option value={productCategory.id ? productCategory.id : ""}>
+                                                    {productCategory.title ? productCategory.title : "Chọn thể loại"}
+                                                </option>
                                                 {category.map((item, i) => (
                                                     <option value={item.slug} key={i}>
                                                         {item.title}
@@ -256,7 +299,7 @@ function CreateProduct() {
                                             <input
                                                 id="form1"
                                                 name="photos"
-                                                defaultValue={newImage}
+                                                defaultValue={product.photos}
                                                 type="text"
                                                 className="form-control w-100"
                                                 onChange={(e) => setNewImage(e.target.value)}
@@ -272,11 +315,19 @@ function CreateProduct() {
                                                 Cancel
                                             </button>
                                         </Link>
+                                        {product.status === 1 ? (
+                                            <Link to={`/product/${product.slug}`}>
+                                                <button type="button" className="btn btn-dark btn-block ">
+                                                    View
+                                                </button>
+                                            </Link>
+                                        ) : null}
+
                                         <button type="reset" className="btn btn-dark btn-block ">
                                             Reset
                                         </button>
                                         <button type="submit" className="btn btn-dark btn-block ">
-                                            Create
+                                            Update
                                         </button>
                                     </div>
                                 </div>
@@ -289,4 +340,4 @@ function CreateProduct() {
     );
 }
 
-export default CreateProduct;
+export default UpdateProduct;

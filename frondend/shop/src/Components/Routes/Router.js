@@ -17,6 +17,7 @@ import Test from "../Test/Test"
 import Orders from "../Order/Orders";
 import OrderDetail from "../Order/OrderDetail";
 import ListProducts from "../Manager/ListProducts";
+import UpdateProduct from "../Manager/UpdateProduct";
 
 function Router() {
     return (
@@ -47,8 +48,10 @@ function Router() {
             <Route path="/orders/:id" element={<OrderDetail/>}></Route>
             {/* Manage: Trang quản lý product của user */}
             <Route path= "/management/list-products" element={<ListProducts/>}></Route>
-            {/* Created Product: Tạo sản phẩm mới */}
+            {/* Created Products: Tạo sản phẩm mới */}
             <Route path="management/create-products" element={<CreateProducts />}></Route>
+            {/* Update Product: Cập nhật sản phẩm  */}
+            <Route path="management/update-product/:id" element={<UpdateProduct />}></Route>
             {/* Tabs */}
             <Route path="/tabs" element={<VerticalTabs />}></Route>
             {/* test */}

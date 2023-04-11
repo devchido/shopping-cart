@@ -56,17 +56,17 @@ function Admin() {
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, borderColor: "divider", minWidth: "6rem" }}
+                sx={{ borderRight: 1, borderColor: "divider", width: "16rem" }}
             >
-                <Tab label="Quản lý user" {...a11yProps(0)} />
-                <Tab label="Quản lý product" {...a11yProps(1)} />
-                <Tab label="Quản lý Order" {...a11yProps(2)} />
+                <Tab label="Quản lý user" className={"text-nowrap"} {...a11yProps(0)} />
+                <Tab label="Quản lý product" className={"text-nowrap"} {...a11yProps(1)} />
+                <Tab label="Quản lý Order" className={"text-nowrap"} {...a11yProps(2)} />
             </Tabs>
-            <TabPanel className={"w-100 "} value={value} index={0}>
+            <TabPanel value={value} index={0}>
                 Quản lý user
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <ProductManagement/>
+                <ProductManagement />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three

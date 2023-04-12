@@ -4,6 +4,7 @@ import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Category;
 import com.example.redstore.domain.Product;
 import com.example.redstore.domain.ProductCategory;
+import com.example.redstore.projection.ProductInfo;
 import com.example.redstore.repository.CategoryRepository;
 import com.example.redstore.repository.ProductCategoryRepository;
 import com.example.redstore.service.dto.CategoryDto;
@@ -84,4 +85,6 @@ public class ProductCategoryService {
         Page<ProductCategoryDto> dtos = entity.map(productCategoryMapper::toDo);
         return dtos;
     }
+
+
 }

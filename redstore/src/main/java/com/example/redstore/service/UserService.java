@@ -1,13 +1,17 @@
 package com.example.redstore.service;
 
 import com.example.redstore.config.SecurityUtils;
+import com.example.redstore.domain.ProductCategory;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
+import com.example.redstore.service.dto.ProductCategoryDto;
 import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,5 +91,14 @@ public class UserService {
         User entity = SecurityUtils.getPrincipal();
         UserDto dto = userMapper.toDo(entity);
         return dto;
+    }
+    // todo: findAllUsers
+    public Page<UserDto> findAllUsers( int offset, int pageSize, String field, String sort, String keyname, String mobile, String email, String role) {
+        Page<User> entity = userRepository.findAllUsers(
+                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+                keyname, mobile, email,
+                role);
+        Page<UserDto> dtos = entity.map(userMapper::toDo);
+        return dtos;
     }
 }

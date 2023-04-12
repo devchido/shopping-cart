@@ -4,11 +4,9 @@ import { Link, useParams } from "react-router-dom";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider, createTheme } from "@mui/material";
-import { format, parseISO, sub } from "date-fns";
-import moment from "moment/moment";
-const theme = createTheme();
-function UpdateProduct() {
+import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider } from "@mui/material";
+
+function ProductDetailManagement() {
     const { id } = useParams();
     const [product, setProduct] = React.useState({});
     const [productCategory, setProductCategory] = React.useState({});
@@ -178,13 +176,12 @@ function UpdateProduct() {
                                 <div className="card mb-4">
                                     <div className="card-header d-flex justify-content-between py-3">
                                         <h5 className="mb-0 text-capitalize">Thông tin sản phẩm</h5>
-                                        
-                                            {product.status === 0 ? (
-                                                <span className="badge bg-warning text-capitalize ms-2">Chờ xét duyệt</span>
-                                            ) : (
-                                                <span className="badge bg-primary text-capitalize ms-2">Đã xét duyệt</span>
-                                            )}
-                                        
+
+                                        {product.status === 0 ? (
+                                            <span className="badge bg-warning text-capitalize ms-2">Chờ xét duyệt</span>
+                                        ) : (
+                                            <span className="badge bg-primary text-capitalize ms-2">Đã xét duyệt</span>
+                                        )}
                                     </div>
                                     <div className="card-body">
                                         <div className="form-outline d-flex justify-content-between mt-4">
@@ -259,20 +256,6 @@ function UpdateProduct() {
                                                 defaultValue={product.content}
                                                 rows={3}
                                                 className="form-control w-75"
-                                            />
-                                        </div>
-                                        <div className="form-outline d-flex justify-content-between mt-4">
-                                            <label className="form-label">Created At</label>
-                                            <input
-                                            type="datetime-local"
-                                            value={moment(product.creatdAt).format("yyy-MM-DDThh:mm:ss")}
-                                            />
-                                        </div>
-                                        <div className="form-outline d-flex justify-content-between mt-4">
-                                            <label className="form-label">Updated At</label>
-                                            <input
-                                            type="datetime-local"
-                                            value={moment(product.updatedAt).format("yyy-MM-DDThh:mm:ss")}
                                             />
                                         </div>
                                     </div>
@@ -356,4 +339,4 @@ function UpdateProduct() {
     );
 }
 
-export default UpdateProduct;
+export default ProductDetailManagement;

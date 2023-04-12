@@ -257,20 +257,22 @@ function ListProducts() {
                                                                         </span>
                                                                     )}
                                                                 </TableCell>
-                                                                <TableCell align="center" className="d-flex">
-                                                                    <Link to={`/product/${item.slug}`}>
-                                                                        <IconButton color="primary">
-                                                                            <CalendarViewMonthIcon />
+                                                                <TableCell align="center">
+                                                                    <div className="d-flex">
+                                                                        <Link to={`/product/${item.slug}`}>
+                                                                            <IconButton color="primary" title="View">
+                                                                                <CalendarViewMonthIcon />
+                                                                            </IconButton>
+                                                                        </Link>
+                                                                        <Link to={`/management/update-product/${item.id}`}>
+                                                                            <IconButton color="success" title="Edit">
+                                                                                <BorderColorIcon />
+                                                                            </IconButton>
+                                                                        </Link>
+                                                                        <IconButton color="error" title="Remove">
+                                                                            <DeleteIcon />
                                                                         </IconButton>
-                                                                    </Link>
-                                                                    <Link to={`/management/update-product/${item.id}`}>
-                                                                    <IconButton color="success">
-                                                                        <BorderColorIcon />
-                                                                    </IconButton>
-                                                                    </Link>
-                                                                    <IconButton color="error">
-                                                                        <DeleteIcon />
-                                                                    </IconButton>
+                                                                    </div>
                                                                 </TableCell>
                                                             </TableRow>
                                                         ))
@@ -292,7 +294,7 @@ function ListProducts() {
                                 <div className="mt-2 d-flex justify-content-end">
                                     <TablePagination
                                         count={Number(totalElements)}
-                                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: Number(totalElements) }]}
+                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: Number(totalElements) }]}
                                         page={page}
                                         component="div"
                                         onPageChange={handleChangePage}

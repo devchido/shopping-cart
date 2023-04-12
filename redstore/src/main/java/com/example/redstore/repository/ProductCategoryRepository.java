@@ -1,6 +1,7 @@
 package com.example.redstore.repository;
 
 import com.example.redstore.domain.ProductCategory;
+import com.example.redstore.projection.ProductInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +19,19 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
     Optional<ProductCategory> findByProductId(Long productId);
 
     //
-    @Query(value = "select " + db + ".product_category.* from " + db + ".product_category," + db + ".product, " + db + ".category " +
+//    @Query(value = "select " + db + ".product_category.* from " + db + ".product_category," + db + ".product, " + db + ".category " +
+//            " where " + db + ".product.id = product_category.product_id " +
+//            " and " + db + ".category.id = product_category.category_id " +
+//            " and category.id like concat('%', :category, '%') " +
+//            " and product.title like concat('%', :title , '%') " +
+//            " and product.status like concat('%', :status , '%') ", nativeQuery = true)
+    @Query(value = "select " + db + ".product_category.* from " + db + ".product_category," + db + ".product, " + db + ".category, "  + db + ".user " +
             " where " + db + ".product.id = product_category.product_id " +
             " and " + db + ".category.id = product_category.category_id " +
-            " and category.id like concat('%', :category, '%') " +
+            " and " + db + ".user.id = product.user_id " +
+            " and category.title like concat('%', :category, '%') " +
             " and product.title like concat('%', :title , '%') " +
             " and product.status like concat('%', :status , '%') ", nativeQuery = true)
     Page<ProductCategory> filterAllProduct(String title, Pageable pageable, String category, String status);
+
 }

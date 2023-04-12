@@ -6,6 +6,8 @@ import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.UserService;
+import com.example.redstore.service.dto.APIResponse;
+import com.example.redstore.service.dto.ProductCategoryDto;
 import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -95,7 +97,23 @@ public class UserResources {
     public void updateRoleUser(@PathVariable String userId, @RequestParam String role){
         service.updateRoleUser(userId, role);
     }
-
+    // todo: findAllUsers
+    @GetMapping("/auth/admin/{offset}/{pageSize}")
+    private APIResponse<Page<UserDto>> findAllUsers(
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @RequestParam(value = "field", defaultValue = "id") String field,
+            @RequestParam(value = "sort", defaultValue = "ASC") String sort,
+            @RequestParam(value = "keyname", defaultValue = "") String keyname,
+            @RequestParam(value = "mobile", defaultValue = "") String mobile,
+            @RequestParam(value = "email", defaultValue = "") String email,
+            @RequestParam(value = "role", defaultValue = "") String role
+            ) {
+        Page<UserDto> dtos = userService.findAllUsers(
+                 offset, pageSize, field, sort, keyname, mobile, email, role
+        );
+        return new APIResponse<>(dtos.getSize(), dtos);
+    }
 
 
 //    test admin : false

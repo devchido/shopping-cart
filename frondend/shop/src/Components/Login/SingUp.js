@@ -84,7 +84,7 @@ export default function SignUp() {
                                         .then((result) => {
                                             console.log(result);
                                             localStorage.setItem("token", result.token);
-                                            window.location = "/user";
+                                            window.location = "/profile";
                                         })
                                         .catch((error) => {
                                             setSnackbarOpen(true);

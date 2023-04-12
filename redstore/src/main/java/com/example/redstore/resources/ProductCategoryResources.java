@@ -1,5 +1,6 @@
 package com.example.redstore.resources;
 
+import com.example.redstore.projection.ProductInfo;
 import com.example.redstore.service.CategoryService;
 import com.example.redstore.service.ProductCategoryService;
 import com.example.redstore.service.dto.APIResponse;
@@ -63,4 +64,5 @@ public class ProductCategoryResources {
         );
         return new APIResponse<>(dtos.getSize(), dtos);
     }
+
 }

@@ -5,6 +5,9 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Profile from "../User/Profile";
 import ProductManagement from "./ProductManagement";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CategoryIcon from '@mui/icons-material/Category';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 // có thể xem để test nav
 // Nested List
 function TabPanel(props) {
@@ -56,11 +59,13 @@ function Admin() {
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, borderColor: "divider", width: "16rem" }}
+                className="text-left"
+                sx={{ borderRight: 1, borderColor: "divider" }}
             >
-                <Tab label="Quản lý user" className={"text-nowrap"} {...a11yProps(0)} />
-                <Tab label="Quản lý product" className={"text-nowrap"} {...a11yProps(1)} />
-                <Tab label="Quản lý Order" className={"text-nowrap"} {...a11yProps(2)} />
+                <Tab label="Quản lý user" className={"text-nowrap m-0 mx-2 px-2"} {...a11yProps(0)} icon={<AccountCircleIcon />} iconPosition="start" />
+                <Tab label="Quản lý product" className={"text-nowrap m-0 px-2"} {...a11yProps(1)} />
+                <Tab label="Quản lý category" className={"text-nowrap m-0 px-2"} {...a11yProps(2)} icon={<CategoryIcon />} iconPosition="start" />
+                <Tab label="Quản lý Order" className={"text-nowrap m-0 px-2"} {...a11yProps(3)} icon={<AssignmentIcon />} iconPosition="start" />
             </Tabs>
             <TabPanel value={value} index={0}>
                 Quản lý user

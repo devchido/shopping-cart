@@ -29,9 +29,9 @@ import TablePagination from "@mui/material/TablePagination";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 import { VND } from "../Unity/VND";
+import moment from "moment";
 
-function ProductManagement() {
-    const [status, setStatus] = React.useState("");
+function UsersManagement() {
     // data product-category
     const [data, setData] = React.useState([]);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -44,25 +44,28 @@ function ProductManagement() {
 
     // Số sản phẩm được hiển thị
     const [pageSize, setPageSize] = React.useState(10);
-    const [field, setField] = React.useState("product_id");
-    const [totalElements, setTotalElements] = React.useState("");
-    const [title, setTitle] = React.useState("");
+    const [field, setField] = React.useState("id");
     const [sort, setSort] = React.useState("ASC");
+    const [keyname, setKeyName] = React.useState("");
+    const [mobile, setMobile] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [role, setRole] = React.useState("");
+    const [totalElements, setTotalElements] = React.useState("");
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
-        loadDataProductCategory();
+        loadDataUser();
     };
 
     const handleChangePageSize = (event) => {
         setPageSize(parseInt(event.target.value, 10));
         setPage(0);
-        loadDataProductCategory();
+        loadDataUser();
     };
     const navigation = useNavigate();
     const handleChange = (event) => {
-        setStatus(event.target.value);
-        loadDataProductCategory();
+        setRole(event.target.value);
+        loadDataUser();
     };
     //
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -79,7 +82,7 @@ function ProductManagement() {
         setSnackbarOpen(false);
     };
 
-    const loadDataProductCategory = () => {
+    const loadDataUser = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var requestOptions = {
@@ -88,7 +91,7 @@ function ProductManagement() {
             redirect: "follow",
         };
         fetch(
-            `/product-category/auth/admin/${page}/${pageSize}/${field}?title=${title}&status=${status}&category=${category}&sort=${sort}`,
+            `/user/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&keyname=${keyname}&mobile=${mobile}&email=${email}&role=${role}`,
             requestOptions
         )
             .then((response) => {
@@ -98,7 +101,7 @@ function ProductManagement() {
                 throw Error(response.status);
             })
             .then((result) => {
-                console.log("product-category", result);
+                console.log("user", result);
                 setData(result.response.content);
                 setTotalElements(result.response.totalElements);
             })
@@ -106,18 +109,18 @@ function ProductManagement() {
                 console.log("error", error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
-                setSnackbarMsg("error! không load được dữ liệu product");
+                setSnackbarMsg("error! không load được dữ liệu user");
             });
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         setPage(0);
-        loadDataProductCategory();
+        loadDataUser();
     };
     React.useEffect(() => {
-        loadDataProductCategory();
-    }, [page, pageSize, status]);
+        loadDataUser();
+    }, [page, pageSize, role]);
     return (
         <div>
             <Snackbar
@@ -144,8 +147,8 @@ function ProductManagement() {
                         <div>
                             <div className="card mb-4">
                                 <div className="card-header d-flex py-3 justify-content-between ">
-                                    <h5 className="mt-1">Quản lý sản phẩm</h5>
-                                    <strong>{data.length} sản phẩm</strong>
+                                    <h5 className="mt-1">Quản lý User</h5>
+                                    <strong>{data.length} user</strong>
                                 </div>
                             </div>
                             <div className="card mb-4">
@@ -157,37 +160,48 @@ function ProductManagement() {
                                     <FormControl className="col-lg-2 col-md-2 col-4 my-1">
                                         <Select
                                             inputProps={{ "aria-label": "Without label" }}
-                                            value={status}
+                                            value={role}
                                             displayEmpty
                                             onChange={handleChange}
                                         >
                                             <MenuItem value="">
-                                                <em>Tất cả</em>
+                                                <em>Role</em>
                                             </MenuItem>
-                                            <MenuItem value={0}>Chờ xét duyệt</MenuItem>
-                                            <MenuItem value={1}>Đã xét duyệt</MenuItem>
+                                            <MenuItem value={"USER"}>USER</MenuItem>
+                                            <MenuItem value={"USER_SHOP"}>USER_SHOP</MenuItem>
+                                            <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
                                         </Select>
                                     </FormControl>
                                     <FormControl className="col-lg-3 col-auto px-2 my-1">
                                         <TextField
                                             id="outlined-basic"
-                                            name="productTitle"
-                                            label="Search Product"
+                                            label="Search User"
                                             variant="outlined"
-                                            onChange={(e) => setTitle(e.target.value)}
+                                            onChange={(e) => setKeyName(e.target.value)}
                                         />
                                     </FormControl>
                                     <FormControl className="col-lg-3 col-auto px-2 my-1">
                                         <TextField
                                             id="outlined-basic"
-                                            name="categoryTitle"
-                                            label="Search Category"
+                                            label="Search Mobile"
                                             variant="outlined"
-                                            onChange={(e) => setCategory(e.target.value)}
+                                            onChange={(e) => setMobile(e.target.value)}
+                                        />
+                                    </FormControl>
+                                    <FormControl className="col-lg-3 col-auto px-2 my-1">
+                                        <TextField
+                                            id="outlined-basic"
+                                            label="Search Email"
+                                            variant="outlined"
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </FormControl>
                                     <FormControl className="col-auto px-2 my-1">
-                                        <button type="submit" className="btn btn-outline-dark text-nowrap" style={{height: "61.6px"}}>
+                                        <button
+                                            type="submit"
+                                            className="btn btn-outline-dark text-nowrap"
+                                            style={{ height: "61.6px" }}
+                                        >
                                             Search
                                         </button>
                                     </FormControl>
@@ -201,24 +215,11 @@ function ProductManagement() {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell className="text-nowrap">Id</TableCell>
-                                                        <TableCell className="text-nowrap">Sản phẩm</TableCell>
                                                         <TableCell className="text-nowrap">User</TableCell>
-                                                        <TableCell className="text-nowrap">Category</TableCell>
-                                                        <TableCell className="text-nowrap" align="right">
-                                                            Giá (₫)
-                                                        </TableCell>
-                                                        <TableCell className="text-nowrap" align="right">
-                                                            Giảm giá (%)
-                                                        </TableCell>
-                                                        <TableCell className="text-nowrap" align="right">
-                                                            Số lượng
-                                                        </TableCell>
-                                                        
-                                                        <TableCell className="text-nowrap">Time</TableCell>
-                                                        <TableCell className="text-nowrap" align="center">
-                                                            Status
-                                                        </TableCell>
-                                                        
+                                                        <TableCell className="text-nowrap">Mobile</TableCell>
+                                                        <TableCell className="text-nowrap">Email</TableCell>
+                                                        <TableCell className="text-nowrap">Created At</TableCell>
+                                                        <TableCell className="text-nowrap">Role</TableCell>
                                                         <TableCell className="text-nowrap" align="center">
                                                             Action
                                                         </TableCell>
@@ -232,70 +233,43 @@ function ProductManagement() {
                                                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                                             >
                                                                 <TableCell component="th" scope="row">
-                                                                    {item.product.id}
+                                                                    {item.id}
                                                                 </TableCell>
+
                                                                 <TableCell>
                                                                     <CardHeader
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={item.product.photos}
+                                                                                src={item.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />
                                                                         }
                                                                         style={{ minWidth: "200px", maxWidth: "400px" }}
-                                                                        title={item.product.title}
+                                                                        title={item.firstName + " " + item.lastName}
                                                                         sx={{ p: 0 }}
                                                                     />
                                                                 </TableCell>
 
+                                                                <TableCell className="text-nowrap">{item.mobile}</TableCell>
+                                                                <TableCell className="text-nowrap">{item.email}</TableCell>
                                                                 <TableCell className="text-nowrap">
-                                                                    {item.product.users.firstName +
-                                                                        " " +
-                                                                        item.product.users.lastName}
+                                                                    {moment(item.createAt).format("DD/MM/YYYY hh:mm:ss A")}
+                                                                    
                                                                 </TableCell>
-                                                                <TableCell className="text-nowrap">
-                                                                    {item.category.title}
-                                                                </TableCell>
-                                                                <TableCell align="right">
-                                                                    {VND.format(item.product.price)}
-                                                                </TableCell>
-                                                                <TableCell align="right">{item.product.discount}(%)</TableCell>
-                                                                <TableCell align="right">{item.product.quantity}</TableCell>
-                                                                
-                                                                <TableCell className="text-nowrap">
-                                                                    {formatDistanceToNow(new Date(item.product.updatedAt), {
-                                                                        locale: vi,
-                                                                        addSuffix: true,
-                                                                    })}
-                                                                </TableCell>
-                                                                <TableCell className="text-nowrap" align="center">
-                                                                    {item.product.status === 0 ? (
-                                                                        <span className="badge bg-warning ms-2">
-                                                                            Chờ xét duyệt
-                                                                        </span>
-                                                                    ) : (
-                                                                        <span className="badge bg-primary ms-2">
-                                                                            Đã xét duyệt
-                                                                        </span>
-                                                                    )}
-                                                                </TableCell>
-                                                                
-                                                                <TableCell align="center" className="row  ">
+                                                                <TableCell className="text-nowrap">{item.role}</TableCell>
+
+                                                                <TableCell align="center"  className="row ">
                                                                     <div className="d-flex">
-                                                                        <Link to={`/product/${item.product.slug}`}>
-                                                                            <IconButton color="primary">
-                                                                                <CalendarViewMonthIcon />
-                                                                            </IconButton>
-                                                                        </Link>
-                                                                        <Link
-                                                                            to={`/management/update-product/${item.product.id}`}
-                                                                        >
-                                                                            <IconButton color="success">
-                                                                                <BorderColorIcon />
-                                                                            </IconButton>
-                                                                        </Link>
+                                                                        <IconButton color="primary">
+                                                                            <CalendarViewMonthIcon />
+                                                                        </IconButton>
+
+                                                                        <IconButton color="success">
+                                                                            <BorderColorIcon />
+                                                                        </IconButton>
+
                                                                         <IconButton color="error">
                                                                             <DeleteIcon />
                                                                         </IconButton>
@@ -305,7 +279,6 @@ function ProductManagement() {
                                                         ))
                                                     ) : (
                                                         <TableRow>
-                                                            {/* Khi không có sản phẩm */}
                                                             <TableCell colSpan={"100%"}>
                                                                 <Stack sx={{ width: "100%" }} spacing={2}>
                                                                     <Alert severity="info">No Data !</Alert>
@@ -338,4 +311,4 @@ function ProductManagement() {
     );
 }
 
-export default ProductManagement;
+export default UsersManagement;

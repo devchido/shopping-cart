@@ -18,14 +18,26 @@ import Orders from "../Order/Orders";
 import OrderDetail from "../Order/OrderDetail";
 import ListProducts from "../Manager/ListProducts";
 import UpdateProduct from "../Manager/UpdateProduct";
+import ProductManagement from "../Admin/ProductManagement";
+import UsersManagement from "../Admin/UsersManagement";
 
 function Router() {
     return (
         <Routes>
             {/* Home */}
             <Route path="/" element={<Home />}></Route>
-            {/* Admin */}
+            {/* Admin management */}
             <Route path="/admin" element={<Admin />}></Route>
+            {/* User management */}
+            <Route path="/admin/user" element={<UsersManagement />}></Route>
+            {/* Products management */}
+            <Route path="/admin/product" element={<ProductManagement />}></Route>
+            {/* Product Detail management */}
+            <Route path="/admin/product" element={<ProductManagement />}></Route>
+            {/* Order management */}
+            <Route path="/admin/order" element={<Admin />}></Route>
+            {/* Transaction management */}
+            <Route path="/admin/transaction" element={<Admin />}></Route>
             {/* Product */}
             <Route path="/product" element={<Product />}></Route>
             {/* Singer Product */}

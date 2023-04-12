@@ -208,10 +208,10 @@ function Navbar(props) {
                                                 <hr />
                                                 <Link to={`/management/${"list-products"}`}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">Product Management</Typography>
+                                                        <Typography textAlign="center">My Product</Typography>
                                                     </MenuItem>
                                                 </Link>
-                                                
+
                                                 {/* <Link to={"/management/create-products"}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
                                                         <Typography textAlign="center">Create Products</Typography>
@@ -221,11 +221,33 @@ function Navbar(props) {
                                         ) : null}
                                         <hr />
                                         {user.role === "ADMIN" ? (
-                                            <Link to={"/admin"}>
-                                                <MenuItem onClick={handleCloseUserMenu}>
-                                                    <Typography textAlign="center">Admin</Typography>
-                                                </MenuItem>
-                                            </Link>
+                                            <div>
+                                                <Link to={"/admin"}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">Admin</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Link to={"/admin/user"}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">User</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Link to={"/admin/product"}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">Product</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Link to={"/admin/order"}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">Order</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                                <Link to={"/admin/transaction"}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">Transaction</Typography>
+                                                    </MenuItem>
+                                                </Link>
+                                            </div>
                                         ) : null}
 
                                         <hr />

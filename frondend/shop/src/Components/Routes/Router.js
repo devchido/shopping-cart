@@ -18,8 +18,12 @@ import Orders from "../Order/Orders";
 import OrderDetail from "../Order/OrderDetail";
 import ListProducts from "../Manager/ListProducts";
 import UpdateProduct from "../Manager/UpdateProduct";
-import ProductManagement from "../Admin/ProductManagement";
-import UsersManagement from "../Admin/UsersManagement";
+import UsersManagement from "../Admin/Users/UsersManagement";
+import ProductManagement from "../Admin/Products/ProductManagement";
+import ProductDetailManagement from "../Admin/Products/ProductDetailManagement";
+import CategoryManagement from "../Admin/Category/CategoryManagement";
+import OrderManagement from "../Admin/Order/OrderManagement";
+import TransactionManagement from "../Admin/Transaction/TransactionManagement";
 
 function Router() {
     return (
@@ -33,11 +37,13 @@ function Router() {
             {/* Products management */}
             <Route path="/admin/product" element={<ProductManagement />}></Route>
             {/* Product Detail management */}
-            <Route path="/admin/product" element={<ProductManagement />}></Route>
+            <Route path="/admin/product/:id" element={<ProductDetailManagement />}></Route>
+            {/* Category management */}
+            <Route path="/admin/category" element={<CategoryManagement />}></Route>
             {/* Order management */}
-            <Route path="/admin/order" element={<Admin />}></Route>
+            <Route path="/admin/order" element={<OrderManagement />}></Route>
             {/* Transaction management */}
-            <Route path="/admin/transaction" element={<Admin />}></Route>
+            <Route path="/admin/transaction" element={<TransactionManagement />}></Route>
             {/* Product */}
             <Route path="/product" element={<Product />}></Route>
             {/* Singer Product */}

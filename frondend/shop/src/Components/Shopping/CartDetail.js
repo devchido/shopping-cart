@@ -16,7 +16,6 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 function CartDetail() {
@@ -295,7 +294,14 @@ function CartDetail() {
             setSnackbarSeverity("error");
             setSnackbarMsg("Giỏ hàng chưa có sản phẩm nào!");
         } else {
-            if (cart.line1 === "" || cart.city === "" || cart.country === "") {
+            if (
+                cart.line1 === "" ||
+                cart.line1 === null ||
+                cart.city === "" ||
+                cart.city === null ||
+                cart.country === "" ||
+                cart.country === null
+            ) {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Thông tin giỏ hàng không hợp lệ!");
@@ -555,7 +561,9 @@ function CartDetail() {
                                                 </form>
                                             </div>
                                         </div>
-                                    ) : <div>Not Found!</div>}
+                                    ) : (
+                                        <div>Not Found!</div>
+                                    )}
                                 </div>
                             </div>
                         </div>

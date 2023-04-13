@@ -3,8 +3,11 @@ package com.example.redstore.resources;
 import com.example.redstore.repository.ProductRepository;
 import com.example.redstore.service.OrderService;
 import com.example.redstore.service.ProductService;
+import com.example.redstore.service.dto.APIResponse;
 import com.example.redstore.service.dto.OrderDto;
+import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -87,6 +90,27 @@ public class OrderResources {
     public void confirmOrder(@RequestParam String id, @RequestParam String status){
         orderService.confirmOrder(id, status);
     }
-
+    // todo: findAllOrder
+    @GetMapping("/auth/admin/{offset}/{pageSize}")
+    private APIResponse<Page<OrderDto>> findAllOrder(
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @RequestParam String field,
+            @RequestParam String sort,
+            @RequestParam String cartId,
+            @RequestParam String userId,
+            @RequestParam String username,
+            @RequestParam String mobile,
+            @RequestParam String email,
+            @RequestParam String address,
+            @RequestParam String city,
+            @RequestParam String country,
+            @RequestParam String status
+    ) {
+        Page<OrderDto> dtos = orderService.findAllOrder(
+                offset, pageSize, field, sort, cartId, userId, username, mobile, email, address, city, country, status
+        );
+        return new APIResponse<>(dtos.getSize(), dtos);
+    }
 
 }

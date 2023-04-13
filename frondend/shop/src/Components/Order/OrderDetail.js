@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { IconButton, Typography } from "@mui/material";
+import { IconButton, Input, Typography } from "@mui/material";
 //
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Snackbar } from "@mui/material";
@@ -19,13 +19,20 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { VND } from "../Unity/VND";
+import { format } from "date-fns";
 
 const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận"];
 function OrderDetail() {
     // id của order
     const { id } = useParams();
     //
-    const [order, setOrder] = React.useState({});
+    const [order, setOrder] = React.useState({
+        id: "",
+        firstName: "",
+        lastName: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    });
     // thông tin chi tiết của order
     const [orderDetail, setOrderDetail] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
@@ -40,7 +47,6 @@ function OrderDetail() {
 
     //
     const [open, setOpen] = React.useState(false);
-    
 
     const handleClickOpen = (item) => {
         console.log(item);
@@ -330,7 +336,7 @@ function OrderDetail() {
                                     <h5 className="mb-0">Trạng thái đơn hàng</h5>
                                 </div>
                                 <div className="card-body">
-                                    <Box sx={{ width: "100%" }}>
+                                    <Box sx={{ width: "100%", my: 2 }}>
                                         <Stepper activeStep={order.status}>
                                             {steps.map((label) => (
                                                 <Step key={label}>
@@ -339,6 +345,21 @@ function OrderDetail() {
                                             ))}
                                         </Stepper>
                                     </Box>
+                                    <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
+                                        <Typography>Created At:</Typography>
+                                        <Input
+                                            type="datetime-local"
+                                            value={format(new Date(order.createdAt), "yyyy-MM-dd'T'hh:mm:ss")}
+                                        />
+                                    </Box>
+                                    {order.updatedAt ? <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
+                                        <Typography>Updated At:</Typography>
+                                        <Input
+                                            type="datetime-local"
+                                            value={format(new Date(order.updatedAt), "yyyy-MM-dd'T'hh:mm:ss")}
+                                        />
+                                    </Box> : null }
+                                    
                                 </div>
                             </div>
                             <div className="card mb-4 mb-lg-0">

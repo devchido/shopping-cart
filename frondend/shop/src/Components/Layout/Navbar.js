@@ -237,6 +237,11 @@ function Navbar(props) {
                                                         <Typography textAlign="center">Product</Typography>
                                                     </MenuItem>
                                                 </Link>
+                                                <Link to={"/admin/category"}>
+                                                    <MenuItem onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">Category</Typography>
+                                                    </MenuItem>
+                                                </Link>
                                                 <Link to={"/admin/order"}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
                                                         <Typography textAlign="center">Order</Typography>

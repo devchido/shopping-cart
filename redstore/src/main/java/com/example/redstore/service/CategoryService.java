@@ -8,6 +8,9 @@ import com.example.redstore.service.dto.CategoryDto;
 import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.service.mapper.CategoryMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,5 +74,13 @@ public class CategoryService {
         Category entity = categoryRepository.singleProductCategory(field).orElseThrow(() -> new RuntimeException("sản phẩm không có category"));
         CategoryDto dto = categoryMapper.toDo(entity);
         return dto;
+    }
+    // todo: findAllCategory
+    public Page<CategoryDto> findAllCategory(int offset, int pageSize, String field, String sort, String title) {
+        Page<Category> entity = categoryRepository.findAllCategory(
+                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+                title);
+        Page<CategoryDto> dtos = entity.map(categoryMapper::toDo);
+        return dtos;
     }
 }

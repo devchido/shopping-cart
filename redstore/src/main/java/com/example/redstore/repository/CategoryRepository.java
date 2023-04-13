@@ -1,6 +1,9 @@
 package com.example.redstore.repository;
 
 import com.example.redstore.domain.Category;
+import com.example.redstore.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +29,10 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
             " where p.slug like concat( '%',:field,'%') "
             , nativeQuery = true)
     Optional<Category> singleProductCategory(String field);
+
+    // todo: findAllCategory
+    @Query(value = " select * from " + db + ".category " +
+            " where title like concat('%', :title, '%') "
+            , nativeQuery = true)
+    Page<Category> findAllCategory(Pageable pageable, String title);
 }

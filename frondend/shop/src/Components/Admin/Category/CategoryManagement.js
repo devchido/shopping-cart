@@ -28,39 +28,41 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TablePagination from "@mui/material/TablePagination";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
-import { VND } from "../Unity/VND";
+import { VND } from "../../Unity/VND";
+import moment from "moment";
 
-function ListProducts() {
-    const [status, setStatus] = React.useState("");
-    const [product, setProduct] = React.useState([]);
+function CategoryManagement() {
+    // data product-category
+    const [data, setData] = React.useState([]);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    const [category, setCategory] = React.useState("");
 
     // Trang hiện tại của page
     const [page, setPage] = React.useState(0);
 
     // Số sản phẩm được hiển thị
-    const [pageSize, setPageSize] = React.useState(10);
+    const [pageSize, setPageSize] = React.useState(5);
     const [field, setField] = React.useState("id");
-    const [totalElements, setTotalElements] = React.useState("");
-    const [title, setTitle] = React.useState("");
     const [sort, setSort] = React.useState("ASC");
+    const [title, setTitle] = React.useState("");
+    const [totalElements, setTotalElements] = React.useState("");
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
-        loadDataProduct();
+        loadDataCategory();
     };
 
     const handleChangePageSize = (event) => {
         setPageSize(parseInt(event.target.value, 10));
         setPage(0);
-        loadDataProduct();
+        loadDataCategory();
     };
     const navigation = useNavigate();
     const handleChange = (event) => {
-        setStatus(event.target.value);
-        loadDataProduct();
+        // setRole(event.target.value);
+        loadDataCategory();
     };
     //
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -77,7 +79,7 @@ function ListProducts() {
         setSnackbarOpen(false);
     };
 
-    const loadDataProduct = () => {
+    const loadDataCategory = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var requestOptions = {
@@ -85,7 +87,10 @@ function ListProducts() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch(`/product/auth/user/${page}/${pageSize}/${field}?title=${title}&status=${status}&sort=${sort}`, requestOptions)
+        fetch(
+            `/category/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&title=${title}`,
+            requestOptions
+        )
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -93,26 +98,26 @@ function ListProducts() {
                 throw Error(response.status);
             })
             .then((result) => {
-                console.log("product", result);
-                setProduct(result.response.content);
+                console.log("category", result);
+                setData(result.response.content);
                 setTotalElements(result.response.totalElements);
             })
             .catch((error) => {
                 console.log("error", error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
-                setSnackbarMsg("error!");
+                setSnackbarMsg("error! không load được dữ liệu user");
             });
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         setPage(0);
-        loadDataProduct();
+        loadDataCategory();
     };
     React.useEffect(() => {
-        loadDataProduct();
-    }, [page, pageSize, status]);
+        loadDataCategory();
+    }, [page, pageSize]);
     return (
         <div>
             <Snackbar
@@ -133,49 +138,38 @@ function ListProducts() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
-            <section className="h-100 gradient-custom">
+            <section className="h-100 gradient-custom col-lg-12">
                 <div className="container py-5">
                     <div className="row d-flex justify-content-center my-4">
                         <div>
                             <div className="card mb-4">
                                 <div className="card-header d-flex py-3 justify-content-between ">
-                                    <h5 className="mt-1">Danh sách sản phẩm</h5>
-                                    <NavLink to={"/management/create-products"}>
-                                        <button className="btn btn-outline-dark">Tạo mới</button>
-                                    </NavLink>
+                                    <h5 className="mt-1">Quản lý Category</h5>
+                                    <strong>{data.length}</strong>
                                 </div>
                             </div>
                             <div className="card mb-4">
                                 <Box
                                     component="form"
                                     onSubmit={handleSubmit}
-                                    className="card-body d-flex justify-content-between"
+                                    className="card-body row d-flex justify-content-between"
                                 >
-                                    <FormControl className="px-2">
-                                        <Select
-                                            inputProps={{ "aria-label": "Without label" }}
-                                            value={status}
-                                            displayEmpty
-                                            onChange={handleChange}
-                                        >
-                                            <MenuItem value="">
-                                                <em>Tất cả</em>
-                                            </MenuItem>
-                                            <MenuItem value={0}>Chờ xét duyệt</MenuItem>
-                                            <MenuItem value={1}>Đã xét duyệt</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <FormControl className="col-lg-8 col-auto px-2">
+                                    
+                                    
+                                    <FormControl className="col-lg-3 col-auto px-2 my-1">
                                         <TextField
                                             id="outlined-basic"
-                                            name="title"
-                                            label="Search"
+                                            label="Search category"
                                             variant="outlined"
                                             onChange={(e) => setTitle(e.target.value)}
                                         />
                                     </FormControl>
-                                    <FormControl className="col-auto px-2">
-                                        <button type="submit" className="btn btn-outline-dark h-100">
+                                    <FormControl className="col-auto px-2 my-1">
+                                        <button
+                                            type="submit"
+                                            className="btn btn-outline-dark text-nowrap"
+                                            style={{ height: "61.6px" }}
+                                        >
                                             Search
                                         </button>
                                     </FormControl>
@@ -189,29 +183,18 @@ function ListProducts() {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell className="text-nowrap">Id</TableCell>
-                                                        <TableCell className="text-nowrap">Sản phẩm</TableCell>
-                                                        <TableCell className="text-nowrap" align="right">
-                                                            Giá (₫)
-                                                        </TableCell>
-                                                        <TableCell className="text-nowrap" align="right">
-                                                            Giảm giá (%)
-                                                        </TableCell>
-                                                        <TableCell className="text-nowrap" align="right">
-                                                            Số lượng
-                                                        </TableCell>
-                                                        {/* <TableCell className="text-nowrap">Created At</TableCell> */}
-                                                        <TableCell className="text-nowrap">Updated At</TableCell>
-                                                        <TableCell className="text-nowrap" align="center">
-                                                            Status
-                                                        </TableCell>
+                                                        <TableCell className="text-nowrap">Category</TableCell>
+                                                        <TableCell className="text-nowrap">Meta Title</TableCell>
+                                                        <TableCell className="text-nowrap">Sulg</TableCell>
+                                                        <TableCell className="text-nowrap">Content</TableCell>
                                                         <TableCell className="text-nowrap" align="center">
                                                             Action
                                                         </TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {product.length > 0 ? (
-                                                        product.map((item, i) => (
+                                                    {data.length > 0 ? (
+                                                        data.map((item, i) => (
                                                             <TableRow
                                                                 key={item.id}
                                                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -219,61 +202,26 @@ function ListProducts() {
                                                                 <TableCell component="th" scope="row">
                                                                     {item.id}
                                                                 </TableCell>
-                                                                <TableCell>
-                                                                    <CardHeader
-                                                                        avatar={
-                                                                            <Avatar
-                                                                                alt="Remy Sharp"
-                                                                                src={item.photos}
-                                                                                variant="rounded"
-                                                                            />
-                                                                        }
-                                                                        style={{ minWidth: "200px", maxWidth: "400px" }}
-                                                                        title={item.title}
-                                                                        sx={{ p: 0 }}
-                                                                    />
-                                                                </TableCell>
 
-                                                                <TableCell align="right">{VND.format(item.price)}</TableCell>
-                                                                <TableCell align="right">{item.discount}(%)</TableCell>
-                                                                <TableCell align="right">{item.quantity}</TableCell>
-                                                                {/* <TableCell className="text-nowrap">
-                                                                    <input 
-                                                                    type="datetime-local"
-                                                                    defaultValue={format(new Date(item.createdAt), "yyyy-MM-dd'T'hh:mm")}
-                                                                    />
                                                                 
-                                                                </TableCell> */}
-                                                                <TableCell className="text-nowrap">
-                                                                    {formatDistanceToNow(new Date(item.updatedAt), {
-                                                                        locale: vi,
-                                                                        addSuffix: true,
-                                                                    })}
-                                                                </TableCell>
-                                                                <TableCell className="text-nowrap" align="center">
-                                                                    {item.status === 0 ? (
-                                                                        <span className="badge bg-warning ms-2">
-                                                                            Chờ xét duyệt
-                                                                        </span>
-                                                                    ) : (
-                                                                        <span className="badge bg-primary ms-2">
-                                                                            Đã xét duyệt
-                                                                        </span>
-                                                                    )}
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <div className="d-flex">
-                                                                        <Link to={`/product/${item.slug}`}>
-                                                                            <IconButton color="primary" title="View">
-                                                                                <CalendarViewMonthIcon />
-                                                                            </IconButton>
-                                                                        </Link>
-                                                                        <Link to={`/management/update-product/${item.id}`}>
-                                                                            <IconButton color="success" title="Edit">
-                                                                                <BorderColorIcon />
-                                                                            </IconButton>
-                                                                        </Link>
-                                                                        <IconButton color="error" title="Remove">
+
+                                                                <TableCell className="text-nowrap">{item.title}</TableCell>
+                                                                <TableCell className="text-nowrap">{item.metaTitle}</TableCell>
+                                                                
+                                                                <TableCell className="text-nowrap">{item.slug}</TableCell>
+                                                                <TableCell className="text-nowrap">{item.content}</TableCell>
+
+                                                                <TableCell align="center"  className="row ">
+                                                                    <div className="d-flex justify-content-center">
+                                                                        {/* <IconButton color="primary">
+                                                                            <CalendarViewMonthIcon />
+                                                                        </IconButton> */}
+
+                                                                        <IconButton color="success" title="Edit">
+                                                                            <BorderColorIcon />
+                                                                        </IconButton>
+
+                                                                        <IconButton color="error" title="Delete">
                                                                             <DeleteIcon />
                                                                         </IconButton>
                                                                     </div>
@@ -282,7 +230,6 @@ function ListProducts() {
                                                         ))
                                                     ) : (
                                                         <TableRow>
-                                                            {/* Khi không có sản phẩm */}
                                                             <TableCell colSpan={"100%"}>
                                                                 <Stack sx={{ width: "100%" }} spacing={2}>
                                                                     <Alert severity="info">No Data !</Alert>
@@ -315,4 +262,4 @@ function ListProducts() {
     );
 }
 
-export default ListProducts;
+export default CategoryManagement;

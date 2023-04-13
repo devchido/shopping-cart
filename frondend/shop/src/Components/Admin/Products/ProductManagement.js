@@ -28,7 +28,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TablePagination from "@mui/material/TablePagination";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
-import { VND } from "../Unity/VND";
+import { VND } from "../../Unity/VND";
 
 function ProductManagement() {
     const [status, setStatus] = React.useState("");
@@ -43,7 +43,7 @@ function ProductManagement() {
     const [page, setPage] = React.useState(0);
 
     // Số sản phẩm được hiển thị
-    const [pageSize, setPageSize] = React.useState(10);
+    const [pageSize, setPageSize] = React.useState(5);
     const [field, setField] = React.useState("product_id");
     const [totalElements, setTotalElements] = React.useState("");
     const [title, setTitle] = React.useState("");

@@ -4,10 +4,16 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Profile from "../User/Profile";
-import ProductManagement from "./ProductManagement";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import CategoryIcon from '@mui/icons-material/Category';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import ProductManagement from "./Products/ProductManagement";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CategoryIcon from "@mui/icons-material/Category";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import UsersManagement from "./Users/UsersManagement";
+import CategoryManagement from "./Category/CategoryManagement";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import OrderManagement from "./Order/OrderManagement";
+import TransactionManagement from "./Transaction/TransactionManagement";
+import StoreIcon from "@mui/icons-material/Store";
 // có thể xem để test nav
 // Nested List
 function TabPanel(props) {
@@ -59,25 +65,64 @@ function Admin() {
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
-                className="text-left"
-                sx={{ borderRight: 1, borderColor: "divider" }}
+                className="text-left col-3"
+                sx={{ borderRight: 1, borderColor: "divider", width: "12rem", justifyContent: "left" }}
             >
-                <Tab label="Quản lý user" className={"text-nowrap m-0 mx-2 px-2"} {...a11yProps(0)} icon={<AccountCircleIcon />} iconPosition="start" />
-                <Tab label="Quản lý product" className={"text-nowrap m-0 px-2"} {...a11yProps(1)} />
-                <Tab label="Quản lý category" className={"text-nowrap m-0 px-2"} {...a11yProps(2)} icon={<CategoryIcon />} iconPosition="start" />
-                <Tab label="Quản lý Order" className={"text-nowrap m-0 px-2"} {...a11yProps(3)} icon={<AssignmentIcon />} iconPosition="start" />
+                <Tab
+                    label="user"
+                    className={"text-nowrap"}
+                    sx={{ justifyContent: "left" }}
+                    {...a11yProps(0)}
+                    icon={<AccountCircleIcon />}
+                    iconPosition="start"
+                />
+                <Tab
+                    label="product"
+                    className={"text-nowrap"}
+                    sx={{ justifyContent: "left" }}
+                    {...a11yProps(1)}
+                    icon={<StoreIcon />}
+                    iconPosition="start"
+                />
+                <Tab
+                    label="category"
+                    className={"text-nowrap"}
+                    sx={{ justifyContent: "left" }}
+                    {...a11yProps(2)}
+                    icon={<CategoryIcon />}
+                    iconPosition="start"
+                />
+                <Tab
+                    label="Order"
+                    className={"text-nowrap"}
+                    sx={{ justifyContent: "left" }}
+                    {...a11yProps(3)}
+                    icon={<AssignmentIcon />}
+                    iconPosition="start"
+                />
+                <Tab
+                    label="Transaction"
+                    className={"text-nowrap"}
+                    sx={{ justifyContent: "left" }}
+                    {...a11yProps(4)}
+                    icon={<ReceiptLongIcon />}
+                    iconPosition="start"
+                />
             </Tabs>
             <TabPanel value={value} index={0}>
-                Quản lý user
+                <UsersManagement />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <ProductManagement />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                Item Three
+                <CategoryManagement />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                Item Four
+                <OrderManagement />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+                <TransactionManagement />
             </TabPanel>
         </Box>
     );

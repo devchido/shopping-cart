@@ -28,7 +28,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TablePagination from "@mui/material/TablePagination";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
-import { VND } from "../Unity/VND";
+import { VND } from "../../Unity/VND";
 import moment from "moment";
 
 function UsersManagement() {
@@ -43,7 +43,7 @@ function UsersManagement() {
     const [page, setPage] = React.useState(0);
 
     // Số sản phẩm được hiển thị
-    const [pageSize, setPageSize] = React.useState(10);
+    const [pageSize, setPageSize] = React.useState(5);
     const [field, setField] = React.useState("id");
     const [sort, setSort] = React.useState("ASC");
     const [keyname, setKeyName] = React.useState("");
@@ -218,7 +218,6 @@ function UsersManagement() {
                                                         <TableCell className="text-nowrap">User</TableCell>
                                                         <TableCell className="text-nowrap">Mobile</TableCell>
                                                         <TableCell className="text-nowrap">Email</TableCell>
-                                                        <TableCell className="text-nowrap">Created At</TableCell>
                                                         <TableCell className="text-nowrap">Role</TableCell>
                                                         <TableCell className="text-nowrap" align="center">
                                                             Action
@@ -254,14 +253,11 @@ function UsersManagement() {
 
                                                                 <TableCell className="text-nowrap">{item.mobile}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.email}</TableCell>
-                                                                <TableCell className="text-nowrap">
-                                                                    {moment(item.createAt).format("DD/MM/YYYY hh:mm:ss A")}
-                                                                    
-                                                                </TableCell>
+                                                                
                                                                 <TableCell className="text-nowrap">{item.role}</TableCell>
 
                                                                 <TableCell align="center"  className="row ">
-                                                                    <div className="d-flex">
+                                                                    <div className="d-flex justify-content-center">
                                                                         <IconButton color="primary">
                                                                             <CalendarViewMonthIcon />
                                                                         </IconButton>

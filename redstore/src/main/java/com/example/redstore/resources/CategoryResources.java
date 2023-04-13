@@ -2,9 +2,12 @@ package com.example.redstore.resources;
 
 import com.example.redstore.service.CategoryService;
 import com.example.redstore.service.ProductService;
+import com.example.redstore.service.dto.APIResponse;
 import com.example.redstore.service.dto.CategoryDto;
 import com.example.redstore.service.dto.ProductDto;
+import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,5 +51,19 @@ public class CategoryResources {
     public CategoryDto singleProductCategory(@RequestParam String field){
         CategoryDto dto = categoryService.singleProductCategory(field);
         return dto;
+    }
+    // todo: findAllCategory
+    @GetMapping("/auth/admin/{offset}/{pageSize}")
+    private APIResponse<Page<CategoryDto>> findAllCategory(
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @RequestParam(value = "field", defaultValue = "id") String field,
+            @RequestParam(value = "sort", defaultValue = "ASC") String sort,
+            @RequestParam(value = "title", defaultValue = "") String title
+    ) {
+        Page<CategoryDto> dtos = categoryService.findAllCategory(
+                offset, pageSize, field, sort, title
+        );
+        return new APIResponse<>(dtos.getSize(), dtos);
     }
 }

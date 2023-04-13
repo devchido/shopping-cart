@@ -4,10 +4,14 @@ import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
 import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.OrderDto;
+import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.service.mapper.CartItemMapOrderItemMapper;
 import com.example.redstore.service.mapper.CartMapOrderMapper;
 import com.example.redstore.service.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -233,5 +237,23 @@ public class OrderService {
 
         }
 
+    }
+
+    // todo: findAllOrder
+    public Page<OrderDto> findAllOrder(int offset, int pageSize, String field, String sort, String cartId,
+                                       String userId,
+                                       String username,
+                                       String mobile,
+                                       String email,
+                                       String address,
+                                       String city,
+                                       String country,
+                                       String status) {
+        Page<Order> entity = orderRepository.findAllOrder(
+                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+                cartId, userId, username, mobile, email, address, city, country, status
+                );
+        Page<OrderDto> dtos = entity.map(orderMapper::toDo);
+        return dtos;
     }
 }

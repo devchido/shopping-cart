@@ -83,16 +83,23 @@ function UsersManagement() {
     };
 
     const loadDataUser = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        var requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow",
-        };
+        var url = "/user/auth/admin/" + page + "/" + pageSize + "?";
         fetch(
-            `/user/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&keyname=${keyname}&mobile=${mobile}&email=${email}&role=${role}`,
-            requestOptions
+            url +
+                new URLSearchParams({
+                    field: field,
+                    sort: sort,
+                    keyname: keyname,
+                    mobile: mobile,
+                    email: email,
+                    role: role,
+                }),
+            {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
         )
             .then((response) => {
                 if (response.ok) {
@@ -253,22 +260,23 @@ function UsersManagement() {
 
                                                                 <TableCell className="text-nowrap">{item.mobile}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.email}</TableCell>
-                                                                
+
                                                                 <TableCell className="text-nowrap">{item.role}</TableCell>
 
-                                                                <TableCell align="center"  className="row ">
+                                                                <TableCell align="center" className="row ">
                                                                     <div className="d-flex justify-content-center">
-                                                                        <IconButton color="primary">
+                                                                        {/* <IconButton color="primary">
                                                                             <CalendarViewMonthIcon />
-                                                                        </IconButton>
-
+                                                                        </IconButton> */}
+                                                                        <Link to={`/admin/user/${item.id}`}>
                                                                         <IconButton color="success">
                                                                             <BorderColorIcon />
                                                                         </IconButton>
+                                                                        </Link>
 
-                                                                        <IconButton color="error">
+                                                                        {/* <IconButton color="error">
                                                                             <DeleteIcon />
-                                                                        </IconButton>
+                                                                        </IconButton> */}
                                                                     </div>
                                                                 </TableCell>
                                                             </TableRow>

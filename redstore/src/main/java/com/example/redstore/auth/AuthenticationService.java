@@ -158,9 +158,8 @@ public class AuthenticationService {
     Admin: Cập nhật quyền cho user
      */
     public void updateRoleUser(String userId,String role){
-        var user = userRepository.findById(userId).orElse(null);
+        var user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("Không tìm thấy user"+ userId));
         user.setRole(Role.valueOf(role));
-
         userRepository.save(user);
     }
 }

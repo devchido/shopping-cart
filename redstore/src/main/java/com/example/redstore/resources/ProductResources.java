@@ -164,10 +164,10 @@ public class ProductResources {
         return dtos;
     }
 
-    // Quản lý trạng thái status của các product: ẩn || hiện trên hệ thống
+    // Quản lý trạng thái status của các product:
     @PutMapping("/auth/admin/setStatus")
-    public void setStatusProduct(@RequestParam("id") String id) {
-        productService.setStatusProduct(id);
+    public void setStatusProduct(@RequestParam("id") String id, @RequestParam("status") int status) {
+        productService.setStatusProduct(id, status);
     }
 
     // sản phẩm mới nhất

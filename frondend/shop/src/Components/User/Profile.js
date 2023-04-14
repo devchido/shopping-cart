@@ -87,13 +87,13 @@ function Profile() {
                                     <div className="mb-5">
                                         <p className="lead fw-normal mb-1">Intro</p>
                                         <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
-                                            <p className="font-italic mb-1">{user.intro}</p>
+                                            <textarea className="font-italic mb-1">{user.intro}</textarea>
                                         </div>
                                     </div>
                                     <div className="mb-5">
                                         <p className="lead fw-normal mb-1">Profile</p>
                                         <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
-                                            <p className="font-italic mb-1">{user.profile}</p>
+                                            <textarea className="font-italic mb-1">{user.profile}</textarea>
                                         </div>
                                     </div>
                                     

@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Autocomplete, Avatar, CardHeader, Stack, TableFooter, TextField, Typography } from "@mui/material";
+import { Autocomplete, Avatar, CardHeader, Input, Stack, TableFooter, TextField, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -316,7 +316,25 @@ function OrderManagement() {
                                                                         locale: vi,
                                                                         addSuffix: true,
                                                                     })} */}
-                                                                    {format(new Date(item.createdAt), "yyyy-MM-dd'T'hh:mm:ss")}
+                                                                    {item.updatedAt ? (
+                                                                        <Input
+                                                                            type="datetime-local"
+                                                                            defaultValue={format(
+                                                                                new Date(item.updatedAt),
+                                                                                "yyyy-MM-dd'T'hh:mm"
+                                                                            )}
+                                                                            readOnly
+                                                                        />
+                                                                    ) : (
+                                                                        <Input
+                                                                            type="datetime-local"
+                                                                            defaultValue={format(
+                                                                                new Date(item.createdAt),
+                                                                                "yyyy-MM-dd'T'hh:mm"
+                                                                            )}
+                                                                            readOnly
+                                                                        />
+                                                                    )}
                                                                 </TableCell>
                                                                 <TableCell className="text-nowrap">
                                                                     {item.status === 0

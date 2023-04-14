@@ -256,7 +256,7 @@ function ListProducts() {
                                                                             Chờ xét duyệt
                                                                         </span>
                                                                     ) : (
-                                                                        <span className="badge bg-primary ms-2">
+                                                                        <span className="badge bg-info ms-2">
                                                                             Đã xét duyệt
                                                                         </span>
                                                                     )}

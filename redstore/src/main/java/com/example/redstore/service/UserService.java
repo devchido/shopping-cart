@@ -92,7 +92,7 @@ public class UserService {
         UserDto dto = userMapper.toDo(entity);
         return dto;
     }
-    // todo: findAllUsers
+    // todo: findAllUsers by page
     public Page<UserDto> findAllUsers( int offset, int pageSize, String field, String sort, String keyname, String mobile, String email, String role) {
         Page<User> entity = userRepository.findAllUsers(
                 (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
@@ -100,5 +100,12 @@ public class UserService {
                 role);
         Page<UserDto> dtos = entity.map(userMapper::toDo);
         return dtos;
+    }
+    // todo: findUserById
+    public UserDto findUserById(String id) {
+        User entity = userRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy user với id: "+id));
+        System.out.println("get user : " +entity.getFirstName() + entity.getLastName());
+        UserDto dto = userMapper.toDo(entity);
+        return dto;
     }
 }

@@ -285,20 +285,20 @@ function ProductManagement() {
                                                                 <TableCell align="center" className="row  ">
                                                                     <div className="d-flex">
                                                                         <Link to={`/product/${item.product.slug}`}>
-                                                                            <IconButton color="primary">
+                                                                            <IconButton color="primary" title="View">
                                                                                 <CalendarViewMonthIcon />
                                                                             </IconButton>
                                                                         </Link>
                                                                         <Link
-                                                                            to={`/management/update-product/${item.product.id}`}
+                                                                            to={`/admin/product/${item.product.id}`}
                                                                         >
-                                                                            <IconButton color="success">
+                                                                            <IconButton color="success" title="Edit">
                                                                                 <BorderColorIcon />
                                                                             </IconButton>
                                                                         </Link>
-                                                                        <IconButton color="error">
+                                                                        {/* <IconButton color="error">
                                                                             <DeleteIcon />
-                                                                        </IconButton>
+                                                                        </IconButton> */}
                                                                     </div>
                                                                 </TableCell>
                                                             </TableRow>

@@ -93,8 +93,8 @@ public class UserResources {
     }
 
     // Admin: Cập nhật quyền cho user
-    @PutMapping("/auth/admin/role/{userId}")
-    public void updateRoleUser(@PathVariable String userId, @RequestParam String role){
+    @PutMapping("/auth/admin/role")
+    public void updateRoleUser(@RequestParam String userId, @RequestParam String role){
         service.updateRoleUser(userId, role);
     }
     // todo: findAllUsers
@@ -114,7 +114,12 @@ public class UserResources {
         );
         return new APIResponse<>(dtos.getSize(), dtos);
     }
-
+    // todo: findUserById
+    @GetMapping("/auth/admin/u/{id}")
+    private UserDto findUserById(@PathVariable String id){
+        UserDto dto = userService.findUserById(id);
+        return dto;
+    }
 
 //    test admin : false
     @GetMapping({"/auth/forUser"})

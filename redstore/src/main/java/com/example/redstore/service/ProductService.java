@@ -101,17 +101,17 @@ public class ProductService {
                 Optional<Category> category = categoryRepository.findBySlug(dto.getCategory());
                 if (category.isPresent()) {
                     ProductCategory check = productCategoryRepository.findByProductId(entity.getId()).orElse(null);
-                    if (check != null){
+                    if (check != null) {
                         check.setCategory(category.get());
                         productCategoryRepository.save(check);
-                        System.out.println("thay đổi category cho product có id= "+entity.getId() );
+                        System.out.println("thay đổi category cho product có id= " + entity.getId());
                     } else {
 
                         ProductCategory productCategory = new ProductCategory();
                         productCategory.setProduct(entity);
                         productCategory.setCategory(category.get());
                         productCategoryRepository.save(productCategory);
-                        System.out.println("Thực thi thêm category cho product có id= "+entity.getId());
+                        System.out.println("Thực thi thêm category cho product có id= " + entity.getId());
                     }
                 }
             }
@@ -236,17 +236,32 @@ public class ProductService {
         return dtos;
     }
 
-    public void setStatusProduct(String id) {
-        Product entity = productRepository.findById(id).orElse(null);
-        if (entity.getStatus() == 1) {
+    public void setStatusProduct(String id, int status) {
+        Product entity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm!"));
+        if (status == 0) {
             entity.setStatus((short) 0);
             productRepository.save(entity);
             System.out.println("Ẩn product");
-        } else {
+        }
+        ;
+        if (status == 1) {
             entity.setStatus((short) 1);
             productRepository.save(entity);
-            System.out.println("Hiện product");
+            System.out.println("Xác nhận sản phẩm");
         }
+        ;
+        if (status == 2) {
+            entity.setStatus((short) 2);
+            productRepository.save(entity);
+            System.out.println("Kiểm duyệt sản phẩm");
+        }
+        ;
+        if (status == 3) {
+            entity.setStatus((short) 3);
+            productRepository.save(entity);
+            System.out.println("Ngừng bán sản phẩm");
+        }
+
     }
 
     public List<ProductDto> lastestProduct(String field) {

@@ -24,6 +24,7 @@ import ProductDetailManagement from "../Admin/Products/ProductDetailManagement";
 import CategoryManagement from "../Admin/Category/CategoryManagement";
 import OrderManagement from "../Admin/Order/OrderManagement";
 import TransactionManagement from "../Admin/Transaction/TransactionManagement";
+import UserDetailManagement from "../Admin/Users/UserDetailManagement";
 
 function Router() {
     return (
@@ -34,6 +35,8 @@ function Router() {
             <Route path="/admin" element={<Admin />}></Route>
             {/* User management */}
             <Route path="/admin/user" element={<UsersManagement />}></Route>
+            {/* User detail management */}
+            <Route path="/admin/user/:id" element={<UserDetailManagement />}></Route>
             {/* Products management */}
             <Route path="/admin/product" element={<ProductManagement />}></Route>
             {/* Product Detail management */}

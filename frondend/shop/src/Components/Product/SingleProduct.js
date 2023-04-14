@@ -1,4 +1,4 @@
-import { Alert, Box, Divider, Drawer, IconButton, List, ListItem, Snackbar, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Divider, Drawer, IconButton, List, ListItem, Snackbar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,7 +9,9 @@ import { vi } from "date-fns/locale";
 import { VND } from "../Unity/VND";
 function SingleProduct() {
     const { slug } = useParams();
-    const [product, setProduct] = useState([]);
+    const [product, setProduct] = useState({
+        users: {},
+    });
     const [category, setCategory] = useState([]);
     const [cart, setCart] = React.useState([]);
     const [loading, setLoading] = useState(false);
@@ -111,7 +113,6 @@ function SingleProduct() {
                             max={product.quantity}
                             name="quantity"
                             value={quantity}
-                            defaultValue={quantity}
                             type="number"
                             className="form-control form-control-sm"
                             onChange={(e) => {
@@ -161,20 +162,29 @@ function SingleProduct() {
                         </>
                     ) : null}
                 </div>
-                <div className="d-flex justify-content-center my-4">
-
-                    <div className="card mb-4 w-100">
+                <div className=" justify-content-center my-4">
+                    <div className="card  mb-4 w-100">
                         <div className="card-header py-3">
                             <h5 className="mb-0 text-capitalize">Thông tin chi tiết</h5>
                         </div>
                         <div className="card-body">
-                            <p>
-
-                            <strong><pre >{product.content}</pre></strong>
-                            </p>
+                            
+                                <strong>
+                                    <pre>{product.content}</pre>
+                                </strong>
+                            
                         </div>
                     </div>
-                
+                    <br />
+                    <div className="card mb-4 w-100">
+                        <div className="card-header py-3">
+                            <h5 className="mb-0 text-capitalize">Người bán</h5>
+                        </div>
+                        <div className="card-body d-flex">
+                            <Avatar alt="Remy Sharp" src={product.users.photos} variant="rounded" />
+                            <p className="my-auto mx-3"><strong>{product.users.firstName + " " + product.users.lastName}</strong></p>
+                        </div>
+                    </div>
                 </div>
             </>
         );

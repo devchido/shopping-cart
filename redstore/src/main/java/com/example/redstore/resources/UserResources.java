@@ -42,12 +42,6 @@ public class UserResources {
     }
 
 
-    //edit
-    @PutMapping("/auth/edit/{id}")
-    public void edit(@RequestBody UserDto dto, @PathVariable("id") Long id) {
-        userService.edit(id, dto);
-    }
-
     //delete
     @DeleteMapping("/auth/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
@@ -70,6 +64,7 @@ public class UserResources {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    // todo: get data user đang đăng nhập
     @GetMapping("/auth/info")
     public UserDto getUserInformation() {
         UserDto dto = userService.getUserInformation();
@@ -81,22 +76,23 @@ public class UserResources {
     @PutMapping("/auth/updatePassUser")
     public ResponseEntity<AuthenticationResponse> updatePassUser(
             @RequestBody UserDto dto
-    ){
+    ) {
         return ResponseEntity.ok(service.updatePassUser(dto));
     }
 
 
     // Cập nhật thông tin người dùng
     @PutMapping("/auth/updateInfo")
-    public ResponseEntity<AuthenticationResponse> updateInfo(@RequestBody UserDto dto){
+    public ResponseEntity<AuthenticationResponse> updateInfo(@RequestBody UserDto dto) {
         return ResponseEntity.ok(service.updateInfo(dto));
     }
 
     // Admin: Cập nhật quyền cho user
     @PutMapping("/auth/admin/role")
-    public void updateRoleUser(@RequestParam String userId, @RequestParam String role){
+    public void updateRoleUser(@RequestParam String userId, @RequestParam String role) {
         service.updateRoleUser(userId, role);
     }
+
     // todo: findAllUsers
     @GetMapping("/auth/admin/{offset}/{pageSize}")
     private APIResponse<Page<UserDto>> findAllUsers(
@@ -108,27 +104,41 @@ public class UserResources {
             @RequestParam(value = "mobile", defaultValue = "") String mobile,
             @RequestParam(value = "email", defaultValue = "") String email,
             @RequestParam(value = "role", defaultValue = "") String role
-            ) {
+    ) {
         Page<UserDto> dtos = userService.findAllUsers(
-                 offset, pageSize, field, sort, keyname, mobile, email, role
+                offset, pageSize, field, sort, keyname, mobile, email, role
         );
         return new APIResponse<>(dtos.getSize(), dtos);
     }
-    // todo: findUserById
+
+    // todo: admin - findUserById
     @GetMapping("/auth/admin/u/{id}")
-    private UserDto findUserById(@PathVariable String id){
+    private UserDto findUserById(@PathVariable String id) {
         UserDto dto = userService.findUserById(id);
         return dto;
     }
 
-//    test admin : false
+    // todo: api : đang lỗi
+    @GetMapping("/api/u/{id}")
+    private UserDto filterUserById(@PathVariable String id) {
+        UserDto dto = userService.filterUserById(id);
+        return dto;
+    }
+
+    // todo: amdin edit data user by id
+    @PutMapping("/auth/admin/u")
+    public void edit(@RequestParam("id") String id, @RequestBody UserDto dto) {
+        userService.edit(id, dto);
+    }
+
+    //    test admin : false
     @GetMapping({"/auth/forUser"})
-    public String forUser(){
+    public String forUser() {
         return "This URL is only accessible to user";
     }
 
     @GetMapping({"/auth/forAdmin"})
-    public String forAdmin(){
+    public String forAdmin() {
         return "This URL is only accessible to Admin";
     }
 }

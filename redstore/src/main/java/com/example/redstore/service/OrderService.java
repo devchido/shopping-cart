@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -182,32 +183,44 @@ public class OrderService {
         return null;
     }
 
-    public void confirmOrder(String id, String status) {
-        Order entity = orderRepository.findById(id).orElse(null);
-        if (entity.getStatus() != 1) {
+    /*
+    todo: Thực hiện thay đổi trạng thái của order
+    nếu order đó ở trạng thái 1 thì order đó đã huỷ -> không thực hiện thêm
+    còn không thì thực hiện bước tiếp theo:
+        Xác nhận thay đổi trạng thái status của order đó và lưu lại
+        nếu status nhập vào == 2, trạng thái xác nhận đơn hàng, thì thực hiện tạo phiếu thanh toán cho phiếu order đó
 
-            entity.setStatus(Short.valueOf(status));
+     */
+    public void confirmOrder(String id, int status) {
+        Order entity = orderRepository.findById(id).orElse(null);
+        if (entity != null && entity.getStatus() != 1) {
+            entity.setStatus((short) status);
             entity.setUpdatedAt(Instant.now());
             orderRepository.save(entity);
-            if (Short.valueOf(status) == 2) {
-                Transaction transaction = new Transaction();
-                transaction.setOrder(entity);
-                transaction.setUsers(entity.getUsers());
-                transaction.setType((short) 0);
-                transaction.setMode((short) 0);
-                transaction.setStatus((short) 0);
-                transaction.setContent(entity.getContent());
-                transaction.setCreatedAt(Instant.now());
-                transaction.setUpdatedAt(Instant.now());
-                transactionRepository.save(transaction);
-                System.out.println("Tạo transaction");
+            if (status == 2) {
+                Transaction check = transactionRepository.findByOrderId(entity.getId()).orElse(null);
+                if (check == null) {
+                    Transaction transaction = new Transaction();
+                    transaction.setOrder(entity);
+                    transaction.setUsers(entity.getUsers());
+                    transaction.setType((short) 0);
+                    transaction.setMode((short) 0);
+                    transaction.setStatus((short) 0);
+                    transaction.setContent(entity.getContent());
+                    transaction.setCreatedAt(Instant.now());
+                    transaction.setUpdatedAt(Instant.now());
+                    transactionRepository.save(transaction);
+                    System.out.println("Tạo transaction");
+                } else {
+                    System.out.println("Đã có transaction");
+                }
             }
             System.out.println("Thưc thi confirm order");
         }
     }
 
     public void cancelOrder(String id) {
-        Order entity = orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy thông tin order: "+id));
+        Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin order: " + id));
         if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
             System.out.println("đúng người sở hữu");
             // Nếu đơn hàng không phải ở trạng thái hoàn thành hay đã huỷ thì thực hiện
@@ -252,8 +265,14 @@ public class OrderService {
         Page<Order> entity = orderRepository.findAllOrder(
                 (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
                 cartId, userId, username, mobile, email, address, city, country, status
-                );
+        );
         Page<OrderDto> dtos = entity.map(orderMapper::toDo);
         return dtos;
+    }
+
+    public OrderDto findById(String id) {
+        Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy order với id: " + id));
+        OrderDto dto = orderMapper.toDo(entity);
+        return dto;
     }
 }

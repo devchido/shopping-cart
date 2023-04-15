@@ -83,4 +83,10 @@ public class CategoryService {
         Page<CategoryDto> dtos = entity.map(categoryMapper::toDo);
         return dtos;
     }
+
+    public CategoryDto findById(String id) {
+        Category entity = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy category id: "+id));
+        CategoryDto dto = categoryMapper.toDo(entity);
+        return dto;
+    }
 }

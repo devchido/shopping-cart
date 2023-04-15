@@ -4,7 +4,20 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Autocomplete, Avatar, CardHeader, Stack, TableFooter, TextField } from "@mui/material";
+import {
+    Autocomplete,
+    Avatar,
+    Button,
+    CardHeader,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Stack,
+    TableFooter,
+    TextField,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -48,6 +61,20 @@ function CategoryManagement() {
     const [sort, setSort] = React.useState("ASC");
     const [title, setTitle] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
+    // dialog delete
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [dialogItem, setDialogItem] = React.useState();
+
+    const handleClickOpenDialog = (item) => {
+        // console.log(item);
+        setOpenDialog(true);
+        setDialogItem(item);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setDialogItem();
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -80,17 +107,12 @@ function CategoryManagement() {
     };
 
     const loadDataCategory = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        var requestOptions = {
+        fetch(`/category/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&title=${title}`, {
             method: "GET",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-        fetch(
-            `/category/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&title=${title}`,
-            requestOptions
-        )
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -115,6 +137,40 @@ function CategoryManagement() {
         setPage(0);
         loadDataCategory();
     };
+    const handleDelete = () => {
+        fetch(
+            `/category/auth/admin?` +
+                new URLSearchParams({
+                    id: dialogItem.id,
+                }),
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Đã xoá category với id: "+ dialogItem.id);
+                handleCloseDialog();
+                loadDataCategory();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("error! Xoá không thành công");
+                handleCloseDialog();
+            });
+    };
     React.useEffect(() => {
         loadDataCategory();
     }, [page, pageSize]);
@@ -138,6 +194,28 @@ function CategoryManagement() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                {dialogItem ? (
+                    <>
+                        <DialogTitle id="alert-dialog-title">Xoá category</DialogTitle>
+
+                        <DialogContent className="d-flex justify-content-center">
+                            <DialogContentText>Thực hiện xoá category có id: {dialogItem.id}?</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog}>Không</Button>
+                            <Button onClick={handleDelete} autoFocus>
+                                Xoá
+                            </Button>
+                        </DialogActions>
+                    </>
+                ) : null}
+            </Dialog>
             <section className="h-100 gradient-custom col-lg-12">
                 <div className="container py-5">
                     <div className="row d-flex justify-content-center my-4">
@@ -156,8 +234,6 @@ function CategoryManagement() {
                                     onSubmit={handleSubmit}
                                     className="card-body row d-flex justify-content-between"
                                 >
-                                    
-                                    
                                     <FormControl className="col-lg-3 col-auto px-2 my-1">
                                         <TextField
                                             id="outlined-basic"
@@ -186,7 +262,6 @@ function CategoryManagement() {
                                                     <TableRow>
                                                         <TableCell className="text-nowrap">Id</TableCell>
                                                         <TableCell className="text-nowrap">Category</TableCell>
-                                                        <TableCell className="text-nowrap">Meta Title</TableCell>
                                                         <TableCell className="text-nowrap">Sulg</TableCell>
                                                         <TableCell className="text-nowrap">Content</TableCell>
                                                         <TableCell className="text-nowrap" align="center">
@@ -205,26 +280,26 @@ function CategoryManagement() {
                                                                     {item.id}
                                                                 </TableCell>
 
-                                                                
-
                                                                 <TableCell className="text-nowrap">{item.title}</TableCell>
-                                                                <TableCell className="text-nowrap">{item.metaTitle}</TableCell>
-                                                                
+
                                                                 <TableCell className="text-nowrap">{item.slug}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.content}</TableCell>
 
-                                                                <TableCell align="center"  className="row ">
+                                                                <TableCell align="center" className="row ">
                                                                     <div className="d-flex justify-content-center">
                                                                         {/* <IconButton color="primary">
                                                                             <CalendarViewMonthIcon />
                                                                         </IconButton> */}
-
-                                                                        <IconButton color="success" title="Edit">
-                                                                            <BorderColorIcon />
-                                                                        </IconButton>
+                                                                        <Link to={`/admin/category/${item.id}`}>
+                                                                            <IconButton color="success" title="Edit">
+                                                                                <BorderColorIcon />
+                                                                            </IconButton>
+                                                                        </Link>
 
                                                                         <IconButton color="error" title="Delete">
-                                                                            <DeleteIcon />
+                                                                            <DeleteIcon
+                                                                                onClick={() => handleClickOpenDialog(item)}
+                                                                            />
                                                                         </IconButton>
                                                                     </div>
                                                                 </TableCell>

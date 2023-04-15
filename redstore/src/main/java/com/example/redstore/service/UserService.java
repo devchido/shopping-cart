@@ -2,6 +2,7 @@ package com.example.redstore.service;
 
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.ProductCategory;
+import com.example.redstore.domain.Role;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.dto.ProductCategoryDto;
@@ -60,12 +61,18 @@ public class UserService {
 
     // Edit user
     @Transactional
-    public void edit(Long id, UserDto dto){
-        User user = userMapper.toEntity(dto);
-        user.setId(id);
-        userRepository.save(user);
-
-        System.out.println("Thực thi edit");
+    public void edit(String id, UserDto dto){
+        User entity = userRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy user với id: "+id));
+        entity.setPhotos(dto.getPhotos());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setMobile(dto.getMobile());
+        entity.setEmail(dto.getEmail());
+        entity.setIntro(dto.getIntro());
+        entity.setProfile(dto.getProfile());
+        entity.setRole(Role.valueOf(dto.getRole()));
+        userRepository.save(entity);
+        System.out.println("Thực thi edit data user");
     }
 
     // Delete user
@@ -103,6 +110,13 @@ public class UserService {
     }
     // todo: findUserById
     public UserDto findUserById(String id) {
+        User entity = userRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy user với id: "+id));
+        System.out.println("get user : " +entity.getFirstName() + entity.getLastName());
+        UserDto dto = userMapper.toDo(entity);
+        return dto;
+    }
+
+    public UserDto filterUserById(String id) {
         User entity = userRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy user với id: "+id));
         System.out.println("get user : " +entity.getFirstName() + entity.getLastName());
         UserDto dto = userMapper.toDo(entity);

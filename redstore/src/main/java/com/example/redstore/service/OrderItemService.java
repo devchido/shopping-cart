@@ -77,9 +77,20 @@ public class OrderItemService {
 
     public List<OrderItemDto> findOrderItemByOrderId(String orderDetail) {
         Order order = orderRepository.findById(orderDetail).orElse(null);
+        if(order.getUsers().getId() == SecurityUtils.getPrincipal().getId()){
+            List<OrderItem> entity = orderItemRepository.findOrderItemByOrderId(order.getId());
+            List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
+            return dtos;
+        } else {
+            return null;
+        }
+
+    }
+
+    public List<OrderItemDto> findByOrderId(String orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()-> new RuntimeException("Không tìm thấy thông tin của order yêu cầu: "+orderId));
         List<OrderItem> entity = orderItemRepository.findOrderItemByOrderId(order.getId());
         List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
         return dtos;
     }
-
 }

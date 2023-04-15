@@ -39,21 +39,6 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(service.authenticate(request));
     }
-  /*
-  http://localhost:8080/api/v1/auth/updateUser/1
-  {
-    "id": 1,
-    "firstName": "Tu",
-    "lastName": "Nguyen",
-    "mobile": "9666666",
-    "email": "tu@gmail.com",
-    "password": 1111,
-    "photos": "https://static.sangtacvietcdn.xyz/img/useravatar/user1036.gif?t=1650607808",
-    "intro": null,
-    "profile": null
-  }
-   */
-
 
     // Check gmail
     @GetMapping("/check-email")

@@ -354,15 +354,16 @@ function OrderManagement() {
 
                                                                 <TableCell align="center" className="row ">
                                                                     <div className="d-flex">
-                                                                        <IconButton color="primary">
+                                                                        {/* <IconButton color="primary">
                                                                             <CalendarViewMonthIcon />
-                                                                        </IconButton>
-
-                                                                        <IconButton color="success">
+                                                                        </IconButton> */}
+                                                                        <Link to={`/admin/order/${item.id}`}>
+                                                                        <IconButton color="success" title="Edit">
                                                                             <BorderColorIcon />
                                                                         </IconButton>
+                                                                        </Link>
 
-                                                                        <IconButton color="error">
+                                                                        <IconButton color="error" title="Delete">
                                                                             <DeleteIcon />
                                                                         </IconButton>
                                                                     </div>

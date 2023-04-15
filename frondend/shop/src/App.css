@@ -55,3 +55,12 @@ a {
 .menu-setting a {
   color: #000;
 }
+.user-name-style{
+  font-weight: 900;
+    background: url(https://media.giphy.com/media/ceCgIb3Pw5xbq/giphy.gif);
+    color: transparent;
+    background-clip: text;
+    background-size: cover;
+    background-position: center;
+    text-shadow: 2px 2px 2px #ffffff1f, -2px -2px 4px #ffffff1f, 2px -2px 4px #ffffff1f, -2px 2px 2px #ffffff1f;
+}

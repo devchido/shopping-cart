@@ -58,7 +58,7 @@ export default function UserDetailManagement() {
     };
     const handleChange = (event) => {
         setRole(event.target.value);
-      };
+    };
     const loadDataUser = () => {
         fetch(`/user/auth/admin/u/${id}`, {
             method: "GET",
@@ -87,7 +87,7 @@ export default function UserDetailManagement() {
             });
     };
     // Đổi quyền truy cập cho user
-    const handleSetRole =()=>{
+    const handleSetRole = () => {
         fetch(
             "/user/auth/admin/role?" +
                 new URLSearchParams({
@@ -111,7 +111,7 @@ export default function UserDetailManagement() {
                 console.log("user", result);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
-                setSnackbarMsg("Đã chuyển chức năng: "+role);
+                setSnackbarMsg("Đã chuyển chức năng: " + role);
                 loadDataUser();
             })
             .catch((error) => {
@@ -120,7 +120,52 @@ export default function UserDetailManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
             });
-    }
+    };
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        fetch(
+            `/user/auth/admin/u?` +
+                new URLSearchParams({
+                    id: user.id,
+                }),
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    photos: data.get("photos"),
+                    firstName: data.get("firstName"),
+                    lastName: data.get("lastName"),
+                    mobile: data.get("mobile"),
+                    email: data.get("email"),
+                    intro: data.get("intro"),
+                    profile: data.get("profile"),
+                    role: data.get("role"),
+                }),
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Set data true");
+                loadDataUser();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Set data error!");
+            });
+    };
     React.useEffect(() => {
         loadDataUser();
     }, []);
@@ -148,13 +193,14 @@ export default function UserDetailManagement() {
             <Dialog
                 open={open}
                 onClose={handleClose}
-                
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title" style={{width: "20rem"}}>Phân Quyền User: {user.id}</DialogTitle>
+                <DialogTitle id="alert-dialog-title" style={{ width: "20rem" }}>
+                    Phân Quyền User: {user.id}
+                </DialogTitle>
 
-                <DialogContent >
+                <DialogContent>
                     <DialogContentText className="mb-3">Chọn chức năng của user: </DialogContentText>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -178,7 +224,7 @@ export default function UserDetailManagement() {
             </Dialog>
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
-                    <div className="row d-flex justify-content-center my-4">
+                    <form onSubmit={handleSubmit} className="row d-flex justify-content-center my-4">
                         <div className="col-lg-7 ">
                             <div className="card mb-4">
                                 <div className="card-header d-flex justify-content-between py-3">
@@ -192,32 +238,33 @@ export default function UserDetailManagement() {
                                             className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
                                             style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}
                                         ></img>
+                                        <input type="text" name="photos" defaultValue={user.photos} className="form-control mt-4" />
                                     </div>
                                     <div className="d-flex justify-content-between">
                                         <div className="form-outline  mt-4 col-lg-5 ">
                                             <label className="form-label">Họ</label>
-                                            <input type="text" defaultValue={user.firstName} className="form-control" readOnly />
+                                            <input type="text" name="firstName" defaultValue={user.firstName} className="form-control"  />
                                         </div>
                                         <div className="form-outline  mt-4 col-lg-5 ">
                                             <label className="form-label">Tên</label>
-                                            <input type="text" defaultValue={user.lastName} className="form-control" readOnly />
+                                            <input type="text" name="lastName" defaultValue={user.lastName} className="form-control"  />
                                         </div>
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Mobile</label>
-                                        <input type="text" defaultValue={user.mobile} className="form-control" readOnly />
+                                        <input type="text" name="mobile" defaultValue={user.mobile} className="form-control"  />
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Email</label>
-                                        <input type="text" defaultValue={user.email} className="form-control" readOnly />
+                                        <input type="text" name="email" defaultValue={user.email} className="form-control"  />
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Intro</label>
-                                        <textarea type="text" defaultValue={user.intro} className="form-control" readOnly />
+                                        <textarea type="text" rows={4} name="intro" defaultValue={user.intro} className="form-control"  />
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Profile</label>
-                                        <textarea type="text" defaultValue={user.profile} className="form-control" readOnly />
+                                        <textarea type="text" rows={4} name="profile" defaultValue={user.profile} className="form-control"  />
                                     </div>
 
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -239,7 +286,7 @@ export default function UserDetailManagement() {
                                 </div>
                                 <div className="card-body">
                                     <div className="form-group">
-                                        <input className="form-control" name="category" defaultValue={user.role} readOnly />
+                                        <input className="form-control" name="role" defaultValue={user.role} readOnly />
                                     </div>
                                 </div>
                             </div>
@@ -254,10 +301,13 @@ export default function UserDetailManagement() {
                                     <button type="button" className="btn btn-success col-auto m-auto" onClick={handleClickOpen}>
                                         Phân quyền
                                     </button>
+                                    <button type="submit" className="btn btn-primary col-auto m-auto">
+                                        Lưu thay đổi
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </section>
         </div>

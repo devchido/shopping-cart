@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
@@ -46,4 +48,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
             String mode,
             String status
     );
+
+    @Query(value = "select * from "+db+".transaction where order_id = :orderId ", nativeQuery = true)
+    Optional<Transaction> findByOrderId(@Param("orderId") Long orderId);
 }

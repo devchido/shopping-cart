@@ -265,9 +265,11 @@ function UsersManagement() {
 
                                                                 <TableCell align="center" className="row ">
                                                                     <div className="d-flex justify-content-center">
-                                                                        {/* <IconButton color="primary">
+                                                                        <Link to={`/user/${item.id}`}>
+                                                                        <IconButton color="primary" title="View">
                                                                             <CalendarViewMonthIcon />
-                                                                        </IconButton> */}
+                                                                        </IconButton>
+                                                                        </Link>
                                                                         <Link to={`/admin/user/${item.id}`}>
                                                                         <IconButton color="success">
                                                                             <BorderColorIcon />

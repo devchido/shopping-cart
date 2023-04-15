@@ -25,12 +25,17 @@ import CategoryManagement from "../Admin/Category/CategoryManagement";
 import OrderManagement from "../Admin/Order/OrderManagement";
 import TransactionManagement from "../Admin/Transaction/TransactionManagement";
 import UserDetailManagement from "../Admin/Users/UserDetailManagement";
+import CategoryDetailManagement from "../Admin/Category/CategoryDetailManagement";
+import CreatedCategory from "../Admin/Category/CreatedCategory";
+import UserView from "../User/UserView";
+import OrderDetailManagement from "../Admin/Order/OrderDetailManagement";
 
 function Router() {
     return (
         <Routes>
             {/* Home */}
             <Route path="/" element={<Home />}></Route>
+            
             {/* Admin management */}
             <Route path="/admin" element={<Admin />}></Route>
             {/* User management */}
@@ -43,8 +48,14 @@ function Router() {
             <Route path="/admin/product/:id" element={<ProductDetailManagement />}></Route>
             {/* Category management */}
             <Route path="/admin/category" element={<CategoryManagement />}></Route>
+            {/* Category detail management */}
+            <Route path="/admin/category/:id" element={<CategoryDetailManagement />}></Route>
+            {/* Add Category management */}
+            <Route path="/admin/category/create" element={<CreatedCategory />}></Route>
             {/* Order management */}
             <Route path="/admin/order" element={<OrderManagement />}></Route>
+            {/* Order management */}
+            <Route path="/admin/order/:id" element={<OrderDetailManagement />}></Route>
             {/* Transaction management */}
             <Route path="/admin/transaction" element={<TransactionManagement />}></Route>
             {/* Product */}
@@ -54,6 +65,8 @@ function Router() {
             {/* Login */}
             <Route path="/singin" element={<SingIn />}></Route>
             <Route path="/singup" element={<SingUp />}></Route>
+            {/* User View */}
+            <Route path="/user/:id" element={<UserView />}></Route>
             {/* Profile */}
             <Route path="/profile" element={<Profile />}></Route>
             {/* Update profile */}

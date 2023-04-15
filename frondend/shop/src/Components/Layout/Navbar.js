@@ -39,21 +39,34 @@ function Navbar(props) {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
+        fetch("/api/v1/auth/logout", {
+            method: "GET",
+            
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                // console.log(result);
+                setUser(result);
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+        // localStorage.removeItem("token");
     };
 
     const loadDataUser = () => {
         if (localStorage.getItem("token") !== null) {
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-            var requestOptions = {
+            fetch("/user/auth/info", {
                 method: "GET",
-                headers: myHeaders,
-                redirect: "follow",
-            };
-
-            fetch("/user/auth/info", requestOptions)
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            })
                 .then((response) => {
                     if (response.ok) {
                         return response.json();

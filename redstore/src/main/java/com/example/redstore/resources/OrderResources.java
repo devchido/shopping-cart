@@ -54,10 +54,16 @@ public class OrderResources {
         List<OrderDto> dtos = orderService.findByUsers(status);
         return dtos;
     }
-
+    // todo: user đăng nhập thực hiện get data order của mình
     @GetMapping("/auth/findOneById/{id}")
     public OrderDto findOneById(@PathVariable String id){
         OrderDto dto = orderService.findOneById(id);
+        return dto;
+    }
+    // todo: admin thực hiện get data order
+    @GetMapping("/auth/admin/p/{id}")
+    public OrderDto findById(@PathVariable String id){
+        OrderDto dto = orderService.findById(id);
         return dto;
     }
 
@@ -87,7 +93,7 @@ public class OrderResources {
     Thực hiện xác nhận order -> vận chuyển
      */
     @PutMapping("/auth/admin/confirm-order")
-    public void confirmOrder(@RequestParam String id, @RequestParam String status){
+    public void confirmOrder(@RequestParam String id, @RequestParam int status){
         orderService.confirmOrder(id, status);
     }
     // todo: findAllOrder

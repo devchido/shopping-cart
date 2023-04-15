@@ -50,11 +50,19 @@ public class OrderItemResources {
         return dtos;
     }
     /*
-    Hiển thị thông tin chi tiết của 1 phiếu order
+    todo: user đang đăng nhập thực hiện Hiển thị thông tin chi tiết của 1 phiếu order nào đó của mình
      */
-    @PostMapping("/auth/shop/order/{orderDetail}")
+    @GetMapping("/auth/shop/order/{orderDetail}")
     public List<OrderItemDto> findOrderItemByOrderId(@PathVariable String orderDetail){
         List<OrderItemDto> dtos = orderItemService.findOrderItemByOrderId(orderDetail);
+        return dtos;
+    }
+    /*
+    todo: admin thực hiện hiển thị thông tin chi tiết của một phiếu order nào đó
+     */
+    @GetMapping("/auth/admin/o/{orderId}")
+    public List<OrderItemDto> findByOrderId(@PathVariable String orderId){
+        List<OrderItemDto> dtos = orderItemService.findByOrderId(orderId);
         return dtos;
     }
 }

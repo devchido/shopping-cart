@@ -1,5 +1,6 @@
 package com.example.redstore.resources;
 
+import com.example.redstore.repository.CategoryRepository;
 import com.example.redstore.service.CategoryService;
 import com.example.redstore.service.ProductService;
 import com.example.redstore.service.dto.APIResponse;
@@ -19,21 +20,22 @@ import java.util.List;
 public class CategoryResources {
 
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
-    @PostMapping("/auth")
+    @PostMapping("/auth/admin")
     public void create(@RequestBody CategoryDto dto) {
         categoryService.create(dto);
     }
 
     //edit
-    @PutMapping("/auth/{id}")
+    @PutMapping("/auth/admin/{id}")
     public void edit(@RequestBody CategoryDto dto, @PathVariable("id") Long id) {
         categoryService.edit(id, dto);
     }
 
     //delete
-    @DeleteMapping("/auth/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    @DeleteMapping("/auth/admin")
+    public void delete(@RequestParam("id") Long id) {
         categoryService.delete(id);
     }
 
@@ -65,5 +67,11 @@ public class CategoryResources {
                 offset, pageSize, field, sort, title
         );
         return new APIResponse<>(dtos.getSize(), dtos);
+    }
+    // todo: findCategoryById
+    @GetMapping("/api/{id}")
+    private CategoryDto findCategoryById(@PathVariable String id){
+        CategoryDto dto = categoryService.findById(id);
+        return dto;
     }
 }

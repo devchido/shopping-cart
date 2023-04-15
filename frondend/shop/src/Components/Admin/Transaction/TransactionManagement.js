@@ -330,30 +330,7 @@ function TransactionManagement() {
                                                                 <TableCell className="text-nowrap">{item.users.mobile}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.users.email}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.orders.line1+"-"+item.orders.city+"-"+item.orders.country }</TableCell>
-                                                                {/* <TableCell className="text-nowrap" align="right">
-                                                                    {VND.format(item.orders.total)}
-                                                                </TableCell>
-                                                                <TableCell className="text-nowrap">
-                                                                    {item.updatedAt ? (
-                                                                        <Input
-                                                                            type="datetime-local"
-                                                                            defaultValue={format(
-                                                                                new Date(item.updatedAt),
-                                                                                "yyyy-MM-dd'T'hh:mm"
-                                                                            )}
-                                                                            readOnly
-                                                                        />
-                                                                    ) : (
-                                                                        <Input
-                                                                            type="datetime-local"
-                                                                            defaultValue={format(
-                                                                                new Date(item.createdAt),
-                                                                                "yyyy-MM-dd'T'hh:mm"
-                                                                            )}
-                                                                            readOnly
-                                                                        />
-                                                                    )}
-                                                                </TableCell> */}
+                                                                
                                                                 <TableCell className="text-nowrap">
                                                                     {item.status === 0
                                                                         ? "Chờ xác nhận"
@@ -370,8 +347,8 @@ function TransactionManagement() {
                                                                         : null}
                                                                 </TableCell>
 
-                                                                <TableCell align="center" className="row ">
-                                                                    <div className="d-flex">
+                                                                <TableCell className="row ">
+                                                                    <div className="d-flex justify-content-center">
                                                                         <IconButton color="primary">
                                                                             <CalendarViewMonthIcon />
                                                                         </IconButton>

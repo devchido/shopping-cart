@@ -41,6 +41,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .mobile(request.getMobile())
                 .photos("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU")
+                .vendor(0)
                 .createAt(new Date().toInstant())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
@@ -72,7 +73,6 @@ public class AuthenticationService {
         user.setMobile(dto.getMobile());
         user.setEmail(dto.getEmail());
         user.setPassword(SecurityUtils.getPrincipal().getPassword());
-
         user.setPhotos(dto.getPhotos());
         user.setIntro(dto.getIntro());
         user.setProfile(dto.getProfile());

@@ -42,7 +42,7 @@ public class Product {
     private String photos;
 
     @Column(name = "quantity", nullable = false)
-    private Short quantity;
+    private Integer quantity;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
@@ -53,7 +53,7 @@ public class Product {
     @Column(name = "ends_at")
     private Instant endsAt;
     @Column(name = "status")
-    private Short status;
+    private Integer status;
 
     @Lob
     @Column(name = "content")

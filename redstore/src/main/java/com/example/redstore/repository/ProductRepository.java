@@ -2,6 +2,7 @@ package com.example.redstore.repository;
 
 import com.example.redstore.domain.Product;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,8 +19,9 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, String> {
 
     String db = "shop";
+
     @Query(value = "SELECT t.* " +
-            "FROM "+ db +".product t " +
+            "FROM " + db + ".product t " +
             "WHERE id like concat('%',:keySearch, '%') " +
             "or user_id like concat('%', :keySearch, '%')" +
             "or title like concat('%', :keySearch, '%')" +
@@ -30,26 +32,45 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     // find by sulg
     Optional<Product> findBySlug(String slug);
 
-    @Query(value = "SELECT t.* FROM "+ db +".product t " +
+    @Query(value = "SELECT t.* FROM " + db + ".product t " +
             "        WHERE user_id = :users and title like concat('%', :title ,'%')", nativeQuery = true)
     List<Product> findByUsers(@Param("users") Long users, @Param("title") String title);
 
-    @Query(value = "select * from " + db + ".product  where title like concat('%', :title , '%') and status = 1", nativeQuery = true)
+    // todo: findAllProductPage - lọc sản phẩm hiện thị trên trang chủ bán hàng
+    @Query(value = "select " + db + ".product.* from " + db + ".product , " + db + ".user  where " +
+            " " + db + ".product.user_id = " + db + ".user.id " +
+            " and product.title like concat('%', :title , '%') and product.status = 1 and user.vendor = 1 ", nativeQuery = true)
     Page<Product> findAllProductPage(String title, Pageable pageable);
-    // lọc sản phẩm của user đang đăng nhập
+
+    // todo: filterUsersProducts - lọc tất cả các product của user đang đăng nhập ở dạng page
     @Query(value = "select * from " + db + ".product  where user_id = :userId and title like concat('%', :title , '%') and status like concat('%', :status , '%') ", nativeQuery = true)
     Page<Product> filterUsersProducts(String title, Pageable pageable, String userId, String status);
-    @Query(value = "select p.* from "+ db +".product p where slug = :slug", nativeQuery = true)
+    // todo: filterAllProducts - lọc tất cả các product ở dạng page
+    @Query(value = "select " + db + ".product.* from " + db + ".product , " + db + ".user, " + db + ".product_category where " +
+            " product.user_id = user.id and " +
+            " product.id = product_category.product_id and " +
+            " product.title like concat('%', :ptitle, '%') and " +
+            " product_category.id like concat('%',:ctitle) and " +
+            " concat(user.first_name, ' ' , user.last_name) like concat('%', :username,'%') and " +
+            " user.vendor like concat('%', :vendor,'%') and " +
+            " product.status like concat('%', :status, '%')"
+            , nativeQuery = true)
+    Page<Product> filterAllProducts(Pageable pageable, String username, String ptitle, String ctitle, String status, String vendor);
+
+    @Query(value = "select p.* from " + db + ".product p where slug = :slug", nativeQuery = true)
     Product findProductBySlug(@Param("slug") String Slug);
+
     // Hiển thị tất cả các product có status =1 : trạng thái được hiển thị trên shop
-    @Query(value = "select p.* from "+ db +".product p where status = 1", nativeQuery = true)
+    @Query(value = "select p.* from " + db + ".product p where status = 1", nativeQuery = true)
     List<Product> findProductByStatus();
 
-    @Query(value = "select  p.* from "+ db +".product p " +
-            " join "+ db+".product_category pc on p.id = pc.product_id " +
-            " join "+ db +".category c on c.id = pc.category_id" +
+    @Query(value = "select  p.* from " + db + ".product p " +
+            " join " + db + ".product_category pc on p.id = pc.product_id " +
+            " join " + db + ".category c on c.id = pc.category_id" +
             " where status = 1 and c.slug like concat('%',:field,'%') " +
             " order by updated_at DESC " +
             " limit 8", nativeQuery = true)
     List<Product> lastestProduct(@Param("field") String field);
+
+
 }

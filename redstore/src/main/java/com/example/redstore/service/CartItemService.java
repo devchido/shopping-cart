@@ -47,13 +47,13 @@ public class CartItemService {
 
         if (cartItem != null) {
             // set thêm giá trị quantity : cartItem
-            cartItem.setQuantity((short) (cartItem.getQuantity() + entity.getQuantity()));
+            cartItem.setQuantity((cartItem.getQuantity() + entity.getQuantity()));
             cartItem.setUpdatedAt(Instant.now());
             cartId.setUpdatedAt(Instant.now());
             cartItemRepository.save(cartItem);
             // set giá trị : product
             int quantity = productId.getQuantity() - entity.getQuantity();
-            productId.setQuantity((short) quantity);
+            productId.setQuantity(quantity);
             productId.setUpdatedAt(Instant.now());
             productRepository.save(productId);
             System.out.println("Thực thi mua thêm lần nữa");
@@ -65,7 +65,7 @@ public class CartItemService {
             entity.setDiscount(productId.getDiscount());
             //
             int quantity = productId.getQuantity() - entity.getQuantity();
-            productId.setQuantity((short) quantity);
+            productId.setQuantity(quantity);
             productId.setUpdatedAt(Instant.now());
             productRepository.save(productId);
             // Set active
@@ -87,7 +87,7 @@ public class CartItemService {
 
     // Edit quantity của cart Item
     @Transactional
-    public void edit(Long id, Short quantity) {
+    public void edit(Long id, Integer quantity) {
 
         // get data cartItem
         CartItem cartItem = cartItemRepository.findById(String.valueOf(id)).
@@ -100,7 +100,7 @@ public class CartItemService {
                 orElseThrow(() -> new RuntimeException("Không thấy product của cartItem"));
         // set số lượng sản phẩm của product = tổng còn lại cộng với sô lượng hiện có của cartItem rồi tất cả trừ đi số sản phẩm sửa lại
         int quantityProduct = product.getQuantity() + cartItem.getQuantity() - quantity;
-        product.setQuantity((short) quantityProduct);
+        product.setQuantity(quantityProduct);
         product.setUpdatedAt(Instant.now());
         // set số lượng sản phẩm trong giỏ hàng
         cartItem.setQuantity(quantity);
@@ -120,7 +120,7 @@ public class CartItemService {
         Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
         Cart cart = cartRepository.findById(String.valueOf(cartItem.getCart().getId())).orElseThrow();
         int quantity = productId.getQuantity() + cartItem.getQuantity();
-        productId.setQuantity((short) quantity);
+        productId.setQuantity(quantity);
         productId.setUpdatedAt(Instant.now());
         cart.setUpdatedAt(Instant.now());
         cartRepository.save(cart);
@@ -140,7 +140,7 @@ public class CartItemService {
             Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
             // Trả về dữ liệu cho sản phẩm sau khi xoá và lưu lại
             int quantity = productId.getQuantity() + cartItem.getQuantity();
-            productId.setQuantity((short) quantity);
+            productId.setQuantity(quantity);
             productId.setUpdatedAt(Instant.now());
             productRepository.save(productId);
             cartItemRepository.deleteById(id);

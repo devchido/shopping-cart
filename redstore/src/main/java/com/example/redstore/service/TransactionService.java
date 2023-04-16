@@ -39,7 +39,7 @@ public class TransactionService {
         Order orderId = orderRepository.findById(String.valueOf(dto.getOrderId())).orElse(null);
         entity.setUsers(orderId.getUsers());
         entity.setOrder(orderId);
-        entity.setStatus((short) 0);
+        entity.setStatus(0);
         entity.setContent(orderId.getContent());
 
         // Set create at

@@ -18,7 +18,7 @@ public class CartItemDto  {
     private String sku;
     private Float price;
     private Float discount;
-    private Short quantity;
+    private Integer quantity;
     private Boolean active;
     private Instant createdAt;
     private Instant updatedAt;

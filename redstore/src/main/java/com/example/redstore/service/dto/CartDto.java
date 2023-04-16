@@ -11,7 +11,7 @@ public class CartDto {
     private Long id;
     private UserDto users;
     private Long userId;
-    private Short status;
+    private Integer status;
     private String firstName;
     private String lastName;
     private String mobile;

@@ -44,7 +44,7 @@ public class CartService {
         entity.setUsers(user);
 
         // Set trạng thái
-        entity.setStatus((short) 0);
+        entity.setStatus(0);
         // Set first name
         entity.setFirstName(user.getFirstName());
         //Set Last Name
@@ -100,7 +100,7 @@ public class CartService {
                         Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElseThrow();
                         Cart cart = cartRepository.findById(String.valueOf(cartItem.getCart().getId())).orElseThrow();
                         int quantity = productId.getQuantity() + cartItem.getQuantity();
-                        productId.setQuantity((short) quantity);
+                        productId.setQuantity(quantity);
                         productId.setUpdatedAt(Instant.now());
                         productRepository.save(productId);
                         // sau khi xoá cartitem thì cập nhật thông tin cho cart

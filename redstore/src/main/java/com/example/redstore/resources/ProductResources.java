@@ -96,7 +96,8 @@ public class ProductResources {
         List<ProductDto> dtos = productService.findByUsers(title);
         return dtos;
     }
-    // todo: filterUsersProducts - lọc tất cả các product của user đang đăng nhập ở dạng page
+
+    // todo: filterUsersProducts - user lọc tất cả các product của mình ở dạng page
     @GetMapping("/auth/user/{offset}/{pageSize}/{field}")
     private APIResponse<Page<ProductDto>> filterUsersProducts(
             @RequestParam(value = "title", defaultValue = "") String title,
@@ -106,6 +107,25 @@ public class ProductResources {
             @RequestParam(value = "status", defaultValue = "") String status,
             @RequestParam String sort) {
         Page<ProductDto> dtos = productService.filterUsersProducts(title, offset, pageSize, field, status, sort);
+        return new APIResponse<>(dtos.getSize(), dtos);
+    }
+
+    // todo: filterAllProducts - admin lọc tất cả các product ở dạng page
+    @GetMapping("/auth/admin/{offset}/{pageSize}")
+    private APIResponse<Page<ProductDto>> filterAllProducts(
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @RequestParam String field,
+            @RequestParam String sort,
+            @RequestParam String username,
+            @RequestParam String ptitle,
+            @RequestParam String ctitle,
+            @RequestParam String status,
+            @RequestParam String vendor
+
+            ) {
+        Page<ProductDto> dtos = productService.filterAllProducts(offset, pageSize, field, sort,
+                username, ptitle, ctitle, status,vendor);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
 
@@ -172,7 +192,7 @@ public class ProductResources {
 
     // sản phẩm mới nhất
     @GetMapping("/api/lastest-product")
-    public List<ProductDto> lastestProduct(@RequestParam String field){
+    public List<ProductDto> lastestProduct(@RequestParam String field) {
         List<ProductDto> dtos = productService.lastestProduct(field);
         return dtos;
     }

@@ -13,7 +13,7 @@ public class OrderDto {
     private Long userId;
     private CartDto carts;
     private Long cartId;
-    private Short status;
+    private Integer status;
     private Float subTotal;
     private Float itemDiscount;
     private Float total;

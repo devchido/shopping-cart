@@ -78,7 +78,7 @@ public class OrderService {
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
         orderRepository.save(entity);
-        cart.setStatus((short) 1);
+        cart.setStatus(1);
         cartRepository.save(cart);
     }
 
@@ -147,7 +147,7 @@ public class OrderService {
         Trạng thái của đơn đặt hàng có thể là :
         Mới, Đã thanh toán, Đã thanh toán, Không thành công, Đã vận chuyển, Đã giao, Đã trả lại và Hoàn thành.
          */
-        order.setStatus((short) 0);
+        order.setStatus(0);
         // tính Tổng giá của các Mục đặt hàng.
         order.setSubTotal((float) 0);
         // Tổng giá của Đơn hàng đã bao gồm thuế và phí vận chuyển.
@@ -170,7 +170,7 @@ public class OrderService {
         order.setTotal(order.getSubTotal() - order.getItemDiscount());
         orderRepository.save(order);
         orderItemRepository.saveAll(orderItem);
-        cart.setStatus((short) 1);
+        cart.setStatus(1);
         cartRepository.save(cart);
     }
 
@@ -191,21 +191,18 @@ public class OrderService {
         nếu status nhập vào == 2, trạng thái xác nhận đơn hàng, thì thực hiện tạo phiếu thanh toán cho phiếu order đó
 
      */
-    public void confirmOrder(String id, int status) {
-        Order entity = orderRepository.findById(id).orElse(null);
-        if (entity != null && entity.getStatus() != 1) {
-            entity.setStatus((short) status);
-            entity.setUpdatedAt(Instant.now());
-            orderRepository.save(entity);
+    public void setStatusOrder(String id, int status) {
+        Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy order với id: " + id));
+        if (entity.getStatus() != 1 && entity.getStatus() != 4) {
             if (status == 2) {
-                Transaction check = transactionRepository.findByOrderId(entity.getId()).orElse(null);
-                if (check == null) {
+                Optional<Transaction> check = transactionRepository.findByOrderId(entity.getId());
+                if (check.isEmpty()) {
                     Transaction transaction = new Transaction();
                     transaction.setOrder(entity);
                     transaction.setUsers(entity.getUsers());
-                    transaction.setType((short) 0);
-                    transaction.setMode((short) 0);
-                    transaction.setStatus((short) 0);
+                    transaction.setType(0);
+                    transaction.setMode(0);
+                    transaction.setStatus(0);
                     transaction.setContent(entity.getContent());
                     transaction.setCreatedAt(Instant.now());
                     transaction.setUpdatedAt(Instant.now());
@@ -215,8 +212,48 @@ public class OrderService {
                     System.out.println("Đã có transaction");
                 }
             }
-            System.out.println("Thưc thi confirm order");
+            ;
+            if (status == 1 || status == 4) {
+                // Huỷ || hoàn trả đơn hàng
+                List<OrderItem> orderItem = orderItemRepository.findOrderItemByOrderId(entity.getId());
+                orderItem.forEach(orderItem1 -> {
+                    Product product = productRepository.findById(String.valueOf(orderItem1.getProducts().getId()))
+                            .orElseThrow(() -> new RuntimeException("Không tìm thấy product: " + orderItem1.getProducts().getId()));
+                    product.setQuantity((product.getQuantity() + orderItem1.getQuantity()));
+                    System.out.println("Trả lại hàng hoá cho cửa hàng");
+                    productRepository.save(product);
+                });
+                if (status == 1) {
+                    Transaction transaction = transactionRepository.findByOrderId(entity.getId()).orElse(null);
+                    if (transaction != null) {
+                        transaction.setStatus(1);
+                        transaction.setUpdatedAt(Instant.now());
+                        transactionRepository.save(transaction);
+                        System.out.println("huỷ transaction");
+                    }
+                }
+
+
+            }
+            ;
+
+            System.out.println("Thưc thi set status order");
+        } else if (entity.getStatus() == 1 || entity.getStatus() == 4) {
+            // 1, 4-> Khôi phục phiếu order -> chuyển sang 1 trạng thái bất kỳ không phải là hoàn trả: !=4
+            if (status != 4 || status != 1) {
+                List<OrderItem> orderItem = orderItemRepository.findOrderItemByOrderId(entity.getId());
+                orderItem.forEach(orderItem1 -> {
+                    Product product = productRepository.findById(String.valueOf(orderItem1.getProducts().getId()))
+                            .orElseThrow(() -> new RuntimeException("Không tìm thấy product: " + orderItem1.getProducts().getId()));
+                    product.setQuantity((product.getQuantity() - orderItem1.getQuantity()));
+                    productRepository.save(product);
+                });
+                System.out.println("Khôi phục đơn hàng");
+            }
         }
+        entity.setStatus(status);
+        entity.setUpdatedAt(Instant.now());
+        orderRepository.save(entity);
     }
 
     public void cancelOrder(String id) {
@@ -226,7 +263,7 @@ public class OrderService {
             // Nếu đơn hàng không phải ở trạng thái hoàn thành hay đã huỷ thì thực hiện
             if (entity.getStatus() != 5 && entity.getStatus() != 1) {
                 // Set order data
-                entity.setStatus((short) 1);
+                entity.setStatus(1);
                 entity.setUpdatedAt(Instant.now());
                 orderRepository.save(entity);
                 // Set data product : trả lại số lượng hàng đã order
@@ -239,7 +276,7 @@ public class OrderService {
                     Product product = productRepository.findById(String.valueOf(orderItem.getProducts().getId())).orElseThrow();
                     // set data cho product
                     int quantity = product.getQuantity() + orderItem.getQuantity();
-                    product.setQuantity((short) quantity);
+                    product.setQuantity(quantity);
                     product.setUpdatedAt(Instant.now());
                     // lưu lại thông tin thay đổi
                     productRepository.save(product);

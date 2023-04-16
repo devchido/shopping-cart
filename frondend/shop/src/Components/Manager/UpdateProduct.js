@@ -103,7 +103,6 @@ function UpdateProduct() {
                 throw new Error(response.status);
             })
             .then((result) => {
-                // console.log(result);
                 setCategory(result);
             })
             .catch((error) => {
@@ -292,16 +291,18 @@ function UpdateProduct() {
                                             <label className="form-label">Created At</label>
                                             <input
                                                 type="datetime-local"
-                                                value={format(new Date(product.createdAt), "yyyy-MM-dd'T'hh:mm:ss")}
+                                                defaultValue={format(new Date(product.createdAt), "yyyy-MM-dd'T'hh:mm:ss")}
                                                 readOnly
+                                                className="form-control w-auto"
                                             />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Updated At</label>
                                             <input
                                                 type="datetime-local"
-                                                value={format(new Date(product.updatedAt), "yyyy-MM-dd'T'hh:mm:ss")}
+                                                defaultValue={format(new Date(product.updatedAt), "yyyy-MM-dd'T'hh:mm:ss")}
                                                 readOnly
+                                                className="form-control w-auto"
                                             />
                                         </div>
                                     </div>

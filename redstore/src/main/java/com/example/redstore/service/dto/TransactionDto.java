@@ -13,9 +13,9 @@ public class TransactionDto {
     private OrderDto orders;
     private Long orderId;
     private String code;
-    private Short type;
-    private Short mode;
-    private Short status;
+    private Integer type;
+    private Integer mode;
+    private Integer status;
     private Instant createdAt;
     private Instant updatedAt;
     private String content;

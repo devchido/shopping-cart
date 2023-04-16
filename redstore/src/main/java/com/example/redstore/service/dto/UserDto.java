@@ -19,6 +19,7 @@ public class UserDto {
     private String mobile;
     private String email;
     private String password;
+    private Integer vendor;
     private Instant createAt;
     private String photos;
     private String intro;

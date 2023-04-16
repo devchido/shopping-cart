@@ -34,31 +34,6 @@ public class UserService {
         List<UserDto> dtos = userMapper.toDo(entity);
         return dtos;}
 
-    // Create new user
-    /*
-    @Transactional
-    public void create(UserDto dto) {
-        // get tất cả các id đã có
-//        Optional<User> userOptionalId = userRepository.findById(String.valueOf(dto.getId()));
-        // Nếu id nhập vào đã có thì thông báo đã có id và hủy sự sự kiện create
-//        if (userOptionalId.isPresent()){
-//            throw new RuntimeException("Đã có id :" + dto.getId());
-//        };
-        Optional<User> userOptionalmobile = userRepository.findByMobile(dto.getMobile());
-        if (userOptionalmobile.isPresent()){
-            throw new RuntimeException("Mobile: " + dto.getMobile() + " đã được sử dụng.");
-        };
-        Optional<User> userOptionalemail = userRepository.findByEmail(dto.getEmail());
-        if (userOptionalemail.isPresent()){
-            throw new RuntimeException("Email:" + dto.getEmail() + "đã được sử dụng.");
-        };
-        User entity =  userMapper.toEntity(dto);
-        userRepository.save(entity);
-        System.out.println("Thực thi create");
-    }
-    */
-
-
     // Edit user
     @Transactional
     public void edit(String id, UserDto dto){
@@ -68,6 +43,7 @@ public class UserService {
         entity.setLastName(dto.getLastName());
         entity.setMobile(dto.getMobile());
         entity.setEmail(dto.getEmail());
+        entity.setVendor(dto.getVendor());
         entity.setIntro(dto.getIntro());
         entity.setProfile(dto.getProfile());
         entity.setRole(Role.valueOf(dto.getRole()));

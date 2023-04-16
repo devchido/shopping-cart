@@ -24,7 +24,7 @@ public class CartItemResources {
 
     // edit: cập nhật item của giỏ hàng
     @PutMapping("/auth/{id}")
-    public void edit(@RequestParam Short quantity, @PathVariable("id") Long id) {
+    public void edit(@RequestParam Integer quantity, @PathVariable("id") Long id) {
         cartItemService.edit(id, quantity);
     }
 

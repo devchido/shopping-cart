@@ -23,7 +23,7 @@ public class Cart {
     private Set<CartItem> cartItem;
 
     @Column(name = "status", nullable = false)
-    private Short status;
+    private Integer status;
 
     @Column(name = "first_name", length = 50)
     private String firstName;

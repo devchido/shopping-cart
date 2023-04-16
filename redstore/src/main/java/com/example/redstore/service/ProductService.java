@@ -66,7 +66,7 @@ public class ProductService {
         entity.setUsers(SecurityUtils.getPrincipal());
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
-        entity.setStatus((short) 0);
+        entity.setStatus(0);
         productRepository.save(entity);
         // add category cho product
         if (dto.getCategory() != null) {
@@ -222,6 +222,17 @@ public class ProductService {
         return dtos;
     }
 
+    // todo: filterAllProducts - lọc tất cả các product ở dạng page
+    public Page<ProductDto> filterAllProducts(int offset, int pageSize, String field, String sort,
+                                              String username, String ptitle, String ctitle, String status, String vendor) {
+        Page<Product> products = productRepository.filterAllProducts(
+                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+                username, ptitle, ctitle, status, vendor
+        );
+        Page<ProductDto> dtos = products.map(productMapper::toDo);
+        return dtos;
+    }
+
     /* test
     public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize, String field) {
         Page<Product> products = productRepository.findAll((PageRequest.of(offset, pageSize).withSort(Sort.by(field))));
@@ -239,25 +250,25 @@ public class ProductService {
     public void setStatusProduct(String id, int status) {
         Product entity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm!"));
         if (status == 0) {
-            entity.setStatus((short) 0);
+            entity.setStatus(0);
             productRepository.save(entity);
             System.out.println("Ẩn product");
         }
         ;
         if (status == 1) {
-            entity.setStatus((short) 1);
+            entity.setStatus(1);
             productRepository.save(entity);
             System.out.println("Xác nhận sản phẩm");
         }
         ;
         if (status == 2) {
-            entity.setStatus((short) 2);
+            entity.setStatus(2);
             productRepository.save(entity);
             System.out.println("Kiểm duyệt sản phẩm");
         }
         ;
         if (status == 3) {
-            entity.setStatus((short) 3);
+            entity.setStatus(3);
             productRepository.save(entity);
             System.out.println("Ngừng bán sản phẩm");
         }
@@ -270,8 +281,7 @@ public class ProductService {
         return dtos;
     }
 
-//    public Page<ProductDto> filterAndPagination( int offset, int pageSize, String field, String keySearch){
-//        List<ProductDto> products = filter(keySearch);
-//        Page<ProductDto> pageProductDtos =
-//    }
+
+
+
 }

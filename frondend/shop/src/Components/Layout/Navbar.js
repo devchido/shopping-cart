@@ -216,7 +216,7 @@ function Navbar(props) {
                                                 <Typography textAlign="center">Test</Typography>
                                             </MenuItem>
                                         </Link>
-                                        {user.role === "USER_SHOP" || user.role === "ADMIN" ? (
+                                        
                                             <div>
                                                 <hr />
                                                 <Link to={`/management/${"list-products"}`}>
@@ -231,7 +231,7 @@ function Navbar(props) {
                                                     </MenuItem>
                                                 </Link> */}
                                             </div>
-                                        ) : null}
+                                        
                                         <hr />
                                         {user.role === "ADMIN" ? (
                                             <div>

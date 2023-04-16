@@ -66,7 +66,7 @@ function OrderDetail() {
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
         var requestOptions = {
-            method: "POST",
+            method: "GET",
             headers: myHeaders,
             redirect: "follow",
         };

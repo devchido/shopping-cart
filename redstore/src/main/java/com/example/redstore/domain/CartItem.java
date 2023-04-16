@@ -30,7 +30,7 @@ public class CartItem {
     private Float discount;
 
     @Column(name = "quantity", nullable = false)
-    private Short quantity;
+    private Integer quantity;
 
     @Column(name = "active", nullable = false)
     private Boolean active = false;

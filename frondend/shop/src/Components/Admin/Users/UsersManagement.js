@@ -175,7 +175,6 @@ function UsersManagement() {
                                                 <em>Role</em>
                                             </MenuItem>
                                             <MenuItem value={"USER"}>USER</MenuItem>
-                                            <MenuItem value={"USER_SHOP"}>USER_SHOP</MenuItem>
                                             <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
                                         </Select>
                                     </FormControl>

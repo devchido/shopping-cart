@@ -44,6 +44,8 @@ public class User implements UserDetails {
 
     @Column(name = "create_at")
     private Instant createAt;
+    @Column(name = "vendor")
+    private Integer vendor;
 
     @Column(name = "intro")
     private String intro;

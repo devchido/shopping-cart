@@ -260,7 +260,7 @@ function TransactionManagement() {
                                                 <MenuItem value="">
                                                     <em>Tất cả</em>
                                                 </MenuItem>
-                                                <MenuItem value={0}>Chờ xử lý</MenuItem>
+                                                <MenuItem value={0}>Chờ xác nhận</MenuItem>
                                                 <MenuItem value={2}>Đang vận chuyển</MenuItem>
                                                 <MenuItem value={3}>Đang giao</MenuItem>
                                                 <MenuItem value={5}>Đã nhận</MenuItem>

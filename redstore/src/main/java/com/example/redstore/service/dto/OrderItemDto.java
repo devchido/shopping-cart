@@ -18,7 +18,7 @@ public class OrderItemDto {
     private String sku;
     private Float price;
     private Float discount;
-    private Short quantity;
+    private Integer quantity;
 
     private Instant createdAt;
     private Instant updatedAt;

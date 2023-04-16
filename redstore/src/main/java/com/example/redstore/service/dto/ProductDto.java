@@ -18,11 +18,11 @@ public class ProductDto {
     private Float price;
     private Float discount;
     private String photos;
-    private Short quantity;
+    private Integer quantity;
     private Instant createdAt;
     private Instant updatedAt;
     private Instant endsAt;
-    private Short status;
+    private Integer status;
     private String content;
     private String category;
 }

@@ -29,7 +29,7 @@ public class OrderItem {
     private Float discount;
 
     @Column(name = "quantity", nullable = false)
-    private Short quantity;
+    private Integer quantity;
 
 
     @Column(name = "created_at", nullable = false)

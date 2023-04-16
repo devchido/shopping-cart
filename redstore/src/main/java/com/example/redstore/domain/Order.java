@@ -28,7 +28,7 @@ public class Order {
     private Cart carts;
 
     @Column(name = "status", nullable = false)
-    private Short status;
+    private Integer status;
 
     @Column(name = "sub_total", nullable = false)
     private Float subTotal;

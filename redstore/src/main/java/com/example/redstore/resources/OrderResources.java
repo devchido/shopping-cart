@@ -92,9 +92,9 @@ public class OrderResources {
     /*
     Thực hiện xác nhận order -> vận chuyển
      */
-    @PutMapping("/auth/admin/confirm-order")
+    @PutMapping("/auth/admin/set-status")
     public void confirmOrder(@RequestParam String id, @RequestParam int status){
-        orderService.confirmOrder(id, status);
+        orderService.setStatusOrder(id, status);
     }
     // todo: findAllOrder
     @GetMapping("/auth/admin/{offset}/{pageSize}")

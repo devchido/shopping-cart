@@ -22,13 +22,13 @@ public class Transaction {
     private Order order;
 
     @Column(name = "type", nullable = false)
-    private Short type;
+    private Integer type;
 
     @Column(name = "mode", nullable = false)
-    private Short mode;
+    private Integer mode;
 
     @Column(name = "status", nullable = false)
-    private Short status;
+    private Integer status;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

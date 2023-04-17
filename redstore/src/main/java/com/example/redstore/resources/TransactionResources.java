@@ -31,8 +31,8 @@ public class TransactionResources {
     }
 
     //delete
-    @DeleteMapping("/auth/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    @DeleteMapping("/auth/admin/{id}")
+    public void delete(@PathVariable("id") String id) {
         transactionService.delete(id);
     }
 
@@ -70,5 +70,15 @@ public class TransactionResources {
                 userId, orderId, username, mobile, email, address, city, country, type, mode, status
         );
         return new APIResponse<>(dtos.getSize(), dtos);
+    }
+    @GetMapping("/auth/{id}")
+    public TransactionDto findTransactionById(@PathVariable String id){
+        TransactionDto dto = transactionService.findTransactionById(id);
+        return dto;
+    }
+    @GetMapping("/auth/admin/{id}")
+    public TransactionDto findById(@PathVariable String id){
+        TransactionDto dto = transactionService.findById(id);
+        return dto;
     }
 }

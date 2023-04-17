@@ -4,7 +4,22 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Autocomplete, Avatar, CardHeader, Input, Stack, TableFooter, TextField, Typography } from "@mui/material";
+import {
+    Autocomplete,
+    Avatar,
+    Button,
+    CardHeader,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Input,
+    Stack,
+    TableFooter,
+    TextField,
+    Typography,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -55,6 +70,20 @@ function TransactionManagement() {
     const [mode, setMode] = React.useState("");
     const [status, setStatus] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
+    //
+    const [dialogItem, setDialogItem] = React.useState();
+    const [openDialog, setOpenDialog] = React.useState(false);
+
+    const handleClickOpenDialog = (item) => {
+        // console.log(item);
+        setOpenDialog(true);
+        setDialogItem(item);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setDialogItem();
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -130,6 +159,41 @@ function TransactionManagement() {
         setPage(0);
         loadDataTransaction();
     };
+    const handleDelete = () => {
+        if (dialogItem.status === 1) {
+            fetch("/transaction/auth/admin/" + dialogItem.id, {
+                method: "DELETE",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.status;
+                    }
+                    throw new Error(response.status);
+                })
+                .then((result) => {
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("success");
+                    setSnackbarMsg("Đã xoá transaction " + dialogItem.id + "!");
+                    handleCloseDialog();
+                    loadDataTransaction();
+                })
+                .catch((error) => {
+                    console.log("error", error);
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("error");
+                    setSnackbarMsg("Thực hiện xoá không thành công!");
+                    handleCloseDialog();
+                });
+        } else {
+            setSnackbarOpen(true);
+            setSnackbarSeverity("error");
+            setSnackbarMsg("Transaction này hiện không thể xoá!");
+            handleCloseDialog();
+        }
+    };
     React.useEffect(() => {
         loadDataTransaction();
     }, [page, pageSize, status, field, sort]);
@@ -153,6 +217,28 @@ function TransactionManagement() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                {dialogItem ? (
+                    <>
+                        <DialogTitle id="alert-dialog-title">Xoá giỏ hàng?</DialogTitle>
+
+                        <DialogContent className="d-flex justify-content-center">
+                            <DialogContentText>Bạn có chắc là muốn xoá giỏ hàng: {dialogItem.id} này không?</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog}>Không</Button>
+                            <Button onClick={handleDelete} autoFocus>
+                                Xoá
+                            </Button>
+                        </DialogActions>
+                    </>
+                ) : null}
+            </Dialog>
             <section className="h-100 gradient-custom col-lg-12">
                 <div className="container py-5">
                     <div className="row d-flex justify-content-center my-4">
@@ -214,7 +300,6 @@ function TransactionManagement() {
                                                 onChange={(e) => setCity(e.target.value)}
                                             />
                                         </FormControl>
-                                        
                                     </Box>
                                     <Box className="w-100 my-2">
                                         <Typography>Sắp xếp</Typography>
@@ -329,8 +414,14 @@ function TransactionManagement() {
                                                                 <TableCell className="text-nowrap">{item.orders.id}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.users.mobile}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.users.email}</TableCell>
-                                                                <TableCell className="text-nowrap">{item.orders.line1+"-"+item.orders.city+"-"+item.orders.country }</TableCell>
-                                                                
+                                                                <TableCell className="text-nowrap">
+                                                                    {item.orders.line1 +
+                                                                        "-" +
+                                                                        item.orders.city +
+                                                                        "-" +
+                                                                        item.orders.country}
+                                                                </TableCell>
+
                                                                 <TableCell className="text-nowrap">
                                                                     {item.status === 0
                                                                         ? "Chờ xác nhận"
@@ -352,12 +443,16 @@ function TransactionManagement() {
                                                                         <IconButton color="primary">
                                                                             <CalendarViewMonthIcon />
                                                                         </IconButton>
+                                                                        <Link to={`/admin/transaction/${item.id}`}>
+                                                                            <IconButton color="success">
+                                                                                <BorderColorIcon />
+                                                                            </IconButton>
+                                                                        </Link>
 
-                                                                        <IconButton color="success">
-                                                                            <BorderColorIcon />
-                                                                        </IconButton>
-
-                                                                        <IconButton color="error">
+                                                                        <IconButton
+                                                                            color="error"
+                                                                            onClick={() => handleClickOpenDialog(item)}
+                                                                        >
                                                                             <DeleteIcon />
                                                                         </IconButton>
                                                                     </div>

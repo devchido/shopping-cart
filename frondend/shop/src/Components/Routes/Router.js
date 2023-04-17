@@ -29,6 +29,7 @@ import CategoryDetailManagement from "../Admin/Category/CategoryDetailManagement
 import CreatedCategory from "../Admin/Category/CreatedCategory";
 import UserView from "../User/UserView";
 import OrderDetailManagement from "../Admin/Order/OrderDetailManagement";
+import TransactionDetailManagement from "../Admin/Transaction/TransactionDetailManagement";
 
 function Router() {
     return (
@@ -58,6 +59,8 @@ function Router() {
             <Route path="/admin/order/:id" element={<OrderDetailManagement />}></Route>
             {/* Transaction management */}
             <Route path="/admin/transaction" element={<TransactionManagement />}></Route>
+            {/* Transaction detail management */}
+            <Route path="/admin/transaction/:id" element={<TransactionDetailManagement />}></Route>
             {/* Product */}
             <Route path="/product" element={<Product />}></Route>
             {/* Singer Product */}

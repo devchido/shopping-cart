@@ -248,6 +248,10 @@ public class OrderService {
                     product.setQuantity((product.getQuantity() - orderItem1.getQuantity()));
                     productRepository.save(product);
                 });
+                entity.setLastName(entity.getUsers().getLastName());
+                entity.setFirstName(entity.getUsers().getFirstName());
+                entity.setEmail(entity.getUsers().getEmail());
+                entity.setMobile(entity.getUsers().getMobile());
                 System.out.println("Khôi phục đơn hàng");
             }
         }

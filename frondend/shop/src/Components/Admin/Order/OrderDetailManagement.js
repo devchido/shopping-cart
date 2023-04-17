@@ -21,8 +21,8 @@ import StepLabel from "@mui/material/StepLabel";
 import { format } from "date-fns";
 import { VND } from "../../Unity/VND";
 
-const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận"];
 export default function OrderDetailManagement() {
+    const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận"];
     // id của order
     const { id } = useParams();
     //

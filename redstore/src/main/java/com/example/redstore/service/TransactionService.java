@@ -1,5 +1,6 @@
 package com.example.redstore.service;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
 import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.OrderDto;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -69,9 +71,16 @@ public class TransactionService {
 
     // Delete user
     @Transactional
-    public void delete(Long id) {
-        transactionRepository.deleteById(String.valueOf(id));
-        System.out.println("Thực thi delete");
+    public void delete(String id) {
+        Optional<Transaction> entity = transactionRepository.findById(id);
+        if (entity.isPresent()) {
+
+            transactionRepository.deleteById(id);
+            System.out.println("Thực thi delete");
+
+
+        }
+
     }
 
     // get all
@@ -106,5 +115,23 @@ public class TransactionService {
         );
         Page<TransactionDto> dtos = entity.map(transactionMapper::toDo);
         return dtos;
+    }
+
+    // todo: user hiển thị thông tin transaction theo id
+    public TransactionDto findTransactionById(String id) {
+        Transaction entity = transactionRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy phiếu transaction: "+id));
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()){
+            TransactionDto dto = transactionMapper.toDo(entity);
+            return dto;
+        } else {
+            return new TransactionDto();
+        }
+    }
+
+    public TransactionDto findById(String id) {
+        Transaction entity = transactionRepository.findById(id).orElseThrow(
+                ()-> new RuntimeException("Không tìm thấy phiếu transaction: "+id));
+        TransactionDto dto = transactionMapper.toDo(entity);
+        return dto;
     }
 }

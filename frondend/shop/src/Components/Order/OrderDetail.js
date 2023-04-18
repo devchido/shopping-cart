@@ -240,43 +240,59 @@ function OrderDetail() {
               ))
             : null;
     };
-    const handleCancelOrder = () => {
-        if (order.status === 1 || order.status === 5) {
-            setSnackbarOpen(true);
-            setSnackbarSeverity("error");
-            setSnackbarMsg("Đơn hàng id= " + order.id + " không hợp lệ!");
-            handleClose();
-        } else {
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-            var requestOptions = {
+    const handleReceiveOrder = () => {
+        fetch(
+            "/order/auth/receive?" +
+                new URLSearchParams({
+                    id: order.id,
+                }),
+            {
                 method: "PUT",
-                headers: myHeaders,
-                redirect: "follow",
-            };
-
-            fetch("/order/auth/cancel-order?id=" + order.id, requestOptions)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.status;
-                    }
-                    throw new Error(response.status);
-                })
-                .then((result) => {
-                    setSnackbarOpen(true);
-                    setSnackbarSeverity("success");
-                    setSnackbarMsg("Đã huỷ đơn hàng id= " + order.id + ".");
-                    handleClose();
-                    loadDataOrder();
-                })
-                .catch((error) => {
-                    setSnackbarOpen(true);
-                    setSnackbarSeverity("error");
-                    setSnackbarMsg("Lỗi huỷ đơn hàng id= " + order.id + "!");
-                    handleClose();
-                });
-        }
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Xác nhận đã nhận được hàng.");
+                loadDataOrder();
+            })
+            .catch((error) => console.log("error", error));
+    };
+    const handleCancelOrder = () => {
+        fetch("/order/auth/cancel?id=" + order.id, {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Đã huỷ đơn hàng id= " + order.id + ".");
+                handleClose();
+                loadDataOrder();
+            })
+            .catch((error) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Lỗi huỷ đơn hàng id= " + order.id + "!");
+                handleClose();
+            });
     };
 
     React.useEffect(() => {
@@ -352,14 +368,15 @@ function OrderDetail() {
                                             value={format(new Date(order.createdAt), "yyyy-MM-dd'T'hh:mm:ss")}
                                         />
                                     </Box>
-                                    {order.updatedAt ? <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
-                                        <Typography>Updated At:</Typography>
-                                        <Input
-                                            type="datetime-local"
-                                            value={format(new Date(order.updatedAt), "yyyy-MM-dd'T'hh:mm:ss")}
-                                        />
-                                    </Box> : null }
-                                    
+                                    {order.updatedAt ? (
+                                        <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
+                                            <Typography>Updated At:</Typography>
+                                            <Input
+                                                type="datetime-local"
+                                                value={format(new Date(order.updatedAt), "yyyy-MM-dd'T'hh:mm:ss")}
+                                            />
+                                        </Box>
+                                    ) : null}
                                 </div>
                             </div>
                             <div className="card mb-4 mb-lg-0">
@@ -379,22 +396,29 @@ function OrderDetail() {
                         <div className="col-md-4">
                             {loading ? <Loading /> : <ShowDataOrder />}
                             <div className="card mb-4 card-body ">
+                                {order.status === 1 || order.status === 2 || order.status === 3 ? (
+                                    <button type="button" className="btn btn-primary btn-block ">
+                                        Transaction
+                                    </button>
+                                ) : null}
+                            </div>
+                            <div className="card mb-4 card-body ">
                                 <div className="d-flex form-group justify-content-between">
                                     <Link to={"/orders"}>
                                         <button type="reset" className="btn btn-dark btn-block ">
                                             Trở lại
                                         </button>
                                     </Link>
-                                    {order.status === 1 || order.status === 5 ? null : (
-                                        <>
-                                            <button className="btn btn-danger btn-block" onClick={handleClickOpen}>
-                                                Huỷ đơn
-                                            </button>
-                                            <button type="button" className="btn btn-primary btn-block ">
-                                                Thanh toán
-                                            </button>
-                                        </>
-                                    )}
+                                    {order.status === 0 || order.status === 1 || order.status === 2 ? (
+                                        <button className="btn btn-danger btn-block" onClick={handleClickOpen}>
+                                            Huỷ đơn
+                                        </button>
+                                    ) : null}
+                                    {order.status === 2 ? (
+                                        <button className="btn btn-info btn-block" onClick={handleReceiveOrder}>
+                                            Xác nhận đã nhận hàng
+                                        </button>
+                                    ) : null}
                                 </div>
                             </div>
                         </div>

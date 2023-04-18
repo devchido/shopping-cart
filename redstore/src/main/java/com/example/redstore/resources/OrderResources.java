@@ -46,8 +46,6 @@ public class OrderResources {
 
     /*
     Hiển thị tất cả order của user đang đăng nhập???
-    http://localhost:8080/order/auth/u/1
-
      */
     @GetMapping("/auth/user")
     public List<OrderDto> findByUsers(@RequestParam String status) {
@@ -67,35 +65,18 @@ public class OrderResources {
         return dto;
     }
 
-    /*
-    http://localhost:8080/order
-    {
-        "cartId": "1",
-        "status": "0",
-        "subTotal": "0",
-        "itemDiscount": "0",
-        "total": "0"
-    }
-     */
     @PostMapping("/auth/create")
     public void create(@RequestBody OrderDto dto) {
         orderService.create(dto);
     }
 
     /*
-    User thực hiện huỷ order wit order status!= 6
-     */
-    @PutMapping("/auth/cancel-order")
-    public void cancelOrder(@RequestParam String id){
-        orderService.cancelOrder(id);
-    }
-    /*
     Thực hiện xác nhận order -> vận chuyển
      */
-    @PutMapping("/auth/admin/set-status")
-    public void confirmOrder(@RequestParam String id, @RequestParam int status){
-        orderService.setStatusOrder(id, status);
-    }
+//    @PutMapping("/auth/admin/set-status")
+//    public void confirmOrder(@RequestParam String id, @RequestParam int status){
+//        orderService.setStatusOrder(id, status);
+//    }
     // todo: findAllOrder
     @GetMapping("/auth/admin/{offset}/{pageSize}")
     private APIResponse<Page<OrderDto>> findAllOrder(
@@ -117,6 +98,46 @@ public class OrderResources {
                 offset, pageSize, field, sort, cartId, userId, username, mobile, email, address, city, country, status
         );
         return new APIResponse<>(dtos.getSize(), dtos);
+    }
+    // todo: xác nhận vận chuyển hàng của đơn hàng: 0 -> 1
+    @PutMapping("/auth/admin/shipping")
+    public void shippingOrder(@RequestParam String id){
+        orderService.shippingOrder(id);
+    }
+    // todo: xác nhận đang giao hàng cho đơn hàng: 1 -> 2
+    @PutMapping("/auth/admin/delivery")
+    public void deliveryOrder(@RequestParam String id){
+        orderService.deliveryOrder(id);
+    }
+
+    // todo: user xác nhận đã nhận đơn hàng: 2 -> 3
+    @PutMapping("/auth/receive")
+    public void receiveOrder(@RequestParam String id){
+        orderService.receiveOrder(id);
+    }
+
+    // todo: user hoàn trả đơn hàng: 3 -> 7
+    @PutMapping("/auth/returns")
+    public void returnsOrder(@RequestParam String id){
+        orderService.returnsOrder(id);
+    }
+
+    // todo: admin - xác nhận đã hoàn trả hàng: 7 -> 8
+    @PutMapping("/auth/returned")
+    public void returnedOrder(@RequestParam String id){
+        orderService.returnedOrder(id);
+    }
+
+    // todo: user huỷ đơn hàng: 0 || 1 || 2 -> 5
+    @PutMapping("/auth/cancel")
+    public void userCancelOrder(@RequestParam String id){
+        orderService.userCancelOrder(id);
+    }
+
+    // todo: admin huỷ đơn hàng: 0 || 1 || 2 -> 5
+    @PutMapping("/auth/admin/cancel")
+    public void adminCancelOrder(@RequestParam String id){
+        orderService.adminCancelOrder(id);
     }
 
 }

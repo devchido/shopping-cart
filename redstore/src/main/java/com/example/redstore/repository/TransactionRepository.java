@@ -15,13 +15,16 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
     String db = "shop";
-    // todo: các trạng thái của transaction:
     /*
-    0 -> mới
-    1 -> huỷ
-    ...
-    3 -> Chờ xử lý
-    6 -> thành công
+        todo: các trạng thái của transaction:
+        0 -> user - chưa thanh toán : mới
+        1 -> user - thanh toán
+        2 -> Thành công : đơn hàng thành công
+        3 -> user - Huỷ
+        4 -> admin - huỷ
+        6 -> hoàn trả
+        7 -> user - đã hoàn trả
+        ...
      */
     @Query(value = "Select t.* from " + db + ".transaction t where user_id = :userId", nativeQuery = true)
     Transaction findByUserId(@Param("userId") String userId);
@@ -57,7 +60,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     );
 
     // todo: tìm kiếm phiếu thanh toán theo id của phiếu order
-    @Query(value = "select * from "+db+".transaction where order_id = :orderId " +
-            " and status = 0 or status = 3 or status = 6 ", nativeQuery = true)
+    @Query(value = "select * from "+db+".transaction where order_id = :orderId ", nativeQuery = true)
     Optional<Transaction> findByOrderId(@Param("orderId") Long orderId);
 }

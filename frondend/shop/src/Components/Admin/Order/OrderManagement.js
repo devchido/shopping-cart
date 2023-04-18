@@ -238,12 +238,15 @@ function OrderManagement() {
                                                 <MenuItem value="">
                                                     <em>Tất cả</em>
                                                 </MenuItem>
-                                                <MenuItem value={0}>Chờ xử lý</MenuItem>
-                                                <MenuItem value={2}>Đang vận chuyển</MenuItem>
-                                                <MenuItem value={3}>Đang giao</MenuItem>
-                                                <MenuItem value={5}>Đã nhận</MenuItem>
-                                                <MenuItem value={1}>Đã huỷ</MenuItem>
-                                                <MenuItem value={4}>Hoàn tiền/Trả lại</MenuItem>
+                                                <MenuItem value={0}>Chờ xác nhận</MenuItem>
+                                                <MenuItem value={1}>Đang vận chuyển</MenuItem>
+                                                <MenuItem value={2}>Đang giao</MenuItem>
+                                                <MenuItem value={3}>Đã nhận</MenuItem>
+                                                <MenuItem value={4}>Hoàn thành</MenuItem>
+                                                <MenuItem value={5}>User - Huỷ</MenuItem>
+                                                <MenuItem value={6}>Admin - Huỷ</MenuItem>
+                                                <MenuItem value={7}>Hoàn trả</MenuItem>
+                                                <MenuItem value={8}>Đã hoàn trả</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Box>
@@ -340,16 +343,23 @@ function OrderManagement() {
                                                                     {item.status === 0
                                                                         ? "Chờ xác nhận"
                                                                         : null || item.status === 1
-                                                                        ? "Đã huỷ"
-                                                                        : null || item.status === 2
                                                                         ? "Đang vận chuyển"
+                                                                        : null || item.status === 2
+                                                                        ? "Đang giao"
                                                                         : null || item.status === 3
-                                                                        ? "Đăng giao"
-                                                                        : null || item.status === 4
-                                                                        ? "Hoàn tiền/Trả lại"
-                                                                        : null || item.status === 5
                                                                         ? "Đã nhận"
-                                                                        : null}
+                                                                        : null || item.status === 4
+                                                                        ? "Hoàn thành"
+                                                                        : null || item.status === 5
+                                                                        ? "User - Huỷ"
+                                                                        : null || item.status === 6
+                                                                        ? "Admin - Huỷ"
+                                                                        : null || item.status === 7
+                                                                        ? "Hoàn trả"
+                                                                        : null || item.status === 8
+                                                                        ? "Đã hoàn trả"
+                                                                        : null
+                                                                    }
                                                                 </TableCell>
 
                                                                 <TableCell align="center" className="row ">

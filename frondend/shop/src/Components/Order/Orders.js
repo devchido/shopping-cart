@@ -131,14 +131,23 @@ function Orders() {
         return (
             <Box sx={{ width: "100%", typography: "body1", mb: 5 }}>
                 <TabContext value={status}>
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }} >
-                        <TabList onChange={handleChange} aria-label="lab API tabs example"  variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <TabList
+                            onChange={handleChange}
+                            aria-label="lab API tabs example"
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            allowScrollButtonsMobile
+                        >
                             <Tab icon={<AssignmentIcon />} iconPosition="start" label="Chờ xử lý" value="0" />
-                            <Tab icon={<WidgetsIcon />} iconPosition="start" label="Đang vận chuyển" value="2" />
-                            <Tab icon={<LocalShippingIcon />} iconPosition="start" label="Đang giao" value="3" />
-                            <Tab icon={<HomeIcon />} iconPosition="start" label="Đã nhận" value="5" />
-                            <Tab icon={<ErrorIcon />} iconPosition="start" label="Đã huỷ" value="1" />
-                            <Tab icon={<AssignmentReturnIcon />} iconPosition="start" label="Hoàn tiền/Trả lại" value="4" />
+                            <Tab icon={<WidgetsIcon />} iconPosition="start" label="Đang vận chuyển" value="1" />
+                            <Tab icon={<LocalShippingIcon />} iconPosition="start" label="Đang giao" value="2" />
+                            <Tab icon={<HomeIcon />} iconPosition="start" label="Đã nhận" value="3" />
+                            <Tab icon={<ErrorIcon />} iconPosition="start" label="Hoàn thành" value="4" />
+                            <Tab icon={<ErrorIcon />} iconPosition="start" label="Đã huỷ" value="5" />
+                            <Tab icon={<ErrorIcon />} iconPosition="start" label="Bị huỷ" value="6" />
+                            <Tab icon={<AssignmentReturnIcon />} iconPosition="start" label="Hoàn trả" value="7" />
+                            <Tab icon={<AssignmentReturnIcon />} iconPosition="start" label="Đã hoàn trả" value="8" />
                         </TabList>
                     </Box>
                     {/* <TabPanel value="0">Item One</TabPanel>
@@ -194,15 +203,21 @@ function Orders() {
                                                         {item.status === 0
                                                             ? "Chờ xác nhận"
                                                             : null || item.status === 1
-                                                            ? "Không thành công"
-                                                            : null || item.status === 2
                                                             ? "Đang vận chuyển"
+                                                            : null || item.status === 2
+                                                            ? "Đang giao"
                                                             : null || item.status === 3
-                                                            ? "Đã giao"
+                                                            ? "Đã nhận"
                                                             : null || item.status === 4
-                                                            ? "Đã trả lại"
-                                                            : null || item.status === 5
                                                             ? "Hoàn thành"
+                                                            : null || item.status === 5
+                                                            ? "Đã Huỷ"
+                                                            : null || item.status === 6
+                                                            ? "Bị Huỷ"
+                                                            : null || item.status === 7
+                                                            ? "Hoàn trả"
+                                                            : null || item.status === 8
+                                                            ? "Đã hoàn trả"
                                                             : null}
                                                     </span>
                                                 </p>
@@ -226,7 +241,6 @@ function Orders() {
                                                 <Link to={`/orders/${item.id}`}>
                                                     <button className="btn btn-outline-dark">Xem chi tiết</button>
                                                 </Link>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -310,11 +324,7 @@ function Orders() {
                                 <h3 className="fw-normal mb-0 text-black">Order</h3>
                                 <div>
                                     <p className="mb-0">
-                                        <span className="text-muted">Sort by:</span>{" "}
-                                        <span className="text-body">
-                                            price
-                                            
-                                        </span>
+                                        <span className="text-muted">Sort by:</span> <span className="text-body">price</span>
                                     </p>
                                 </div>
                             </div>

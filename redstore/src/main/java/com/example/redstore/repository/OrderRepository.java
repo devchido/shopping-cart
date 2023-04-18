@@ -15,6 +15,19 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
     String db = "shop";
+    /*
+        todo: các trạng thái của order
+        Trạng thái của đơn đặt hàng có thể là
+        0 -> Chờ xác nhận
+        1 -> Đang vận chuyển
+        2 -> Đang giao
+        3 -> Đã nhận
+        4 -> Hoàn thành
+        5 -> User - Huỷ
+        6 -> Admin - Huỷ
+        7 -> User - Hoàn trả
+        8 -> user xác nhận - Đã hoàn trả
+     */
 
     @Query(value = "SELECT t.* FROM " + db + ".order t " +
             "        WHERE user_id = :users and status like concat( :status )", nativeQuery = true)

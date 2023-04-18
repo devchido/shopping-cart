@@ -11,7 +11,13 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<Cart, String> {
     List<Cart> findAllByUsersId(Long userId);
     String db = "shop";
+    /*
+        todo: các trạng thái của cart
+        Trạng thái của đơn đặt hàng có thể là
+        0 -> sử dụng
+        1 -> huỷ
 
+     */
 
     @Query(value = "select c.* from "+ db +".cart c where user_id = :userId and status = :status order by updated_at DESC", nativeQuery = true)
     List<Cart> findUsersCart(Long userId, String status);

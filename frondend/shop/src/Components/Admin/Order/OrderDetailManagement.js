@@ -22,7 +22,8 @@ import { format } from "date-fns";
 import { VND } from "../../Unity/VND";
 
 export default function OrderDetailManagement() {
-    const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận"];
+    const steps = ["Chờ xác nhận", "Đang vận chuyển", "Đang giao", "Đã nhận"];
+    const steps2 = ["Hoàn trả", "Đã hoàn trả"];
     // id của order
     const { id } = useParams();
     //
@@ -102,13 +103,12 @@ export default function OrderDetailManagement() {
             })
             .catch((error) => console.log("error", error));
     };
-    // 0 -> Xác nhận đơn hàng -> chuyển giao tới đơn vị vận chuyển: 2
-    const handleConfirmOrder = () => {
+    // xác nhận vận chuyển hàng của đơn hàng: 0 -> 1
+    const handleShippingOrder = () => {
         fetch(
-            "/order/auth/admin/set-status?" +
+            "/order/auth/admin/shipping?" +
                 new URLSearchParams({
                     id: order.id,
-                    status: 2,
                 }),
             {
                 method: "PUT",
@@ -121,7 +121,7 @@ export default function OrderDetailManagement() {
                 if (response.ok) {
                     return response.status;
                 }
-                throw Error(response.status);
+                throw new Error(response.status);
             })
             .then((result) => {
                 setSnackbarOpen(true);
@@ -131,13 +131,12 @@ export default function OrderDetailManagement() {
             })
             .catch((error) => console.log("error", error));
     };
-    // 2 -> Xác nhận đã vận chuyển -> chuyển giao tới khách hàng: 3
-    const handleShipped = () => {
+    // xác nhận đang giao hàng cho đơn hàng: 1 -> 2
+    const handleDeliveryOrder = () => {
         fetch(
-            "/order/auth/admin/set-status?" +
+            "/order/auth/admin/delivery?" +
                 new URLSearchParams({
                     id: order.id,
-                    status: 3,
                 }),
             {
                 method: "PUT",
@@ -150,7 +149,7 @@ export default function OrderDetailManagement() {
                 if (response.ok) {
                     return response.status;
                 }
-                throw Error(response.status);
+                throw new Error(response.status);
             })
             .then((result) => {
                 setSnackbarOpen(true);
@@ -189,26 +188,19 @@ export default function OrderDetailManagement() {
             })
             .catch((error) => console.log("error", error));
     };
-    // 0,2,3 -> Huỷ đơn hàng -> 1
+    // admin huỷ đơn hàng: 0 || 1 || 2 -> 5
     const handleCancelOrder = () => {
-        fetch(
-            "/order/auth/admin/set-status?" +
-                new URLSearchParams({
-                    id: order.id,
-                    status: 1,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
+        fetch("/order/auth/admin/cancel?id=" + order.id, {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
             .then((response) => {
                 if (response.ok) {
                     return response.status;
                 }
-                throw Error(response.status);
+                throw new Error(response.status);
             })
             .then((result) => {
                 setSnackbarOpen(true);
@@ -219,13 +211,12 @@ export default function OrderDetailManagement() {
             })
             .catch((error) => console.log("error", error));
     };
-    // 5 -> Hoàn trả đơn hàng -> 4
-    const handleRefund = () => {
+    // xác nhận đã hoàn trả hàng: 7 -> 8
+    const handleReturned = () => {
         fetch(
-            "/order/auth/admin/set-status?" +
+            "/order/auth/admin/returned?" +
                 new URLSearchParams({
                     id: order.id,
-                    status: 4,
                 }),
             {
                 method: "PUT",
@@ -244,35 +235,6 @@ export default function OrderDetailManagement() {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Xác nhận hoàn trả! Đơn hàng sẽ được gửi trả về đơn vị, đồng thời hoàn tiền cho khách hàng.");
-                loadDataOrder();
-            })
-            .catch((error) => console.log("error", error));
-    };
-    // Khôi phục đơn hàng
-    const handleRecovery = () => {
-        fetch(
-            "/order/auth/admin/set-status?" +
-                new URLSearchParams({
-                    id: order.id,
-                    status: 0,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Xác nhận khôi phục đơn hàng. Đã chuyển vào mục chờ xử lý");
                 loadDataOrder();
             })
             .catch((error) => console.log("error", error));
@@ -473,7 +435,7 @@ export default function OrderDetailManagement() {
                                 </div>
                                 <div className="card-body">
                                     <Box sx={{ width: "100%", my: 2 }}>
-                                        {order.status === 0 || order.status === 2 || order.status === 3 || order.status === 5 ? (
+                                        {order.status === 0 || order.status === 1 || order.status === 2 || order.status === 3 ? (
                                             <Stepper activeStep={order.status}>
                                                 {steps.map((label) => (
                                                     <Step key={label}>
@@ -482,17 +444,24 @@ export default function OrderDetailManagement() {
                                                 ))}
                                             </Stepper>
                                         ) : null}
-                                        {order.status === 1 ? (
+                                        {order.status === 5 || order.status === 6 ? (
                                             <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
                                                 <Typography>Status: </Typography>
-                                                <Typography>Đã huỷ</Typography>
+                                                {order.status === 5 ? (
+                                                    <Typography color="error">User - Huỷ</Typography>
+                                                ) : (
+                                                    <Typography color="error">Admin - Huỷ</Typography>
+                                                )}
                                             </Box>
                                         ) : null}
-                                        {order.status === 4 ? (
-                                            <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
-                                                <Typography>Status: </Typography>
-                                                <Typography>Hoàn tiền/Trả lại</Typography>
-                                            </Box>
+                                        {order.status === 7 || order.status === 8 ? (
+                                            <Stepper activeStep={order.status - 6}>
+                                            {steps2.map((label) => (
+                                                <Step key={label}>
+                                                    <StepLabel>{label}</StepLabel>
+                                                </Step>
+                                            ))}
+                                        </Stepper>
                                         ) : null}
                                     </Box>
                                     <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
@@ -540,30 +509,22 @@ export default function OrderDetailManagement() {
                                         <button
                                             type="button"
                                             className="btn btn-info btn-block col-auto mx-auto mb-3"
-                                            onClick={handleConfirmOrder}
+                                            onClick={handleShippingOrder}
                                         >
-                                            Xác nhận đơn hàng
+                                            Xác nhận - Đang vận chuyển
                                         </button>
                                     ) : null}
-                                    {order.status === 2 ? (
+                                    {order.status === 1 ? (
                                         <button
                                             type="button"
                                             className="btn btn-info btn-block col-auto mx-auto mb-3"
-                                            onClick={handleShipped}
+                                            onClick={handleDeliveryOrder}
                                         >
-                                            Xác nhận đã vận chuyển
+                                            Xác nhận - Đang giao
                                         </button>
                                     ) : null}
-                                    {order.status === 3 ? (
-                                        <button
-                                            type="button"
-                                            className="btn btn-info btn-block col-auto mx-auto mb-3"
-                                            onClick={handleDelivered}
-                                        >
-                                            Xác nhận đã giao hàng
-                                        </button>
-                                    ) : null}
-                                    {order.status === 0 || order.status === 2 || order.status === 3 ? (
+                                    
+                                    {order.status === 0 || order.status === 1 || order.status === 2 ? (
                                         <button
                                             type="button"
                                             className="btn btn-danger btn-block col-auto mx-auto mb-3"
@@ -572,24 +533,7 @@ export default function OrderDetailManagement() {
                                             Huỷ đơn hàng
                                         </button>
                                     ) : null}
-                                    {order.status === 5 ? (
-                                        <button
-                                            type="button"
-                                            className="btn btn-info btn-block col-auto mx-auto mb-3"
-                                            onClick={handleRefund}
-                                        >
-                                            Hoàn trả
-                                        </button>
-                                    ) : null}
-                                    {order.status === 1 || order.status === 4 ? (
-                                        <button
-                                            type="button"
-                                            className="btn btn-info btn-block col-auto mx-auto mb-3"
-                                            onClick={handleRecovery}
-                                        >
-                                            Khôi phục đơn hàng
-                                        </button>
-                                    ) : null}
+                                    
                                 </div>
                             </div>
                         </div>

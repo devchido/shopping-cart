@@ -115,6 +115,11 @@ public class OrderResources {
     public void receiveOrder(@RequestParam String id){
         orderService.receiveOrder(id);
     }
+    // todo: user xác nhận đơn hàng thành công 3 -> 4
+    @PutMapping("/auth/success")
+    public void handleSuccessOrder(@RequestParam String id){
+        orderService.handleSuccessOrder(id);
+    }
 
     // todo: user hoàn trả đơn hàng: 3 -> 7
     @PutMapping("/auth/returns")
@@ -123,7 +128,7 @@ public class OrderResources {
     }
 
     // todo: admin - xác nhận đã hoàn trả hàng: 7 -> 8
-    @PutMapping("/auth/returned")
+    @PutMapping("/auth/admin/returned")
     public void returnedOrder(@RequestParam String id){
         orderService.returnedOrder(id);
     }

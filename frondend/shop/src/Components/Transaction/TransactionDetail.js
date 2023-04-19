@@ -19,9 +19,9 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { format } from "date-fns";
-import { VND } from "../../Unity/VND";
+import { VND } from "../Unity/VND";
 
-export default function TransactionDetailManagement() {
+export default function TransactionDetail() {
     const steps = ["Chưa thanh toán", "Đã thanh toán", "Thành công"];
     const steps2 = ["Chưa hoàn trả", "Đã hoàn trả"];
     // id của data
@@ -60,7 +60,7 @@ export default function TransactionDetailManagement() {
 
     // admin thực hiện get data của data
     const loadDataTransaction = () => {
-        fetch("/transaction/auth/admin/" + id, {
+        fetch("/transaction/auth/" + id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -256,6 +256,59 @@ export default function TransactionDetailManagement() {
         );
     };
 
+    const handlePayment = () => {
+        fetch("/transaction/auth/" + data.id, {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Đã thanh toán thành công.");
+                loadDataTransaction();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Thanh toán không thành công!");
+            });
+    };
+    const handleRefunded = () => {
+        fetch("/transaction/auth/refunded/" + data.id, {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Đã thanh toán thành công.");
+                loadDataTransaction();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Thanh toán không thành công!");
+            });
+    };
+
     React.useEffect(() => {
         setLoading(true);
         loadDataTransaction();
@@ -309,7 +362,7 @@ export default function TransactionDetailManagement() {
                                 <div className="card-body">
                                     <Typography>Status</Typography>
                                     <Box sx={{ width: "100%", my: 2 }}>
-                                    {data.status === 0 || data.status === 1 || data.status === 2 ? (
+                                        {data.status === 0 || data.status === 1 || data.status === 2 ? (
                                             <Stepper activeStep={data.status + 1}>
                                                 {steps.map((label) => (
                                                     <Step key={label}>
@@ -360,11 +413,29 @@ export default function TransactionDetailManagement() {
                             {loading ? <Loading /> : <ShowDatadata />}
                             <div className="card mb-4 card-body ">
                                 <div className="row form-group ">
-                                    <Link to={"/admin"} className="col-auto mx-auto mb-3">
-                                        <button type="reset" className="btn btn-dark btn-block ">
+                                    <Link to={`/orders/${data.orders.id}`} className="col-auto mx-auto mb-3">
+                                        <button type="button" className="btn btn-dark btn-block ">
                                             Trở lại
                                         </button>
                                     </Link>
+                                    {data.status === 0 ? (
+                                        <button
+                                            type="button"
+                                            className="btn btn-info btn-block col-auto mx-auto mb-3"
+                                            onClick={handlePayment}
+                                        >
+                                            Thanh toán
+                                        </button>
+                                    ) : null}
+                                    
+                                    {data.status === 6 ? (
+                                        <button
+                                            className="btn btn-info btn-block col-auto mx-auto mb-3"
+                                            onClick={handleRefunded}
+                                        >
+                                            Đã hoàn trả
+                                        </button>
+                                    ) : null}
                                 </div>
                             </div>
                         </div>

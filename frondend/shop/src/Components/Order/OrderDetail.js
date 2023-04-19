@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 //
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { IconButton, Input, Typography } from "@mui/material";
@@ -21,8 +21,9 @@ import StepLabel from "@mui/material/StepLabel";
 import { VND } from "../Unity/VND";
 import { format } from "date-fns";
 
-const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận"];
 function OrderDetail() {
+    const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận"];
+    const steps2 = ["Hoàn trả", "Đã hoàn trả"];
     // id của order
     const { id } = useParams();
     //
@@ -267,6 +268,60 @@ function OrderDetail() {
             })
             .catch((error) => console.log("error", error));
     };
+    const handleReturnsOrder = () => {
+        fetch(
+            "/order/auth/returns?" +
+                new URLSearchParams({
+                    id: order.id,
+                }),
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Xác nhận đã nhận được hàng.");
+                loadDataOrder();
+            })
+            .catch((error) => console.log("error", error));
+    };
+    const handleSuccess = () => {
+        fetch(
+            "/order/auth/success?" +
+                new URLSearchParams({
+                    id: order.id,
+                }),
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Xác nhận đã nhận được hàng.");
+                loadDataOrder();
+            })
+            .catch((error) => console.log("error", error));
+    };
     const handleCancelOrder = () => {
         fetch("/order/auth/cancel?id=" + order.id, {
             method: "PUT",
@@ -292,6 +347,30 @@ function OrderDetail() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Lỗi huỷ đơn hàng id= " + order.id + "!");
                 handleClose();
+            });
+    };
+    const navigation = useNavigate();
+    const handleTransaction = () => {
+        fetch("/transaction/auth/order/" + order.id, {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                navigation(`/transaction/${result.id}`);
+                console.log(result);
+            })
+            .catch((error) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Lỗi chuyển trang giao dịch!");
             });
     };
 
@@ -353,13 +432,34 @@ function OrderDetail() {
                                 </div>
                                 <div className="card-body">
                                     <Box sx={{ width: "100%", my: 2 }}>
-                                        <Stepper activeStep={order.status}>
-                                            {steps.map((label) => (
+                                    {order.status === 0 || order.status === 1 || order.status === 2 || order.status === 3 ? (
+                                            <Stepper activeStep={order.status + 1}>
+                                                {steps.map((label) => (
+                                                    <Step key={label}>
+                                                        <StepLabel>{label}</StepLabel>
+                                                    </Step>
+                                                ))}
+                                            </Stepper>
+                                        ) : null}
+                                        {order.status === 5 || order.status === 6 ? (
+                                            <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
+                                                <Typography>Status: </Typography>
+                                                {order.status === 5 ? (
+                                                    <Typography color="error">User - Huỷ</Typography>
+                                                ) : (
+                                                    <Typography color="error">Admin - Huỷ</Typography>
+                                                )}
+                                            </Box>
+                                        ) : null}
+                                        {order.status === 7 || order.status === 8 ? (
+                                            <Stepper activeStep={order.status - 6}>
+                                            {steps2.map((label) => (
                                                 <Step key={label}>
                                                     <StepLabel>{label}</StepLabel>
                                                 </Step>
                                             ))}
                                         </Stepper>
+                                        ) : null}
                                     </Box>
                                     <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
                                         <Typography>Created At:</Typography>
@@ -395,17 +495,17 @@ function OrderDetail() {
                         </div>
                         <div className="col-md-4">
                             {loading ? <Loading /> : <ShowDataOrder />}
-                            <div className="card mb-4 card-body ">
-                                {order.status === 1 || order.status === 2 || order.status === 3 ? (
-                                    <button type="button" className="btn btn-primary btn-block ">
+                            {order.status !== 0 ? (
+                                <div className="card mb-4 card-body ">
+                                    <button type="button" className="btn btn-primary btn-block" onClick={handleTransaction}>
                                         Transaction
                                     </button>
-                                ) : null}
-                            </div>
+                                </div>
+                            ) : null}
                             <div className="card mb-4 card-body ">
                                 <div className="d-flex form-group justify-content-between">
                                     <Link to={"/orders"}>
-                                        <button type="reset" className="btn btn-dark btn-block ">
+                                        <button type="reset" className="btn btn-dark btn-block">
                                             Trở lại
                                         </button>
                                     </Link>
@@ -417,6 +517,16 @@ function OrderDetail() {
                                     {order.status === 2 ? (
                                         <button className="btn btn-info btn-block" onClick={handleReceiveOrder}>
                                             Xác nhận đã nhận hàng
+                                        </button>
+                                    ) : null}
+                                    {order.status === 3 ? (
+                                        <button className="btn btn-danger btn-block" onClick={handleReturnsOrder}>
+                                            Hoàn trả
+                                        </button>
+                                    ) : null}
+                                    {order.status === 3 ? (
+                                        <button className="btn btn-primary btn-block" onClick={handleSuccess}>
+                                            Thành công
                                         </button>
                                     ) : null}
                                 </div>

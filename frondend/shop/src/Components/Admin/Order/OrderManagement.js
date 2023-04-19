@@ -373,9 +373,9 @@ function OrderManagement() {
                                                                         </IconButton>
                                                                         </Link>
 
-                                                                        <IconButton color="error" title="Delete">
+                                                                        {/* <IconButton color="error" title="Delete">
                                                                             <DeleteIcon />
-                                                                        </IconButton>
+                                                                        </IconButton> */}
                                                                     </div>
                                                                 </TableCell>
                                                             </TableRow>

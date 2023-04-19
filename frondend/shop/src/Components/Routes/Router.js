@@ -30,6 +30,7 @@ import CreatedCategory from "../Admin/Category/CreatedCategory";
 import UserView from "../User/UserView";
 import OrderDetailManagement from "../Admin/Order/OrderDetailManagement";
 import TransactionDetailManagement from "../Admin/Transaction/TransactionDetailManagement";
+import TransactionDetail from "../Transaction/TransactionDetail";
 
 function Router() {
     return (
@@ -83,6 +84,8 @@ function Router() {
             {/* Orders */}
             <Route path="/orders" element={<Orders/>}></Route>
             <Route path="/orders/:id" element={<OrderDetail/>}></Route>
+            {/* Transaction */}
+            <Route path="/transaction/:id" element={<TransactionDetail/>}> </Route>
             {/* Manage: Trang quản lý product của user */}
             <Route path= "/management/list-products" element={<ListProducts/>}></Route>
             {/* Created Products: Tạo sản phẩm mới */}

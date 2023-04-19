@@ -81,4 +81,32 @@ public class TransactionResources {
         TransactionDto dto = transactionService.findById(id);
         return dto;
     }
+    // todo: user tìm đến transaction thông qua orderId
+    @GetMapping("/auth/order/{orderId}")
+    public TransactionDto findByOrderId(@PathVariable Long orderId){
+        TransactionDto dto = transactionService.findByOrderId(orderId);
+        return dto;
+    }
+
+    // todo: admin tìm đến transaction thông qua orderId
+    @GetMapping("/auth/admin/order/{orderId}")
+    public TransactionDto adminFindByOrderId(@PathVariable Long orderId){
+        TransactionDto dto = transactionService.adminFindByOrderId(orderId);
+        return dto;
+    }
+    // todo: user thanh toán giao dịch 0 -> 1
+    @PutMapping("/auth/{id}")
+    public void paymentUser(@PathVariable String id){
+        transactionService.paymentUser(id);
+    }
+    // todo: admin xác nhận thanh toán cho giao dịch 0 -> 1
+    @PutMapping("/auth/admin/{id}")
+    public void paymentAdmin(@PathVariable String id){
+        transactionService.paymentAdmin(id);
+    }
+    // todo: user xác nhận đã hoàn trả giao dịch
+    @PutMapping("/auth/refunded/{id}")
+    public void refundedTransaction(@PathVariable String id){
+        transactionService.refundedTransaction(id);
+    }
 }

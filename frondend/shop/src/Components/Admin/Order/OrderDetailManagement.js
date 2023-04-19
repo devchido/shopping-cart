@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 //
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { FormControl, IconButton, Input, InputLabel, MenuItem, Select, Typography } from "@mui/material";
@@ -103,6 +103,30 @@ export default function OrderDetailManagement() {
             })
             .catch((error) => console.log("error", error));
     };
+    const navigation = useNavigate();
+    const handleTransaction = () => {
+        fetch("/transaction/auth/admin/order/" + order.id, {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                navigation(`/admin/transaction/${result.id}`);
+                console.log(result);
+            })
+            .catch((error) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Lỗi chuyển trang giao dịch!");
+            });
+    };
     // xác nhận vận chuyển hàng của đơn hàng: 0 -> 1
     const handleShippingOrder = () => {
         fetch(
@@ -159,13 +183,12 @@ export default function OrderDetailManagement() {
             })
             .catch((error) => console.log("error", error));
     };
-    // 3 -> Xác nhận đã giao hàng -> đã nhận được hàng:5
-    const handleDelivered = () => {
+    // admin - xác nhận đã hoàn trả hàng: 7 -> 8
+    const handleReturnedOrder = () => {
         fetch(
-            "/order/auth/admin/set-status?" +
+            "/order/auth/admin/returned?" +
                 new URLSearchParams({
                     id: order.id,
-                    status: 5,
                 }),
             {
                 method: "PUT",
@@ -183,10 +206,13 @@ export default function OrderDetailManagement() {
             .then((result) => {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
-                setSnackbarMsg("Xác nhận đơn hàng đã giao đến khách hàng!");
+                setSnackbarMsg("Xác nhận đơn hàng đã được hoàn trả thành công.");
                 loadDataOrder();
             })
-            .catch((error) => console.log("error", error));
+            .catch((error) => {console.log("error", error)
+            setSnackbarOpen(true);
+            setSnackbarSeverity("error");
+            setSnackbarMsg("Xác nhận đơn hàng đã được hoàn trả không thành công!");});
     };
     // admin huỷ đơn hàng: 0 || 1 || 2 -> 5
     const handleCancelOrder = () => {
@@ -436,7 +462,7 @@ export default function OrderDetailManagement() {
                                 <div className="card-body">
                                     <Box sx={{ width: "100%", my: 2 }}>
                                         {order.status === 0 || order.status === 1 || order.status === 2 || order.status === 3 ? (
-                                            <Stepper activeStep={order.status}>
+                                            <Stepper activeStep={order.status + 1}>
                                                 {steps.map((label) => (
                                                     <Step key={label}>
                                                         <StepLabel>{label}</StepLabel>
@@ -498,9 +524,16 @@ export default function OrderDetailManagement() {
                         </div>
                         <div className="col-md-4">
                             {loading ? <Loading /> : <ShowDataOrder />}
+                            {order.status !== 0 ? (
+                                <div className="card mb-4 card-body ">
+                                    <button type="button" className="btn btn-primary btn-block" onClick={handleTransaction}>
+                                        Transaction
+                                    </button>
+                                </div>
+                            ) : null}
                             <div className="card mb-4 card-body ">
                                 <div className="row form-group ">
-                                    <Link to={"/admin/order"} className="col-auto mx-auto mb-3">
+                                    <Link to={"/admin"} className="col-auto mx-auto mb-3">
                                         <button type="reset" className="btn btn-dark btn-block ">
                                             Trở lại
                                         </button>
@@ -531,6 +564,15 @@ export default function OrderDetailManagement() {
                                             onClick={handleClickOpen}
                                         >
                                             Huỷ đơn hàng
+                                        </button>
+                                    ) : null}
+                                    {order.status === 7 ? (
+                                        <button
+                                            type="button"
+                                            className="btn btn-info btn-block col-auto mx-auto mb-3"
+                                            onClick={handleReturnedOrder}
+                                        >
+                                            Đã hoàn trả
                                         </button>
                                     ) : null}
                                     

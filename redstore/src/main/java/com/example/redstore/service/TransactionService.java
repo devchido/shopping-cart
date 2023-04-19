@@ -119,8 +119,8 @@ public class TransactionService {
 
     // todo: user hiển thị thông tin transaction theo id
     public TransactionDto findTransactionById(String id) {
-        Transaction entity = transactionRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy phiếu transaction: "+id));
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()){
+        Transaction entity = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu transaction: " + id));
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
             TransactionDto dto = transactionMapper.toDo(entity);
             return dto;
         } else {
@@ -128,10 +128,61 @@ public class TransactionService {
         }
     }
 
+    // todo: admin hiển thị thông tin của transaction theo id
     public TransactionDto findById(String id) {
         Transaction entity = transactionRepository.findById(id).orElseThrow(
-                ()-> new RuntimeException("Không tìm thấy phiếu transaction: "+id));
+                () -> new RuntimeException("Không tìm thấy phiếu transaction: " + id));
         TransactionDto dto = transactionMapper.toDo(entity);
         return dto;
+    }
+
+    // todo: user tìm đến transaction thông qua orderId
+    public TransactionDto findByOrderId(Long orderId) {
+        Transaction entity = transactionRepository.findByOrderId(orderId).orElseThrow(() -> new RuntimeException("Không tìm thấy transaction qua orderId"));
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+            TransactionDto dto = transactionMapper.toDo(entity);
+            return dto;
+        } else {
+            return new TransactionDto();
+        }
+    }
+
+    // todo: admin tìm đến transaction thông qua orderId
+    public TransactionDto adminFindByOrderId(Long orderId) {
+        Transaction entity = transactionRepository.findByOrderId(orderId).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy transaction qua orderId"));
+        TransactionDto dto = transactionMapper.toDo(entity);
+        return dto;
+    }
+
+    // todo: user thanh toán giao dịch 0 -> 1
+    public void paymentUser(String id) {
+        Transaction entity = transactionRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy transaction, id: " + id));
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+            entity.setStatus(1);
+            transactionRepository.save(entity);
+            System.out.println("transaction đã được thanh toán");
+        }
+    }
+
+    // todo: admin xác nhận thanh toán cho giao dịch 0 -> 1
+    public void paymentAdmin(String id) {
+        Transaction entity = transactionRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy transaction, id: " + id));
+        entity.setStatus(1);
+        transactionRepository.save(entity);
+        System.out.println("transaction đã được thanh toán");
+
+    }
+
+    public void refundedTransaction(String id) {
+        Transaction entity = transactionRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy transaction, id: " + id));
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+            entity.setStatus(7);
+            transactionRepository.save(entity);
+            System.out.println("transaction đã được thanh toán");
+        }
     }
 }

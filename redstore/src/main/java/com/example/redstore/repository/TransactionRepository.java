@@ -17,9 +17,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     String db = "shop";
     /*
         todo: các trạng thái của transaction:
-        0 -> user - chưa thanh toán : mới
-        1 -> user - thanh toán
-        2 -> Thành công : đơn hàng thành công
+        0 -> user - Chưa thanh toán : mới
+        1 -> user - Đã thanh toán
+        2 -> Thành công
         3 -> user - Huỷ
         4 -> admin - huỷ
         6 -> hoàn trả

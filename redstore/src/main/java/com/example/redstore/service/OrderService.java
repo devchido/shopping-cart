@@ -232,6 +232,24 @@ public class OrderService {
 
     }
 
+    // todo: user xác nhận đơn hàng thành công 3 -> 4
+    public void handleSuccessOrder(String id) {
+        Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy order với id: " + id));
+        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+            Transaction transaction = transactionRepository.findByOrderId(entity.getId()).orElseThrow(
+                    () -> new RuntimeException("Không tìm thấy phiếu thanh toán"));
+
+            System.out.println("xác nhận đơn hàng thành công");
+            entity.setStatus(4);
+            entity.setUpdatedAt(Instant.now());
+            orderRepository.save(entity);
+            transaction.setStatus(2);
+            transactionRepository.save(transaction);
+            System.out.println("giao dịch thành công");
+        }
+
+    }
+
     // todo: user hoàn trả đơn hàng: 3 -> 7
     public void returnsOrder(String id) {
         Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy order với id: " + id));
@@ -269,22 +287,22 @@ public class OrderService {
             productRepository.save(product);
         });
         Transaction transaction = transactionRepository.findByOrderId(entity.getId()).orElse(null);
-        if (transaction != null){
+        if (transaction != null) {
             transaction.setStatus(7);
             transaction.setUpdatedAt(Instant.now());
             transactionRepository.save(transaction);
             System.out.println("đã hoàn trả transaction");
         }
     }
+
     // todo: user huỷ đơn hàng: 0 || 1 || 2 -> 5
     public void userCancelOrder(String id) {
         Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin order: " + id));
         if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
             System.out.println("đúng người sở hữu");
             System.out.println("user huỷ order");
-            entity.setStatus(5);
-            entity.setUpdatedAt(Instant.now());
-            orderRepository.save(entity);
+
+
             // Set data product : trả lại số lượng hàng đã order
             List<OrderItem> orderItemList = orderItemRepository.findOrderItemByOrderId(entity.getId());
             // Xét từng item tìm được và trả lại số hàng đã order
@@ -302,33 +320,39 @@ public class OrderService {
             });
             if (entity.getStatus() == 0) {
                 System.out.println("order chưa được xác nhận");
-            };
-            if (entity.getStatus() == 1 || entity.getStatus() == 2){
-                System.out.println("order đã được xác nhận");
-                Transaction transaction = transactionRepository.findByOrderId(entity.getId()).orElse(null);
-                if (transaction != null){
-                    if (transaction.getStatus() == 0){
-                        System.out.println("transaction chưa được thanh toán");
-                        transaction.setStatus(3);
-                        transaction.setUpdatedAt(Instant.now());
-                        transactionRepository.save(transaction);
-                        System.out.println("user huỷ transaction");
-                    };
-                    if (transaction.getStatus() == 1){
-                        transaction.setStatus(6);
-                        transaction.setUpdatedAt(Instant.now());
-                        transactionRepository.save(transaction);
-                        System.out.println("cần hoàn trả transaction");
-                    }
-
-                }
             }
+            ;
+            if (entity.getStatus() == 1 || entity.getStatus() == 2) {
+                System.out.println("order đã được xác nhận");
+                Transaction transaction = transactionRepository.findByOrderId(entity.getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu giao dịch"));
+
+                if (transaction.getStatus() == 0) {
+                    System.out.println("transaction chưa được thanh toán");
+                    transaction.setStatus(3);
+                    transaction.setUpdatedAt(Instant.now());
+                    transactionRepository.save(transaction);
+                    System.out.println("user huỷ transaction");
+                }
+                ;
+                if (transaction.getStatus() == 1) {
+                    transaction.setStatus(6);
+                    transaction.setUpdatedAt(Instant.now());
+                    transactionRepository.save(transaction);
+                    System.out.println("cần hoàn trả transaction");
+                }
+
+
+            };
+            entity.setStatus(5);
+            entity.setUpdatedAt(Instant.now());
+            orderRepository.save(entity);
 
         }
 
     }
+
     // todo: admin huỷ đơn hàng: 0 || 1 || 2 -> 5
-    public void adminCancelOrder(String id){
+    public void adminCancelOrder(String id) {
         Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin order: " + id));
 
         System.out.println("admin thực hiện huỷ order");
@@ -347,19 +371,21 @@ public class OrderService {
         });
         if (entity.getStatus() == 0) {
             System.out.println("order chưa được xác nhận");
-        };
-        if (entity.getStatus() == 1 || entity.getStatus() == 2){
+        }
+        ;
+        if (entity.getStatus() == 1 || entity.getStatus() == 2) {
             System.out.println("order đã được xác nhận");
             Transaction transaction = transactionRepository.findByOrderId(entity.getId()).orElse(null);
-            if (transaction != null){
-                if (transaction.getStatus() == 0){
+            if (transaction != null) {
+                if (transaction.getStatus() == 0) {
                     System.out.println("transaction chưa được thanh toán");
                     transaction.setStatus(4);
                     transaction.setUpdatedAt(Instant.now());
                     transactionRepository.save(transaction);
                     System.out.println("admin huỷ transaction");
-                };
-                if (transaction.getStatus() == 1){
+                }
+                ;
+                if (transaction.getStatus() == 1) {
                     transaction.setStatus(6);
                     transaction.setUpdatedAt(Instant.now());
                     transactionRepository.save(transaction);

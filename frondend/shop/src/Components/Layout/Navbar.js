@@ -39,24 +39,9 @@ function Navbar(props) {
     };
 
     const handleLogout = () => {
-        fetch("/api/v1/auth/logout", {
-            method: "GET",
-            
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
-                // console.log(result);
-                setUser(result);
-            })
-            .catch((error) => {
-                console.log("error", error);
-            });
-        // localStorage.removeItem("token");
+        
+        localStorage.removeItem("token");
+        
     };
 
     const loadDataUser = () => {
@@ -201,7 +186,17 @@ function Navbar(props) {
                                                 <Typography textAlign="center">Account</Typography>
                                             </MenuItem>
                                         </Link>
-                                        <Link to={"/dashboard"}>
+                                        <Link to={"/carts"}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center">Shopping Cart</Typography>
+                                            </MenuItem>
+                                        </Link>
+                                        <Link to={"/orders"}>
+                                            <MenuItem onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center">Order</Typography>
+                                            </MenuItem>
+                                        </Link>
+                                        {/* <Link to={"/dashboard"}>
                                             <MenuItem onClick={handleCloseUserMenu}>
                                                 <Typography textAlign="center">Dashboard</Typography>
                                             </MenuItem>
@@ -215,7 +210,7 @@ function Navbar(props) {
                                             <MenuItem onClick={handleCloseUserMenu}>
                                                 <Typography textAlign="center">Test</Typography>
                                             </MenuItem>
-                                        </Link>
+                                        </Link> */}
                                         
                                             <div>
                                                 <hr />
@@ -232,15 +227,15 @@ function Navbar(props) {
                                                 </Link> */}
                                             </div>
                                         
-                                        <hr />
                                         {user.role === "ADMIN" ? (
                                             <div>
+                                                <hr />
                                                 <Link to={"/admin"}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
                                                         <Typography textAlign="center">Admin</Typography>
                                                     </MenuItem>
                                                 </Link>
-                                                <Link to={"/admin/user"}>
+                                                {/* <Link to={"/admin/user"}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
                                                         <Typography textAlign="center">User</Typography>
                                                     </MenuItem>
@@ -264,7 +259,7 @@ function Navbar(props) {
                                                     <MenuItem onClick={handleCloseUserMenu}>
                                                         <Typography textAlign="center">Transaction</Typography>
                                                     </MenuItem>
-                                                </Link>
+                                                </Link> */}
                                             </div>
                                         ) : null}
 

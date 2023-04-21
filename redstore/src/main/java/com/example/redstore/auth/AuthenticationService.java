@@ -73,7 +73,7 @@ public class AuthenticationService {
         user.setMobile(dto.getMobile());
         user.setEmail(dto.getEmail());
         user.setPassword(SecurityUtils.getPrincipal().getPassword());
-        user.setPhotos(dto.getPhotos());
+//        user.setPhotos(dto.getPhotos());
         user.setIntro(dto.getIntro());
         user.setProfile(dto.getProfile());
         var saveUser = userRepository.save(user);
@@ -129,6 +129,7 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
+
 //    @Bean
 //    public AuthenticationResponse tesstCreate() {
 //        var user1 = User.builder()
@@ -161,5 +162,23 @@ public class AuthenticationService {
         var user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("Không tìm thấy user"+ userId));
         user.setRole(Role.valueOf(role));
         userRepository.save(user);
+    }
+    // đổi mật khẩu
+    public AuthenticationResponse forgotPassword(AuthenticationRequest request, String newPass){
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        user.setPassword(passwordEncoder.encode(newPass));
+        userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

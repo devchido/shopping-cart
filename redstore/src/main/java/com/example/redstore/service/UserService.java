@@ -1,5 +1,8 @@
 package com.example.redstore.service;
 
+import com.example.redstore.auth.AuthenticationRequest;
+import com.example.redstore.auth.AuthenticationResponse;
+import com.example.redstore.config.JwtService;
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.ProductCategory;
 import com.example.redstore.domain.Role;
@@ -13,10 +16,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +46,7 @@ public class UserService {
     @Transactional
     public void edit(String id, UserDto dto){
         User entity = userRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy user với id: "+id));
-        entity.setPhotos(dto.getPhotos());
+//        entity.setPhotos(dto.getPhotos());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setMobile(dto.getMobile());

@@ -4,7 +4,9 @@ import com.example.redstore.auth.AuthenticationResponse;
 import com.example.redstore.auth.AuthenticationService;
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.User;
+import com.example.redstore.repository.ImageUserRepository;
 import com.example.redstore.repository.UserRepository;
+import com.example.redstore.service.ImageUserSevice;
 import com.example.redstore.service.UserService;
 import com.example.redstore.service.dto.APIResponse;
 import com.example.redstore.service.dto.ProductCategoryDto;
@@ -12,11 +14,15 @@ import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -26,6 +32,8 @@ import java.util.List;
 public class UserResources {
     private final UserService userService;
     private final AuthenticationService service;
+
+    private final ImageUserSevice imageUserSevice;
 
     //cho nay lan sau de post lay dto nhe
     /*
@@ -86,6 +94,24 @@ public class UserResources {
     public ResponseEntity<AuthenticationResponse> updateInfo(@RequestBody UserDto dto) {
         return ResponseEntity.ok(service.updateInfo(dto));
     }
+
+    // todo: test image
+    @PostMapping("/auth/image")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+        String uploadImage = imageUserSevice.uploadImage(file);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
+    }
+
+    @GetMapping("/auth/image/{fileName}")
+    public ResponseEntity<?> downloadImage(@PathVariable String fileName) {
+        byte[] imageData = imageUserSevice.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+
+    }
+    //
 
     // Admin: Cập nhật quyền cho user
     @PutMapping("/auth/admin/role")

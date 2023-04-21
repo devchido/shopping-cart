@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { Alert } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 
 export default function UpdateProfile() {
     const [user, setUser] = React.useState({});
@@ -19,6 +19,7 @@ export default function UpdateProfile() {
         setSnackbarOpen(false);
     };
     const loadDataUser = () => {
+        setUser({});
         if (localStorage.getItem("token") !== null) {
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -54,29 +55,55 @@ export default function UpdateProfile() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        var formdata = new FormData();
+        if (data.get("photos").name === "" || data.get("photos").name === null) {
+            
+        } else {
+            formdata.append("image", data.get("photos"), "/" + event.target[0].value);
+            fetch("/user/auth/image", {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+                body: formdata,
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.status;
+                    }
+                    throw Error(response.status);
+                })
+                .then((result) => {
+                    // console.log(result);
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("success");
+                    setSnackbarMsg("Cập nhật ảnh thành công.");
+                    loadDataUser();
+                })
+                .catch((error) => {
+                    // console.log("error", error);
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("error");
+                    setSnackbarMsg("False");
+                });
+        }
 
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-            photos: data.get("photos"),
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            mobile: data.get("mobile"),
-            email: data.get("email"),
-            intro: data.get("intro"),
-            profile: data.get("profile"),
-        });
-
-        var requestOptions = {
+        // thông tin user
+        fetch("/user/auth/updateInfo", {
             method: "PUT",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-        };
-
-        fetch("/user/auth/updateInfo", requestOptions)
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                firstName: data.get("firstName"),
+                lastName: data.get("lastName"),
+                mobile: data.get("mobile"),
+                email: data.get("email"),
+                intro: data.get("intro"),
+                profile: data.get("profile"),
+            }),
+        })
             .then((response) => {
                 if (response.ok) {
                     return response.status;
@@ -84,10 +111,12 @@ export default function UpdateProfile() {
                 throw Error(response.status);
             })
             .then((result) => {
-                console.log(result);
+                // console.log(result);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Cập nhật thành công.");
+                
+                loadDataUser();
             })
             .catch((error) => {
                 console.log("error", error);
@@ -116,19 +145,24 @@ export default function UpdateProfile() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
-            <Box component="form" onSubmit={handleSubmit}>
+            <Box component="form" onSubmit={handleSubmit} noValidate="novalidate" encType="multipart/form-data">
                 <div className="container rounded bg-white mt-5">
                     <div className="row">
                         <div className="col-md-4 border-right">
                             <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                                <img className="rounded-circle mt-5 border" src={user.photos} width={135} alt="" />
+                                <img
+                                    className="rounded form-control mt-5 border"
+                                    src={user.photos}
+                                    style={{ maxHeight: "300px" }}
+                                    alt=""
+                                />
+
                                 <input
-                                    type="text"
+                                    type="file"
                                     className="form-control mt-4"
                                     placeholder="Photos link"
                                     id="photos"
                                     name="photos"
-                                    defaultValue={user.photos}
                                 />
                             </div>
                         </div>
@@ -197,6 +231,7 @@ export default function UpdateProfile() {
                                             placeholder="Intro"
                                             id="intro"
                                             name="intro"
+                                            rows={3}
                                             defaultValue={user.intro}
                                         />
                                     </div>
@@ -209,6 +244,7 @@ export default function UpdateProfile() {
                                             placeholder="Profile"
                                             id="profile"
                                             name="profile"
+                                            rows={3}
                                             defaultValue={user.profile}
                                         />
                                     </div>

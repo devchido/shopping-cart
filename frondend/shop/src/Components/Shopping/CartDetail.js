@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 //
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -31,6 +31,8 @@ function CartDetail() {
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
     //
     const [open, setOpen] = React.useState(false);
+
+    const navigation = useNavigate();
 
     const handleClickOpen = (item) => {
         console.log(item);
@@ -66,7 +68,7 @@ function CartDetail() {
                 throw Error(response.status);
             })
             .then((result) => {
-                // console.log("cart-item", result);
+                console.log("cart-item", result);
                 setLoading(false);
                 setCartDetail(result);
             })
@@ -88,7 +90,7 @@ function CartDetail() {
                 throw Error(response.status);
             })
             .then((result) => {
-                // console.log("cart", result);
+                console.log("cart", result);
                 setCart(result);
             })
             .catch((error) => console.log("error", error));
@@ -97,11 +99,11 @@ function CartDetail() {
     const ShowCartItem = () => {
         return (
             <div>
-                {cartDetail.length > 0 ? (
+                {cartDetail.length >= 0 ? (
                     <>
                         {cartDetail.map((item, i) => (
-                            <>
-                                <div className="d-flex align-items-center mb-4  " key={i}>
+                            <div key={item.id}>
+                                <div className="d-flex align-items-center mb-4  ">
                                     <div className="flex-shrink-0 me-2">
                                         <img
                                             src={item.product.photos}
@@ -127,21 +129,23 @@ function CartDetail() {
                                                     className="form-control form-control-sm"
                                                     readOnly
                                                 />
-
-                                                <IconButton sx={{ mx: 1 }} title="Sửa" onClick={() => handleClickOpen(item)}>
+                                                {cart === 0 ? <IconButton sx={{ mx: 1 }} title="Sửa" onClick={() => handleClickOpen(item)}>
                                                     <BorderColorIcon className="text-primary" />
-                                                </IconButton>
+                                                </IconButton> : null}
+
+                                                
                                             </div>
                                         </div>
                                         <hr />
                                         <div className="d-flex justify-content-between">
-                                            <IconButton
+                                            {cart.statut === 0 ? <IconButton
                                                 className="text-danger me-1 m-2"
                                                 onClick={() => handleDelete(item)}
                                                 title="remove"
                                             >
                                                 <DeleteIcon />
-                                            </IconButton>
+                                            </IconButton> : null }
+                                            
                                             <Link to={`/product/${item.product.slug}`}>
                                                 <IconButton className="text-primary m-2" title="view">
                                                     <VisibilityIcon />
@@ -151,7 +155,7 @@ function CartDetail() {
                                     </div>
                                 </div>
                                 <hr className="mb-4" style={{ height: 2, backgroundColor: "#1266f1", opacity: 1 }} />
-                            </>
+                            </div>
                         ))}
                     </>
                 ) : (
@@ -248,25 +252,19 @@ function CartDetail() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-            line1: data.get("line1"),
-            city: data.get("city"),
-            country: data.get("country"),
-            content: data.get("content"),
-        });
-
-        var requestOptions = {
+        fetch("/cart/auth/" + cart.id, {
             method: "PUT",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-        };
-
-        fetch("/cart/auth/" + cart.id, requestOptions)
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                line1: data.get("line1"),
+                city: data.get("city"),
+                country: data.get("country"),
+                content: data.get("content"),
+            }),
+        })
             .then((response) => {
                 if (response.ok) {
                     return response.status;
@@ -306,15 +304,12 @@ function CartDetail() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Thông tin giỏ hàng không hợp lệ!");
             } else {
-                var myHeaders = new Headers();
-                myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-                var requestOptions = {
+                fetch("/order/auth/createByCart?idCart=" + cart.id, {
                     method: "POST",
-                    headers: myHeaders,
-                    redirect: "follow",
-                };
-                fetch("/order/auth/createByCart?idCart=" + cart.id, requestOptions)
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                })
                     .then((response) => {
                         if (response.ok) {
                             return response.status;
@@ -323,13 +318,11 @@ function CartDetail() {
                     })
                     .then((result) => {
                         console.log(result);
-                        // alert("true");
-                        loadDataCart();
-                        loadDataCartDetail();
-                        //
                         setSnackbarOpen(true);
                         setSnackbarSeverity("success");
                         setSnackbarMsg("Thành công.");
+                        loadDataCart();
+                        loadDataCartDetail();
                     })
                     .catch((error) => {
                         console.log("error", error);
@@ -495,7 +488,6 @@ function CartDetail() {
                         <div className="col">
                             <div className="card shopping-cart" style={{ borderRadius: 15 }}>
                                 <div className="card-body text-black">
-                                    {cart.status === 0 ? (
                                         <div className="row">
                                             <div className="col-lg-6 px-5 py-4">
                                                 <div className="d-flex justify-content-between">
@@ -561,9 +553,6 @@ function CartDetail() {
                                                 </form>
                                             </div>
                                         </div>
-                                    ) : (
-                                        <div>Not Found!</div>
-                                    )}
                                 </div>
                             </div>
                         </div>

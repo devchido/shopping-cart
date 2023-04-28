@@ -36,29 +36,38 @@ public class CartService {
 
     // Create new user
     @Transactional
-    public void create(CartDto dto) {
+    public String create(CartDto dto) {
 
-        Cart entity = cartMapper.toEntity(dto);
-        // Set userId
-        User user = SecurityUtils.getPrincipal();
-        entity.setUsers(user);
+        Cart check = cartRepository.isActiveCart(SecurityUtils.getPrincipal().getId()).orElse(null);
+        if (check != null) {
+            System.out.println("Đã có giỏ hàng");
+            return "false";
+        } else{
 
-        // Set trạng thái
-        entity.setStatus(0);
-        // Set first name
-        entity.setFirstName(user.getFirstName());
-        //Set Last Name
-        entity.setLastName(user.getLastName());
-        // Set Mobile
-        entity.setMobile(user.getMobile());
-        // Set Email
-        entity.setEmail(user.getEmail());
-        // Set create at
-        entity.setCreatedAt(Instant.now());
-        entity.setUpdatedAt(Instant.now());
-        cartRepository.save(entity);
-        System.out.println("Thực thi create");
+            Cart entity = cartMapper.toEntity(dto);
+            // Set userId
+            User user = SecurityUtils.getPrincipal();
+            entity.setUsers(user);
+
+            // Set trạng thái
+            entity.setStatus(0);
+            // Set first name
+            entity.setFirstName(user.getFirstName());
+            //Set Last Name
+            entity.setLastName(user.getLastName());
+            // Set Mobile
+            entity.setMobile(user.getMobile());
+            // Set Email
+            entity.setEmail(user.getEmail());
+            // Set create at
+            entity.setCreatedAt(Instant.now());
+            entity.setUpdatedAt(Instant.now());
+            cartRepository.save(entity);
+            System.out.println("Thực thi create");
+            return "true";
+        }
     }
+
 
     // Edit user
     @Transactional
@@ -95,7 +104,7 @@ public class CartService {
                     //
                     cartItemList.forEach(cartItem -> {
 //                        cartItemRepository.deleteById(String.valueOf(cartItem.getId()));
-                        System.out.println("Xoá cart item id=  "+ cartItem.getId() + "product title " + cartItem.getProduct().getTitle());
+                        System.out.println("Xoá cart item id=  " + cartItem.getId() + "product title " + cartItem.getProduct().getTitle());
                         // set thông tin cho product
                         Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElseThrow();
                         Cart cart = cartRepository.findById(String.valueOf(cartItem.getCart().getId())).orElseThrow();
@@ -152,4 +161,18 @@ public class CartService {
     }
 
 
+    public CartDto isActiveCart() {
+        Cart entity = cartRepository.isActiveCart(SecurityUtils.getPrincipal().getId()).orElse(null);
+        if (entity != null) {
+            System.out.println("Đã có giỏ hàng");
+            CartDto dto = cartMapper.toDo(entity);
+            return dto;
+        } else {
+            System.out.println("Chưa có giỏ hàng");
+            create(new CartDto());
+            Cart newCart = cartRepository.isActiveCart(SecurityUtils.getPrincipal().getId()).orElse(null);
+            CartDto dto = cartMapper.toDo(entity);
+            return dto;
+        }
+    }
 }

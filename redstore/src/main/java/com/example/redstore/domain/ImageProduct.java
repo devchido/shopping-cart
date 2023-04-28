@@ -6,26 +6,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
+@Table(name = "image_product")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "product_category")
-public class ProductCategory {
+public class ImageProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-
-
+    private String name;
+    private String type;
+    @Lob
+    @Column(name = "imagedata",length = 1000)
+    private byte[] imageData;
 }

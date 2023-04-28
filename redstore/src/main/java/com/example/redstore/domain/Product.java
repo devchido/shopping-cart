@@ -23,10 +23,10 @@ public class Product {
     @JoinColumn(name = "user_id", nullable = false)
     private User users;
 
-    @Column(name = "title", nullable = false, length = 75)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "slug", nullable = false, length = 100)
+    @Column(name = "slug", nullable = false)
     private String slug;
 
     @Column(name = "summary")

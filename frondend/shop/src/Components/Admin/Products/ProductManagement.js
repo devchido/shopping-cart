@@ -55,7 +55,7 @@ function ProductManagement() {
     const [username, setUsername] = React.useState("");
     const [ptitle, setPtitle] = React.useState("");
     const [ctitle, setCtitle] = React.useState("");
-    const [status, setStatus] = React.useState("");
+    const [status, setStatus] = React.useState("0");
     const [vendor, setVendor] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
 

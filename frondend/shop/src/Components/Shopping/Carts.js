@@ -113,9 +113,16 @@ function Carts() {
                 .then((result) => {
                     console.log(result);
                     setSnackbarOpen(true);
-                    setSnackbarSeverity("success");
-                    setSnackbarMsg("Thành công.");
-                    loadDataCart();
+                    if(result === "true"){
+                        setSnackbarSeverity("success");
+                        setSnackbarMsg("Tạo mới giỏ hàng thành công.");
+                        loadDataCart();
+                    }else {
+                        setSnackbarSeverity("warning");
+                        setSnackbarMsg("Đã có giỏ hàng");
+                    }
+                    
+                    
                 })
                 .catch((error) => {
                     console.log("error", error);

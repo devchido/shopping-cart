@@ -168,11 +168,9 @@ function SingleProduct() {
                             <h5 className="mb-0 text-capitalize">Thông tin chi tiết</h5>
                         </div>
                         <div className="card-body">
-                            
-                                <strong>
-                                    <pre>{product.content}</pre>
-                                </strong>
-                            
+                            <strong>
+                                <pre>{product.content}</pre>
+                            </strong>
                         </div>
                     </div>
                     <br />
@@ -182,7 +180,11 @@ function SingleProduct() {
                         </div>
                         <div className="card-body d-flex">
                             <Avatar alt="Remy Sharp" src={product.users.photos} variant="rounded" />
-                            <p className="my-auto mx-3"><strong>{product.users.firstName + " " + product.users.lastName}</strong></p>
+                            <p className="my-auto mx-3">
+                                <Link to={"/user/" + product.users.id}>
+                                    <strong>{product.users.firstName + " " + product.users.lastName}</strong>
+                                </Link>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 package com.example.redstore.resources;
 
+import com.example.redstore.service.ImageProductService;
 import com.example.redstore.service.ProductService;
 import com.example.redstore.service.UserService;
 import com.example.redstore.service.dto.APIResponse;
@@ -9,9 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -21,6 +26,7 @@ import java.util.List;
 public class ProductResources {
 
     private final ProductService productService;
+    private final ImageProductService imageProductService;
 
     /*
     user đăng nhập thực hiện tạo sản phẩm mới
@@ -195,5 +201,23 @@ public class ProductResources {
     public List<ProductDto> lastestProduct(@RequestParam String field) {
         List<ProductDto> dtos = productService.lastestProduct(field);
         return dtos;
+    }
+    // todo: upload image
+    @PostMapping("/auth/image")
+    public ResponseEntity<?> uploadImage(
+            @RequestParam("image") MultipartFile file, @RequestParam("slug") String slug)
+            throws IOException {
+        String uploadImage = imageProductService.uploadImage(file, slug);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
+    }
+
+    @GetMapping("/auth/image/{fileName}")
+    public ResponseEntity<?> downloadImage(@PathVariable String fileName) {
+        byte[] imageData = imageProductService.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+
     }
 }

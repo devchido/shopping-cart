@@ -57,9 +57,9 @@ function Product() {
                     <>
                         {product.map((item, i) => {
                             return (
-                                <div className="col-lg-3 col-md-4 col-sm-6 mb-4 col-auto " key={i}>
-                                    <div className="card h-100 text-center p-2 " style={{ maxWidth: "330px" }}>
-                                        <img src={item.photos} className="card-img-top" title={item.title} alt={item.title} height="250px" />
+                                <div className="col-lg-3 col-md-4 col-sm-6 mb-4 col-auto p-2" key={i}>
+                                    <div className="card h-100 text-center p-2" style={{maxWidth: "320px"}}>
+                                        <img src={item.photos} className="card-img-top w-auto " title={item.title} alt={item.title} height="250px" />
                                         <div className="card-body">
                                             <div className="mask">
                                                 <div className="d-flex justify-content-center h-100">

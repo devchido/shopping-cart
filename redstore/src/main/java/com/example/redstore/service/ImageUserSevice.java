@@ -35,7 +35,7 @@ public class ImageUserSevice {
                 User user = userRepository.findById(String.valueOf(SecurityUtils.getPrincipal().getId()))
                         .orElseThrow();
                 user.setPhotos("/api/v1/auth/image/user/"+imageData.getName());
-                return "file uploaded successfully : " + file.getOriginalFilename();
+                return "file uploaded successfully : " + imageData.getName();
             }
         } else {
             System.out.println("đã có ảnh");
@@ -43,7 +43,7 @@ public class ImageUserSevice {
             entity.setType(file.getContentType());
             User user = userRepository.findById(String.valueOf(SecurityUtils.getPrincipal().getId()))
                     .orElseThrow();
-            user.setPhotos("/api/v1/auth/image/user/"+"user-"+ SecurityUtils.getPrincipal().getId());
+            user.setPhotos("/api/v1/auth/image/user/"+entity.getName());
             return "file uploaded successfully : " + entity.getName();
         }
 

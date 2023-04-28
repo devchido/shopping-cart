@@ -8,6 +8,8 @@ import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider,
 const theme = createTheme();
 function CreateProduct() {
     const [category, setCategory] = React.useState([]);
+    const [selectedFile, setSelectedFile] = React.useState();
+    const [preview, setPreview] = React.useState();
 
     const [newImage, setNewImage] = React.useState(
         "https://nghikhangmy.vn/wp-content/themes/webchuan-ecom1/images/default-image.jpg"
@@ -20,9 +22,6 @@ function CreateProduct() {
 
     const snackbarClose = () => {
         setSnackbarOpen(false);
-    };
-    const handleLogout = () => {
-        localStorage.removeItem("token");
     };
 
     const loadDataCategory = () => {
@@ -44,23 +43,33 @@ function CreateProduct() {
 
     React.useEffect(() => {
         loadDataCategory();
-    }, []);
+        if (!selectedFile) {
+            setPreview(undefined);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setPreview(objectUrl);
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [selectedFile]);
+    const onSelectFile = (e) => {
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined);
+            return;
+        }
+
+        // I've kept this example simple by using the first image instead of multiple
+        setSelectedFile(e.target.files[0]);
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            title: data.get("title"),
-            slug: data.get("slug"),
-            summary: data.get("summary"),
-            price: data.get("price"),
-            discount: data.get("discount"),
-            quantity: data.get("quantity"),
-            photos: data.get("photos"),
-            content: data.get("content"),
-            category: data.get("category"),
-        });
-
+        var formdata = new FormData();
+        formdata.append("image", data.get("photos"), "/" + event.target[0].value);
+        formdata.append("slug", data.get("slug"));
         if (
             data.get("category") === "" ||
             data.get("title") === "" ||
@@ -69,16 +78,15 @@ function CreateProduct() {
             data.get("price") === "" ||
             data.get("discount") === "" ||
             data.get("quantity") === "" ||
-            data.get("photos") === "" ||
-            data.get("content") === ""
+            data.get("content") === "" ||
+            data.get("photos").name === "" ||
+            data.get("photos").name === null
         ) {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
             setSnackbarMsg("Thông tin chưa đầy đủ!");
         } else {
-            setSnackbarOpen(true);
-            setSnackbarSeverity("success");
-            setSnackbarMsg("Thông tin đầy đủ!");
+            // save thông tin product
             fetch("/product/auth", {
                 method: "POST",
                 headers: {
@@ -92,7 +100,6 @@ function CreateProduct() {
                     price: data.get("price"),
                     discount: data.get("discount"),
                     quantity: data.get("quantity"),
-                    photos: data.get("photos"),
                     content: data.get("content"),
                     category: data.get("category"),
                 }),
@@ -104,23 +111,46 @@ function CreateProduct() {
                     throw new Error(response.status);
                 })
                 .then((result) => {
-                    console.log(result);
                     setSnackbarOpen(true);
                     setSnackbarSeverity("success");
-                    setSnackbarMsg("Thành công.");
-                    fetch("/product/api/findProductBySlug/" + data.get("slug")).then((resp) => {
-                        resp.json().then((result) => {
-                            // console.log(result);
-                            navigation(`/management/update-product/${result.id}`);
+                    setSnackbarMsg("tạo thông tin sản phẩm Thành công.");
+
+                    fetch("/product/auth/image", {
+                        method: "POST",
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                        },
+                        body: formdata,
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                return response.status;
+                            }
+                            throw Error(response.status);
+                        })
+                        .then((result) => {
+                            setSnackbarOpen(true);
+                            setSnackbarSeverity("success");
+                            setSnackbarMsg("Tạo ảnh thành công.");
+                            fetch("/product/api/findProductBySlug/" + data.get("slug")).then((resp) => {
+                                resp.json().then((result) => {
+                                    // console.log(result);
+                                    navigation(`/management/update-product/${result.id}`);
+                                });
+                            });
+                        })
+                        .catch((error) => {
+                            console.log("error", error);
+                            setSnackbarOpen(true);
+                            setSnackbarSeverity("error");
+                            setSnackbarMsg("False tạo ảnh");
                         });
-                    });
-                    
                 })
                 .catch((error) => {
                     console.log("error", error);
                     setSnackbarOpen(true);
                     setSnackbarSeverity("error");
-                    setSnackbarMsg("False");
+                    setSnackbarMsg("Không thành công");
                 });
         }
     };
@@ -150,7 +180,7 @@ function CreateProduct() {
                     <p className="lead" style={{ fontWeight: "500" }}>
                         Tạo sản phẩm mới
                     </p>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} noValidate="novalidate" encType="multipart/form-data">
                         <div className="row d-flex justify-content-center my-4">
                             <div className="col-lg-7 ">
                                 <div className="card mb-4">
@@ -244,24 +274,23 @@ function CreateProduct() {
                                         <h5 className="mb-0 text-capitalize">Ảnh sản phẩm</h5>
                                     </div>
                                     <div className="card-body ">
-                                        <img
-                                            src={newImage}
-                                            alt="Images"
-                                            className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
-                                            style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}
-                                        ></img>
-                                        <div className="form-group mt-5">
-                                            <label>Photos link</label>
-
-                                            <input
-                                                id="form1"
-                                                name="photos"
-                                                defaultValue={newImage}
-                                                type="text"
-                                                className="form-control w-100"
-                                                onChange={(e) => setNewImage(e.target.value)}
-                                            />
-                                        </div>
+                                        {selectedFile && (
+                                            <img
+                                                src={preview}
+                                                alt="Images"
+                                                className="img-thumbnail form-control  m-auto"
+                                                style={{ height: "300px", width: "300px" }}
+                                            ></img>
+                                        )}
+                                        <input
+                                            id="form1"
+                                            name="photos"
+                                            type="file"
+                                            accept="image/png, image/gif, image/jpeg"
+                                            className="form-control mt-2 mx-auto"
+                                            style={{ width: "300px" }}
+                                            onChange={onSelectFile}
+                                        />
                                     </div>
                                 </div>
 
@@ -272,10 +301,7 @@ function CreateProduct() {
                                                 Cancel
                                             </button>
                                         </Link>
-                                        <button type="reset" className="btn btn-dark btn-block ">
-                                            Reset
-                                        </button>
-                                        <button type="submit" className="btn btn-dark btn-block ">
+                                        <button type="submit" className="btn btn-primary btn-block ">
                                             Create
                                         </button>
                                     </div>

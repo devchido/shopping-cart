@@ -1,14 +1,8 @@
 package com.example.redstore.service;
 
 import com.example.redstore.config.SecurityUtils;
-import com.example.redstore.domain.Category;
-import com.example.redstore.domain.Product;
-import com.example.redstore.domain.ProductCategory;
-import com.example.redstore.domain.User;
-import com.example.redstore.repository.CategoryRepository;
-import com.example.redstore.repository.ProductCategoryRepository;
-import com.example.redstore.repository.ProductRepository;
-import com.example.redstore.repository.UserRepository;
+import com.example.redstore.domain.*;
+import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.ProductDto;
 import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.service.mapper.ProductMapper;
@@ -37,6 +31,7 @@ public class ProductService {
     public final CategoryRepository categoryRepository;
     public final ProductMapper productMapper;
     private final UserRepository userRepository;
+    private final ImageProductRepository imageProductRepository;
 
     // Create new user
     /*
@@ -88,13 +83,18 @@ public class ProductService {
     public void edit(String id, ProductDto dto) {
         Product entity = productRepository.findById(id).orElse(null);
         if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+            ImageProduct imageProduct = imageProductRepository.findByProduct(entity.getSlug()).orElseThrow(
+                    ()-> new RuntimeException("Không thấy ảnh")
+            );
+            imageProduct.setName(dto.getSlug());
+            imageProductRepository.save(imageProduct);
             entity.setTitle(dto.getTitle());
             entity.setSlug(dto.getSlug());
             entity.setSummary(dto.getSummary());
             entity.setPrice(dto.getPrice());
             entity.setDiscount(dto.getDiscount());
-            entity.setPhotos(dto.getPhotos());
             entity.setQuantity(dto.getQuantity());
+            entity.setPhotos("/api/v1/auth/image/product/"+entity.getSlug());
             entity.setContent(dto.getContent());
             entity.setUpdatedAt(Instant.now());
             if (dto.getCategory() != null) {
@@ -115,6 +115,7 @@ public class ProductService {
                     }
                 }
             }
+
             productRepository.save(entity);
             System.out.println("Thực thi edit");
         } else new String("Không thể edit");

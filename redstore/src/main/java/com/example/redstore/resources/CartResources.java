@@ -5,6 +5,8 @@ import com.example.redstore.service.ProductService;
 import com.example.redstore.service.dto.CartDto;
 import com.example.redstore.service.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +28,8 @@ public class CartResources {
     }
      */
     @PostMapping("/auth/create")
-    public void create(@RequestBody CartDto dto) {
-        cartService.create(dto);
+    public ResponseEntity<?> create(@RequestBody CartDto dto) {
+        return ResponseEntity.ok(cartService.create(dto));
     }
 
     //edit giỏ hàng theo id
@@ -77,6 +79,11 @@ public class CartResources {
     public List<CartDto> findUsersCart(@RequestParam String status){
         List<CartDto> dtos = cartService.findUsersCart(status);
         return dtos;
+    }
+    @GetMapping("/auth/active")
+    public ResponseEntity<?> isActiveCart(){
+        CartDto dto = cartService.isActiveCart();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
 

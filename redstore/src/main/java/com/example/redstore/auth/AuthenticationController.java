@@ -2,6 +2,7 @@ package com.example.redstore.auth;
 
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
+import com.example.redstore.service.ImageProductService;
 import com.example.redstore.service.ImageUserSevice;
 import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
     private final UserRepository userRepository;
     private final ImageUserSevice imageUserSevice;
+    private final ImageProductService imageProductService;
 
     /*
     http://localhost:8080/api/v1/auth/register
@@ -71,6 +73,13 @@ public class AuthenticationController {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
 
+    }
+    @GetMapping("/image/product/{fileName}")
+    public ResponseEntity<?> downloadProductImage(@PathVariable String fileName){
+        byte [] imageProduct = imageProductService.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageProduct);
     }
 
 }

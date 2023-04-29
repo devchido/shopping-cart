@@ -28,8 +28,8 @@ public class CartResources {
     }
      */
     @PostMapping("/auth/create")
-    public ResponseEntity<?> create(@RequestBody CartDto dto) {
-        return ResponseEntity.ok(cartService.create(dto));
+    public ResponseEntity<?> create() {
+        return ResponseEntity.ok(cartService.create());
     }
 
     //edit giỏ hàng theo id

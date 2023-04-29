@@ -8,6 +8,9 @@ import com.example.redstore.service.dto.OrderDto;
 import com.example.redstore.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,15 +25,16 @@ public class OrderResources {
 
 
     @GetMapping("/auth/c/{carts}")
-    public List<OrderDto> findByCarts(@PathVariable("carts") Long carts) {
-        List<OrderDto> dtos = orderService.findByCarts(carts);
-        return dtos;
+    public ResponseEntity<?> findByCarts(@PathVariable("carts") Long carts) {
+        OrderDto dto = orderService.findByCarts(carts);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     // Thực hiện order cho cart ?idCart={id}
     @PostMapping("/auth/createByCart")
-    public void createOrderByCart(@RequestParam("idCart") Long id) {
-        orderService.createOrderByCart(id);
+    public ResponseEntity<?> createOrderByCart(@RequestParam("idCart") Long id) {
+        OrderDto dto = orderService.createOrderByCart(id);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
 

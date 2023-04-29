@@ -6,6 +6,7 @@ import com.example.redstore.service.CartService;
 import com.example.redstore.service.dto.CartDto;
 import com.example.redstore.service.dto.CartItemDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +51,12 @@ public class CartItemResources {
     public List<CartItemDto> findAllByCartId(@PathVariable("cartId") Long cartId){
         List<CartItemDto> dtos = cartItemService.findByCartId(cartId);
         return dtos;
+    }
+    // todo: hiển thị tất cả các item của giỏ hàng đang được sử dụng
+    @GetMapping("/auth/active")
+    public ResponseEntity<List<CartItemDto>> isActiveCartItem(){
+        List<CartItemDto> dtos = cartItemService.isActiveCartItem();
+        return ResponseEntity.ok(dtos);
     }
     // người bán quản lý hiện trạng các product được đặt trong giỏ hàng: (chỉ có thể xoá)
     @GetMapping("/auth/shop/product-cart")

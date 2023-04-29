@@ -35,8 +35,7 @@ public class CartService {
     private final ProductRepository productRepository;
 
     // Create new user
-    @Transactional
-    public String create(CartDto dto) {
+    public String create() {
 
         Cart check = cartRepository.isActiveCart(SecurityUtils.getPrincipal().getId()).orElse(null);
         if (check != null) {
@@ -44,7 +43,7 @@ public class CartService {
             return "false";
         } else{
 
-            Cart entity = cartMapper.toEntity(dto);
+            Cart entity = new Cart();
             // Set userId
             User user = SecurityUtils.getPrincipal();
             entity.setUsers(user);
@@ -59,6 +58,7 @@ public class CartService {
             entity.setMobile(user.getMobile());
             // Set Email
             entity.setEmail(user.getEmail());
+            entity.setCountry("Việt Nam");
             // Set create at
             entity.setCreatedAt(Instant.now());
             entity.setUpdatedAt(Instant.now());
@@ -169,9 +169,9 @@ public class CartService {
             return dto;
         } else {
             System.out.println("Chưa có giỏ hàng");
-            create(new CartDto());
+            create();
             Cart newCart = cartRepository.isActiveCart(SecurityUtils.getPrincipal().getId()).orElse(null);
-            CartDto dto = cartMapper.toDo(entity);
+            CartDto dto = cartMapper.toDo(newCart);
             return dto;
         }
     }

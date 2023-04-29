@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +42,10 @@ public class OrderService {
         return dtos;
     }
 
-    public List<OrderDto> findByCarts(Long carts) {
-        List<Order> entity = orderRepository.findByCarts(carts);
-        List<OrderDto> dtos = orderMapper.toDo(entity);
-        return dtos;
+    public OrderDto findByCarts(Long carts) {
+        Order entity = orderRepository.findByCarts(carts).orElseThrow(()-> new RuntimeException("Không tìm thấy!"));
+        OrderDto dto = orderMapper.toDo(entity);
+        return dto;
     }
 
     @Transactional
@@ -117,7 +118,7 @@ public class OrderService {
         các item từ bảng cart sẽ được lưu thành các orderItem
         mỗi orer item đều chứa id của phiếu order để nhận diện.
     */
-    public void createOrderByCart(Long id) {
+    public OrderDto createOrderByCart(Long id) {
 
         Cart cart = cartRepository.findById(String.valueOf(id)).orElseThrow();
         // dùng tạm cách này vậy
@@ -170,6 +171,8 @@ public class OrderService {
         orderItemRepository.saveAll(orderItem);
         cart.setStatus(1);
         cartRepository.save(cart);
+        OrderDto dto = orderMapper.toDo(order);
+        return dto;
     }
 
     public OrderDto findOneById(String id) {

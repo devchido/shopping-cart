@@ -31,6 +31,7 @@ import UserView from "../User/UserView";
 import OrderDetailManagement from "../Admin/Order/OrderDetailManagement";
 import TransactionDetailManagement from "../Admin/Transaction/TransactionDetailManagement";
 import TransactionDetail from "../Transaction/TransactionDetail";
+import ShoppingCart from "../Shopping/ShoppingCart";
 
 function Router() {
     return (
@@ -62,21 +63,25 @@ function Router() {
             <Route path="/admin/transaction" element={<TransactionManagement />}></Route>
             {/* Transaction detail management */}
             <Route path="/admin/transaction/:id" element={<TransactionDetailManagement />}></Route>
+
             {/* Product */}
             <Route path="/product" element={<Product />}></Route>
             {/* Singer Product */}
             <Route path="/product/:slug" element={<SingleProduct />}></Route>
+
             {/* Login */}
             <Route path="/singin" element={<SingIn />}></Route>
             <Route path="/singup" element={<SingUp />}></Route>
+
             {/* User View */}
             <Route path="/user/:id" element={<UserView />}></Route>
             {/* Profile */}
             <Route path="/profile" element={<Profile />}></Route>
             {/* Update profile */}
             <Route path="/profile/update" element={<UpdateProfile />}></Route>
+
             {/* Carts: Trang quản lý các giỏ hảng */}
-            <Route path="/carts" element={<Carts />}></Route>
+            <Route path="/carts" element={<ShoppingCart />}></Route>
             {/* carts/:id : chi tiết giỏ hàng */}
             <Route path="/carts/:id" element={<CartDetail />}></Route>
             {/* carts/add-cart : Thêm giỏ hàng mới */}

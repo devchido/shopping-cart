@@ -15,7 +15,7 @@ function SingleProduct() {
     const [category, setCategory] = useState([]);
     const [cart, setCart] = React.useState([]);
     const [loading, setLoading] = useState(false);
-    const [quantity, setQuantity] = React.useState(0);
+    const [quantity, setQuantity] = React.useState(1);
     //Drawer
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
@@ -148,8 +148,9 @@ function SingleProduct() {
                                         setSnackbarSeverity("error");
                                         setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
                                     } else {
-                                        setIsDrawerOpen(true);
-                                        loadDataCart();
+                                        // setIsDrawerOpen(true);
+                                        // loadDataCart();
+                                        handleAddToCart();
                                     }
                                 }}
                             >
@@ -212,7 +213,7 @@ function SingleProduct() {
                                         })}
                                     </p>
                                     <div className="d-flex justify-content-end">
-                                        <button className="btn btn-outline-dark" onClick={() => handleAddToCart(cart)}>
+                                        <button className="btn btn-outline-dark" onClick={handleAddToCart}>
                                             Add to Cart
                                         </button>
                                     </div>
@@ -225,45 +226,55 @@ function SingleProduct() {
             </Drawer>
         );
     };
-    const handleAddToCart = (cart) => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-            productId: product.id,
-            cartId: cart.id,
-            quantity: quantity,
-        });
-
-        var requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-        };
-
-        fetch("/cart-item/auth/create", requestOptions)
+    const handleAddToCart = () => {
+        //
+        fetch("/cart/auth/active", {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
             .then((response) => {
                 if (response.ok) {
-                    return response.status;
+                    return response.json();
                 }
-                throw new Error(response.status);
+                throw Error(response.status);
             })
             .then((result) => {
-                // console.log(result);
-                setIsDrawerOpen(false);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Thành công");
-                loadDataProduct();
+                fetch("/cart-item/auth/create", {
+                    method: "POST",
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        productId: product.id,
+                        quantity: quantity,
+                    }),
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.status;
+                        }
+                        throw new Error(response.status);
+                    })
+                    .then((result) => {
+                        // console.log(result);
+                        setIsDrawerOpen(false);
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity("success");
+                        setSnackbarMsg("Thành công");
+                        loadDataProduct();
+                    })
+                    .catch((error) => {
+                        // console.log("error", error);
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity("error");
+                        setSnackbarMsg("False");
+                    });
             })
-            .catch((error) => {
-                // console.log("error", error);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("error");
-                setSnackbarMsg("False");
-            });
+            .catch((error) => console.log("error", error));
+        //
     };
     return (
         <div>

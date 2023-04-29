@@ -35,15 +35,16 @@ public class CartItemService {
     public void create(CartItemDto dto) {
 
         CartItem entity = cartItemMapper.toEntity(dto);
-        //Check có cart với id được thêm không? get data
-        Cart cartId = cartRepository.findById(String.valueOf(dto.getCartId())).orElse(null);
+        Cart cartId = cartRepository.isActiveCart(SecurityUtils.getPrincipal().getId()).orElseThrow(
+                ()-> new RuntimeException("Không tìm thấy giỏ hàng!"));
+
         // Set product
         // Kiểm tra product đó trong list product có tồn tại hay không
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
 
         // Check product được chọn đã có trong giỏ hàng hay chưa?
         //
-        CartItem cartItem = cartItemRepository.findByProductAndCart(dto.getProductId(), dto.getCartId()).orElse(null);
+        CartItem cartItem = cartItemRepository.findByProductAndCart(dto.getProductId(), cartId.getId()).orElse(null);
 
         if (cartItem != null) {
             // set thêm giá trị quantity : cartItem
@@ -176,4 +177,10 @@ public class CartItemService {
     }
 
 
+    public List<CartItemDto> isActiveCartItem() {
+        Cart check = cartRepository.isActiveCart(SecurityUtils.getPrincipal().getId()).orElse(null);
+        List<CartItem> entity = cartItemRepository.findByCartId(check.getId());
+        List<CartItemDto> dtos = cartItemMapper.toDo(entity);
+        return dtos;
+    }
 }

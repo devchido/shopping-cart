@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
@@ -35,7 +36,7 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     @Query(value = "SELECT t.* FROM " + db + ".order t " +
             "        WHERE cart_id = :carts", nativeQuery = true)
-    List<Order> findByCarts(@Param("carts") Long carts);
+    Optional<Order> findByCarts(@Param("carts") Long carts);
 
     @Query(value = "select o.* from " + db + ".order o where status = :status order by updated_at DESC ", nativeQuery = true)
     List<Order> filter(@Param("status") String status);

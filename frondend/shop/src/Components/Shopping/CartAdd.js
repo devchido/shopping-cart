@@ -17,9 +17,7 @@ function CartAdd() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-    };
+   
     const loadDataUser = () => {
         if (localStorage.getItem("token") !== null) {
             var myHeaders = new Headers();
@@ -43,7 +41,6 @@ function CartAdd() {
                 })
                 .catch((error) => {
                     console.log("error", error);
-                    handleLogout();
                 });
         }
     };

@@ -1,0 +1,40 @@
+.comment-form {
+    width: 600px;
+    margin: 0 auto;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: vertical;
+  }
+  
+  .comment {
+    margin-bottom: 16px;
+  }
+  
+  .comment-text {
+    margin-bottom: 8px;
+  }
+  
+  .comment button {
+    margin-left: 16px;
+  }
+  
+  .comment .comment {
+    margin-left: 16px;
+    border-left: 1px solid #ccc;
+    padding-left: 16px;
+  }

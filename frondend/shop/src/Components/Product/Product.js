@@ -97,6 +97,7 @@ function Product() {
             </>
         );
     };
+    
     React.useEffect(() => {
         loadDataProduct();
     }, [page, offset]);

@@ -28,7 +28,7 @@ public class Product {
 
     @Column(name = "slug", nullable = false)
     private String slug;
-
+    @Lob
     @Column(name = "summary")
     private String summary;
 

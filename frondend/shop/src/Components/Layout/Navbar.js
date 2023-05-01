@@ -205,12 +205,12 @@ function Navbar(props) {
                                             <MenuItem onClick={handleCloseUserMenu}>
                                                 <Typography textAlign="center">Tabs</Typography>
                                             </MenuItem>
-                                        </Link>
+                                    </Link>*/}
                                         <Link to={"/test"}>
                                             <MenuItem onClick={handleCloseUserMenu}>
                                                 <Typography textAlign="center">Test</Typography>
                                             </MenuItem>
-                                        </Link> */}
+                                        </Link> 
                                         
                                             <div>
                                                 <hr />

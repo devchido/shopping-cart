@@ -21,7 +21,4 @@ public class Category {
     @Lob
     @Column(name = "content")
     private String content;
-
-
-
 }

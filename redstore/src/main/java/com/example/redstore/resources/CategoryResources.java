@@ -20,7 +20,6 @@ import java.util.List;
 public class CategoryResources {
 
     private final CategoryService categoryService;
-    private final CategoryRepository categoryRepository;
 
     @PostMapping("/auth/admin")
     public void create(@RequestBody CategoryDto dto) {

@@ -7,21 +7,25 @@ import AddIcon from "@mui/icons-material/Add";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
 import { VND } from "../Unity/VND";
+import CommentForm from "./CommentForm";
 function SingleProduct() {
     const { slug } = useParams();
     const [product, setProduct] = useState({
+        id: "",
         users: {},
     });
     const [category, setCategory] = useState([]);
     const [cart, setCart] = React.useState([]);
     const [loading, setLoading] = useState(false);
     const [quantity, setQuantity] = React.useState(1);
+    
     //Drawer
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
@@ -36,6 +40,7 @@ function SingleProduct() {
                 // console.log(result);
                 setLoading(false);
                 setProduct(result);
+                
             });
         });
         fetch("/category/api/single-product-category?field=" + slug).then((resp) => {
@@ -45,6 +50,7 @@ function SingleProduct() {
             });
         });
     };
+
     const loadDataCart = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -174,22 +180,30 @@ function SingleProduct() {
                             </strong>
                         </div>
                     </div>
-                    <br />
-                    <div className="card mb-4 w-100">
-                        <div className="card-header py-3">
-                            <h5 className="mb-0 text-capitalize">Người bán</h5>
-                        </div>
-                        <div className="card-body d-flex">
-                            <Avatar alt="Remy Sharp" src={product.users.photos} variant="rounded" />
-                            <p className="my-auto mx-3">
-                                <Link to={"/user/" + product.users.id}>
-                                    <strong>{product.users.firstName + " " + product.users.lastName}</strong>
-                                </Link>
-                            </p>
-                        </div>
-                    </div>
+                    <ShowUser />
+                    <CommentForm product={product} />
                 </div>
             </>
+        );
+    };
+    const ShowUser = () => {
+        return (
+            <div>
+                <br />
+                <div className="card mb-4 w-100">
+                    <div className="card-header py-3">
+                        <h5 className="mb-0 text-capitalize">Người bán</h5>
+                    </div>
+                    <div className="card-body d-flex">
+                        <Avatar alt="Remy Sharp" src={product.users.photos} variant="rounded" />
+                        <p className="my-auto mx-3">
+                            <Link to={"/user/" + product.users.id}>
+                                <strong>{product.users.firstName + " " + product.users.lastName}</strong>
+                            </Link>
+                        </p>
+                    </div>
+                </div>
+            </div>
         );
     };
     const ShowCarts = () => {
@@ -276,6 +290,7 @@ function SingleProduct() {
             .catch((error) => console.log("error", error));
         //
     };
+
     return (
         <div>
             <Snackbar

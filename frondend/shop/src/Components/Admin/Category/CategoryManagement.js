@@ -209,7 +209,7 @@ function CategoryManagement() {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleCloseDialog}>Không</Button>
-                            <Button onClick={handleDelete} autoFocus>
+                            <Button onClick={handleDelete}>
                                 Xoá
                             </Button>
                         </DialogActions>

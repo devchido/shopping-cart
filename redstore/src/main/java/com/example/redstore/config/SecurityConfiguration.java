@@ -36,7 +36,8 @@ public class SecurityConfiguration {
                         "/category/api/**",
                         "/product-category/api/**",
                         "/user/api/**",
-                        "/comment/api/**"
+                        "/comment/api/**",
+                        "/product-review/api/**"
                 )
                 .permitAll()
                 //test phân quyền truy cập

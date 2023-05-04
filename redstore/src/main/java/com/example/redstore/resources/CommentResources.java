@@ -19,14 +19,19 @@ public class CommentResources {
         List<CommentDto> dtos = commentService.filterCommentByProduct(productId);
         return dtos;
     }
-    @GetMapping("/api/find-by-parent-id")
-    public List<CommentDto> filterCommentByParentId(@RequestParam Long parentId){
-        List<CommentDto> dtos = commentService.filterCommentByParentId(parentId);
+    @GetMapping("/api/filter-comment-reply")
+    public List<CommentDto> filterCommentReply(@RequestParam Long productId){
+        List<CommentDto> dtos = commentService.filterCommentReply(productId);
         return dtos;
     }
     // todo: tạo comment mới
     @PostMapping("/auth")
     public void create(@RequestBody CommentDto dto){
         commentService.create(dto);
+    }
+    // todo: xoá comment
+    @DeleteMapping("/auth")
+    public void delete(@RequestParam String commentId){
+        commentService.delete(commentId);
     }
 }

@@ -82,8 +82,8 @@ function SingleProduct() {
                     <img src={product.photos} alt={product.title} height={"400px"} width={"400px"} />
                 </div>
                 <div className="col-md-6">
-                    <h4 className="text-uppercase test-black-50">{category.title}</h4>
                     <h1 className="display-5">{product.title}</h1>
+                    <p className="lead">Loại sản phẩm: {category.title}</p>
                     <p className="lead">Hiện còn: {product.quantity}</p>
                     {product.discount === 0 ? (
                         <>
@@ -147,7 +147,7 @@ function SingleProduct() {
                     {localStorage.getItem("token") !== null ? (
                         <>
                             <button
-                                className="btn btn-outline-dark"
+                                className="btn btn-info ms-2 px-3 py-2"
                                 onClick={() => {
                                     if (quantity <= 0) {
                                         setSnackbarOpen(true);
@@ -160,11 +160,11 @@ function SingleProduct() {
                                     }
                                 }}
                             >
-                                Buy Now
+                                Add to Cart
                             </button>
 
-                            <Link to={"/carts"} className="btn btn-dark ms-2 px-3 py-2">
-                                Go to Cart
+                            <Link to={"/carts"} className="btn btn-warning ms-2 px-3 py-2">
+                                Đánh giá
                             </Link>
                         </>
                     ) : null}
@@ -206,40 +206,7 @@ function SingleProduct() {
             </div>
         );
     };
-    const ShowCarts = () => {
-        return (
-            <Drawer anchor="right" open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-                <Box p={2} width={"25rem"} textAlign={"center"} role="presentation">
-                    <Typography variant="h6" component="div">
-                        Giỏ hàng
-                    </Typography>
-                    <List>
-                        {cart.map((cart, i) => (
-                            <ListItem key={i} className="mb-3 " disablePadding>
-                                <div className=" row mx-auto w-100">
-                                    <hr className="mb-3" />
-                                    <h6 className="text-muted">Cart: {cart.id}</h6>
-                                    <h6 className="text-black mb-0">{cart.content}</h6>
-                                    <p className="text-muted mb-0">
-                                        {formatDistanceToNow(new Date(cart.updatedAt), {
-                                            locale: vi,
-                                            addSuffix: true,
-                                        })}
-                                    </p>
-                                    <div className="d-flex justify-content-end">
-                                        <button className="btn btn-outline-dark" onClick={handleAddToCart}>
-                                            Add to Cart
-                                        </button>
-                                    </div>
-                                </div>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                </Box>
-            </Drawer>
-        );
-    };
+    
     const handleAddToCart = () => {
         //
         fetch("/cart/auth/active", {
@@ -313,7 +280,7 @@ function SingleProduct() {
             </Snackbar>
             <div className="container py-5">
                 <div className="row py-4">{loading ? <Loading /> : <ShowProduct />}</div>
-                <ShowCarts />
+                
             </div>
         </div>
     );

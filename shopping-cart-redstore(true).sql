@@ -251,8 +251,10 @@ CREATE TABLE `shop`.`product_review` (
   `rating` int DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `product_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_review_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+  CONSTRAINT `fk_review_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `fk_review_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 );
 CREATE TABLE `shop`.`tag` (
   `id` bigint NOT NULL AUTO_INCREMENT,

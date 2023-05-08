@@ -1,5 +1,6 @@
 package com.example.redstore.auth;
 
+import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.ImageProductService;
@@ -65,6 +66,15 @@ public class AuthenticationController {
             return null;
         }
     }
+
+    // todo: đổi mật khẩu
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(
+            @RequestParam String passOld, @RequestParam String passNew
+    ){
+        return ResponseEntity.ok(service.changePassword(passOld, passNew));
+    }
+
 
     @GetMapping("/image/user/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName) {

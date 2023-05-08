@@ -32,7 +32,7 @@ public class ProductReviewMapper implements EntityMapper<ProductReviewDto, Produ
     public ProductReview toEntity(ProductReviewDto dto) {
         ProductReview entity = new ProductReview();
         entity.setId(dto.getId());
-        entity.setTitle(entity.getTitle());
+        entity.setTitle(dto.getTitle());
         entity.setRating(dto.getRating());
         entity.setPublished(dto.getPublished());
         entity.setCreatedAt(dto.getCreatedAt());

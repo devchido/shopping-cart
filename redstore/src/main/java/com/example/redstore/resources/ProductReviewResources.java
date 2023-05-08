@@ -15,7 +15,7 @@ public class ProductReviewResources {
     private final ProductRevewService productRevewService;
 
     // todo: tạo đánh giá mới
-    @GetMapping("/auth/create")
+    @PostMapping("/auth/create")
     public void create(@RequestBody ProductReviewDto dto){
         productRevewService.create(dto);
     }

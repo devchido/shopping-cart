@@ -157,14 +157,5 @@ public class UserResources {
         userService.edit(id, dto);
     }
 
-    //    test admin : false
-    @GetMapping({"/auth/forUser"})
-    public String forUser() {
-        return "This URL is only accessible to user";
-    }
 
-    @GetMapping({"/auth/forAdmin"})
-    public String forAdmin() {
-        return "This URL is only accessible to Admin";
-    }
 }

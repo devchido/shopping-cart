@@ -26,7 +26,7 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
     @Query(value = " select c.* from " + db + ".category c" +
             " join " + db + ".product_category pc on c.id = pc.category_id" +
             " join " + db + ".product p on p.id = pc.product_id " +
-            " where p.slug like concat( '%',:field,'%') "
+            " where p.slug = :field "
             , nativeQuery = true)
     Optional<Category> singleProductCategory(String field);
 

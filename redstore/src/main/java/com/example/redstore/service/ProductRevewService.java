@@ -39,9 +39,15 @@ public class ProductRevewService {
     public ProductReviewDto filterRatingWithUserAndProduct(Long productId){
         ProductReview entity = productReviewRepository.filterRatingWithUserAndProduct(
                 SecurityUtils.getPrincipal().getId(), productId
-        ).orElseThrow(()-> new RuntimeException("Bạn chưa đánh giá sản phẩm này"));
+        ).orElse(null);
+        if (entity != null){
         ProductReviewDto dto = productReviewMapper.toDo(entity);
+
         return dto;
+        } else {
+            System.out.println("Bạn chưa đánh giá sản phẩm này!");
+            return null;
+        }
     }
     public List<ProductReviewDto> getAllByProduct(String productId){
         List<ProductReview> entity = productReviewRepository.findByProduct(productId);

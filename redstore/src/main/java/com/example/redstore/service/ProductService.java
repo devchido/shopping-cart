@@ -2,6 +2,7 @@ package com.example.redstore.service;
 
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
+import com.example.redstore.projection.RatingInfo;
 import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.ProductDto;
 import com.example.redstore.service.dto.UserDto;
@@ -32,6 +33,7 @@ public class ProductService {
     public final ProductMapper productMapper;
     private final UserRepository userRepository;
     private final ImageProductRepository imageProductRepository;
+    private final ProductReviewRepository productReviewRepository;
 
     // Create new user
     /*
@@ -84,7 +86,7 @@ public class ProductService {
         Product entity = productRepository.findById(id).orElse(null);
         if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
             ImageProduct imageProduct = imageProductRepository.findByProduct(entity.getSlug()).orElseThrow(
-                    ()-> new RuntimeException("Không thấy ảnh")
+                    () -> new RuntimeException("Không thấy ảnh")
             );
             imageProduct.setName(dto.getSlug());
             imageProductRepository.save(imageProduct);
@@ -94,7 +96,7 @@ public class ProductService {
             entity.setPrice(dto.getPrice());
             entity.setDiscount(dto.getDiscount());
             entity.setQuantity(dto.getQuantity());
-            entity.setPhotos("/api/v1/auth/image/product/"+entity.getSlug());
+            entity.setPhotos("/api/v1/auth/image/product/" + entity.getSlug());
             entity.setContent(dto.getContent());
             entity.setUpdatedAt(Instant.now());
             if (dto.getCategory() != null) {
@@ -147,6 +149,13 @@ public class ProductService {
     public ProductDto findProductBySlug(String slug) {
         Product entity = productRepository.findProductBySlug(slug);
         ProductDto dto = productMapper.toDo(entity);
+        Category category = categoryRepository.singleProductCategory(slug).orElse(null);
+        if (category != null) {
+            dto.setCategory(category.getTitle());
+        }
+
+        RatingInfo ratingInfo = productReviewRepository.ratingAvgByProduct(entity.getId());
+        dto.setRating(ratingInfo);
         return dto;
     }
 
@@ -281,8 +290,6 @@ public class ProductService {
         List<ProductDto> dtos = productMapper.toDo(entity);
         return dtos;
     }
-
-
 
 
 }

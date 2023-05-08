@@ -1,5 +1,6 @@
 package com.example.redstore.service.dto;
 
+import com.example.redstore.projection.RatingInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Lob;
 import lombok.Data;
@@ -25,4 +26,5 @@ public class ProductDto {
     private Integer status;
     private String content;
     private String category;
+    private RatingInfo rating;
 }

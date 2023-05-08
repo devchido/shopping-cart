@@ -1,4 +1,23 @@
-import { Alert, Avatar, Box, Divider, Drawer, IconButton, List, ListItem, Snackbar, Typography } from "@mui/material";
+import {
+    Alert,
+    Avatar,
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Divider,
+    Drawer,
+    IconButton,
+    List,
+    ListItem,
+    Rating,
+    Snackbar,
+    TextField,
+    Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
@@ -13,19 +32,33 @@ function SingleProduct() {
     const [product, setProduct] = useState({
         id: "",
         users: {},
+        rating: {},
     });
     const [category, setCategory] = useState([]);
-    const [cart, setCart] = React.useState([]);
     const [loading, setLoading] = useState(false);
     const [quantity, setQuantity] = React.useState(1);
-    
+    // đánh giá
+    const [checkRating, setCheckRating] = React.useState(false);
+    const [dataRating, setDataRating] = React.useState();
+    const [rating, setRating] = React.useState(10);
+    const [ratingTitle, setRatingTitle] = React.useState("");
+    const [ratingContent, setRatingContent] = React.useState("");
+    //
+    const [open, setOpen] = React.useState(false);
+
     //Drawer
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
-
+    const handleClickOpen = () => {
+        // console.log(item);
+        setOpen(true);
+        
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
@@ -34,43 +67,88 @@ function SingleProduct() {
         setLoading(true);
         loadDataProduct();
     }, []);
+    // kiểm tra sản phẩm đã được chủ đang nhập đánh giá hay chưa
+    const handleCheckReview = (result) => {
+        fetch("/product-review/auth/product?productId=" + result.id, {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                if (result !== null) {
+                    setCheckRating(true);
+                    // console.log(result);
+                    setDataRating(result);
+                }
+            })
+            .catch((error) => {
+                setCheckRating(false);
+            });
+    };
+    const handleReviewProduct = () => {
+        console.log(rating, ratingTitle, ratingContent);
+        if (rating === 0 || ratingTitle === "") {
+            setSnackbarOpen(true);
+            setSnackbarSeverity("warning");
+            setSnackbarMsg("Thông tin đánh giá chưa hợp lệ");
+            return;
+        }
+        fetch("/product-review/auth/create", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                productId: product.id,
+                rating: rating,
+                title: ratingTitle,
+                content: ratingContent,
+            }),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                // console.log(result);
+                setIsDrawerOpen(false);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Thành công");
+                setOpen(false);
+                loadDataProduct();
+                setRating(10);
+                setRatingTitle("");
+                setRatingContent("");
+            })
+            .catch((error) => {
+                // console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("False");
+            });
+    };
     const loadDataProduct = () => {
         fetch("/product/api/findProductBySlug/" + slug).then((resp) => {
             resp.json().then((result) => {
                 // console.log(result);
                 setLoading(false);
                 setProduct(result);
-                
-            });
-        });
-        fetch("/category/api/single-product-category?field=" + slug).then((resp) => {
-            resp.json().then((result) => {
-                // console.log(result);
-                setCategory(result);
+                handleCheckReview(result);
             });
         });
     };
 
-    const loadDataCart = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        var requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-        fetch("/cart/auth/my-cart?status=0", requestOptions)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                setCart(result);
-            })
-            .catch((error) => console.log("error", error));
-    };
     const Loading = () => {
         return <>Loading . . .</>;
     };
@@ -83,8 +161,10 @@ function SingleProduct() {
                 </div>
                 <div className="col-md-6">
                     <h1 className="display-5">{product.title}</h1>
-                    <p className="lead">Loại sản phẩm: {category.title}</p>
+                    <p className="lead">Loại sản phẩm: {product.category}</p>
+
                     <p className="lead">Hiện còn: {product.quantity}</p>
+
                     {product.discount === 0 ? (
                         <>
                             <h3 className="display-6 fw-bold my-4">{VND.format(product.price)} </h3>
@@ -100,8 +180,21 @@ function SingleProduct() {
                             </h3>
                         </>
                     )}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginBlock: 2,
+                        }}
+                    >
+                        <Rating name="read-only" value={product.rating.diem} precision={0.5} max={10} readOnly />
+                        <Box sx={{ ml: 2 }}>
+                            <Typography component="legend">{product.rating.dem} đánh giá</Typography>
+                        </Box>
+                    </Box>
 
                     <p className="">{product.summary}</p>
+
                     <div className=" d-flex  my-3">
                         <IconButton
                             sx={{ mx: 1 }}
@@ -154,8 +247,6 @@ function SingleProduct() {
                                         setSnackbarSeverity("error");
                                         setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
                                     } else {
-                                        // setIsDrawerOpen(true);
-                                        // loadDataCart();
                                         handleAddToCart();
                                     }
                                 }}
@@ -163,9 +254,9 @@ function SingleProduct() {
                                 Add to Cart
                             </button>
 
-                            <Link to={"/carts"} className="btn btn-warning ms-2 px-3 py-2">
+                            <button className="btn btn-warning ms-2 px-3 py-2" onClick={handleClickOpen}>
                                 Đánh giá
-                            </Link>
+                            </button>
                         </>
                     ) : null}
                 </div>
@@ -175,9 +266,7 @@ function SingleProduct() {
                             <h5 className="mb-0 text-capitalize">Thông tin chi tiết</h5>
                         </div>
                         <div className="card-body">
-                            <strong>
-                                <pre>{product.content}</pre>
-                            </strong>
+                            <pre style={{ fontSize: "1rem", fontFamily: "Roboto,Helvetica,Arial" }}>{product.content}</pre>
                         </div>
                     </div>
                     <ShowUser />
@@ -206,7 +295,7 @@ function SingleProduct() {
             </div>
         );
     };
-    
+
     const handleAddToCart = () => {
         //
         fetch("/cart/auth/active", {
@@ -278,9 +367,114 @@ function SingleProduct() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
+
+            {checkRating ? (
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">Đánh giá sản phẩm</DialogTitle>
+                    <DialogContent className="justify-content-center">
+                        <Box
+                            sx={{
+                                my: 1,
+                                justifyContent: "center",
+                                display: "flex",
+                            }}
+                        >
+                            <Rating name="customized-10" defaultValue={ (dataRating.rating) } max={10} readOnly />
+                        </Box>
+                        <Box
+                            sx={{
+                                mb: 2,
+                                minWidth: "25rem",
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Mô tả trải nghiệm"
+                                id="fullWidth"
+                                defaultValue={dataRating.title}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                        </Box>
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="Chi tiết"
+                            defaultValue={dataRating.content}
+                            rows={1}
+                            fullWidth
+                            multiline
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Đóng</Button>
+                    </DialogActions>
+                </Dialog>
+            ) : (
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">Đánh giá sản phẩm</DialogTitle>
+                    <DialogContent className="justify-content-center">
+                        <Box
+                            sx={{
+                                my: 1,
+                                justifyContent: "center",
+                                display: "flex",
+                            }}
+                        >
+                            <Rating
+                                name="customized-10"
+                                value={parseInt(rating)}
+                                onChange={(e) => setRating(e.target.value)}
+                                max={10}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                mb: 2,
+                                minWidth: "25rem",
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Mô tả trải nghiệm"
+                                id="fullWidth"
+                                required
+                                value={ratingTitle}
+                                onChange={(e) => setRatingTitle(e.target.value)}
+                            />
+                        </Box>
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="Chi tiết"
+                            fullWidth
+                            multiline
+                            rows={1}
+                            value={ratingContent}
+                            onChange={(e) => setRatingContent(e.target.value)}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Huỷ</Button>
+                        <Button onClick={handleReviewProduct}>Lưu</Button>
+                    </DialogActions>
+                </Dialog>
+            )}
+
             <div className="container py-5">
                 <div className="row py-4">{loading ? <Loading /> : <ShowProduct />}</div>
-                
             </div>
         </div>
     );

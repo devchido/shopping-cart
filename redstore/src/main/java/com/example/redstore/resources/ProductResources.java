@@ -177,8 +177,8 @@ public class ProductResources {
     //
     @GetMapping("/api/findProductBySlug/{slug}")
     public ProductDto findProductBySlug(@PathVariable String slug) {
-        ProductDto dto = productService.findProductBySlug(slug);
-        return dto;
+        return productService.findProductBySlug(slug);
+
     }
 
     /*

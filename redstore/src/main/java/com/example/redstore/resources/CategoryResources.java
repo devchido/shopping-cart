@@ -50,8 +50,8 @@ public class CategoryResources {
     }
     @GetMapping("/api/single-product-category")
     public CategoryDto singleProductCategory(@RequestParam String field){
-        CategoryDto dto = categoryService.singleProductCategory(field);
-        return dto;
+        return categoryService.singleProductCategory(field);
+
     }
     // todo: findAllCategory
     @GetMapping("/auth/admin/{offset}/{pageSize}")

@@ -57,7 +57,6 @@ export default function UpdateProfile() {
         const data = new FormData(event.currentTarget);
         var formdata = new FormData();
         if (data.get("photos").name === "" || data.get("photos").name === null) {
-            
         } else {
             formdata.append("image", data.get("photos"), "/" + event.target[0].value);
             fetch("/user/auth/image", {
@@ -115,7 +114,7 @@ export default function UpdateProfile() {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Cập nhật thành công.");
-                
+
                 loadDataUser();
             })
             .catch((error) => {
@@ -177,7 +176,6 @@ export default function UpdateProfile() {
                                             </Link>
                                         </h6>
                                     </div>
-                                    <h6 className="text-right blockquote text-capitalize">Edit Profile</h6>
                                 </div>
                                 <div className="row mt-2">
                                     <div className="col-md-6">
@@ -250,7 +248,8 @@ export default function UpdateProfile() {
                                     </div>
                                 </div>
                                 <div className="mt-5 text-right float-end">
-                                    <button className="btn btn-outline-dark" type="submit">
+                                    <Link to={"/change-password"} className="btn btn-outline-dark">Đổi mật khẩu</Link>&nbsp;
+                                    <button className="btn btn-primary" type="submit">
                                         Save Profile
                                     </button>
                                 </div>

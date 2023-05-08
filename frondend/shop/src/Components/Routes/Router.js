@@ -32,6 +32,7 @@ import OrderDetailManagement from "../Admin/Order/OrderDetailManagement";
 import TransactionDetailManagement from "../Admin/Transaction/TransactionDetailManagement";
 import TransactionDetail from "../Transaction/TransactionDetail";
 import ShoppingCart from "../Shopping/ShoppingCart";
+import ChangePassword from "../Login/ChangePassword";
 
 function Router() {
     return (
@@ -79,6 +80,8 @@ function Router() {
             <Route path="/profile" element={<Profile />}></Route>
             {/* Update profile */}
             <Route path="/profile/update" element={<UpdateProfile />}></Route>
+            {/* ChangePassword */}
+            <Route path="/change-password" element={<ChangePassword/>} ></Route>
 
             {/* Carts: Trang quản lý các giỏ hảng */}
             <Route path="/carts" element={<ShoppingCart />}></Route>

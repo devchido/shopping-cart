@@ -181,4 +181,22 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+
+    public AuthenticationResponse changePassword(String passOld, String passNew) {
+        User user = SecurityUtils.getPrincipal();
+        if (!passwordEncoder.matches(passOld, user.getPassword())) {
+            System.out.println("Đổi mật khẩu không thành công!");
+            return null;
+        }
+        user.setPassword(passwordEncoder.encode(passNew));
+        userRepository.save(user);
+        System.out.println("Thay đổi mật khẩu thành công.");
+        var jwtToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
 }

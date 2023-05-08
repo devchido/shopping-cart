@@ -1,6 +1,7 @@
 package com.example.redstore.repository;
 
 import com.example.redstore.domain.ProductReview;
+import com.example.redstore.projection.RatingInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, St
             " where user_id = :userId and product_id = :productId "
             , nativeQuery = true)
     Optional<ProductReview> filterRatingWithUserAndProduct(Long userId, Long productId);
+    @Query(value = "select AVG(rating) as diem, COUNT(rating) as dem from "+db+".product_review " +
+            " where product_id = :productId", nativeQuery = true)
+    RatingInfo ratingAvgByProduct(Long productId);
 }

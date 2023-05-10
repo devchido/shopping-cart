@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -105,5 +106,22 @@ public class  UserService {
         System.out.println("get user : " +entity.getFirstName() + entity.getLastName());
         UserDto dto = userMapper.toDo(entity);
         return dto;
+    }
+    // todo: ứng tuyển làm nhà cung cầp - vendor = 2
+    public String changeVendor(String id,Integer vendor){
+        User entity = userRepository.findById(id).orElseThrow(
+                ()-> new RuntimeException("Không tìm thấy user với id: "+id));
+        entity.setVendor(vendor);
+        userRepository.save(entity);
+        if (vendor == 0){
+            return "Người dùng không bán hàng nữa.";
+        } else if (vendor == 1){
+            return "Người dùng được phép bán hàng.";
+        } else if (vendor == 2) {
+            return "Người dùng ứng tuyển vị trí bán hàng";
+        } else {
+            return "Người dùng không được phép bán hàng";
+        }
+
     }
 }

@@ -33,11 +33,6 @@ export default function UserDetailManagement() {
         createAt: new Date(),
     });
     const [role, setRole] = React.useState({});
-    // chuyển đổi trạng thái của sản phẩm
-    const [status, setStatus] = React.useState(0);
-    const [category, setCategory] = React.useState([]);
-
-    const [newImage, setNewImage] = React.useState({});
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
@@ -238,7 +233,7 @@ export default function UserDetailManagement() {
                                             className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
                                             style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}
                                         ></img>
-                                        <input type="text" name="photos" defaultValue={user.photos} className="form-control mt-4" />
+                                        {/* <input type="text" name="photos" defaultValue={user.photos} className="form-control mt-4" /> */}
                                     </div>
                                     <div className="d-flex justify-content-between">
                                         <div className="form-outline  mt-4 col-lg-5 ">
@@ -282,10 +277,10 @@ export default function UserDetailManagement() {
                         <div className="col-lg-4">
                             <div className="card mb-4 ">
                                 <div className="card-header py-3">
-                                    <h5 className="mb-0">Chức năng/Quyền</h5>
+                                    <h5 className="mb-0">Bộ phận</h5>
                                 </div>
                                 <div className="card-body">
-                                    <div className="form-group">
+                                    <div className="form-outline">
                                         <input className="form-control" name="role" defaultValue={user.role} readOnly />
                                     </div>
                                 </div>
@@ -293,7 +288,7 @@ export default function UserDetailManagement() {
 
                             <div className="card mb-4 card-body ">
                                 <div className=" row form-group ">
-                                    <Link to={"/admin/user"} className="col-auto m-auto">
+                                    <Link to={"/admin"} className="col-auto m-auto">
                                         <button type="button" className="btn btn-dark  ">
                                             Cancel
                                         </button>

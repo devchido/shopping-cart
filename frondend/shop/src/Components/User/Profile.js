@@ -75,11 +75,16 @@ function Profile() {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="p-5 text-black" style={{ backgroundColor: "#f8f9fa" }}>
+                                <div className="p-3 text-black" style={{ backgroundColor: "#f8f9fa" }}>
                                     <div className="d-flex justify-content-end text-center py-1">
                                         <div>
-                                            {/* <p className="mb-1 h5">Email: {user.email}</p>
-                                            <p className="small text-muted mb-0">Email</p> */}
+                                            <p className="mb-1 h5">Vendor</p>
+
+                                            {user.vendor === 0 ? <span className="badge bg-secondary ms-2">False</span> : null}
+                                            {user.vendor === 1 ? <span className="badge bg-info ms-2">True</span> : null}
+                                            {user.vendor === 2 ? <span className="badge bg-warning ms-2">Warning</span> : null}
+                                            {user.vendor === 3 ? <span className="badge bg-danger ms-2">Ban</span> : null}
+                                            {/* <p className="small text-muted mb-0"></p> */}
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +99,7 @@ function Profile() {
                                             style={{
                                                 border: "none",
                                                 background: "#f8f9fa",
-                                                cursor: "-moz-grab"
+                                                cursor: "-moz-grab",
                                             }}
                                             readOnly
                                         />
@@ -108,7 +113,7 @@ function Profile() {
                                             style={{
                                                 border: "none",
                                                 background: "#f8f9fa",
-                                                cursor: "-moz-grab"
+                                                cursor: "-moz-grab",
                                             }}
                                             readOnly
                                         />

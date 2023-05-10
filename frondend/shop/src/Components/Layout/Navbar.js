@@ -39,9 +39,7 @@ function Navbar(props) {
     };
 
     const handleLogout = () => {
-        
         localStorage.removeItem("token");
-        
     };
 
     const loadDataUser = () => {
@@ -67,6 +65,26 @@ function Navbar(props) {
                     handleLogout();
                 });
         }
+    };
+    const handleChangeVendor = () => {
+        fetch("/user/auth/change-vendor?id=" + user.id + "&vendor=2", {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                loadDataUser();
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
     };
 
     React.useEffect(() => {
@@ -183,17 +201,17 @@ function Navbar(props) {
                                         {/* "Profile", "Account", "Dashboard", "Logout" */}
                                         <Link to={"/profile"}>
                                             <MenuItem onClick={handleCloseUserMenu}>
-                                                <Typography textAlign="center">Account</Typography>
+                                                <Typography>Account</Typography>
                                             </MenuItem>
                                         </Link>
                                         <Link to={"/carts"}>
                                             <MenuItem onClick={handleCloseUserMenu}>
-                                                <Typography textAlign="center">Shopping Cart</Typography>
+                                                <Typography>Shopping Cart</Typography>
                                             </MenuItem>
                                         </Link>
                                         <Link to={"/orders"}>
                                             <MenuItem onClick={handleCloseUserMenu}>
-                                                <Typography textAlign="center">Order</Typography>
+                                                <Typography>Order</Typography>
                                             </MenuItem>
                                         </Link>
                                         {/* <Link to={"/dashboard"}>
@@ -208,67 +226,47 @@ function Navbar(props) {
                                     </Link>*/}
                                         <Link to={"/test"}>
                                             <MenuItem onClick={handleCloseUserMenu}>
-                                                <Typography textAlign="center">Test</Typography>
+                                                <Typography>Test</Typography>
                                             </MenuItem>
-                                        </Link> 
-                                        
-                                            <div>
-                                                <hr />
+                                        </Link>
+
+                                        <div>
+                                            <hr />
+                                            {user.vendor === 0 ? (
+                                                <MenuItem onClick={handleChangeVendor}>
+                                                    <Typography>Ứng tuyển</Typography>
+                                                </MenuItem>
+                                            ) : null}
+
+                                            {user.vendor === 1 ? (
                                                 <Link to={`/management/${"list-products"}`}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">My Product</Typography>
+                                                        <Typography>My Product</Typography>
                                                     </MenuItem>
                                                 </Link>
+                                            ) : null}
+                                            {user.vendor === 2 ? (
+                                                <MenuItem onClick={handleCloseUserMenu}>
+                                                    <Typography>Chờ xác nhận</Typography>
+                                                </MenuItem>
+                                            ) : null}
+                                        </div>
 
-                                                {/* <Link to={"/management/create-products"}>
-                                                    <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">Create Products</Typography>
-                                                    </MenuItem>
-                                                </Link> */}
-                                            </div>
-                                        
                                         {user.role === "ADMIN" ? (
                                             <div>
                                                 <hr />
                                                 <Link to={"/admin"}>
                                                     <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">Admin</Typography>
+                                                        <Typography>Admin</Typography>
                                                     </MenuItem>
                                                 </Link>
-                                                {/* <Link to={"/admin/user"}>
-                                                    <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">User</Typography>
-                                                    </MenuItem>
-                                                </Link>
-                                                <Link to={"/admin/product"}>
-                                                    <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">Product</Typography>
-                                                    </MenuItem>
-                                                </Link>
-                                                <Link to={"/admin/category"}>
-                                                    <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">Category</Typography>
-                                                    </MenuItem>
-                                                </Link>
-                                                <Link to={"/admin/order"}>
-                                                    <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">Order</Typography>
-                                                    </MenuItem>
-                                                </Link>
-                                                <Link to={"/admin/transaction"}>
-                                                    <MenuItem onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">Transaction</Typography>
-                                                    </MenuItem>
-                                                </Link> */}
                                             </div>
                                         ) : null}
 
                                         <hr />
                                         <Link to={"/"}>
                                             <MenuItem onClick={handleCloseUserMenu}>
-                                                <Typography textAlign="center" onClick={handleLogout}>
-                                                    Logout
-                                                </Typography>
+                                                <Typography onClick={handleLogout}>Logout</Typography>
                                             </MenuItem>
                                         </Link>
                                     </Menu>

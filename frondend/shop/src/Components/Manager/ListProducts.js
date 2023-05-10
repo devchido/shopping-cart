@@ -251,15 +251,26 @@ function ListProducts() {
                                                                     })}
                                                                 </TableCell>
                                                                 <TableCell className="text-nowrap" align="center">
-                                                                    {item.status === 0 ? (
-                                                                        <span className="badge bg-warning ms-2">
+                                                                {item.status === 0 ? (
+                                                                        <span className="badge bg-warning text-capitalize ms-2">
                                                                             Chờ xét duyệt
                                                                         </span>
-                                                                    ) : (
-                                                                        <span className="badge bg-info ms-2">
-                                                                            Đã xét duyệt
+                                                                    ) : null}
+                                                                    {item.status === 1 ? (
+                                                                        <span className="badge bg-info text-capitalize ms-2">
+                                                                            Được đăng bán
                                                                         </span>
-                                                                    )}
+                                                                    ) : null}
+                                                                    {item.status === 2 ? (
+                                                                        <span className="badge bg-secondary text-capitalize ms-2">
+                                                                            Chưa đăng bán
+                                                                        </span>
+                                                                    ) : null}
+                                                                    {item.status === 3 ? (
+                                                                        <span className="badge bg-danger text-capitalize ms-2">
+                                                                            Ngưng bán
+                                                                        </span>
+                                                                    ) : null}
                                                                 </TableCell>
                                                                 <TableCell align="center">
                                                                     <div className="d-flex">

@@ -144,7 +144,7 @@ public class UserResources {
         return dto;
     }
 
-    // todo: api : đang lỗi
+    // todo: api
     @GetMapping("/api/u/{id}")
     private UserDto filterUserById(@PathVariable String id) {
         UserDto dto = userService.filterUserById(id);
@@ -157,5 +157,9 @@ public class UserResources {
         userService.edit(id, dto);
     }
 
-
+    // todo: change vendor : thay đổi vendor
+    @PutMapping("/auth/change-vendor")
+    public ResponseEntity<?> changeVendor(@RequestParam String id, @RequestParam Integer vendor){
+        return ResponseEntity.ok(userService.changeVendor(id,vendor));
+    }
 }

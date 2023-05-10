@@ -4,7 +4,21 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Autocomplete, Avatar, CardHeader, Stack, TableFooter, TextField } from "@mui/material";
+import {
+    Autocomplete,
+    Avatar,
+    Button,
+    CardHeader,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    InputLabel,
+    Stack,
+    TableFooter,
+    TextField,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,31 +27,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 //Icon
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Snackbar } from "@mui/material";
 import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-//item menu
+
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 //Paginavtion
 import TablePagination from "@mui/material/TablePagination";
-import { format, parseISO, formatDistanceToNow } from "date-fns";
-import vi from "date-fns/locale/vi";
-import { VND } from "../../Unity/VND";
-import moment from "moment";
 
 function UsersManagement() {
     // data product-category
     const [data, setData] = React.useState([]);
+    //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
-    const [category, setCategory] = React.useState("");
+    const [open, setOpen] = React.useState(false);
 
     // Trang hiện tại của page
     const [page, setPage] = React.useState(0);
@@ -51,6 +57,43 @@ function UsersManagement() {
     const [email, setEmail] = React.useState("");
     const [role, setRole] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
+    // dialog delete
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [dialogItem, setDialogItem] = React.useState();
+    const [dialogVendor, setDialogVendor] = React.useState({});
+
+    const handleClickOpenDialog = (item) => {
+        // console.log(item);
+        setOpenDialog(true);
+        setDialogItem(item);
+        setDialogVendor(item.vendor);
+    };
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setDialogItem();
+        setDialogVendor();
+    };
+    const handleChangeVendor = () => {
+        fetch("/user/auth/change-vendor?id=" + dialogItem.id + "&vendor=" + dialogVendor, {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error(response.status);
+            })
+            .then((result) => {
+                loadDataUser();
+                handleCloseDialog();
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -68,15 +111,7 @@ function UsersManagement() {
         loadDataUser();
     };
     //
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    // Đóng menu
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);
@@ -125,6 +160,7 @@ function UsersManagement() {
         setPage(0);
         loadDataUser();
     };
+
     React.useEffect(() => {
         loadDataUser();
     }, [page, pageSize, role]);
@@ -148,6 +184,43 @@ function UsersManagement() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                {dialogItem ? (
+                    <>
+                        <DialogTitle id="alert-dialog-title">
+                            Thay đổi quyền hạn cho user: {dialogItem.firstName + " " + dialogItem.lastName}
+                        </DialogTitle>
+
+                        <DialogContent>
+                            <DialogContentText>Quyền bán hàng</DialogContentText>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={dialogVendor}
+                                    label="Vendor"
+                                    onChange={(e) => setDialogVendor(e.target.value)}
+                                >
+                                    <MenuItem value={0}>Huỷ kích hoạt</MenuItem>
+                                    <MenuItem value={1}>Kích hoạt</MenuItem>
+                                    <MenuItem value={2}>Chờ xác nhận</MenuItem>
+                                    <MenuItem value={3}>Cấm</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog}>Huỷ</Button>
+                            <Button onClick={handleChangeVendor}>Lưu</Button>
+                        </DialogActions>
+                    </>
+                ) : null}
+            </Dialog>
             <section className="h-100 gradient-custom col-lg-12">
                 <div className="container py-5">
                     <div className="row d-flex justify-content-center my-4">
@@ -224,6 +297,7 @@ function UsersManagement() {
                                                         <TableCell className="text-nowrap">User</TableCell>
                                                         <TableCell className="text-nowrap">Mobile</TableCell>
                                                         <TableCell className="text-nowrap">Email</TableCell>
+                                                        <TableCell className="text-nowrap">Vendor</TableCell>
                                                         <TableCell className="text-nowrap">Role</TableCell>
                                                         <TableCell className="text-nowrap" align="center">
                                                             Action
@@ -259,21 +333,37 @@ function UsersManagement() {
 
                                                                 <TableCell className="text-nowrap">{item.mobile}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.email}</TableCell>
+                                                                <TableCell className="text-nowrap">
+                                                                    {item.vendor === 0 ? (
+                                                                        <span className="badge bg-secondary ms-2">False</span>
+                                                                    ) : null}
+                                                                    {item.vendor === 1 ? (
+                                                                        <span className="badge bg-info ms-2">True</span>
+                                                                    ) : null}
+                                                                    {item.vendor === 2 ? (
+                                                                        <span className="badge bg-warning ms-2">Warning</span>
+                                                                    ) : null}
+                                                                    {item.vendor === 3 ? (
+                                                                        <span className="badge bg-danger ms-2">Ban</span>
+                                                                    ) : null}
+                                                                </TableCell>
 
                                                                 <TableCell className="text-nowrap">{item.role}</TableCell>
 
                                                                 <TableCell align="center" className="row ">
                                                                     <div className="d-flex justify-content-center">
-                                                                        <Link to={`/user/${item.id}`}>
-                                                                        <IconButton color="primary" title="View">
-                                                                            <CalendarViewMonthIcon />
-                                                                        </IconButton>
-                                                                        </Link>
                                                                         <Link to={`/admin/user/${item.id}`}>
-                                                                        <IconButton color="success">
+                                                                            <IconButton color="primary" title="View">
+                                                                                <CalendarViewMonthIcon />
+                                                                            </IconButton>
+                                                                        </Link>
+
+                                                                        <IconButton
+                                                                            color="success"
+                                                                            onClick={() => handleClickOpenDialog(item)}
+                                                                        >
                                                                             <BorderColorIcon />
                                                                         </IconButton>
-                                                                        </Link>
 
                                                                         {/* <IconButton color="error">
                                                                             <DeleteIcon />

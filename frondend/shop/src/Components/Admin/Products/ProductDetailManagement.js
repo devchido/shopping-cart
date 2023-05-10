@@ -236,7 +236,7 @@ function ProductDetailManagement() {
                 console.log("user", result);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
-                setSnackbarMsg("Sản phẩm được chuyển vào mục kiểm duyệt");
+                setSnackbarMsg("Đã huỷ đăng bán sản phẩm");
                 loadDataProduct();
             })
             .catch((error) => {
@@ -322,12 +322,12 @@ function ProductDetailManagement() {
                                         null
                                     )}
                                     {product.status === 1 ? (
-                                        <span className="badge bg-info text-capitalize ms-2">Đã xác nhận</span>
+                                        <span className="badge bg-info text-capitalize ms-2">Được đăng bán</span>
                                     ) : (
                                         null
                                     )}
                                     {product.status === 2 ? (
-                                        <span className="badge bg-success text-capitalize ms-2">Kiểm duyệt</span>
+                                        <span className="badge bg-secondary text-capitalize ms-2">Chưa đăng bán</span>
                                     ) : (
                                         null
                                     )}
@@ -488,23 +488,31 @@ function ProductDetailManagement() {
 
                             <div className="card mb-4 card-body ">
                                 <div className=" row form-group justify-content-between">
-                                    <Link to={"/admin/product"} className="col-auto">
+                                    <Link to={"/admin"} className="col-auto">
                                         <button type="button" className="btn btn-dark  ">
                                             Cancel
                                         </button>
                                     </Link>
-                                    {product.status === 2 ? (
+                                    {product.status === 1 ? (
+                                        <Link to={`/product/${product.slug}`} className="col-auto">
+                                            <button type="button" className="btn btn-primary">
+                                                View
+                                            </button>
+                                        </Link>
+                                    ) : null}
+                                    {product.status === 1 || product.status === 3 ? (
+                                        <button type="button" className="btn btn-warning col-auto" onClick={handleCensorship}>
+                                            Huỷ đăng bài
+                                        </button>
+                                    ) : null}
+                                    {product.status === 1 ? (
                                         <button type="button" className="btn btn-danger col-auto " onClick={handleStop}>
                                             Ngừng bán
                                         </button>
                                     ) : null}
 
-                                    {product.status === 1 || product.status === 3 ? (
-                                        <button type="button" className="btn btn-success col-auto" onClick={handleCensorship}>
-                                            Kiểm duyệt
-                                        </button>
-                                    ) : null}
-                                    {product.status === 0 || product.status === 2 ? (
+                                    
+                                    {product.status === 0 ? (
                                         <button type="reset" className="btn btn-info col-auto " onClick={handleConfirm}>
                                             Duyệt bài
                                         </button>
@@ -514,13 +522,7 @@ function ProductDetailManagement() {
                                             Chờ xác nhận
                                         </button>
                                     ) : null} */}
-                                    {product.status === 1 ? (
-                                        <Link to={`/product/${product.slug}`} className="col-auto">
-                                            <button type="button" className="btn btn-primary">
-                                                View
-                                            </button>
-                                        </Link>
-                                    ) : null}
+                                    
                                 </div>
                             </div>
                         </div>

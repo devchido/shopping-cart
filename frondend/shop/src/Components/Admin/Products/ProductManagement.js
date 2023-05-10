@@ -206,7 +206,9 @@ function ProductManagement() {
                                                     <em>Tất cả</em>
                                                 </MenuItem>
                                                 <MenuItem value={0}>Chờ xét duyệt</MenuItem>
-                                                <MenuItem value={1}>Đã xét duyệt</MenuItem>
+                                                <MenuItem value={1}>Được đăng bán</MenuItem>
+                                                <MenuItem value={2}>Chờ kiểm duyệt</MenuItem>
+                                                <MenuItem value={3}>Ngưng bán</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <FormControl className="col-lg-2 col-md-2 col-4 my-1">
@@ -250,7 +252,10 @@ function ProductManagement() {
                                                 inputProps={{ "aria-label": "Without label" }}
                                                 value={field}
                                                 displayEmpty
-                                                onChange={(e) => {setField(e.target.value); loadDataProduct()}}
+                                                onChange={(e) => {
+                                                    setField(e.target.value);
+                                                    loadDataProduct();
+                                                }}
                                             >
                                                 <MenuItem value={"id"}>Id</MenuItem>
                                                 <MenuItem value={"title"}>Tên sản phẩm</MenuItem>
@@ -266,7 +271,10 @@ function ProductManagement() {
                                                 inputProps={{ "aria-label": "Without label" }}
                                                 value={sort}
                                                 displayEmpty
-                                                onChange={(e) => {setSort(e.target.value); loadDataProduct()}}
+                                                onChange={(e) => {
+                                                    setSort(e.target.value);
+                                                    loadDataProduct();
+                                                }}
                                             >
                                                 <MenuItem value={"ASC"}>Tăng dần</MenuItem>
                                                 <MenuItem value={"DESC"}>Giảm dần</MenuItem>
@@ -275,11 +283,8 @@ function ProductManagement() {
                                     </Box>
 
                                     <Box className="my-2">
-                                        <FormControl className="px-2" >
-                                            <button
-                                                type="submit"
-                                                className="btn btn-dark text-nowrap"
-                                            >
+                                        <FormControl className="px-2">
+                                            <button type="submit" className="btn btn-dark text-nowrap">
                                                 Search
                                             </button>
                                         </FormControl>
@@ -358,14 +363,25 @@ function ProductManagement() {
                                                                 </TableCell>
                                                                 <TableCell className="text-nowrap" align="center">
                                                                     {item.status === 0 ? (
-                                                                        <span className="badge bg-warning ms-2">
+                                                                        <span className="badge bg-warning text-capitalize ms-2">
                                                                             Chờ xét duyệt
                                                                         </span>
-                                                                    ) : (
-                                                                        <span className="badge bg-primary ms-2">
-                                                                            Đã xét duyệt
+                                                                    ) : null}
+                                                                    {item.status === 1 ? (
+                                                                        <span className="badge bg-info text-capitalize ms-2">
+                                                                            Được đăng bán
                                                                         </span>
-                                                                    )}
+                                                                    ) : null}
+                                                                    {item.status === 2 ? (
+                                                                        <span className="badge bg-success text-capitalize ms-2">
+                                                                            Kiểm duyệt
+                                                                        </span>
+                                                                    ) : null}
+                                                                    {item.status === 3 ? (
+                                                                        <span className="badge bg-danger text-capitalize ms-2">
+                                                                            Ngưng bán
+                                                                        </span>
+                                                                    ) : null}
                                                                 </TableCell>
 
                                                                 <TableCell align="center" className="row  ">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes} from "react-router-dom";
 import Home from "../Home/Home";
 import Admin from "../Admin/Admin";
 import Product from "../Product/Product";
@@ -33,6 +33,7 @@ import TransactionDetailManagement from "../Admin/Transaction/TransactionDetailM
 import TransactionDetail from "../Transaction/TransactionDetail";
 import ShoppingCart from "../Shopping/ShoppingCart";
 import ChangePassword from "../Login/ChangePassword";
+import NotFoundPage from "../NotFoundPage/NotFoundPage";
 
 function Router() {
     return (
@@ -43,25 +44,25 @@ function Router() {
             {/* Admin management */}
             <Route path="/admin" element={<Admin />}></Route>
             {/* User management */}
-            <Route path="/admin/user" element={<UsersManagement />}></Route>
+            {/* <Route path="/admin/user" element={<UsersManagement />}></Route> */}
             {/* User detail management */}
             <Route path="/admin/user/:id" element={<UserDetailManagement />}></Route>
             {/* Products management */}
-            <Route path="/admin/product" element={<ProductManagement />}></Route>
+            {/* <Route path="/admin/product" element={<ProductManagement />}></Route> */}
             {/* Product Detail management */}
             <Route path="/admin/product/:id" element={<ProductDetailManagement />}></Route>
             {/* Category management */}
-            <Route path="/admin/category" element={<CategoryManagement />}></Route>
+            {/* <Route path="/admin/category" element={<CategoryManagement />}></Route> */}
             {/* Category detail management */}
             <Route path="/admin/category/:id" element={<CategoryDetailManagement />}></Route>
             {/* Add Category management */}
             <Route path="/admin/category/create" element={<CreatedCategory />}></Route>
             {/* Order management */}
-            <Route path="/admin/order" element={<OrderManagement />}></Route>
+            {/* <Route path="/admin/order" element={<OrderManagement />}></Route> */}
             {/* Order management */}
             <Route path="/admin/order/:id" element={<OrderDetailManagement />}></Route>
             {/* Transaction management */}
-            <Route path="/admin/transaction" element={<TransactionManagement />}></Route>
+            {/* <Route path="/admin/transaction" element={<TransactionManagement />}></Route> */}
             {/* Transaction detail management */}
             <Route path="/admin/transaction/:id" element={<TransactionDetailManagement />}></Route>
 
@@ -97,13 +98,15 @@ function Router() {
             {/* Manage: Trang quản lý product của user */}
             <Route path= "/management/list-products" element={<ListProducts/>}></Route>
             {/* Created Products: Tạo sản phẩm mới */}
-            <Route path="management/create-products" element={<CreateProducts />}></Route>
+            <Route path="/management/create-products" element={<CreateProducts />}></Route>
             {/* Update Product: Cập nhật sản phẩm  */}
-            <Route path="management/update-product/:id" element={<UpdateProduct />}></Route>
+            <Route path="/management/update-product/:id" element={<UpdateProduct />}></Route>
             {/* Tabs */}
             <Route path="/tabs" element={<VerticalTabs />}></Route>
             {/* test */}
             <Route path="/test" element={<Test />}></Route>
+
+            <Route path="*" exact={true} element={<NotFoundPage />} />
         </Routes>
     );
 }

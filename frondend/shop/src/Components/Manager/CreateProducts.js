@@ -1,15 +1,23 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 //
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider, createTheme } from "@mui/material";
+import convertToUrl from "../Unity/CovertToUrl";
+
 const theme = createTheme();
 function CreateProduct() {
     const [category, setCategory] = React.useState([]);
     const [selectedFile, setSelectedFile] = React.useState();
     const [preview, setPreview] = React.useState();
+
+    //
+    const [title, setTitle] = React.useState("");
+    const [slug, setSlug] = React.useState("");
+    //
 
     const [newImage, setNewImage] = React.useState(
         "https://nghikhangmy.vn/wp-content/themes/webchuan-ecom1/images/default-image.jpg"
@@ -23,7 +31,13 @@ function CreateProduct() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-
+    const handleChangeSlug = (event) => {
+        const text = event.target.value;
+        const url = convertToUrl(text);
+        setTitle(text);
+        setSlug(url);
+    };
+    
     const loadDataCategory = () => {
         fetch("/category/api/filter?title= ")
             .then((response) => {
@@ -195,15 +209,24 @@ function CreateProduct() {
                                                 name="title"
                                                 type="text"
                                                 className="form-control text-right w-75  word-wrap"
+                                                value={title}
+                                                onChange={handleChangeSlug}
                                             />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Slug</label>
-                                            <input id="form1" name="slug" type="text" className="form-control w-75" />
+                                            <input
+                                                id="form1"
+                                                name="slug"
+                                                type="text"
+                                                className="form-control w-75"
+                                                value={slug}
+                                                onChange={(e) => setSlug(convertToUrl(e.target.value))}
+                                            />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Summary</label>
-                                            <input id="form1" name="summary" type="text" className="form-control w-75" />
+                                            <input id="form1" name="summary" type="text" className="form-control w-75" maxLength={100} />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Giá</label>

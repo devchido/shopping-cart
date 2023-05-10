@@ -189,6 +189,11 @@ public class ProductResources {
         List<ProductDto> dtos = productService.filterProduct(sort, field);
         return dtos;
     }
+    // todo: Quản lý trạng thái cuản sản phẩm - NCC
+    @PutMapping("/auth/change-status")
+    public void changeStatus(@RequestParam("id") String id, @RequestParam("status") int status) {
+        productService.setStatusProduct(id, status);
+    }
 
     // Quản lý trạng thái status của các product:
     @PutMapping("/auth/admin/setStatus")

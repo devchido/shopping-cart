@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import Profile from "../User/Profile";
 import ProductManagement from "./Products/ProductManagement";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -14,6 +13,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import OrderManagement from "./Order/OrderManagement";
 import TransactionManagement from "./Transaction/TransactionManagement";
 import StoreIcon from "@mui/icons-material/Store";
+import { useNavigate } from "react-router-dom";
 // có thể xem để test nav
 // Nested List
 function TabPanel(props) {
@@ -52,10 +52,36 @@ function a11yProps(index) {
 
 function Admin() {
     const [value, setValue] = React.useState(0);
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    const navigation = useNavigate();
+
+    React.useEffect(()=>{
+        if (localStorage.getItem("token") !== null) {
+            fetch("/user/auth/info", {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error(response.status);
+                })
+                .then((result) => {
+                    console.log(result);
+                    if (result.role !== "ADMIN"){
+                        navigation("/");
+                    }
+                })
+                .catch((error) => {
+                    console.log("error", error);
+                });
+        }
+    },[])
 
     return (
         <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex" }}>

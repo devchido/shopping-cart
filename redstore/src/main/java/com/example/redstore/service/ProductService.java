@@ -63,7 +63,7 @@ public class ProductService {
         entity.setUsers(SecurityUtils.getPrincipal());
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
-        entity.setStatus(0);
+        entity.setStatus(2);
         productRepository.save(entity);
         // add category cho product
         if (dto.getCategory() != null) {
@@ -268,13 +268,13 @@ public class ProductService {
         if (status == 1) {
             entity.setStatus(1);
             productRepository.save(entity);
-            System.out.println("Xác nhận sản phẩm");
+            System.out.println("Xác nhận đăng bán sản phẩm");
         }
         ;
         if (status == 2) {
             entity.setStatus(2);
             productRepository.save(entity);
-            System.out.println("Kiểm duyệt sản phẩm");
+            System.out.println("Huỷ đăng bán sản phẩm");
         }
         ;
         if (status == 3) {

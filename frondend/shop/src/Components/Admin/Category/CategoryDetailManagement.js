@@ -175,7 +175,7 @@ export default function CategoryDetailManagement() {
                                 </div>
                                 <div className="card-body">
                                     <div className=" row form-group ">
-                                        <Link to={"/admin/category"} className="col-auto m-auto">
+                                        <Link to={"/admin"} className="col-auto m-auto">
                                             <button type="button" className="btn btn-dark  ">
                                                 Cancel
                                             </button>

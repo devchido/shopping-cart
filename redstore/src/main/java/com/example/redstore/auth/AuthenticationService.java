@@ -163,26 +163,7 @@ public class AuthenticationService {
         user.setRole(Role.valueOf(role));
         userRepository.save(user);
     }
-    // đổi mật khẩu
-    public AuthenticationResponse forgotPassword(AuthenticationRequest request, String newPass){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        user.setPassword(passwordEncoder.encode(newPass));
-        userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
-    }
-
-
+    // todo: đổi mật khẩu cho user đăng nhập
     public AuthenticationResponse changePassword(String passOld, String passNew) {
         User user = SecurityUtils.getPrincipal();
         if (!passwordEncoder.matches(passOld, user.getPassword())) {

@@ -249,7 +249,9 @@ function Orders() {
                         })}
                     </>
                 ) : (
-                    <div className="card rounded-3 mb-4">Not found</div>
+                    <Stack sx={{ width: "100%" }} spacing={2}>
+                        <Alert severity="info">Không có đơn hàng nào!</Alert>
+                    </Stack>
                 )}
             </>
         );

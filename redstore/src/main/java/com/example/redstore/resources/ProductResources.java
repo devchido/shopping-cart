@@ -79,8 +79,8 @@ public class ProductResources {
 
     //delete by id
     @DeleteMapping("/auth/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        productService.delete(id);
+    public ResponseEntity<?> delete(@PathVariable("id") String id) {
+        return ResponseEntity.ok(productService.delete(id));
     }
 
     @GetMapping("/api/find-all-product")

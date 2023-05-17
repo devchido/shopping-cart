@@ -92,7 +92,7 @@ function CreateProduct() {
             data.get("price") === "" ||
             data.get("discount") === "" ||
             data.get("quantity") === "" ||
-            data.get("content") === "" ||
+            
             data.get("photos").name === "" ||
             data.get("photos").name === null
         ) {
@@ -267,6 +267,7 @@ function CreateProduct() {
                                                 id="form1"
                                                 name="content"
                                                 type="text"
+                                                defaultValue={""}
                                                 rows={3}
                                                 className="form-control w-75"
                                             />

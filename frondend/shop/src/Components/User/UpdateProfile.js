@@ -5,6 +5,7 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
+import API from "../Api/Api";
 
 export default function UpdateProfile() {
     const [user, setUser] = React.useState({});

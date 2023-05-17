@@ -66,6 +66,11 @@ public class AuthenticationController {
             return null;
         }
     }
+    // todo: forgot password
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody AuthenticationRequest request){
+        return ResponseEntity.ok(service.forgotPassword(request));
+    }
 
     // todo: đổi mật khẩu
     @PostMapping("/change-password")

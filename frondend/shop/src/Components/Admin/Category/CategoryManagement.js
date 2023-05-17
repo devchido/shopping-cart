@@ -91,16 +91,6 @@ function CategoryManagement() {
         // setRole(event.target.value);
         loadDataCategory();
     };
-    //
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    // Đóng menu
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);

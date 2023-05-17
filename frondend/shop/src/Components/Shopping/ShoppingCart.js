@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { IconButton } from "@mui/material";
+import { DialogContentText, IconButton, Stack } from "@mui/material";
 //
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Snackbar } from "@mui/material";
@@ -17,6 +17,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+//
+import { VND } from "../Unity/VND";
 
 export default function ShoppingCart() {
     const [cart, setCart] = React.useState({});
@@ -24,14 +26,26 @@ export default function ShoppingCart() {
     const [loading, setLoading] = React.useState(false);
     const [cartItem, setCartItem] = React.useState();
     const [quantity, setQuantity] = React.useState(0);
+    const [totalValue, setTotalValue] = React.useState(0);
+    const [discountValue, setDistcountValue] = React.useState(0);
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
     //
     const [open, setOpen] = React.useState(false);
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     const navigation = useNavigate();
+
+    const handleClickOpenDialog = () => {
+        // console.log(item);
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
 
     const handleClickOpen = (item) => {
         console.log(item);
@@ -82,6 +96,8 @@ export default function ShoppingCart() {
                         console.log("cart-item", result);
                         setLoading(false);
                         setCartDetail(result);
+                        setTotalValue(result.reduce((acc, cur) => acc + cur.quantity * cur.price, 0));
+                        setDistcountValue(result.reduce((acc, cur) => acc + cur.price * (cur.discount / 100) * cur.quantity, 0));
                     })
                     .catch((error) => console.log("error", error));
             })
@@ -111,7 +127,7 @@ export default function ShoppingCart() {
                                         </p>
                                         <h6 style={{ color: "#9e9e9e" }}>Giảm giá: {item.product.discount}%</h6>
                                         <div className="row justify-content-between">
-                                            <p className="fw-bold col-auto">{item.product.price}vnd</p>
+                                            <p className="fw-bold col-auto">{VND.format(item.product.price)}</p>
 
                                             <div className=" d-flex col-auto">
                                                 <input
@@ -150,7 +166,9 @@ export default function ShoppingCart() {
                         ))}
                     </>
                 ) : (
-                    <>Chưa có sản phẩm</>
+                    <Stack sx={{ width: "100%" }} spacing={2}>
+                        <Alert severity="info">Giỏ hàng chưa có sản phẩm nào!</Alert>
+                    </Stack>
                 )}
             </div>
         );
@@ -282,6 +300,7 @@ export default function ShoppingCart() {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
             setSnackbarMsg("Giỏ hàng chưa có sản phẩm nào!");
+            handleCloseDialog();
         } else {
             if (
                 cart.line1 === "" ||
@@ -294,6 +313,7 @@ export default function ShoppingCart() {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Thông tin giỏ hàng không hợp lệ!");
+                handleCloseDialog();
             } else {
                 fetch("/order/auth/createByCart?idCart=" + cart.id, {
                     method: "POST",
@@ -314,6 +334,7 @@ export default function ShoppingCart() {
                         setSnackbarSeverity("success");
                         setSnackbarMsg("Thành công.");
                         loadDataCart();
+                        handleCloseDialog();
                         navigation(`/orders/${result.id}`);
                     })
                     .catch((error) => {
@@ -321,6 +342,7 @@ export default function ShoppingCart() {
                         setSnackbarOpen(true);
                         setSnackbarSeverity("error");
                         setSnackbarMsg("False");
+                        handleCloseDialog();
                     });
             }
         }
@@ -453,17 +475,18 @@ export default function ShoppingCart() {
                                     }
                                 }}
                             />
-
-                            <IconButton
-                                sx={{ mx: 1 }}
-                                onClick={() => {
-                                    if (quantity < cartItem.product.quantity) {
-                                        setQuantity((i) => i + 1);
-                                    }
-                                }}
-                            >
-                                <AddIcon className="text-primary" />
-                            </IconButton>
+                            {cartItem.status === 1 ? (
+                                <IconButton
+                                    sx={{ mx: 1 }}
+                                    onClick={() => {
+                                        if (quantity < cartItem.product.quantity) {
+                                            setQuantity((i) => i + 1);
+                                        }
+                                    }}
+                                >
+                                    <AddIcon className="text-primary" />
+                                </IconButton>
+                            ) : null}
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Huỷ</Button>
@@ -471,6 +494,22 @@ export default function ShoppingCart() {
                         </DialogActions>
                     </>
                 ) : null}
+            </Dialog>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Đặt hàng</DialogTitle>
+
+                <DialogContent className="d-flex justify-content-center">
+                    <DialogContentText>Bạn có muốn đặt hàng ngay bây giờ?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog}>Không</Button>
+                    <Button onClick={handleOrderNow}>Đặt hàng</Button>
+                </DialogActions>
             </Dialog>
             <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container h-100 py-5">
@@ -485,18 +524,22 @@ export default function ShoppingCart() {
                                                 <p className="pt-3  fw-bold ">{cartDetail.length} item</p>
                                             </div>
                                             {loading ? <Loading /> : <ShowCartItem />}
-
-                                            {/* <div className="d-flex justify-content-between px-x">
-                                                <p className="fw-bold">Discount:</p>
-                                                <p className="fw-bold">95$</p>
+                                            <div className="d-flex justify-content-between px-x">
+                                                <p className="fw-bold">Sub total:</p>
+                                                <p className="fw-bold">{VND.format(totalValue)}</p>
                                             </div>
+                                            <div className="d-flex justify-content-between px-x">
+                                                <p className="fw-bold">Discount:</p>
+                                                <p className="fw-bold">{VND.format(discountValue)}</p>
+                                            </div>
+
                                             <div
                                                 className="d-flex justify-content-between p-2 mb-2"
                                                 style={{ backgroundColor: "#e1f5fe" }}
                                             >
                                                 <h5 className="fw-bold mb-0">Total:</h5>
-                                                <h5 className="fw-bold mb-0">2261$</h5>
-                                            </div> */}
+                                                <h5 className="fw-bold mb-0">{VND.format(totalValue - discountValue)}</h5>
+                                            </div>
                                         </div>
                                         <div className="col-lg-6 px-5 py-4">
                                             <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">Thông tin</h3>
@@ -516,10 +559,7 @@ export default function ShoppingCart() {
                                                     {cart.status === 0 ? (
                                                         <>
                                                             <span>
-                                                                <button
-                                                                    type="submit"
-                                                                    className="btn btn-outline-dark btn-block  "
-                                                                >
+                                                                <button type="submit" className="btn btn-warning btn-block  ">
                                                                     Cập nhật
                                                                 </button>
                                                             </span>
@@ -527,10 +567,10 @@ export default function ShoppingCart() {
                                                             <span>
                                                                 <button
                                                                     type="button"
-                                                                    className="btn btn-dark btn-block"
-                                                                    onClick={handleOrderNow}
+                                                                    className="btn btn-info btn-block"
+                                                                    onClick={handleClickOpenDialog}
                                                                 >
-                                                                    Order now
+                                                                    Đặt hàng
                                                                 </button>
                                                             </span>
                                                         </>

@@ -2,6 +2,7 @@ import React from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { Link, useParams } from "react-router-dom";
+import API from "../Api/Api";
 export default function UserView() {
     // Đang lỗi
     const [user, setUser] = React.useState({});

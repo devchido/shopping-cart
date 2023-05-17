@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import API from "../Api/Api";
 
 const theme = createTheme();
 
@@ -22,8 +23,6 @@ export default function SingIn() {
             email: data.get("email"),
             password: data.get("password"),
         });
-
-        
 
         //
         var myHeaders = new Headers();
@@ -41,7 +40,7 @@ export default function SingIn() {
             redirect: "follow",
         };
 
-        fetch("/api/v1/auth/authenticate", requestOptions)
+        fetch(API + "/api/v1/auth/authenticate", requestOptions)
             .then((response) => {
                 console.log(response);
                 if (response.ok) {
@@ -104,6 +103,11 @@ export default function SingIn() {
                             Đăng nhập
                         </Button>
                         <Grid container>
+                            <Grid item xs>
+                                <Link to={"/forgot-password"} variant="body2">
+                                    {"Quên mật khẩu?"}
+                                </Link>
+                            </Grid>
                             <Grid item>
                                 <Link to={"/singup"} variant="body2">
                                     {"Bạn chưa có tài khoản? Đăng ký"}

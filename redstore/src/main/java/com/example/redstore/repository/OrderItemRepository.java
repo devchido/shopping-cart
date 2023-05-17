@@ -1,6 +1,7 @@
 package com.example.redstore.repository;
 
 import com.example.redstore.domain.OrderItem;
+import com.example.redstore.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, String> {
 
     @Query(value = "select oi.* from "+ db +".order_item oi where order_id = :orderId and status = 0", nativeQuery = true)
     Optional<OrderItem> checkStatus(Long orderId);
+
+    Optional<OrderItem> findOrderItemByProducts(Product product);
+
+    boolean existsByProducts(Product product);
 }

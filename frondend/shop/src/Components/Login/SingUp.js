@@ -16,6 +16,7 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert } from "@mui/material";
+import API from "../Api/Api";
 
 const theme = createTheme();
 
@@ -30,13 +31,13 @@ export default function SignUp() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            mobile: data.get("mobile"),
-            password: data.get("password"),
-        });
+        // console.log({
+        //     firstName: data.get("firstName"),
+        //     lastName: data.get("lastName"),
+        //     email: data.get("email"),
+        //     mobile: data.get("mobile"),
+        //     password: data.get("password"),
+        // });
         if (
             data.get("firstName") === "" ||
             data.get("lastName") === "" ||
@@ -48,11 +49,11 @@ export default function SignUp() {
             setSnackbarSeverity("error");
             setSnackbarMsg("Thông tin không đầy đủ!");
         } else {
-            fetch("/api/v1/auth/check-email?email=" + data.get("email")).then((resp) => {
+            fetch(API + "/api/v1/auth/check-email?email=" + data.get("email")).then((resp) => {
                 resp.text().then((result) => {
                     // console.log(result);
                     if (result === "") {
-                        fetch("/api/v1/auth/check-mobile?mobile=" + data.get("mobile")).then((resp) => {
+                        fetch(API + "/api/v1/auth/check-mobile?mobile=" + data.get("mobile")).then((resp) => {
                             resp.text().then((result) => {
                                 // console.log(result);
                                 if (result === "") {

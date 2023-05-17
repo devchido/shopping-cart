@@ -34,6 +34,7 @@ public class ProductService {
     private final UserRepository userRepository;
     private final ImageProductRepository imageProductRepository;
     private final ProductReviewRepository productReviewRepository;
+    private final OrderItemRepository orderItemRepository;
 
     // Create new user
     /*
@@ -127,12 +128,19 @@ public class ProductService {
 
     // Delete user
     @Transactional
-    public void delete(Long id) {
-        Product product = productRepository.findById(String.valueOf(id)).orElseThrow();
-        if (SecurityUtils.getPrincipal().getId() == product.getUsers().getId()) {
-            productRepository.deleteById(String.valueOf(id));
-            System.out.println("Thực thi delete");
-        } else new String("Không thể xoá");
+    public String delete(String id) {
+        Product product = productRepository.findById(id).orElseThrow();
+        if (orderItemRepository.existsByProducts(product)){
+            return "Bạn không thể xoá sản phẩm này vì nó đã được sử dụng trong một đơn hàng.";
+        } else {
+            if (SecurityUtils.getPrincipal().getId() == product.getUsers().getId()) {
+                productRepository.delete(product);
+                return "Thực thi delete";
+            } else {
+                return "Không thể xoá sản phẩm này vì bạn không phải là người tạo nó.";
+            }
+        }
+
 
     }
 

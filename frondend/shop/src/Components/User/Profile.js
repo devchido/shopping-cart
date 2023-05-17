@@ -2,6 +2,7 @@ import React from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { Link } from "react-router-dom";
+import API from "../Api/Api";
 function Profile() {
     const [user, setUser] = React.useState({});
 

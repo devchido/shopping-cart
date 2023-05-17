@@ -1,7 +1,7 @@
 import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Divider, InputBase, Paper, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
@@ -25,6 +25,11 @@ function Product() {
     const [title, setTitle] = React.useState("");
     // loading
     const [loading, setLoading] = React.useState(false);
+    // chuyển trang chi tiết sản phẩm
+    const navigation = useNavigate();
+    const handleClick = (item) => {
+        navigation(`/product/${item.slug}`);
+    };
 
     // Sự kiện
     const handleChange = (event, value) => {
@@ -58,8 +63,15 @@ function Product() {
                         {product.map((item, i) => {
                             return (
                                 <div className="col-lg-3 col-md-4 col-sm-6 mb-4 col-auto p-2" key={i}>
-                                    <div className="card h-100 text-center p-2" style={{maxWidth: "320px"}}>
-                                        <img src={item.photos} className="card-img-top w-auto " title={item.title} alt={item.title} height="250px" />
+                                    <div className="card h-100 text-center p-2" style={{ maxWidth: "300px", width: "auto" }}>
+                                        <img
+                                            src={item.photos}
+                                            className="card-img-top w-auto"
+                                            title={item.title}
+                                            alt={item.title}
+                                            height="250px"
+                                            onClick={() => handleClick(item)}
+                                        />
                                         <div className="card-body">
                                             <div className="mask">
                                                 <div className="d-flex justify-content-center h-100">
@@ -76,13 +88,14 @@ function Product() {
                                             <h5
                                                 className="card-title mb-0 text-nowrap text-truncate text-capitalize"
                                                 title={item.title}
+                                                onClick={()=> handleClick(item)}
                                             >
                                                 {item.title}
                                             </h5>
                                             <p className="card-text lead fw-bold">{VND.format(item.price)}</p>
-                                            <Link to={`/product/${item.slug}`} className="btn btn-outline-dark">
+                                            {/* <Link to={`/product/${item.slug}`} className="btn btn-outline-dark">
                                                 Details
-                                            </Link>
+                                            </Link> */}
                                         </div>
                                     </div>
                                 </div>
@@ -97,7 +110,7 @@ function Product() {
             </>
         );
     };
-    
+
     React.useEffect(() => {
         loadDataProduct();
     }, [page, offset]);

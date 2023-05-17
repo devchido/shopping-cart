@@ -1,19 +1,19 @@
 import React from "react";
-import { Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "../Home/Home";
 import Admin from "../Admin/Admin";
 import Product from "../Product/Product";
 import SingleProduct from "../Product/SingleProduct";
 import SingIn from "../Login/SingIn";
-import SingUp from "../Login/SingUp"
+import SingUp from "../Login/SingUp";
 import Profile from "../User/Profile";
 import UpdateProfile from "../User/UpdateProfile";
 import Carts from "../Shopping/Carts";
 import CartDetail from "../Shopping/CartDetail";
 import CartAdd from "../Shopping/CartAdd";
-import CreateProducts from "../Manager/CreateProducts"
+import CreateProducts from "../Manager/CreateProducts";
 import VerticalTabs from "../Layout/VerticalTabs";
-import Test from "../Test/Test"
+import Test from "../Test/Test";
 import Orders from "../Order/Orders";
 import OrderDetail from "../Order/OrderDetail";
 import ListProducts from "../Manager/ListProducts";
@@ -34,13 +34,14 @@ import TransactionDetail from "../Transaction/TransactionDetail";
 import ShoppingCart from "../Shopping/ShoppingCart";
 import ChangePassword from "../Login/ChangePassword";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
+import ForgotPassWord from "../Login/ForgotPassWord";
 
 function Router() {
     return (
         <Routes>
             {/* Home */}
             <Route path="/" element={<Home />}></Route>
-            
+
             {/* Admin management */}
             <Route path="/admin" element={<Admin />}></Route>
             {/* User management */}
@@ -74,6 +75,7 @@ function Router() {
             {/* Login */}
             <Route path="/singin" element={<SingIn />}></Route>
             <Route path="/singup" element={<SingUp />}></Route>
+            <Route path="/forgot-password" element={<ForgotPassWord />} />
 
             {/* User View */}
             <Route path="/user/:id" element={<UserView />}></Route>
@@ -82,7 +84,7 @@ function Router() {
             {/* Update profile */}
             <Route path="/profile/update" element={<UpdateProfile />}></Route>
             {/* ChangePassword */}
-            <Route path="/change-password" element={<ChangePassword/>} ></Route>
+            <Route path="/change-password" element={<ChangePassword />}></Route>
 
             {/* Carts: Trang quản lý các giỏ hảng */}
             <Route path="/carts" element={<ShoppingCart />}></Route>
@@ -91,12 +93,14 @@ function Router() {
             {/* carts/add-cart : Thêm giỏ hàng mới */}
             <Route path="/carts/add-cart" element={<CartAdd />}></Route>
             {/* Orders */}
-            <Route path="/orders" element={<Orders/>}></Route>
-            <Route path="/orders/:id" element={<OrderDetail/>}></Route>
+            <Route path="/orders" element={<Orders />}></Route>
+            <Route path="/orders/:id" element={<OrderDetail />}></Route>
             {/* Transaction */}
-            <Route path="/transaction/:id" element={<TransactionDetail/>}> </Route>
+            <Route path="/transaction/:id" element={<TransactionDetail />}>
+                {" "}
+            </Route>
             {/* Manage: Trang quản lý product của user */}
-            <Route path= "/management/list-products" element={<ListProducts/>}></Route>
+            <Route path="/management/list-products" element={<ListProducts />}></Route>
             {/* Created Products: Tạo sản phẩm mới */}
             <Route path="/management/create-products" element={<CreateProducts />}></Route>
             {/* Update Product: Cập nhật sản phẩm  */}

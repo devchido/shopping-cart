@@ -59,7 +59,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     @Query(value = "select p.* from " + db + ".product p where slug = :slug", nativeQuery = true)
     Product findProductBySlug(@Param("slug") String Slug);
 
-    // Hiển thị tất cả các product có status =1 : trạng thái được hiển thị trên shop
+    // Hiển thị tất cả các product có status =1 : trạng thái được hiển thị trên "+db+
     @Query(value = "select p.* from " + db + ".product p where status = 1", nativeQuery = true)
     List<Product> findProductByStatus();
     // todo: Lastest Product
@@ -71,5 +71,10 @@ public interface ProductRepository extends JpaRepository<Product, String> {
             " limit 4", nativeQuery = true)
     List<Product> lastestProduct(@Param("field") String field);
 
-
+    @Query(value = "DELETE  "+db+".image_product, "+db+".product_category, "+db+".product " +
+            "FROM "+db+".product " +
+            "LEFT JOIN "+db+".product_category ON product.id = product_category.product_id " +
+            "LEFT JOIN "+db+".image_product ON product.id = image_product.product_id " +
+            "WHERE product.id = :id ", nativeQuery = true)
+    Product deleteProductById(@Param("id") String id);
 }

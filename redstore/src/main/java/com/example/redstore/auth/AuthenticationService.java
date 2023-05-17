@@ -180,4 +180,13 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+    public Boolean forgotPassword(AuthenticationRequest request){
+        Optional<User> user = userRepository.findByEmail(request.getEmail());
+        if (user.isPresent()){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }

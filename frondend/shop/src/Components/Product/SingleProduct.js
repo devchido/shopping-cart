@@ -34,7 +34,6 @@ function SingleProduct() {
         users: {},
         rating: {},
     });
-    const [category, setCategory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [quantity, setQuantity] = React.useState(1);
     // đánh giá
@@ -54,7 +53,6 @@ function SingleProduct() {
     const handleClickOpen = () => {
         // console.log(item);
         setOpen(true);
-        
     };
     const handleClose = () => {
         setOpen(false);
@@ -239,20 +237,27 @@ function SingleProduct() {
 
                     {localStorage.getItem("token") !== null ? (
                         <>
-                            <button
-                                className="btn btn-info ms-2 px-3 py-2"
-                                onClick={() => {
-                                    if (quantity <= 0) {
-                                        setSnackbarOpen(true);
-                                        setSnackbarSeverity("error");
-                                        setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
-                                    } else {
-                                        handleAddToCart();
-                                    }
-                                }}
-                            >
-                                Add to Cart
-                            </button>
+                            {product.status === 1 ? (
+                                <button
+                                    className="btn btn-info ms-2 px-3 py-2"
+                                    onClick={() => {
+                                        if (quantity <= 0) {
+                                            setSnackbarOpen(true);
+                                            setSnackbarSeverity("error");
+                                            setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
+                                        } else {
+                                            handleAddToCart();
+                                        }
+                                    }}
+                                >
+                                    Add to Cart
+                                </button>
+                            ) : <button
+                            className="btn btn-danger ms-2 px-3 py-2"
+                            
+                        >
+                            Sản phẩm hiện không hoạt động
+                        </button>}
 
                             <button className="btn btn-warning ms-2 px-3 py-2" onClick={handleClickOpen}>
                                 Đánh giá
@@ -384,7 +389,7 @@ function SingleProduct() {
                                 display: "flex",
                             }}
                         >
-                            <Rating name="customized-10" defaultValue={ (dataRating.rating) } max={10} readOnly />
+                            <Rating name="customized-10" defaultValue={dataRating.rating} max={10} readOnly />
                         </Box>
                         <Box
                             sx={{

@@ -37,7 +37,7 @@ insert into `shop`.`token_seq` values ( 1 );
 -- Bảng product
 CREATE TABLE `shop`.`product` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `user_id` BIGINT NOT NULL,
+  `user_id` BIGINT NULL,
   `title` VARCHAR(75) NOT NULL,
   `slug` VARCHAR(100) NOT NULL,
   `summary` TEXT NULL,
@@ -69,19 +69,20 @@ CREATE TABLE `shop`.`category` (
 -- Bảng product_category
 CREATE TABLE `shop`.`product_category` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `product_id` BIGINT NOT NULL,
+  `product_id` BIGINT NULL,
   `category_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_pc_product`
     FOREIGN KEY (`product_id`)
     REFERENCES `shop`.`product` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_pc_category`
     FOREIGN KEY (`category_id`)
     REFERENCES `shop`.`category` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON DELETE CASCADE
+	ON UPDATE NO ACTION
+  );
     
 -- bảng cart
 CREATE TABLE `shop`.`cart` (
@@ -121,14 +122,15 @@ CREATE TABLE `shop`.`cart_item` (
   CONSTRAINT `fk_cart_item_product`
     FOREIGN KEY (`product_id`)
     REFERENCES `shop`.`product` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION);
 ALTER TABLE `shop`.`cart_item` 
 ADD CONSTRAINT `fk_cart_item_cart`
   FOREIGN KEY (`cart_id`)
   REFERENCES `shop`.`cart` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION
+  ;
   
 -- Bảng order
 CREATE TABLE `shop`.`order` (
@@ -162,7 +164,7 @@ CREATE TABLE `shop`.`order` (
 -- Bảng order_item
 CREATE TABLE `shop`.`order_item` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `product_id` BIGINT NOT NULL,
+  `product_id` BIGINT NULL,
   `order_id` BIGINT NOT NULL,
   `price` FLOAT NOT NULL DEFAULT 0,
   `discount` FLOAT NOT NULL DEFAULT 0,
@@ -222,7 +224,7 @@ CREATE TABLE `shop`.`comment` (
   CONSTRAINT `fk_comments_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `shop`.`user` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
 );
 CREATE TABLE `shop`.`image_user` (
@@ -238,9 +240,11 @@ CREATE TABLE `shop`.`image_product` (
   `imagedata` longblob,
   `name` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
-  `product_id` bigint NOT NULL,
+  `product_id` bigint NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_image_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
 );
 CREATE TABLE `shop`.`product_review` (
   `id` bigint NOT NULL AUTO_INCREMENT,

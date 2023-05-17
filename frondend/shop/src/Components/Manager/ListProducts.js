@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Autocomplete, Avatar, CardHeader, Stack, TableFooter, TextField } from "@mui/material";
+import { Autocomplete, Avatar, Button, CardHeader, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TableFooter, TextField } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -46,6 +46,9 @@ function ListProducts() {
     const [totalElements, setTotalElements] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [sort, setSort] = React.useState("ASC");
+    // dialog delete
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [dialogItem, setDialogItem] = React.useState();
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -57,21 +60,53 @@ function ListProducts() {
         setPage(0);
         loadDataProduct();
     };
-    const navigation = useNavigate();
     const handleChange = (event) => {
         setStatus(event.target.value);
         loadDataProduct();
     };
-    //
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    // dialog
+
+    const handleClickOpenDialog = (item) => {
+        // console.log(item);
+        setOpenDialog(true);
+        setDialogItem(item);
     };
-    // Đóng menu
-    const handleClose = () => {
-        setAnchorEl(null);
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setDialogItem();
     };
+    const handleDelete = () => {
+        fetch(
+            `/product/auth/${dialogItem.id}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("warning");
+                setSnackbarMsg(result);
+                handleCloseDialog();
+                loadDataProduct();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Sản phẩm này hiện không thể xoá!");
+                handleCloseDialog();
+            });
+    }
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);
@@ -133,6 +168,28 @@ function ListProducts() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                {dialogItem ? (
+                    <>
+                        <DialogTitle id="alert-dialog-title">Xoá sản phẩm</DialogTitle>
+
+                        <DialogContent className="d-flex justify-content-center">
+                            <DialogContentText>Bạn có muốn xoá sản phẩm <b>{dialogItem.title}</b> không?</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog}>Không</Button>
+                            <Button onClick={handleDelete}>
+                                Xoá
+                            </Button>
+                        </DialogActions>
+                    </>
+                ) : null}
+            </Dialog>
             <section className="h-100 gradient-custom">
                 <div className="container py-5">
                     <div className="row d-flex justify-content-center my-4">
@@ -284,7 +341,7 @@ function ListProducts() {
                                                                                 <BorderColorIcon />
                                                                             </IconButton>
                                                                         </Link>
-                                                                        <IconButton color="error" title="Remove">
+                                                                        <IconButton color="error" title="Remove" onClick={() => handleClickOpenDialog(item)}>
                                                                             <DeleteIcon />
                                                                         </IconButton>
                                                                     </div>

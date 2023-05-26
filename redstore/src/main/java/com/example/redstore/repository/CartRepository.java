@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, String> {
-    List<Cart> findAllByUsersId(Long userId);
+    List<Cart> findAllByUserId(Long userId);
     String db = "shop";
     /*
         todo: các trạng thái của cart

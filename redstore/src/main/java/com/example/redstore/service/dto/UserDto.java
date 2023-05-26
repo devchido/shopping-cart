@@ -20,7 +20,7 @@ public class UserDto {
     private String email;
     private String password;
     private Integer vendor;
-    private Instant createAt;
+    private Instant createdAt;
     private String photos;
     private String intro;
     private String profile;

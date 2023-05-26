@@ -30,8 +30,9 @@ import { format } from "date-fns";
 export default function UserDetailManagement() {
     const { id } = useParams();
     const [user, setUser] = React.useState({
-        createAt: new Date(),
+        createdAt: new Date(),
     });
+    const [vendor, setVendor] = React.useState({});
     const [role, setRole] = React.useState({});
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -70,6 +71,7 @@ export default function UserDetailManagement() {
             .then((result) => {
                 console.log("user", result);
                 setUser(result);
+                setVendor(result.vendor);
                 setRole(result.role);
                 handleClose();
             })
@@ -138,6 +140,7 @@ export default function UserDetailManagement() {
                     email: data.get("email"),
                     intro: data.get("intro"),
                     profile: data.get("profile"),
+                    vendor: vendor,
                     role: data.get("role"),
                 }),
             }
@@ -238,35 +241,57 @@ export default function UserDetailManagement() {
                                     <div className="d-flex justify-content-between">
                                         <div className="form-outline  mt-4 col-lg-5 ">
                                             <label className="form-label">Họ</label>
-                                            <input type="text" name="firstName" defaultValue={user.firstName} className="form-control"  />
+                                            <input
+                                                type="text"
+                                                name="firstName"
+                                                defaultValue={user.firstName}
+                                                className="form-control"
+                                            />
                                         </div>
                                         <div className="form-outline  mt-4 col-lg-5 ">
                                             <label className="form-label">Tên</label>
-                                            <input type="text" name="lastName" defaultValue={user.lastName} className="form-control"  />
+                                            <input
+                                                type="text"
+                                                name="lastName"
+                                                defaultValue={user.lastName}
+                                                className="form-control"
+                                            />
                                         </div>
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Mobile</label>
-                                        <input type="text" name="mobile" defaultValue={user.mobile} className="form-control"  />
+                                        <input type="text" name="mobile" defaultValue={user.mobile} className="form-control" />
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Email</label>
-                                        <input type="text" name="email" defaultValue={user.email} className="form-control"  />
+                                        <input type="text" name="email" defaultValue={user.email} className="form-control" />
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Intro</label>
-                                        <textarea type="text" rows={4} name="intro" defaultValue={user.intro} className="form-control"  />
+                                        <textarea
+                                            type="text"
+                                            rows={4}
+                                            name="intro"
+                                            defaultValue={user.intro}
+                                            className="form-control"
+                                        />
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Profile</label>
-                                        <textarea type="text" rows={4} name="profile" defaultValue={user.profile} className="form-control"  />
+                                        <textarea
+                                            type="text"
+                                            rows={4}
+                                            name="profile"
+                                            defaultValue={user.profile}
+                                            className="form-control"
+                                        />
                                     </div>
 
                                     <div className="form-outline d-flex justify-content-between mt-4">
                                         <label className="form-label">Created At</label>
                                         <input
                                             type="datetime-local"
-                                            defaultValue={format(new Date(user.createAt), "yyyy-MM-dd'T'hh:mm:ss")}
+                                            defaultValue={format(new Date(user.createdAt), "yyyy-MM-dd'T'hh:mm:ss")}
                                             className="form-control w-auto"
                                             readOnly
                                         />
@@ -282,6 +307,30 @@ export default function UserDetailManagement() {
                                 <div className="card-body">
                                     <div className="form-outline">
                                         <input className="form-control" name="role" defaultValue={user.role} readOnly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card mb-4 ">
+                                <div className="card-header py-3">
+                                    <h5 className="mb-0">Quyền bán hàng</h5>
+                                </div>
+                                <div className="card-body">
+                                    <div className="form-outline">
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Vendor</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={vendor}
+                                                label="Vendor"
+                                                onChange={(e) => setVendor(e.target.value)}
+                                            >
+                                                <MenuItem value={0}>Huỷ kích hoạt</MenuItem>
+                                                <MenuItem value={1}>Kích hoạt</MenuItem>
+                                                <MenuItem value={2}>Chờ xác nhận</MenuItem>
+                                                <MenuItem value={3}>Cấm</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </div>
                                 </div>
                             </div>

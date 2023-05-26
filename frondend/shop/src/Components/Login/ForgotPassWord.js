@@ -68,7 +68,7 @@ export default function ForgotPassWord() {
                 } else {
                     setSnackbarOpen(true);
                     setSnackbarSeverity("error");
-                    setSnackbarMsg("Thông tin không hợp lệ. Nhập lại!");
+                    setSnackbarMsg("Thông tin không chính xác!");
                 }
             })
             .catch((error) => {

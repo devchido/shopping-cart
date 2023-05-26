@@ -179,7 +179,7 @@ export default function ShoppingCart() {
     const ShowDataCart = () => {
         return (
             <>
-                <div className="row">
+                {/* <div className="row">
                     <div className="col-md-6 mb-3">
                         <div className="form-outline">
                             <input type="text" className="form-control form-control-lg" defaultValue={cart.firstName} disabled />
@@ -192,8 +192,8 @@ export default function ShoppingCart() {
                             <label className="form-label">Tên</label>
                         </div>
                     </div>
-                </div>
-                <div className="form-outline mb-3">
+                </div> */}
+                {/* <div className="form-outline mb-3">
                     <input type="number" className="form-control form-control-lg" defaultValue={cart.mobile} disabled />
                     <label className="form-label" htmlFor="typeText">
                         Điện thoại
@@ -204,7 +204,7 @@ export default function ShoppingCart() {
                     <label className="form-label" htmlFor="typeText">
                         Email
                     </label>
-                </div>
+                </div> */}
                 <div className="form-outline mb-3">
                     <input
                         type="text"
@@ -518,7 +518,7 @@ export default function ShoppingCart() {
                             <div className="card shopping-cart" style={{ borderRadius: 15 }}>
                                 <div className="card-body text-black">
                                     <div className="row">
-                                        <div className="col-lg-6 px-5 py-4">
+                                        <div className="col-lg-8 px-5 py-4">
                                             <div className="d-flex justify-content-between">
                                                 <h3 className="mb-5 pt-2  fw-bold text-uppercase">Shopping-Cart</h3>
                                                 <p className="pt-3  fw-bold ">{cartDetail.length} item</p>
@@ -541,8 +541,8 @@ export default function ShoppingCart() {
                                                 <h5 className="fw-bold mb-0">{VND.format(totalValue - discountValue)}</h5>
                                             </div>
                                         </div>
-                                        <div className="col-lg-6 px-5 py-4">
-                                            <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">Thông tin</h3>
+                                        <div className="col-lg-4 px-5 py-4">
+                                            <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">Địa chỉ nhận hàng</h3>
                                             <form onSubmit={handleSubmit} className="mb-5">
                                                 <ShowDataCart />
                                                 <div className="d-flex justify-content-between">

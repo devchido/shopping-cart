@@ -66,7 +66,7 @@ public class AuthenticationController {
             return null;
         }
     }
-    // todo: forgot password
+    // todo: forgot password - quên mật khẩu
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody AuthenticationRequest request){
         return ResponseEntity.ok(service.forgotPassword(request));

@@ -21,11 +21,11 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User users;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
-    private Cart carts;
+    private Cart cart;
 
     @Column(name = "status", nullable = false)
     private Integer status;
@@ -61,7 +61,7 @@ public class Order {
     private String country;
 
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     Set<OrderItem> orderItemSet = new HashSet<>();
 
     @Column(name = "created_at", nullable = false)

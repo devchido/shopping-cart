@@ -23,7 +23,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, String> {
     @Query(value = "select oi.* from "+ db +".order_item oi where order_id = :orderId and status = 0", nativeQuery = true)
     Optional<OrderItem> checkStatus(Long orderId);
 
-    Optional<OrderItem> findOrderItemByProducts(Product product);
+    Optional<OrderItem> findOrderItemByProduct(Product product);
 
-    boolean existsByProducts(Product product);
+    boolean existsByProduct(Product product);
 }

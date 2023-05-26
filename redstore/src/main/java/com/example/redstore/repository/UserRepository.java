@@ -1,5 +1,6 @@
 package com.example.redstore.repository;
 
+import com.example.redstore.domain.Product;
 import com.example.redstore.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +44,7 @@ public interface UserRepository extends JpaRepository<User, String> {
             " and email like concat('%', :email , '%') " +
             " and role like concat('%', :role) "
             , nativeQuery = true)
-    Page<User> findAllUsers(Pageable pageable, String keyname, String mobile, String email, String role);
+    Page<User> findAllUser(Pageable pageable, String keyname, String mobile, String email, String role);
 
-
+    boolean existsByEmail(String email);
 }

@@ -31,7 +31,7 @@ function SingleProduct() {
     const { slug } = useParams();
     const [product, setProduct] = useState({
         id: "",
-        users: {},
+        user: {},
         rating: {},
     });
     const [loading, setLoading] = useState(false);
@@ -289,10 +289,10 @@ function SingleProduct() {
                         <h5 className="mb-0 text-capitalize">Người bán</h5>
                     </div>
                     <div className="card-body d-flex">
-                        <Avatar alt="Remy Sharp" src={product.users.photos} variant="rounded" />
+                        <Avatar alt="Remy Sharp" src={product.user.photos} variant="rounded" />
                         <p className="my-auto mx-3">
-                            <Link to={"/user/" + product.users.id}>
-                                <strong>{product.users.firstName + " " + product.users.lastName}</strong>
+                            <Link to={"/user/" + product.user.id}>
+                                <strong>{product.user.firstName + " " + product.user.lastName}</strong>
                             </Link>
                         </p>
                     </div>

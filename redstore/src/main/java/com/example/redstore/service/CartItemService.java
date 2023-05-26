@@ -136,7 +136,7 @@ public class CartItemService {
         CartItem cartItem = cartItemRepository.findById(id).orElse(null);
         Long userId = SecurityUtils.getPrincipal().getId();
         // Check người thực hiện có phải là người quản lý sản phẩm đó không
-        if (userId == cartItem.getProduct().getUsers().getId()) {
+        if (userId == cartItem.getProduct().getUser().getId()) {
             // get data của product được chọn by product's id from cartItem
             Product productId = productRepository.findById(String.valueOf(cartItem.getProduct().getId())).orElse(null);
             // Trả về dữ liệu cho sản phẩm sau khi xoá và lưu lại
@@ -161,7 +161,7 @@ public class CartItemService {
     public List<CartItemDto> findByCartId(Long cartId) {
         Long userSecurityId = SecurityUtils.getPrincipal().getId();
         Cart cartUser = cartRepository.findById(String.valueOf(cartId)).orElse(null);
-        if (userSecurityId == cartUser.getUsers().getId()) {
+        if (userSecurityId == cartUser.getUser().getId()) {
             List<CartItem> entity = cartItemRepository.findByCartId(cartId);
             List<CartItemDto> dtos = cartItemMapper.toDo(entity);
             return dtos;

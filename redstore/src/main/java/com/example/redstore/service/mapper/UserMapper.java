@@ -21,7 +21,7 @@ public class UserMapper implements EntityMapper<UserDto, User> {
         dto.setEmail(entity.getEmail());
         dto.setPassword(entity.getPassword());
         dto.setVendor(entity.getVendor());
-        dto.setCreateAt(entity.getCreateAt());
+        dto.setCreatedAt(entity.getCreatedAt());
         dto.setIntro(entity.getIntro());
         dto.setProfile(entity.getProfile());
         dto.setPhotos(entity.getPhotos());
@@ -39,7 +39,7 @@ public class UserMapper implements EntityMapper<UserDto, User> {
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());
         entity.setVendor(dto.getVendor());
-        entity.setCreateAt(dto.getCreateAt());
+        entity.setCreatedAt(dto.getCreatedAt());
         entity.setIntro(dto.getIntro());
         entity.setProfile(dto.getProfile());
         entity.setPhotos(dto.getPhotos());

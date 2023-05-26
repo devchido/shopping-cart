@@ -17,7 +17,7 @@ public class ProductMapper implements EntityMapper<ProductDto, Product>{
     public ProductDto toDo(Product entity) {
         ProductDto dto = new ProductDto();
         dto.setId(entity.getId());
-        dto.setUsers(userMapper.toDo(entity.getUsers()));
+        dto.setUser(userMapper.toDo(entity.getUser()));
         dto.setTitle(entity.getTitle());
         dto.setSlug(entity.getSlug());
         dto.setPhotos((entity.getPhotos()));

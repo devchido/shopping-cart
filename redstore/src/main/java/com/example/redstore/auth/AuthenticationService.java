@@ -9,7 +9,12 @@ import com.example.redstore.service.dto.UserDto;
 import com.example.redstore.token.Token;
 import com.example.redstore.token.TokenRepository;
 import com.example.redstore.token.TokenType;
+import com.example.redstore.util.EmailUtil;
+import com.example.redstore.util.EmailValidator;
+import com.example.redstore.util.OtpUtil;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,13 +33,26 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final OtpUtil otpUtil;
+    private final EmailUtil emailUtil;
 
     public AuthenticationResponse register(UserDto request) {
 
-        Optional<User> userOptionalEmail = userRepository.findByEmail(request.getEmail());
-        if (userOptionalEmail.isPresent()) {
-            throw new RuntimeException("Email: " + request.getEmail() + " đã được sử dụng.");
-        };
+//        Optional<User> userOptionalEmail = userRepository.findByEmail(request.getEmail());
+//        if (userRepository.existsByEmail(request.getEmail())) {
+//            throw new RuntimeException("Email: " + request.getEmail() + " đã được sử dụng.");
+//        }
+//        ;
+        String otp = otpUtil.generateOtp();
+        if (EmailValidator.isEmailValid(request.getEmail())){
+            System.out.println("Email is valid.");
+            try {
+                emailUtil.sendSingUpEmail(request.getFirstName(), request.getLastName(), request.getEmail(), otp);
+            } catch (MessagingException e) {
+                throw new RuntimeException("Unable to send otp please try again");
+            }
+        } else throw new RuntimeException("Email is not valid.");
+
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -42,8 +60,8 @@ public class AuthenticationService {
                 .mobile(request.getMobile())
                 .photos("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU")
                 .vendor(0)
-                .createAt(new Date().toInstant())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .createdAt(new Date().toInstant())
+                .password(passwordEncoder.encode(otp))
                 .role(Role.USER)
                 .build();
         var savedUser = userRepository.save(user);
@@ -53,6 +71,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
     /*
     http://localhost:8080/user/auth/updateInfo
     {
@@ -66,7 +85,7 @@ public class AuthenticationService {
         "profile": "RedStore"
       }
      */
-    public AuthenticationResponse updateInfo(UserDto dto){
+    public AuthenticationResponse updateInfo(UserDto dto) {
         var user = userRepository.findById(String.valueOf(SecurityUtils.getPrincipal().getId())).orElseThrow();
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
@@ -82,7 +101,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    public AuthenticationResponse updatePassUser(UserDto dto){
+    public AuthenticationResponse updatePassUser(UserDto dto) {
         var user = userRepository.findById(String.valueOf(SecurityUtils.getPrincipal().getId())).orElseThrow();
 //        user.setId(SecurityUtils.getPrincipal().getId());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -108,6 +127,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
@@ -158,11 +178,12 @@ public class AuthenticationService {
     /*
     Admin: Cập nhật quyền cho user
      */
-    public void updateRoleUser(String userId,String role){
-        var user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("Không tìm thấy user"+ userId));
+    public void updateRoleUser(String userId, String role) {
+        var user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy user" + userId));
         user.setRole(Role.valueOf(role));
         userRepository.save(user);
     }
+
     // todo: đổi mật khẩu cho user đăng nhập
     public AuthenticationResponse changePassword(String passOld, String passNew) {
         User user = SecurityUtils.getPrincipal();
@@ -180,11 +201,22 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-    public Boolean forgotPassword(AuthenticationRequest request){
-        Optional<User> user = userRepository.findByEmail(request.getEmail());
-        if (user.isPresent()){
+
+    public Boolean forgotPassword(AuthenticationRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if (user != null) {
+            String otp = otpUtil.generateOtp();
+            user.setPassword(passwordEncoder.encode(otp));
+            userRepository.save(user);
+            System.out.println("Đã đổi mật khâu cho email với mã otp là: " + otp);
+            try {
+                emailUtil.sendOtpEmail(request.getEmail(), otp);
+            } catch (MessagingException e) {
+                throw new RuntimeException("Unable to send otp please try again");
+            }
             return true;
         } else {
+            System.out.println("Không tìm thấy tài khoản!");
             return false;
         }
 

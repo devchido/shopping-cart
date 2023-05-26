@@ -61,7 +61,7 @@ public class ProductService {
         }
         ;
         Product entity = productMapper.toEntity(dto);
-        entity.setUsers(SecurityUtils.getPrincipal());
+        entity.setUser(SecurityUtils.getPrincipal());
         entity.setCreatedAt(Instant.now());
         entity.setUpdatedAt(Instant.now());
         entity.setStatus(2);
@@ -85,7 +85,7 @@ public class ProductService {
 
     public void edit(String id, ProductDto dto) {
         Product entity = productRepository.findById(id).orElse(null);
-        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+        if (SecurityUtils.getPrincipal().getId() == entity.getUser().getId()) {
             ImageProduct imageProduct = imageProductRepository.findByProduct(entity.getSlug()).orElseThrow(
                     () -> new RuntimeException("Không thấy ảnh")
             );
@@ -130,10 +130,10 @@ public class ProductService {
     @Transactional
     public String delete(String id) {
         Product product = productRepository.findById(id).orElseThrow();
-        if (orderItemRepository.existsByProducts(product)){
+        if (orderItemRepository.existsByProduct(product)){
             return "Bạn không thể xoá sản phẩm này vì nó đã được sử dụng trong một đơn hàng.";
         } else {
-            if (SecurityUtils.getPrincipal().getId() == product.getUsers().getId()) {
+            if (SecurityUtils.getPrincipal().getId() == product.getUser().getId()) {
                 productRepository.delete(product);
                 return "Thực thi delete";
             } else {

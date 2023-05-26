@@ -17,7 +17,7 @@ public class Cart {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User users;
+    private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private Set<CartItem> cartItem;
@@ -25,17 +25,17 @@ public class Cart {
     @Column(name = "status", nullable = false)
     private Integer status;
 
-    @Column(name = "first_name", length = 50)
-    private String firstName;
-
-    @Column(name = "last_name", length = 50)
-    private String lastName;
-
-    @Column(name = "mobile", length = 15)
-    private String mobile;
-
-    @Column(name = "email", length = 50)
-    private String email;
+//    @Column(name = "first_name", length = 50)
+//    private String firstName;
+//
+//    @Column(name = "last_name", length = 50)
+//    private String lastName;
+//
+//    @Column(name = "mobile", length = 15)
+//    private String mobile;
+//
+//    @Column(name = "email", length = 50)
+//    private String email;
 
     @Column(name = "line1", length = 50)
     private String line1;

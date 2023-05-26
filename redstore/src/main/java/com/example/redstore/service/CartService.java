@@ -46,18 +46,18 @@ public class CartService {
             Cart entity = new Cart();
             // Set userId
             User user = SecurityUtils.getPrincipal();
-            entity.setUsers(user);
+            entity.setUser(user);
 
             // Set trạng thái
             entity.setStatus(0);
             // Set first name
-            entity.setFirstName(user.getFirstName());
-            //Set Last Name
-            entity.setLastName(user.getLastName());
-            // Set Mobile
-            entity.setMobile(user.getMobile());
-            // Set Email
-            entity.setEmail(user.getEmail());
+//            entity.setFirstName(user.getFirstName());
+//            //Set Last Name
+//            entity.setLastName(user.getLastName());
+//            // Set Mobile
+//            entity.setMobile(user.getMobile());
+//            // Set Email
+//            entity.setEmail(user.getEmail());
             entity.setCountry("Việt Nam");
             // Set create at
             entity.setCreatedAt(Instant.now());
@@ -74,11 +74,11 @@ public class CartService {
     public void edit(Long id, CartDto dto) {
         Cart entity = cartRepository.findById(String.valueOf(id)).orElse(null);
         // Cập nhật thông tin user
-        User user = userRepository.findById(String.valueOf(entity.getUsers().getId())).orElse(null);
-        entity.setFirstName(user.getFirstName());
-        entity.setLastName(user.getLastName());
-        entity.setMobile(user.getMobile());
-        entity.setEmail(user.getEmail());
+        User user = userRepository.findById(String.valueOf(entity.getUser().getId())).orElse(null);
+//        entity.setFirstName(user.getFirstName());
+//        entity.setLastName(user.getLastName());
+//        entity.setMobile(user.getMobile());
+//        entity.setEmail(user.getEmail());
         // Cập nhật thông tin địa chỉ đơn hàng
         entity.setLine1(dto.getLine1());
         entity.setCity(dto.getCity());
@@ -95,7 +95,7 @@ public class CartService {
     @Transactional
     public void delete(String id) {
         Cart entity = cartRepository.findById(id).orElseThrow();
-        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+        if (SecurityUtils.getPrincipal().getId() == entity.getUser().getId()) {
             if (entity.getStatus() == 0) {
                 //
                 List<CartItem> cartItemList = cartItemRepository.findByCartId(Long.valueOf(id));
@@ -138,7 +138,7 @@ public class CartService {
     }
 
     public List<CartDto> findAllByUserId(Long userId) {
-        List<Cart> entity = cartRepository.findAllByUsersId(userId);
+        List<Cart> entity = cartRepository.findAllByUserId(userId);
         List<CartDto> dtos = cartMapper.toDo(entity);
         return dtos;
     }
@@ -146,7 +146,7 @@ public class CartService {
     //
     public CartDto findMyCartById(String id) {
         Cart entity = cartRepository.findById(id).orElse(null);
-        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+        if (SecurityUtils.getPrincipal().getId() == entity.getUser().getId()) {
             CartDto dto = cartMapper.toDo(entity);
             return dto;
         }

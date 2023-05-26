@@ -30,8 +30,8 @@ export default function TransactionDetail() {
     const [status, setStatus] = useState({});
     const [data, setData] = React.useState({
         id: "",
-        users: {},
-        orders: {},
+        user: {},
+        order: {},
         createdAt: new Date(),
         updatedAt: new Date(),
     });
@@ -174,7 +174,7 @@ export default function TransactionDetail() {
                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                             Mã phiếu order
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.orders.id}
+                                {data.order.id}
                             </span>
                         </li>
                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
@@ -199,37 +199,37 @@ export default function TransactionDetail() {
                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                             Người đặt hàng
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.users.firstName + " " + data.users.lastName}
+                                {data.user.firstName + " " + data.user.lastName}
                             </span>
                         </li>
                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                             Mobile
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.users.mobile}
+                                {data.user.mobile}
                             </span>
                         </li>
                         <li className="list-group-item d-flex justify-content-between align-items-center  px-0 ">
                             Email
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.users.email}
+                                {data.user.email}
                             </span>
                         </li>
                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                             Address
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.orders.line1}
+                                {data.order.line1}
                             </span>
                         </li>
                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                             City
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.orders.city}
+                                {data.order.city}
                             </span>
                         </li>
                         <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                             Country
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.orders.country}
+                                {data.order.country}
                             </span>
                         </li>
                         <li className="list-group-item d-flex justify-content-between align-items-center px-0">
@@ -247,7 +247,7 @@ export default function TransactionDetail() {
                                 </strong> */}
                             </div>
                             <span>
-                                <strong>{VND.format(data.orders.total)}</strong>
+                                <strong>{VND.format(data.order.total)}</strong>
                             </span>
                         </li>
                     </ul>
@@ -413,7 +413,7 @@ export default function TransactionDetail() {
                             {loading ? <Loading /> : <ShowDatadata />}
                             <div className="card mb-4 card-body ">
                                 <div className="row form-group ">
-                                    <Link to={`/orders/${data.orders.id}`} className="col-auto mx-auto mb-3">
+                                    <Link to={`/orders/${data.order.id}`} className="col-auto mx-auto mb-3">
                                         <button type="button" className="btn btn-dark btn-block ">
                                             Trở lại
                                         </button>

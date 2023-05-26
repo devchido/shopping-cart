@@ -15,12 +15,12 @@ public class CartMapper implements EntityMapper<CartDto, Cart>{
     public CartDto toDo(Cart entity) {
         CartDto dto = new CartDto();
         dto.setId(entity.getId());
-        dto.setUsers(userMapper.toDo(entity.getUsers()));
+        dto.setUser(userMapper.toDo(entity.getUser()));
         dto.setStatus(entity.getStatus());
-        dto.setFirstName(entity.getFirstName());
-        dto.setLastName(entity.getLastName());
-        dto.setMobile(entity.getMobile());
-        dto.setEmail(entity.getEmail());
+//        dto.setFirstName(entity.getFirstName());
+//        dto.setLastName(entity.getLastName());
+//        dto.setMobile(entity.getMobile());
+//        dto.setEmail(entity.getEmail());
         dto.setLine1(entity.getLine1());
         dto.setCity(entity.getCity());
         dto.setCountry(entity.getCountry());

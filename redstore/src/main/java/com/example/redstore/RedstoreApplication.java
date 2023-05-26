@@ -14,13 +14,4 @@ public class RedstoreApplication {
 		SpringApplication.run(RedstoreApplication.class, args);
 	}
 
-//	public WebMvcConfigurer configurer(){
-//		return new WebMvcConfigurer() {
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/*").allowedMethods("*");
-//			}
-//		};
-//	}
-
 }

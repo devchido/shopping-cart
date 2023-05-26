@@ -42,8 +42,8 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "create_at")
-    private Instant createAt;
+    @Column(name = "created_at")
+    private Instant createdAt;
     @Column(name = "vendor")
     private Integer vendor;
 

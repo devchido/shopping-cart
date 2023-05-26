@@ -37,13 +37,13 @@ public class OrderService {
 
     public List<OrderDto> findByUsers(String status) {
         Long users = SecurityUtils.getPrincipal().getId();
-        List<Order> entity = orderRepository.findByUsers(users, status);
+        List<Order> entity = orderRepository.findByUser(users, status);
         List<OrderDto> dtos = orderMapper.toDo(entity);
         return dtos;
     }
 
     public OrderDto findByCarts(Long carts) {
-        Order entity = orderRepository.findByCarts(carts).orElseThrow(()-> new RuntimeException("Không tìm thấy!"));
+        Order entity = orderRepository.findByCart(carts).orElseThrow(()-> new RuntimeException("Không tìm thấy!"));
         OrderDto dto = orderMapper.toDo(entity);
         return dto;
     }
@@ -57,17 +57,9 @@ public class OrderService {
 //        entity.setUsers(user);
         //Set cart
 
-        entity.setCarts(cart);
+        entity.setCart(cart);
         // Set user từ giỏ hàng cart
-        entity.setUsers(cart.getUsers());
-        //Set các thông tin liên quan
-        entity.setFirstName(cart.getFirstName());
-        //Set Last Name
-        entity.setLastName(cart.getLastName());
-        // Set Mobile
-        entity.setMobile(cart.getMobile());
-        // Set Email
-        entity.setEmail(cart.getEmail());
+        entity.setUser(cart.getUser());
         // Set địa chỉ giao hàng
         entity.setLine1(cart.getLine1());
         entity.setCity(cart.getCity());
@@ -85,17 +77,14 @@ public class OrderService {
 
         Order entity = orderMapper.toEntity(dto);
         Order order = orderRepository.findById(String.valueOf(id)).orElse(null);
-        Cart cart = cartRepository.findById(String.valueOf(order.getCarts())).orElse(null);
+        Cart cart = cartRepository.findById(String.valueOf(order.getCart())).orElse(null);
         //
         entity.setId(order.getId());
 
-        entity.setCarts(order.getCarts());
+        entity.setCart(order.getCart());
         // Set thông tin user
-        entity.setUsers(cart.getUsers());
-        entity.setFirstName(cart.getFirstName());
-        entity.setLastName(cart.getLastName());
-        entity.setMobile(cart.getMobile());
-        entity.setEmail(cart.getEmail());
+        entity.setUser(cart.getUser());
+
         // set update
         entity.setUpdatedAt(Instant.now());
         orderRepository.save(entity);
@@ -126,10 +115,10 @@ public class OrderService {
 
         Order order = cartMapOrderMapper.toEntity(cart);
         // todo: Lưu thông tin đính kèm của giỏ hàng
-        order.setFirstName(cart.getFirstName());
-        order.setLastName(cart.getLastName());
-        order.setMobile(cart.getMobile());
-        order.setEmail(cart.getEmail());
+        order.setFirstName(cart.getUser().getFirstName());
+        order.setLastName(cart.getUser().getLastName());
+        order.setMobile(cart.getUser().getMobile());
+        order.setEmail(cart.getUser().getEmail());
         order.setLine1(cart.getLine1());
         order.setCity(cart.getCity());
         order.setCountry(cart.getCountry());
@@ -155,7 +144,7 @@ public class OrderService {
         List<OrderItem> orderItem = orderItemMapper.toEntity(cartItem);
 
         orderItem.forEach(orderItem1 -> {
-            orderItem1.setOrders(order);
+            orderItem1.setOrder(order);
             // todo: tính giá trị tổng đơn hàng
             order.setSubTotal(order.getSubTotal() + orderItem1.getPrice() * orderItem1.getQuantity());
             // todo: tính giá trị tổng tiền được giảm của đơn hàng
@@ -177,7 +166,7 @@ public class OrderService {
 
     public OrderDto findOneById(String id) {
         Order entity = orderRepository.findById(id).orElse(null);
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+        if (entity.getUser().getId() == SecurityUtils.getPrincipal().getId()) {
             OrderDto dto = orderMapper.toDo(entity);
             return dto;
         }
@@ -193,7 +182,7 @@ public class OrderService {
         if (check.isEmpty()) {
             Transaction transaction = new Transaction();
             transaction.setOrder(entity);
-            transaction.setUsers(entity.getUsers());
+            transaction.setUser(entity.getUser());
             transaction.setType(0);
             transaction.setMode(0);
             transaction.setStatus(0);
@@ -238,7 +227,7 @@ public class OrderService {
     // todo: user xác nhận đơn hàng thành công 3 -> 4
     public void handleSuccessOrder(String id) {
         Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy order với id: " + id));
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+        if (entity.getUser().getId() == SecurityUtils.getPrincipal().getId()) {
             Transaction transaction = transactionRepository.findByOrderId(entity.getId()).orElseThrow(
                     () -> new RuntimeException("Không tìm thấy phiếu thanh toán"));
 
@@ -283,8 +272,8 @@ public class OrderService {
         // trả lại hàng cho cửa hàng
         List<OrderItem> orderItem = orderItemRepository.findOrderItemByOrderId(entity.getId());
         orderItem.forEach(orderItem1 -> {
-            Product product = productRepository.findById(String.valueOf(orderItem1.getProducts().getId()))
-                    .orElseThrow(() -> new RuntimeException("Không tìm thấy product: " + orderItem1.getProducts().getId()));
+            Product product = productRepository.findById(String.valueOf(orderItem1.getProduct().getId()))
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy product: " + orderItem1.getProduct().getId()));
             product.setQuantity((product.getQuantity() + orderItem1.getQuantity()));
             System.out.println("Trả lại hàng hoá cho cửa hàng");
             productRepository.save(product);
@@ -301,7 +290,7 @@ public class OrderService {
     // todo: user huỷ đơn hàng: 0 || 1 || 2 -> 5
     public void userCancelOrder(String id) {
         Order entity = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin order: " + id));
-        if (SecurityUtils.getPrincipal().getId() == entity.getUsers().getId()) {
+        if (SecurityUtils.getPrincipal().getId() == entity.getUser().getId()) {
             System.out.println("đúng người sở hữu");
             System.out.println("user huỷ order");
 
@@ -310,10 +299,10 @@ public class OrderService {
             List<OrderItem> orderItemList = orderItemRepository.findOrderItemByOrderId(entity.getId());
             // Xét từng item tìm được và trả lại số hàng đã order
             orderItemList.forEach(orderItem -> {
-                System.out.println("Thực hiện hoàn trả số lượn hàng cho product có id: " + orderItem.getProducts().getId() +
-                        "và có title: " + orderItem.getProducts().getTitle() + " với số lượng: " + orderItem.getQuantity());
+                System.out.println("Thực hiện hoàn trả số lượn hàng cho product có id: " + orderItem.getProduct().getId() +
+                        "và có title: " + orderItem.getProduct().getTitle() + " với số lượng: " + orderItem.getQuantity());
                 // Tìm kiếm sản phẩm trên hệ thống
-                Product product = productRepository.findById(String.valueOf(orderItem.getProducts().getId())).orElseThrow();
+                Product product = productRepository.findById(String.valueOf(orderItem.getProduct().getId())).orElseThrow();
                 // set data cho product
                 int quantity = product.getQuantity() + orderItem.getQuantity();
                 product.setQuantity(quantity);
@@ -366,7 +355,7 @@ public class OrderService {
         List<OrderItem> orderItemList = orderItemRepository.findOrderItemByOrderId(entity.getId());
         // todo: trả lại số hàng đã order
         orderItemList.forEach(orderItem -> {
-            Product product = productRepository.findById(String.valueOf(orderItem.getProducts().getId())).orElseThrow();
+            Product product = productRepository.findById(String.valueOf(orderItem.getProduct().getId())).orElseThrow();
             int quantity = product.getQuantity() + orderItem.getQuantity();
             product.setQuantity(quantity);
             product.setUpdatedAt(Instant.now());

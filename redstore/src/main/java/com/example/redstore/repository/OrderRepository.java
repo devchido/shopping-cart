@@ -32,11 +32,11 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     @Query(value = "SELECT t.* FROM " + db + ".order t " +
             "        WHERE user_id = :users and status like concat( :status )", nativeQuery = true)
-    List<Order> findByUsers(@Param("users") Long users, @Param("status") String status);
+    List<Order> findByUser(@Param("users") Long users, @Param("status") String status);
 
     @Query(value = "SELECT t.* FROM " + db + ".order t " +
             "        WHERE cart_id = :carts", nativeQuery = true)
-    Optional<Order> findByCarts(@Param("carts") Long carts);
+    Optional<Order> findByCart(@Param("carts") Long carts);
 
     @Query(value = "select o.* from " + db + ".order o where status = :status order by updated_at DESC ", nativeQuery = true)
     List<Order> filter(@Param("status") String status);

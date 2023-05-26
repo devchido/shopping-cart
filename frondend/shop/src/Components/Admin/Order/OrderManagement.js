@@ -298,7 +298,7 @@ function OrderManagement() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={item.users.photos}
+                                                                                src={item.user.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />

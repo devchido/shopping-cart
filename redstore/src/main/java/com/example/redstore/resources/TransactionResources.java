@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/transaction")
-public class TransactionResources {
+public class  TransactionResources {
     private final TransactionService transactionService;
 
     @PostMapping("/auth/create")

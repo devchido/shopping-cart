@@ -39,7 +39,7 @@ public class TransactionService {
 
         // Set order (Nếu có order với id đó thì nhận id đó, nếu không thì truyền tham số null)
         Order orderId = orderRepository.findById(String.valueOf(dto.getOrderId())).orElse(null);
-        entity.setUsers(orderId.getUsers());
+        entity.setUser(orderId.getUser());
         entity.setOrder(orderId);
         entity.setStatus(0);
         entity.setContent(orderId.getContent());
@@ -59,7 +59,7 @@ public class TransactionService {
         // Giữ nguyên bản order
         entity.setOrder(transaction.getOrder());
         // Giữ nguyên user tạo transaction
-        entity.setUsers(transaction.getUsers());
+        entity.setUser(transaction.getUser());
         // Giữ nguyên thời gian tạo
         entity.setCreatedAt(transaction.getCreatedAt());
         // Set update at
@@ -120,7 +120,7 @@ public class TransactionService {
     // todo: user hiển thị thông tin transaction theo id
     public TransactionDto findTransactionById(String id) {
         Transaction entity = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu transaction: " + id));
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+        if (entity.getUser().getId() == SecurityUtils.getPrincipal().getId()) {
             TransactionDto dto = transactionMapper.toDo(entity);
             return dto;
         } else {
@@ -139,7 +139,7 @@ public class TransactionService {
     // todo: user tìm đến transaction thông qua orderId
     public TransactionDto findByOrderId(Long orderId) {
         Transaction entity = transactionRepository.findByOrderId(orderId).orElseThrow(() -> new RuntimeException("Không tìm thấy transaction qua orderId"));
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+        if (entity.getUser().getId() == SecurityUtils.getPrincipal().getId()) {
             TransactionDto dto = transactionMapper.toDo(entity);
             return dto;
         } else {
@@ -159,7 +159,7 @@ public class TransactionService {
     public void paymentUser(String id) {
         Transaction entity = transactionRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Không tìm thấy transaction, id: " + id));
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+        if (entity.getUser().getId() == SecurityUtils.getPrincipal().getId()) {
             entity.setStatus(1);
             transactionRepository.save(entity);
             System.out.println("transaction đã được thanh toán");
@@ -179,7 +179,7 @@ public class TransactionService {
     public void refundedTransaction(String id) {
         Transaction entity = transactionRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Không tìm thấy transaction, id: " + id));
-        if (entity.getUsers().getId() == SecurityUtils.getPrincipal().getId()) {
+        if (entity.getUser().getId() == SecurityUtils.getPrincipal().getId()) {
             entity.setStatus(7);
             transactionRepository.save(entity);
             System.out.println("transaction đã được thanh toán");

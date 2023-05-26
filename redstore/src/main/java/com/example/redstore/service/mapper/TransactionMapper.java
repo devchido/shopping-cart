@@ -17,8 +17,8 @@ public class TransactionMapper implements EntityMapper<TransactionDto, Transacti
     public TransactionDto toDo(Transaction entity) {
         TransactionDto dto = new TransactionDto();
         dto.setId(entity.getId());
-        dto.setUsers(userMapper.toDo(entity.getUsers()));
-        dto.setOrders(orderMapper.toDo(entity.getOrder()));
+        dto.setUser(userMapper.toDo(entity.getUser()));
+        dto.setOrder(orderMapper.toDo(entity.getOrder()));
         dto.setType(entity.getType());
         dto.setMode(entity.getMode());
         dto.setStatus(entity.getStatus());

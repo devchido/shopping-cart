@@ -86,7 +86,7 @@ public class  UserService {
     }
     // todo: findAllUsers by page
     public Page<UserDto> findAllUsers( int offset, int pageSize, String field, String sort, String keyname, String mobile, String email, String role) {
-        Page<User> entity = userRepository.findAllUsers(
+        Page<User> entity = userRepository.findAllUser(
                 (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
                 keyname, mobile, email,
                 role);

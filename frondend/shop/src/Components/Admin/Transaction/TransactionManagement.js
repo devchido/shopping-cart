@@ -401,25 +401,25 @@ function TransactionManagement() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={item.users.photos}
+                                                                                src={item.user.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />
                                                                         }
-                                                                        title={item.users.firstName + " " + item.users.lastName}
+                                                                        title={item.user.firstName + " " + item.user.lastName}
                                                                         sx={{ p: 0 }}
                                                                     />
                                                                 </TableCell>
 
-                                                                <TableCell className="text-nowrap">{item.orders.id}</TableCell>
-                                                                <TableCell className="text-nowrap">{item.users.mobile}</TableCell>
-                                                                <TableCell className="text-nowrap">{item.users.email}</TableCell>
+                                                                <TableCell className="text-nowrap">{item.order.id}</TableCell>
+                                                                <TableCell className="text-nowrap">{item.user.mobile}</TableCell>
+                                                                <TableCell className="text-nowrap">{item.user.email}</TableCell>
                                                                 <TableCell className="text-nowrap">
-                                                                    {item.orders.line1 +
+                                                                    {item.order.line1 +
                                                                         "-" +
-                                                                        item.orders.city +
+                                                                        item.order.city +
                                                                         "-" +
-                                                                        item.orders.country}
+                                                                        item.order.country}
                                                                 </TableCell>
 
                                                                 <TableCell className="text-nowrap">

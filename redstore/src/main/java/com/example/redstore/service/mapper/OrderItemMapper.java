@@ -17,8 +17,8 @@ public class OrderItemMapper implements EntityMapper<OrderItemDto, OrderItem>{
     public OrderItemDto toDo(OrderItem entity) {
         OrderItemDto dto = new OrderItemDto();
         dto.setId(entity.getId());
-        dto.setProducts(productMapper.toDo(entity.getProducts()));
-        dto.setOrders(orderMapper.toDo(entity.getOrders()));
+        dto.setProduct(productMapper.toDo(entity.getProduct()));
+        dto.setOrder(orderMapper.toDo(entity.getOrder()));
         dto.setPrice(entity.getPrice());
         dto.setDiscount(entity.getDiscount());
         dto.setQuantity(entity.getQuantity());

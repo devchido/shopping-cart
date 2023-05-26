@@ -23,8 +23,8 @@ public class CartMapOrderMapper implements EntityMapper<Cart, Order>{
     @Override
     public Order toEntity(Cart cart) {
         Order order = new Order();
-        order.setUsers(cart.getUsers());
-        order.setCarts(cart);
+        order.setUser(cart.getUser());
+        order.setCart(cart);
 
         return order;
     }

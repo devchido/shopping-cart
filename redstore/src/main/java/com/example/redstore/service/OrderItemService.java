@@ -28,11 +28,11 @@ public class OrderItemService {
         OrderItem entity = orderItemMapper.toEntity(dto);
         // Set product
         Product productId = productRepository.findById(String.valueOf(dto.getProductId())).orElse(null);
-        entity.setProducts(productId);
+        entity.setProduct(productId);
 
         // Set order (Nếu có order với id đó thì nhận id đó, nếu không thì truyền tham số null)
-        Order orderId = orderRepository.findById(String.valueOf(dto.getOrders())).orElse(null);
-        entity.setOrders(orderId);
+        Order orderId = orderRepository.findById(String.valueOf(dto.getOrder())).orElse(null);
+        entity.setOrder(orderId);
 
         // Set create at
         //khong can nua
@@ -77,7 +77,7 @@ public class OrderItemService {
 
     public List<OrderItemDto> findOrderItemByOrderId(String orderDetail) {
         Order order = orderRepository.findById(orderDetail).orElse(null);
-        if(order.getUsers().getId() == SecurityUtils.getPrincipal().getId()){
+        if(order.getUser().getId() == SecurityUtils.getPrincipal().getId()){
             List<OrderItem> entity = orderItemRepository.findOrderItemByOrderId(order.getId());
             List<OrderItemDto> dtos = orderItemMapper.toDo(entity);
             return dtos;

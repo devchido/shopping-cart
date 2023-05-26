@@ -9,9 +9,9 @@ import java.time.Instant;
 @Data
 public class OrderDto {
     private Long id;
-    private UserDto users;
+    private UserDto user;
     private Long userId;
-    private CartDto carts;
+    private CartDto cart;
     private Long cartId;
     private Integer status;
     private Float subTotal;

@@ -202,7 +202,7 @@ function OrderDetail() {
                           <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                               {/* Image start */}
                               <div className="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                  <img src={item.products.photos} className="w-100" alt={item.products.title} />
+                                  <img src={item.product.photos} className="w-100" alt={item.product.title} />
                                   <a href="#!">
                                       <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }} />
                                   </a>
@@ -212,7 +212,7 @@ function OrderDetail() {
                           <div className="col-lg-8 col-md-12 m-0">
                               {/* Data start */}
                               <p>
-                                  <strong>{item.products.title}</strong>
+                                  <strong>{item.product.title}</strong>
                               </p>
                               {/* discount start */}
                               <p>Giảm giá: {item.discount}%</p>
@@ -227,7 +227,7 @@ function OrderDetail() {
                                   Số lượng: <strong>{item.quantity}</strong>
                               </p>
                               {/* Quantity end*/}
-                              <Link to={`/product/${item.products.slug}`}>
+                              <Link to={`/product/${item.product.slug}`}>
                                   <IconButton className="text-primary" title="view">
                                       <VisibilityIcon />
                                   </IconButton>

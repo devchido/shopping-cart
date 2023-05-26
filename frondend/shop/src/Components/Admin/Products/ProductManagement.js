@@ -348,7 +348,7 @@ function ProductManagement() {
                                                                 </TableCell>
 
                                                                 <TableCell className="text-nowrap">
-                                                                    {item.users.firstName + " " + item.users.lastName}
+                                                                    {item.user.firstName + " " + item.user.lastName}
                                                                 </TableCell>
 
                                                                 <TableCell align="right">{VND.format(item.price)}</TableCell>

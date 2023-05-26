@@ -13,7 +13,7 @@ function ProductDetailManagement() {
         createdAt: new Date(),
         updatedAt: new Date(),
         endsAt: new Date(),
-        users: [],
+        user: [],
     });
     // chuyển đổi trạng thái của sản phẩm
     const [status, setStatus] = React.useState(0);
@@ -452,9 +452,9 @@ function ProductDetailManagement() {
                                     <h5 className="mb-0">Người bán</h5>
                                 </div>
                                 <div className="card-body d-flex">
-                                    <Avatar alt="Remy Sharp" src={product.users.photos} variant="rounded" />
+                                    <Avatar alt="Remy Sharp" src={product.user.photos} variant="rounded" />
                                     <p className="my-auto mx-3">
-                                        <strong>{product.users.firstName + " " + product.users.lastName}</strong>
+                                        <strong>{product.user.firstName + " " + product.user.lastName}</strong>
                                     </p>
                                 </div>
                             </div>

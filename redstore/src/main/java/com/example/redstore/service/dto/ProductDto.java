@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 public class ProductDto {
     private Long id;
-    private UserDto users;
+    private UserDto user;
     private Long userId;
     private String title;
     private String slug;

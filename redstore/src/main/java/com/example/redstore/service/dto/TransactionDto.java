@@ -8,9 +8,9 @@ import java.time.Instant;
 @Data
 public class TransactionDto {
     private Long id;
-    private UserDto users;
+    private UserDto user;
     private Long userId;
-    private OrderDto orders;
+    private OrderDto order;
     private Long orderId;
     private String code;
     private Integer type;

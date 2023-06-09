@@ -21,6 +21,8 @@ public class Transaction {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @Column(name = "code")
+    private String code;
     @Column(name = "type", nullable = false)
     private Integer type;
 

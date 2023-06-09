@@ -315,27 +315,19 @@ function ProductDetailManagement() {
                             <div className="card mb-4">
                                 <div className="card-header d-flex justify-content-between py-3">
                                     <h5 className="mb-0 text-capitalize">Thông tin sản phẩm</h5>
-                                    
+
                                     {product.status === 0 ? (
                                         <span className="badge bg-warning text-capitalize ms-2">Chờ xét duyệt</span>
-                                    ) : (
-                                        null
-                                    )}
+                                    ) : null}
                                     {product.status === 1 ? (
                                         <span className="badge bg-info text-capitalize ms-2">Được đăng bán</span>
-                                    ) : (
-                                        null
-                                    )}
+                                    ) : null}
                                     {product.status === 2 ? (
                                         <span className="badge bg-secondary text-capitalize ms-2">Chưa đăng bán</span>
-                                    ) : (
-                                        null
-                                    )}
+                                    ) : null}
                                     {product.status === 3 ? (
                                         <span className="badge bg-danger text-capitalize ms-2">Ngưng bán</span>
-                                    ) : (
-                                        null
-                                    )}
+                                    ) : null}
                                 </div>
                                 <div className="card-body">
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -471,18 +463,6 @@ function ProductDetailManagement() {
                                         className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
                                         style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}
                                     ></img>
-                                    <div className="form-group mt-5">
-                                        <label>Photos link</label>
-
-                                        <input
-                                            id="form1"
-                                            name="photos"
-                                            defaultValue={product.photos}
-                                            type="text"
-                                            className="form-control w-100"
-                                            onChange={(e) => setNewImage(e.target.value)}
-                                        />
-                                    </div>
                                 </div>
                             </div>
 
@@ -511,7 +491,6 @@ function ProductDetailManagement() {
                                         </button>
                                     ) : null}
 
-                                    
                                     {product.status === 0 ? (
                                         <button type="reset" className="btn btn-info col-auto " onClick={handleConfirm}>
                                             Duyệt bài
@@ -522,7 +501,6 @@ function ProductDetailManagement() {
                                             Chờ xác nhận
                                         </button>
                                     ) : null} */}
-                                    
                                 </div>
                             </div>
                         </div>

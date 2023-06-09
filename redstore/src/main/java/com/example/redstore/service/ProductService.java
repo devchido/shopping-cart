@@ -224,8 +224,8 @@ public class ProductService {
 //    }
 
     // todo: findProductsWithPaginationAndSorting - lọc tất cả các product được đăng bán ở dạng page
-    public Page<ProductDto> findProductsWithPaginationAndSorting(String title, int offset, int pageSize, String field) {
-        Page<Product> products = productRepository.findAllProductPage(title, (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field))));
+    public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize,String title, String categoryId, String field) {
+        Page<Product> products = productRepository.findAllProductPage((PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field))),title, categoryId);
         Page<ProductDto> dtos = products.map(productMapper::toDo);
         return dtos;
     }
@@ -269,18 +269,21 @@ public class ProductService {
         Product entity = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm!"));
         if (status == 0) {
             entity.setStatus(0);
+            entity.setUpdatedAt(Instant.now());
             productRepository.save(entity);
             System.out.println("Ẩn product");
         }
         ;
         if (status == 1) {
             entity.setStatus(1);
+            entity.setUpdatedAt(Instant.now());
             productRepository.save(entity);
             System.out.println("Xác nhận đăng bán sản phẩm");
         }
         ;
         if (status == 2) {
             entity.setStatus(2);
+            entity.setUpdatedAt(Instant.now());
             productRepository.save(entity);
             System.out.println("Huỷ đăng bán sản phẩm");
         }
@@ -288,6 +291,7 @@ public class ProductService {
         if (status == 3) {
             entity.setStatus(3);
             productRepository.save(entity);
+            entity.setUpdatedAt(Instant.now());
             System.out.println("Ngừng bán sản phẩm");
         }
 

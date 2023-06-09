@@ -297,6 +297,7 @@ function UsersManagement() {
                                                         <TableCell className="text-nowrap">User</TableCell>
                                                         <TableCell className="text-nowrap">Mobile</TableCell>
                                                         <TableCell className="text-nowrap">Email</TableCell>
+                                                        {/* <TableCell className="text-nowrap">Password</TableCell> */}
                                                         <TableCell className="text-nowrap">Vendor</TableCell>
                                                         <TableCell className="text-nowrap">Role</TableCell>
                                                         <TableCell className="text-nowrap" align="center">
@@ -333,6 +334,7 @@ function UsersManagement() {
 
                                                                 <TableCell className="text-nowrap">{item.mobile}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.email}</TableCell>
+                                                                {/* <TableCell className="text-nowrap">{item.password}</TableCell> */}
                                                                 <TableCell className="text-nowrap">
                                                                     {item.vendor === 0 ? (
                                                                         <span className="badge bg-secondary ms-2">False</span>

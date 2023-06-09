@@ -238,30 +238,28 @@ function SingleProduct() {
                     {localStorage.getItem("token") !== null ? (
                         <>
                             {product.status === 1 ? (
-                                <button
-                                    className="btn btn-info ms-2 px-3 py-2"
-                                    onClick={() => {
-                                        if (quantity <= 0) {
-                                            setSnackbarOpen(true);
-                                            setSnackbarSeverity("error");
-                                            setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
-                                        } else {
-                                            handleAddToCart();
-                                        }
-                                    }}
-                                >
-                                    Add to Cart
-                                </button>
-                            ) : <button
-                            className="btn btn-danger ms-2 px-3 py-2"
-                            
-                        >
-                            Sản phẩm hiện không hoạt động
-                        </button>}
-
-                            <button className="btn btn-warning ms-2 px-3 py-2" onClick={handleClickOpen}>
-                                Đánh giá
-                            </button>
+                                <>
+                                    <button
+                                        className="btn btn-info ms-2 px-3 py-2"
+                                        onClick={() => {
+                                            if (quantity <= 0) {
+                                                setSnackbarOpen(true);
+                                                setSnackbarSeverity("error");
+                                                setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
+                                            } else {
+                                                handleAddToCart();
+                                            }
+                                        }}
+                                    >
+                                        Add to Cart
+                                    </button>
+                                    <button className="btn btn-warning ms-2 px-3 py-2" onClick={handleClickOpen}>
+                                        Đánh giá
+                                    </button>
+                                </>
+                            ) : (
+                                <button className="btn btn-danger ms-2 px-3 py-2">Sản phẩm hiện không hoạt động</button>
+                            )}
                         </>
                     ) : null}
                 </div>

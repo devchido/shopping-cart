@@ -4,10 +4,13 @@ import { Link, useParams } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Snackbar } from "@mui/material";
+import convertToUrl from "../../Unity/CovertToUrl";
 
 export default function CategoryDetailManagement() {
     const { id } = useParams();
-
+    const [title, setTitle] = React.useState("");
+    const [slug, setSlug] = React.useState("");
+    const [content, setContent] = React.useState("");
     const [category, setCategory] = React.useState({});
 
     //
@@ -18,7 +21,12 @@ export default function CategoryDetailManagement() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-
+    const handleChangeSlug = (event) => {
+        const text = event.target.value;
+        const url = convertToUrl(text);
+        setTitle(text);
+        setSlug(url);
+    };
     const loadDataCategory = () => {
         fetch(`/category/api/${id}`, {
             method: "GET",
@@ -31,7 +39,9 @@ export default function CategoryDetailManagement() {
             })
             .then((result) => {
                 console.log("category ", result);
-                setCategory(result);
+                setTitle(result.title);
+                setSlug(result.slug);
+                setContent(result.content);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -45,12 +55,8 @@ export default function CategoryDetailManagement() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         if (
-            data.get("title") === null ||
-            data.get("title") === "" ||
-            data.get("slug") === null ||
-            data.get("slug") === "" ||
-            data.get("content") === null ||
-            data.get("content") === ""
+            title === "" ||
+            slug === "" 
         ) {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
@@ -127,7 +133,7 @@ export default function CategoryDetailManagement() {
                                         <label className="form-label">Id</label>
                                         <input
                                             type="text"
-                                            defaultValue={category.id}
+                                            defaultValue={id}
                                             className="form-control"
                                             id="id"
                                             name="id"
@@ -138,20 +144,21 @@ export default function CategoryDetailManagement() {
                                         <label className="form-label">Title</label>
                                         <input
                                             type="text"
-                                            defaultValue={category.title}
                                             className="form-control"
-                                            id="title"
+                                            value={title}
                                             name="title"
+                                            onChange={handleChangeSlug}
                                         />
                                     </div>
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Slug</label>
                                         <input
                                             type="text"
-                                            defaultValue={category.slug}
+                                            value={slug}
                                             className="form-control"
                                             id="slug"
                                             name="slug"
+                                            onChange={(e) => setSlug(convertToUrl(e.target.value))}
                                         />
                                     </div>
 
@@ -159,10 +166,11 @@ export default function CategoryDetailManagement() {
                                         <label className="form-label">Content</label>
                                         <textarea
                                             type="text"
-                                            defaultValue={category.content}
+                                           value={content}
                                             className="form-control"
                                             id="content"
                                             name="content"
+                                            onChange={(e)=> setContent(e.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -180,9 +188,9 @@ export default function CategoryDetailManagement() {
                                                 Cancel
                                             </button>
                                         </Link>
-                                        <button type="reset" className="btn btn-secondary col-auto m-auto">
+                                        {/* <button type="reset" className="btn btn-secondary col-auto m-auto">
                                             Reset
-                                        </button>
+                                        </button> */}
                                         <button type="submit" className="btn btn-primary col-auto m-auto">
                                             Lưu thay đổi
                                         </button>

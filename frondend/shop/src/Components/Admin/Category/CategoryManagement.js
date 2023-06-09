@@ -56,7 +56,7 @@ function CategoryManagement() {
     const [page, setPage] = React.useState(0);
 
     // Số sản phẩm được hiển thị
-    const [pageSize, setPageSize] = React.useState(5);
+    const [pageSize, setPageSize] = React.useState(20);
     const [field, setField] = React.useState("id");
     const [sort, setSort] = React.useState("ASC");
     const [title, setTitle] = React.useState("");
@@ -229,6 +229,7 @@ function CategoryManagement() {
                                             id="outlined-basic"
                                             label="Search category"
                                             variant="outlined"
+                                            name="title"
                                             onChange={(e) => setTitle(e.target.value)}
                                         />
                                     </FormControl>

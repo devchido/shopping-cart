@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Autocomplete, Avatar, Button, CardHeader, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TableFooter, TextField } from "@mui/material";
+import { Autocomplete, Avatar, Button, CardHeader, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TableFooter, TextField, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -33,6 +33,7 @@ import { VND } from "../Unity/VND";
 function ListProducts() {
     const [status, setStatus] = React.useState("");
     const [product, setProduct] = React.useState([]);
+    const [category, setCategory] = React.useState([]);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
@@ -46,6 +47,8 @@ function ListProducts() {
     const [totalElements, setTotalElements] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [sort, setSort] = React.useState("ASC");
+    //
+    const [ctitle, setCtitle] = React.useState("");
     // dialog delete
     const [openDialog, setOpenDialog] = React.useState(false);
     const [dialogItem, setDialogItem] = React.useState();
@@ -63,6 +66,14 @@ function ListProducts() {
     const handleChange = (event) => {
         setStatus(event.target.value);
         loadDataProduct();
+    };
+
+    const loadDataCategory = () => {
+        fetch("/category/api").then((resp) => {
+            resp.json().then((result) => {
+                setCategory(result);
+            });
+        });
     };
     // dialog
 
@@ -147,7 +158,8 @@ function ListProducts() {
     };
     React.useEffect(() => {
         loadDataProduct();
-    }, [page, pageSize, status]);
+        loadDataCategory();
+    }, [page, pageSize, field, status, sort]);
     return (
         <div>
             <Snackbar
@@ -203,7 +215,107 @@ function ListProducts() {
                                 </div>
                             </div>
                             <div className="card mb-4">
-                                <Box
+                            <Box
+                                    component="form"
+                                    onSubmit={handleSubmit}
+                                    className="card-body row d-flex justify-content-between"
+                                >
+                                    <Box className="my-2">
+                                        <FormControl className="col-lg-3 col-auto px-2 my-1">
+                                            <Typography>Tìm kiếm theo sản phẩm</Typography>
+                                            <TextField
+                                                id="outlined-basic"
+                                                name="productTitle"
+                                                label="Tìm kiếm title của sản phẩm"
+                                                variant="outlined"
+                                                onChange={(e) => setTitle(e.target.value)}
+                                            />
+                                        </FormControl>
+                                        <FormControl className="col-lg-2 col-auto px-2 my-1">
+                                            <Typography>Trạng thái của sản phẩm</Typography>
+                                            <Select
+                                                inputProps={{ "aria-label": "Without label" }}
+                                                value={status}
+                                                displayEmpty
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Tất cả</em>
+                                                </MenuItem>
+                                                <MenuItem value={0}>Chờ xét duyệt</MenuItem>
+                                                <MenuItem value={1}>Được đăng bán</MenuItem>
+                                                <MenuItem value={2}>Chưa đăng bán</MenuItem>
+                                                <MenuItem value={3}>Ngưng bán</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl className="col-lg-2 col-auto px-2 my-1">
+                                            <Typography>Loại sản phẩm</Typography>
+                                            <Select
+                                                inputProps={{ "aria-label": "Without label" }}
+                                                value={ctitle}
+                                                displayEmpty
+                                                onChange={(e) => {
+                                                    setCtitle(e.target.value);
+                                                    loadDataProduct();
+                                                }}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Category All</em>
+                                                </MenuItem>
+                                                {category.map((item, i) => (
+                                                    <MenuItem value={item.id} key={i}>
+                                                        {item.title}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                    
+                                    <Box className="w-100 my-2">
+                                        <Typography>Sắp xếp</Typography>
+                                        <FormControl className="col-lg-3 col-auto px-2 my-1">
+                                            <Select
+                                                inputProps={{ "aria-label": "Without label" }}
+                                                value={field}
+                                                displayEmpty
+                                                onChange={(e) => {
+                                                    setField(e.target.value);
+                                                }}
+                                            >
+                                                <MenuItem value={"id"}>Id</MenuItem>
+                                                <MenuItem value={"title"}>Tên sản phẩm</MenuItem>
+                                                <MenuItem value={"price"}>Giá</MenuItem>
+                                                <MenuItem value={"discount"}>Giảm giá</MenuItem>
+                                                <MenuItem value={"quantity"}>Số lượng</MenuItem>
+                                                <MenuItem value={"created_at"}>Thời gian tạo</MenuItem>
+                                                <MenuItem value={"updated_at"}>Thời gian cập nhật</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl className="col-lg-3 col-auto px-2 my-1">
+                                            <Select
+                                                inputProps={{ "aria-label": "Without label" }}
+                                                value={sort}
+                                                displayEmpty
+                                                onChange={(e) => {
+                                                    setSort(e.target.value);
+                                                }}
+                                            >
+                                                <MenuItem value={"ASC"}>Tăng dần</MenuItem>
+                                                <MenuItem value={"DESC"}>Giảm dần</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+
+                                    <Box className="my-2">
+                                        <FormControl className="px-2">
+                                            <button type="submit" className="btn btn-dark text-nowrap">
+                                                Search
+                                            </button>
+                                        </FormControl>
+                                    </Box>
+                                </Box>
+                                {/*  */}
+                                {/* <Box
                                     component="form"
                                     onSubmit={handleSubmit}
                                     className="card-body d-flex justify-content-between"
@@ -236,7 +348,7 @@ function ListProducts() {
                                             Search
                                         </button>
                                     </FormControl>
-                                </Box>
+                                </Box> */}
                             </div>
                             <div className="card mb-4">
                                 <Box sx={{ width: "100%" }}>

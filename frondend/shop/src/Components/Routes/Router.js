@@ -35,6 +35,7 @@ import ShoppingCart from "../Shopping/ShoppingCart";
 import ChangePassword from "../Login/ChangePassword";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import ForgotPassWord from "../Login/ForgotPassWord";
+import PaymentLoading from "../Transaction/PaymentLoading";
 
 function Router() {
     return (
@@ -96,9 +97,9 @@ function Router() {
             <Route path="/orders" element={<Orders />}></Route>
             <Route path="/orders/:id" element={<OrderDetail />}></Route>
             {/* Transaction */}
-            <Route path="/transaction/:id" element={<TransactionDetail />}>
-                {" "}
-            </Route>
+            <Route path="/transaction/:id" element={<TransactionDetail />}></Route>
+            {/* Transaction loading */}
+            <Route path="/transaction" element={<PaymentLoading/>}></Route>
             {/* Manage: Trang quản lý product của user */}
             <Route path="/management/list-products" element={<ListProducts />}></Route>
             {/* Created Products: Tạo sản phẩm mới */}

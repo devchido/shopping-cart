@@ -205,8 +205,7 @@ function UpdateProduct() {
             data.get("summary") === "" ||
             data.get("price") === "" ||
             data.get("discount") === "" ||
-            data.get("quantity") === "" ||
-            data.get("content") === ""
+            data.get("quantity") === "" 
         ) {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
@@ -288,10 +287,9 @@ function UpdateProduct() {
     };
     const Loading = () => {
         return (
-            <Stack>
-                <Skeleton variant="rounded" sx={{ marginBlock: 1 }} height={120} />
-                <Skeleton variant="rounded" sx={{ marginBlock: 1 }} height={120} />
-                <Skeleton variant="rounded" sx={{ marginBlock: 1 }} height={120} />
+            <Stack direction="row" spacing={2} sx={{ m: 1, justifyContent: "center" }}>
+                <Skeleton variant="rectangular" width={800} height={300} />
+                <Skeleton variant="rectangular" width={400} height={300} />
             </Stack>
         );
     };

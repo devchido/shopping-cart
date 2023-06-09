@@ -36,14 +36,7 @@ function ProductManagement() {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
-    const [category, setCategory] = React.useState([
-        {
-            id: "",
-            title: "",
-            slug: "",
-            content: "",
-        },
-    ]);
+    const [category, setCategory] = React.useState([]);
 
     // Trang hiện tại của page
     const [page, setPage] = React.useState(0);
@@ -207,7 +200,7 @@ function ProductManagement() {
                                                 </MenuItem>
                                                 <MenuItem value={0}>Chờ xét duyệt</MenuItem>
                                                 <MenuItem value={1}>Được đăng bán</MenuItem>
-                                                <MenuItem value={2}>Chờ kiểm duyệt</MenuItem>
+                                                <MenuItem value={2}>Chưa đăng bán</MenuItem>
                                                 <MenuItem value={3}>Ngưng bán</MenuItem>
                                             </Select>
                                         </FormControl>
@@ -225,8 +218,8 @@ function ProductManagement() {
                                                 <MenuItem value="">
                                                     <em>Category All</em>
                                                 </MenuItem>
-                                                {category.map((item) => (
-                                                    <MenuItem value={item.id} key={item.id}>
+                                                {category.map((item, i) => (
+                                                    <MenuItem value={item.id} key={i}>
                                                         {item.title}
                                                     </MenuItem>
                                                 ))}
@@ -301,6 +294,7 @@ function ProductManagement() {
                                                         <TableCell className="text-nowrap">Id</TableCell>
                                                         <TableCell className="text-nowrap">Sản phẩm</TableCell>
                                                         <TableCell className="text-nowrap">User</TableCell>
+                                                        <TableCell className="text-nowrap">Thể loại</TableCell>
                                                         <TableCell className="text-nowrap" align="right">
                                                             Giá (₫)
                                                         </TableCell>
@@ -322,7 +316,7 @@ function ProductManagement() {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {data.length > 0 ? (
+                                                    {data.length !== 0 ? (
                                                         data.map((item, i) => (
                                                             <TableRow
                                                                 key={item.id}
@@ -350,6 +344,9 @@ function ProductManagement() {
                                                                 <TableCell className="text-nowrap">
                                                                     {item.user.firstName + " " + item.user.lastName}
                                                                 </TableCell>
+                                                                <TableCell className="text-nowrap">
+                                                                    {item.user.firstName + " " + item.user.lastName}
+                                                                </TableCell>
 
                                                                 <TableCell align="right">{VND.format(item.price)}</TableCell>
                                                                 <TableCell align="right">{item.discount}(%)</TableCell>
@@ -374,7 +371,7 @@ function ProductManagement() {
                                                                     ) : null}
                                                                     {item.status === 2 ? (
                                                                         <span className="badge bg-success text-capitalize ms-2">
-                                                                            Kiểm duyệt
+                                                                            Chưa đăng bán
                                                                         </span>
                                                                     ) : null}
                                                                     {item.status === 3 ? (

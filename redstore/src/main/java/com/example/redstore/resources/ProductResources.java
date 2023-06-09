@@ -30,17 +30,7 @@ public class ProductResources {
 
     /*
     user đăng nhập thực hiện tạo sản phẩm mới
-    http://localhost:8080/product/auth/create
-    {
-        "title": "GIÀY SNEAKER CHỐNG BÁM NƯỚC",
-        "slug": "giay-sneaker-chong-tham-nuoc",
-        "summary": "GIÀY SNEAKER CHỐNG BÁM NƯỚC - LESS TIRING 28.5cm ĐEN",
-        "price": "599000",
-        "discount": "10",
-        "quantity": "300",
-        "photos": "https://img.muji.net/img/item/4550344414453_1260.jpg",
-        "content": "Sản phẩm sử dụng vải cotton chống bám nước, có thiết kế hỗ trợ chuyển động của chân."
-    }
+
      */
     @PostMapping("/auth")
     public void create(@RequestBody ProductDto dto) {
@@ -50,18 +40,7 @@ public class ProductResources {
     //edit by id
     /*
     Người dùng thực hiện thay đổi thông tin sản phẩm họ đăng bán
-    {
-        "title": "Áo nam",
-        "slug": "ao-phong-nam-1",
-        "summary": "Áo phông nam",
-        "price": 200000.0,
-        "discount": 20.0,
-        "photos": "https://cf.shopee.vn/file/b04924adbab55d4b305d8b15a396a4ef",
-        "quantity": 50,
-        "updatedAt": null,
-        "endsAt": null,
-        "content": "Áo phông dành cho nam"
-    }
+
      */
     @PutMapping("/auth/{id}")
     public void edit(@PathVariable String id, @RequestBody ProductDto dto) {
@@ -165,11 +144,13 @@ public class ProductResources {
 
     @GetMapping("/api/paginationAndSort/{offset}/{pageSize}/{field}")
     private APIResponse<Page<ProductDto>> getProductsWithPaginationAndSort(
-            @RequestParam(value = "title", defaultValue = "") String title,
+
             @PathVariable int offset,
             @PathVariable int pageSize,
+            @RequestParam(value = "title", defaultValue = "") String title,
+            @RequestParam(value = "categoryId", defaultValue = "") String categoryId,
             @PathVariable String field) {
-        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(title, offset, pageSize, field);
+        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize,title, categoryId, field);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
 
@@ -189,7 +170,7 @@ public class ProductResources {
         List<ProductDto> dtos = productService.filterProduct(sort, field);
         return dtos;
     }
-    // todo: Quản lý trạng thái cuản sản phẩm - NCC
+    // todo: Quản lý trạng thái của sản phẩm - NCC
     @PutMapping("/auth/change-status")
     public void changeStatus(@RequestParam("id") String id, @RequestParam("status") int status) {
         productService.setStatusProduct(id, status);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 //
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { FormControl, IconButton, Input, InputLabel, MenuItem, Select, Skeleton, Stack, Typography } from "@mui/material";
@@ -22,7 +22,10 @@ import { format } from "date-fns";
 import { VND } from "../Unity/VND";
 
 export default function TransactionDetail() {
-    const steps = ["Chưa thanh toán", "Đã thanh toán", "Thành công"];
+    //
+
+    //
+    const steps = ["Chưa thanh toán", "Đã thanh toán"];
     const steps2 = ["Chưa hoàn trả", "Đã hoàn trả"];
     // id của data
     const { id } = useParams();
@@ -80,72 +83,9 @@ export default function TransactionDetail() {
             })
             .catch((error) => console.log("error", error));
     };
-    // 0 -> Xác nhận đơn hàng -> chuyển giao tới đơn vị vận chuyển: 2
-    const handleConfirmdata = () => {};
-    // 2 -> Xác nhận đã vận chuyển -> chuyển giao tới khách hàng: 3
-    const handleShipped = () => {};
-    // 3 -> Xác nhận đã giao hàng -> đã nhận được hàng:5
-    const handleDelivered = () => {};
+
     // 0,2,3 -> Huỷ đơn hàng -> 1
     const handleCanceldata = () => {};
-    // 5 -> Hoàn trả đơn hàng -> 4
-    const handleRefund = () => {
-        fetch(
-            "/data/auth/admin/set-status?" +
-                new URLSearchParams({
-                    id: data.id,
-                    status: 4,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Xác nhận hoàn trả! Đơn hàng sẽ được gửi trả về đơn vị, đồng thời hoàn tiền cho khách hàng.");
-                loadDataTransaction();
-            })
-            .catch((error) => console.log("error", error));
-    };
-    // Khôi phục đơn hàng
-    const handleRecovery = () => {
-        fetch(
-            "/data/auth/admin/set-status?" +
-                new URLSearchParams({
-                    id: data.id,
-                    status: 0,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Xác nhận khôi phục đơn hàng. Đã chuyển vào mục chờ xử lý");
-                loadDataTransaction();
-            })
-            .catch((error) => console.log("error", error));
-    };
 
     const Loading = () => {
         return (
@@ -257,29 +197,31 @@ export default function TransactionDetail() {
     };
 
     const handlePayment = () => {
-        fetch("/transaction/auth/" + data.id, {
-            method: "PUT",
+        fetch("/transaction/auth/payment/" + data.id, {
+            method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
             },
         })
             .then((response) => {
                 if (response.ok) {
-                    return response.status;
+                    return response.json();
                 }
                 throw Error(response.status);
             })
             .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Đã thanh toán thành công.");
-                loadDataTransaction();
+                // setSnackbarOpen(true);
+                // setSnackbarSeverity("success");
+                // setSnackbarMsg("Đã thanh toán thành công.");
+                // loadDataTransaction();
+                console.log(result);
+                window.open(result.url);
             })
             .catch((error) => {
                 console.log("error", error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
-                setSnackbarMsg("Thanh toán không thành công!");
+                setSnackbarMsg("GD chưa được thực hiện!");
             });
     };
     const handleRefunded = () => {
@@ -348,13 +290,14 @@ export default function TransactionDetail() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Không</Button>
-                    <Button onClick={handleCanceldata}>Huỷ đơn hàng</Button>
+                    <Button onClick={handleClose}>Huỷ đơn hàng</Button>
                 </DialogActions>
             </Dialog>
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
                     <div className="row d-flex justify-content-center my-4">
                         <div className="col-lg-8">
+                            {loading ? <Loading /> : <ShowDatadata />}
                             <div className="card mb-4">
                                 <div className="card-header py-3">
                                     <h5 className="mb-0">Transaction</h5>
@@ -410,7 +353,6 @@ export default function TransactionDetail() {
                                 </div>
                             </div>
 
-                            {loading ? <Loading /> : <ShowDatadata />}
                             <div className="card mb-4 card-body ">
                                 <div className="row form-group ">
                                     <Link to={`/orders/${data.order.id}`} className="col-auto mx-auto mb-3">
@@ -427,12 +369,9 @@ export default function TransactionDetail() {
                                             Thanh toán
                                         </button>
                                     ) : null}
-                                    
+
                                     {data.status === 6 ? (
-                                        <button
-                                            className="btn btn-info btn-block col-auto mx-auto mb-3"
-                                            onClick={handleRefunded}
-                                        >
+                                        <button className="btn btn-info btn-block col-auto mx-auto mb-3" onClick={handleRefunded}>
                                             Đã hoàn trả
                                         </button>
                                     ) : null}

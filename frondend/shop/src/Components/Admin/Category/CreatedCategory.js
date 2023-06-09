@@ -4,9 +4,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Snackbar } from "@mui/material";
+import convertToUrl from "../../Unity/CovertToUrl";
 
 export default function CreatedCategory() {
-
+    const [title, setTitle] = React.useState("");
+    const [slug, setSlug] = React.useState("");
+    const [content, setContent] = React.useState("");
     const [category, setCategory] = React.useState({});
     const navigation = useNavigate();
     //
@@ -17,6 +20,12 @@ export default function CreatedCategory() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
+    const handleChangeSlug = (event) => {
+        const text = event.target.value;
+        const url = convertToUrl(text);
+        setTitle(text);
+        setSlug(url);
+    };
 
     // thêm category
     const handleSubmit = (event) => {
@@ -26,9 +35,7 @@ export default function CreatedCategory() {
             data.get("title") === null ||
             data.get("title") === "" ||
             data.get("slug") === null ||
-            data.get("slug") === "" ||
-            data.get("content") === null ||
-            data.get("content") === ""
+            data.get("slug") === "" 
         ) {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
@@ -56,7 +63,7 @@ export default function CreatedCategory() {
                     setSnackbarOpen(true);
                     setSnackbarSeverity("success");
                     setSnackbarMsg("Thêm mới category thành công.");
-                    navigation("/admin/category")
+                    navigation("/admin")
                 })
                 .catch((error) => {
                     console.log("error", error);
@@ -106,6 +113,8 @@ export default function CreatedCategory() {
                                             className="form-control"
                                             id="title"
                                             name="title"
+                                            value={title}
+                                            onChange={handleChangeSlug}
                                         />
                                     </div>
                                     <div className="form-outline mt-4  ">
@@ -115,6 +124,8 @@ export default function CreatedCategory() {
                                             className="form-control"
                                             id="slug"
                                             name="slug"
+                                            value={slug}
+                                            onChange={(e) => setSlug(convertToUrl(e.target.value))}
                                         />
                                     </div>
 
@@ -125,6 +136,8 @@ export default function CreatedCategory() {
                                             className="form-control"
                                             id="content"
                                             name="content"
+                                            value={content}
+                                            onChange={(e) => setContent(e.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -137,7 +150,7 @@ export default function CreatedCategory() {
                                 </div>
                                 <div className="card-body">
                                     <div className=" row form-group ">
-                                        <Link to={"/admin/category"} className="col-auto m-auto">
+                                        <Link to={"/admin"} className="col-auto m-auto">
                                             <button type="button" className="btn btn-dark  ">
                                                 Cancel
                                             </button>

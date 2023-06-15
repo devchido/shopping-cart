@@ -475,7 +475,7 @@ export default function ShoppingCart() {
                                     }
                                 }}
                             />
-                            {cartItem.status === 1 ? (
+                            {cartItem.product.status === 1 ? (
                                 <IconButton
                                     sx={{ mx: 1 }}
                                     onClick={() => {

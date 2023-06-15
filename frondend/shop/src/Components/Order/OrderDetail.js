@@ -22,7 +22,7 @@ import { VND } from "../Unity/VND";
 import { format } from "date-fns";
 
 function OrderDetail() {
-    const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận"];
+    const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận", "Hoàn thành"];
     const steps2 = ["Hoàn trả", "Đã hoàn trả"];
     // id của order
     const { id } = useParams();
@@ -432,7 +432,7 @@ function OrderDetail() {
                                 </div>
                                 <div className="card-body">
                                     <Box sx={{ width: "100%", my: 2 }}>
-                                    {order.status === 0 || order.status === 1 || order.status === 2 || order.status === 3 ? (
+                                    {order.status === 0 || order.status === 1 || order.status === 2 || order.status === 3 || order.status === 4 ? (
                                             <Stepper activeStep={order.status + 1}>
                                                 {steps.map((label) => (
                                                     <Step key={label}>
@@ -486,9 +486,9 @@ function OrderDetail() {
                                     </p>
                                     <img
                                         className="me-2"
-                                        width="45px"
-                                        src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
-                                        alt="Visa"
+                                        width="75px"
+                                        src="https://images.careerbuilder.vn/employer_folders/lot2/154592/140244ncbbank.jpg"
+                                        alt="NCB"
                                     />
                                 </div>
                             </div>

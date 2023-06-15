@@ -20,7 +20,7 @@ export default function ProductItem({ id, title, slug, price, discount, photos }
                         <div className="mask">
                             <div className="d-flex justify-content-center h-100">
                                 <h5>
-                                    <span className="badge bg-primary ms-2">New</span>
+                                    {/* <span className="badge bg-primary ms-2">New</span> */}
                                     {/* <span className="badge bg-success ms-2">Eco</span> */}
                                     {discount > 0 ? <span className="badge bg-danger ms-2">-{discount}%</span> : null}
                                 </h5>
@@ -38,8 +38,8 @@ export default function ProductItem({ id, title, slug, price, discount, photos }
                         </h5>
                         <p className="card-text lead fw-bold">{VND.format(price)}</p>
                         {/* <Link to={`/product/${item.slug}`} className="btn btn-outline-dark">
-                    Details
-                </Link> */}
+                            Details
+                        </Link> */}
                     </div>
                 </div>
             </div>

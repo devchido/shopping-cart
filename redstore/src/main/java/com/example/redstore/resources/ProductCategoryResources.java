@@ -1,5 +1,6 @@
 package com.example.redstore.resources;
 
+import com.example.redstore.domain.Category;
 import com.example.redstore.projection.ProductInfo;
 import com.example.redstore.service.CategoryService;
 import com.example.redstore.service.ProductCategoryService;
@@ -9,6 +10,8 @@ import com.example.redstore.service.dto.ProductCategoryDto;
 import com.example.redstore.service.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +32,13 @@ public class ProductCategoryResources {
     @PutMapping("/auth/update/{id}")
     public void edit(@RequestBody ProductCategoryDto dto, @PathVariable("id") Long id) {
         productCategoryService.edit(id, dto);
+    }
+    @PutMapping("/auth/handleChangeProductCategory")
+    public ResponseEntity<?> handleChangeProductCategory(
+            @RequestParam("productId") Long productId,
+            @RequestParam("categoryId") String categoryId
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(productCategoryService.handleChangeProductCategory(productId, categoryId));
     }
 
     //delete

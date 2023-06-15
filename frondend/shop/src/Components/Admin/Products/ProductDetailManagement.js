@@ -6,15 +6,37 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Avatar, Box, Container, CssBaseline, Input, Snackbar, TextField, ThemeProvider } from "@mui/material";
 import { format } from "date-fns";
+import convertToUrl from "../../Unity/CovertToUrl";
 
 function ProductDetailManagement() {
     const { id } = useParams();
     const [product, setProduct] = React.useState({
+        id: "",
+        title: "",
+        summary: "",
+        price: "",
+        discount: "",
+        quantity: "",
+        content: "",
         createdAt: new Date(),
         updatedAt: new Date(),
         endsAt: new Date(),
         user: [],
     });
+    // thông tin của product
+    const [title, setTitle] = React.useState({});
+    const [slug, setSlug] = React.useState({});
+    const [summary, setSumary] = React.useState({});
+    const [price, setPrice] = React.useState({});
+    const [discount, setDiscount] = React.useState({});
+    const [quantity, setQuantity] = React.useState({});
+    const [content, setContent] = React.useState({});
+    const [categoryItem, setCategoryItem] = React.useState({});
+    // image
+    const [selectedFile, setSelectedFile] = React.useState();
+    const [preview, setPreview] = React.useState();
+    const [imageFileName, setImageFileName] = React.useState("");
+
     // chuyển đổi trạng thái của sản phẩm
     const [status, setStatus] = React.useState(0);
     const [productCategory, setProductCategory] = React.useState({});
@@ -29,6 +51,7 @@ function ProductDetailManagement() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
+
     const loadDataProduct = () => {
         fetch(`/product/auth/${id}`, {
             method: "GET",
@@ -45,6 +68,13 @@ function ProductDetailManagement() {
             .then((result) => {
                 console.log("product", result);
                 setProduct(result);
+                setTitle(result.title);
+                setSlug(result.slug);
+                setSumary(result.summary);
+                setPrice(result.price);
+                setDiscount(result.discount);
+                setQuantity(result.quantity);
+                setContent(result.content);
                 setNewImage(result.photos);
                 setStatus(result.status);
             })
@@ -88,6 +118,13 @@ function ProductDetailManagement() {
             .catch((error) => {
                 console.log("error", error);
             });
+    };
+    // thay đổi slug mặc định
+    const handleChangeSlug = (event) => {
+        const text = event.target.value;
+        const url = convertToUrl(text);
+        setTitle(text);
+        setSlug(url);
     };
 
     // Set trạng thái của sản phẩm : status
@@ -286,7 +323,156 @@ function ProductDetailManagement() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
-    }, []);
+        if (!selectedFile) {
+            setPreview(undefined);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setPreview(objectUrl);
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [selectedFile]);
+    // ---------------------------------------------------------------
+    // Thay đổi thuộc tính sản phẩm
+    const handleChangeProduct = () => {
+        var formdata = new FormData();
+        formdata.append("id", id);
+        formdata.append("slug", slug);
+        formdata.append("title", title);
+        formdata.append("summary", summary);
+        formdata.append("price", price);
+        formdata.append("discount", discount);
+        formdata.append("quantity", quantity);
+        formdata.append("content", content);
+        fetch("/product/auth/admin/handleChangeProduct", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: formdata,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                console.log(result);
+                if (result === "true") {
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("success");
+                    setSnackbarMsg("Cập nhật thông tin thành công.");
+                } else {
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("error");
+                    setSnackbarMsg("Cập nhật thông tin không thành công.");
+                }
+                // loadDataProduct();
+                setSelectedFile();
+                setPreview();
+                setImageFileName();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Thực hiện Cập nhật thông tin không thành công.");
+            });
+    };
+    // Cập nhật loại sản phẩm
+    const handleChangeProductCategory = () => {
+        fetch(
+            "/product-category/auth/handleChangeProductCategory?" +
+                new URLSearchParams({
+                    productId: id,
+                    categoryId: categoryItem,
+                }),
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+                // body: JSON.stringify({
+                //     productId: id,
+                //     categoryId: categoryItem,
+                // }),
+            }
+        )
+            .then((response) => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                console.log(result);
+                if (result === "true") {
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("success");
+                    setSnackbarMsg("Cập nhật loại sản phẩm thành công.");
+                } else {
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("error");
+                    setSnackbarMsg("Cập nhật loại sản phẩm không thành công.");
+                }
+                // loadDataProduct();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Thực hiện Cập nhật loại sản phẩm không thành công.");
+            });
+    };
+
+    // select image file
+    const onSelectFile = (e) => {
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined);
+            return;
+        }
+
+        // I've kept this example simple by using the first image instead of multiple
+        const file = e.target.files[0];
+        setSelectedFile(file);
+        setImageFileName(file.name);
+    };
+    // sự kiện đổi ảnh
+    const handleChangeImage = () => {
+        var formdata = new FormData();
+        formdata.append("image", selectedFile, imageFileName);
+        formdata.append("slug", product.slug);
+        fetch("/product/auth/image", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: formdata,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.status;
+                }
+                throw Error(response.status);
+            })
+            .then((result) => {
+                setSnackbarOpen(true);
+                setSnackbarSeverity("success");
+                setSnackbarMsg("Cập nhật ảnh thành công.");
+                setSelectedFile();
+                setPreview();
+                setImageFileName();
+            })
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Thực hiện Cập nhật ảnh không thành công.");
+            });
+    };
+    //----------------------------------------------------------------
 
     return (
         <div>
@@ -310,7 +496,11 @@ function ProductDetailManagement() {
             </Snackbar>
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
-                    <div className="row d-flex justify-content-center my-4">
+                    <form
+                        className="row d-flex justify-content-center my-4"
+                        noValidate="novalidate"
+                        encType="multipart/form-data"
+                    >
                         <div className="col-lg-7 ">
                             <div className="card mb-4">
                                 <div className="card-header d-flex justify-content-between py-3">
@@ -336,8 +526,9 @@ function ProductDetailManagement() {
                                             id="form1"
                                             name="title"
                                             type="text"
-                                            defaultValue={product.title}
+                                            value={title}
                                             className="form-control text-right w-75  word-wrap"
+                                            onChange={handleChangeSlug}
                                         />
                                     </div>
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -346,8 +537,9 @@ function ProductDetailManagement() {
                                             id="form1"
                                             name="slug"
                                             type="text"
-                                            defaultValue={product.slug}
+                                            value={slug}
                                             className="form-control w-75"
+                                            onChange={(e) => setSlug(e.target.value)}
                                         />
                                     </div>
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -356,8 +548,9 @@ function ProductDetailManagement() {
                                             id="form1"
                                             name="summary"
                                             type="text"
-                                            defaultValue={product.summary}
+                                            value={summary}
                                             className="form-control w-75"
+                                            onChange={(e) => setSumary(e.target.value)}
                                         />
                                     </div>
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -367,8 +560,9 @@ function ProductDetailManagement() {
                                             name="price"
                                             type="number"
                                             min={0}
-                                            defaultValue={product.price}
+                                            value={price}
                                             className="form-control w-50"
+                                            onChange={(e) => setPrice(e.target.value)}
                                         />
                                     </div>
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -378,8 +572,9 @@ function ProductDetailManagement() {
                                             name="discount"
                                             type="number"
                                             min={0}
-                                            defaultValue={product.discount}
+                                            value={discount}
                                             className="form-control w-50"
+                                            onChange={(e) => setDiscount(e.target.value)}
                                         />
                                     </div>
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -389,8 +584,9 @@ function ProductDetailManagement() {
                                             name="quantity"
                                             type="number"
                                             min={0}
-                                            defaultValue={product.quantity}
+                                            value={quantity}
                                             className="form-control w-50"
+                                            onChange={(e) => setQuantity(e.target.value)}
                                         />
                                     </div>
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -399,9 +595,10 @@ function ProductDetailManagement() {
                                             id="form1"
                                             name="content"
                                             type="text"
-                                            defaultValue={product.content}
+                                            value={content}
                                             rows={3}
                                             className="form-control w-75"
+                                            onChange={(e) => setContent(e.target.value)}
                                         />
                                     </div>
                                     <div className="form-outline d-flex justify-content-between mt-4">
@@ -426,12 +623,19 @@ function ProductDetailManagement() {
                                 </div>
                                 <div className="card-body">
                                     <div className="form-group">
-                                        <select className="form-control" name="category">
+                                        <select
+                                            className="form-control"
+                                            name="category"
+                                            onChange={(e) => {
+                                                setCategoryItem(e.target.value);
+                                                console.log(e.target.value);
+                                            }}
+                                        >
                                             <option value={productCategory.id ? productCategory.id : ""}>
                                                 {productCategory.title ? productCategory.title : "Chọn thể loại"}
                                             </option>
                                             {category.map((item, i) => (
-                                                <option value={item.slug} key={i}>
+                                                <option value={item.id} key={i}>
                                                     {item.title}
                                                 </option>
                                             ))}
@@ -457,14 +661,59 @@ function ProductDetailManagement() {
                                     <h5 className="mb-0 text-capitalize">Ảnh sản phẩm</h5>
                                 </div>
                                 <div className="card-body ">
-                                    <img
-                                        src={newImage}
-                                        alt="Images"
-                                        className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
-                                        style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}
-                                    ></img>
+                                    {!selectedFile && (
+                                        <img
+                                            src={newImage}
+                                            alt="Images"
+                                            className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
+                                            style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}
+                                        ></img>
+                                    )}
+                                    {/*  */}
+                                    {selectedFile && (
+                                        <img
+                                            src={preview}
+                                            alt="Images"
+                                            className="img-thumbnail form-control  m-auto"
+                                            style={{ height: "300px", width: "300px" }}
+                                        ></img>
+                                    )}
+                                    <input
+                                        id="form1"
+                                        name="photos"
+                                        type="file"
+                                        accept="image/png, image/gif, image/jpeg"
+                                        className="form-control mt-2 mx-auto"
+                                        style={{ width: "300px" }}
+                                        onChange={onSelectFile}
+                                    />
                                 </div>
                             </div>
+                            {selectedFile && (
+                                <div className="card mb-4 card-body ">
+                                    <div className=" row form-group justify-content-between">
+                                        <button type="button" className="btn btn-info col-auto" onClick={handleChangeImage}>
+                                            Đổi ảnh sản phẩm
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="card mb-4 card-body ">
+                                <div className=" row form-group justify-content-between">
+                                    <button type="button" className="btn btn-info" onClick={handleChangeProduct}>
+                                        Cập nhật thông tin sản phẩm
+                                    </button>
+                                </div>
+                            </div>
+                            {categoryItem && (
+                                <div className="card mb-4 card-body ">
+                                    <div className=" row form-group justify-content-between">
+                                        <button type="button" className="btn btn-info" onClick={handleChangeProductCategory}>
+                                            Cập nhật loại sản phẩm
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="card mb-4 card-body ">
                                 <div className=" row form-group justify-content-between">
@@ -504,7 +753,7 @@ function ProductDetailManagement() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </section>
         </div>

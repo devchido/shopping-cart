@@ -123,16 +123,16 @@ export default function TransactionDetail() {
                                 {data.code}
                             </span>
                         </li>
-                        <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                        {/* <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                             Loại giao dịch
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.type}
+                                {data.type }
                             </span>
-                        </li>
+                        </li> */}
                         <li className="list-group-item d-flex justify-content-between align-items-center  px-0 ">
                             Phương thức giao dịch
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
-                                {data.mode}
+                                {data.mode === 0 ? "Thanh toán qua Web" : "Thanh toán khi nhận hàng (Tiền mặt)"}
                             </span>
                         </li>
 

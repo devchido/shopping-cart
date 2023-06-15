@@ -1,7 +1,10 @@
 package com.example.redstore.service;
 
+import com.example.redstore.domain.Category;
 import com.example.redstore.domain.ProductCategory;
+import com.example.redstore.repository.CategoryRepository;
 import com.example.redstore.repository.ProductCategoryRepository;
+import com.example.redstore.service.dto.CategoryDto;
 import com.example.redstore.service.dto.ProductCategoryDto;
 import com.example.redstore.service.mapper.ProductCategoryMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class ProductCategoryService {
     private final ProductCategoryRepository productCategoryRepository;
     private final ProductCategoryMapper productCategoryMapper;
+    private final CategoryRepository categoryRepository;
 
     // Create new user
     @Transactional
@@ -79,4 +83,15 @@ public class ProductCategoryService {
     }
 
 
+    public String handleChangeProductCategory(Long productId, String categoryId) {
+        ProductCategory entity = productCategoryRepository.findByProductId(productId).orElse(null);
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        if (entity != null && category != null){
+            entity.setCategory(category);
+            productCategoryRepository.save(entity);
+            return "true";
+        } else {
+            return "false";
+        }
+    }
 }

@@ -18,10 +18,6 @@ function CreateProduct() {
     const [title, setTitle] = React.useState("");
     const [slug, setSlug] = React.useState("");
     //
-
-    const [newImage, setNewImage] = React.useState(
-        "https://nghikhangmy.vn/wp-content/themes/webchuan-ecom1/images/default-image.jpg"
-    );
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
@@ -37,7 +33,7 @@ function CreateProduct() {
         setTitle(text);
         setSlug(url);
     };
-    
+
     const loadDataCategory = () => {
         fetch("/category/api/filter?title= ")
             .then((response) => {
@@ -92,7 +88,6 @@ function CreateProduct() {
             data.get("price") === "" ||
             data.get("discount") === "" ||
             data.get("quantity") === "" ||
-            
             data.get("photos").name === "" ||
             data.get("photos").name === null
         ) {
@@ -226,7 +221,13 @@ function CreateProduct() {
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Summary</label>
-                                            <input id="form1" name="summary" type="text" className="form-control w-75" maxLength={100} />
+                                            <input
+                                                id="form1"
+                                                name="summary"
+                                                type="text"
+                                                className="form-control w-75"
+                                                maxLength={100}
+                                            />
                                         </div>
                                         <div className="form-outline d-flex justify-content-between mt-4">
                                             <label className="form-label">Giá</label>

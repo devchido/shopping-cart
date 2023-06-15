@@ -77,7 +77,7 @@ function PaymentLoading() {
             >
                 <CircularProgress size={80} /> {/* Kích thước của CircularProgress */}
             </Box>
-            <h1>Vui lòng chờ ...</h1>
+            {/* <h1>Vui lòng chờ ...</h1>
             <h1>Transaction Page</h1>
             <p>vnp_Amount: {vnp_Amount}</p>
             <p>vnp_BankCode: {vnp_BankCode}</p>
@@ -90,7 +90,7 @@ function PaymentLoading() {
             <p>vnp_TransactionNo: {vnp_TransactionNo}</p>
             <p>vnp_TransactionStatus: {vnp_TransactionStatus}</p>
             <p>vnp_TxnRef: {vnp_TxnRef}</p>
-            <p>vnp_SecureHash: {vnp_SecureHash}</p>
+            <p>vnp_SecureHash: {vnp_SecureHash}</p> */}
         </div>
     );
 }

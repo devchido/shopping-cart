@@ -345,12 +345,14 @@ function TransactionManagement() {
                                                 <MenuItem value="">
                                                     <em>Tất cả</em>
                                                 </MenuItem>
-                                                <MenuItem value={0}>Chờ xác nhận</MenuItem>
-                                                <MenuItem value={2}>Đang vận chuyển</MenuItem>
-                                                <MenuItem value={3}>Đang giao</MenuItem>
-                                                <MenuItem value={5}>Đã nhận</MenuItem>
-                                                <MenuItem value={1}>Đã huỷ</MenuItem>
-                                                <MenuItem value={4}>Hoàn tiền/Trả lại</MenuItem>
+                                                <MenuItem value={0}>Chưa thanh toán</MenuItem>
+                                                <MenuItem value={1}>Đã thanh toán</MenuItem>
+                                                <MenuItem value={2}>Thành công</MenuItem>
+                                                <MenuItem value={3}>User - Huỷ</MenuItem>
+                                                <MenuItem value={4}>Admin - Huỷ</MenuItem>
+                                                <MenuItem value={5}>Hoàn tiền/Trả lại</MenuItem>
+                                                <MenuItem value={6}>Y/c hoàn trả</MenuItem>
+                                                <MenuItem value={7}>Đã hoàn trả</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Box>
@@ -424,17 +426,21 @@ function TransactionManagement() {
 
                                                                 <TableCell className="text-nowrap">
                                                                     {item.status === 0
-                                                                        ? "Chờ xác nhận"
+                                                                        ? "Chưa thanh toán"
                                                                         : null || item.status === 1
-                                                                        ? "Đã huỷ"
+                                                                        ? "Đã thanh toán"
                                                                         : null || item.status === 2
-                                                                        ? "Đang vận chuyển"
+                                                                        ? "Thành công"
                                                                         : null || item.status === 3
-                                                                        ? "Đăng giao"
+                                                                        ? "User - Huỷ"
                                                                         : null || item.status === 4
-                                                                        ? "Hoàn tiền/Trả lại"
-                                                                        : null || item.status === 5
-                                                                        ? "Đã nhận"
+                                                                        ? "admin - huỷ"
+                                                                        // : null || item.status === 5
+                                                                        // ? "Đã nhận"
+                                                                        : null || item.status === 6
+                                                                        ? "Y/c hoàn trả"
+                                                                        : null || item.status === 7
+                                                                        ? "Đã hoàn trả"
                                                                         : null}
                                                                 </TableCell>
 
@@ -449,12 +455,12 @@ function TransactionManagement() {
                                                                             </IconButton>
                                                                         </Link>
 
-                                                                        <IconButton
+                                                                        {/* <IconButton
                                                                             color="error"
                                                                             onClick={() => handleClickOpenDialog(item)}
                                                                         >
                                                                             <DeleteIcon />
-                                                                        </IconButton>
+                                                                        </IconButton> */}
                                                                     </div>
                                                                 </TableCell>
                                                             </TableRow>

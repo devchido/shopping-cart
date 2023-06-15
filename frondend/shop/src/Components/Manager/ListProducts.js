@@ -131,7 +131,7 @@ function ListProducts() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch(`/product/auth/user/${page}/${pageSize}/${field}?title=${title}&status=${status}&sort=${sort}`, requestOptions)
+        fetch(`/product/auth/user/${page}/${pageSize}/${field}?title=${title}&categoryId=${ctitle}&status=${status}&sort=${sort}`, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -159,7 +159,7 @@ function ListProducts() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
-    }, [page, pageSize, field, status, sort]);
+    }, [page, pageSize, field, ctitle, status, sort]);
     return (
         <div>
             <Snackbar

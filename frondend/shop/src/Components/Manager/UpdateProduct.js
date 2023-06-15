@@ -194,9 +194,9 @@ function UpdateProduct() {
                 })
                 .catch((error) => {
                     console.log("error", error);
-                    setSnackbarOpen(true);
-                    setSnackbarSeverity("error");
-                    setSnackbarMsg("False");
+                    // setSnackbarOpen(true);
+                    // setSnackbarSeverity("error");
+                    // setSnackbarMsg("False");
                 });
         }
         if (

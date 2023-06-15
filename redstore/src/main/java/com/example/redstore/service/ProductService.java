@@ -124,13 +124,13 @@ public class ProductService {
         } else new String("Không thể edit");
 
     }
-
+//    public void changleImageProduct()
 
     // Delete user
     @Transactional
     public String delete(String id) {
         Product product = productRepository.findById(id).orElseThrow();
-        if (orderItemRepository.existsByProduct(product)){
+        if (orderItemRepository.existsByProduct(product)) {
             return "Bạn không thể xoá sản phẩm này vì nó đã được sử dụng trong một đơn hàng.";
         } else {
             if (SecurityUtils.getPrincipal().getId() == product.getUser().getId()) {
@@ -224,31 +224,65 @@ public class ProductService {
 //    }
 
     // todo: findProductsWithPaginationAndSorting - lọc tất cả các product được đăng bán ở dạng page
-    public Page<ProductDto> findProductsWithPaginationAndSorting(int offset, int pageSize,String title, String categoryId, String field) {
-        Page<Product> products = productRepository.findAllProductPage((PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field))),title, categoryId);
-        Page<ProductDto> dtos = products.map(productMapper::toDo);
-        return dtos;
+    public Page<ProductDto> findProductsWithPaginationAndSorting(
+            int offset, int pageSize, String title, String categoryId, String field
+    ) {
+        if (!categoryId.equals("")) {
+            Page<Product> products = productRepository.findAllProductPage(
+                    (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field))),
+                    title, categoryId);
+            Page<ProductDto> dtos = products.map(productMapper::toDo);
+            return dtos;
+        } else {
+            Page<Product> products = productRepository.findAllProductPage1(
+                    (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field))),
+                    title);
+            Page<ProductDto> dtos = products.map(productMapper::toDo);
+            return dtos;
+        }
+
     }
 
     // todo: filterUsersProducts - lọc tất cả các product của user đang đăng nhập ở dạng page
-    public Page<ProductDto> filterUsersProducts(String title, int offset, int pageSize, String field, String status, String sort) {
-        Page<Product> products = productRepository.filterUsersProducts(title,
-                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+    public Page<ProductDto> filterUsersProducts(String title, int offset, int pageSize, String field, String categoryId, String status, String sort) {
+        if (!categoryId.equals("")){
+            Page<Product> products = productRepository.filterUsersProducts(title,
+                    (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
 
-                String.valueOf(SecurityUtils.getPrincipal().getId()), status);
-        Page<ProductDto> dtos = products.map(productMapper::toDo);
-        return dtos;
+                    String.valueOf(SecurityUtils.getPrincipal().getId()), categoryId, status);
+            Page<ProductDto> dtos = products.map(productMapper::toDo);
+            return dtos;
+        } else {
+            Page<Product> products = productRepository.filterUsersProducts1(title,
+                    (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+
+                    String.valueOf(SecurityUtils.getPrincipal().getId()), status);
+            Page<ProductDto> dtos = products.map(productMapper::toDo);
+            return dtos;
+        }
+
     }
 
     // todo: filterAllProducts - lọc tất cả các product ở dạng page
+    // todo: hiển thị danh sách sản phẩm đươc đăng bán
     public Page<ProductDto> filterAllProducts(int offset, int pageSize, String field, String sort,
                                               String username, String ptitle, String ctitle, String status, String vendor) {
-        Page<Product> products = productRepository.filterAllProducts(
-                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
-                username, ptitle, ctitle, status, vendor
-        );
-        Page<ProductDto> dtos = products.map(productMapper::toDo);
-        return dtos;
+        System.out.println(ctitle);
+        if (!ctitle.equals("")) {
+            Page<Product> products = productRepository.filterAllProducts(
+                    (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+                    username, ptitle, ctitle, status, vendor
+            );
+            Page<ProductDto> dtos = products.map(productMapper::toDo);
+            return dtos;
+        } else {
+            Page<Product> products = productRepository.filterAllProducts1(
+                    (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+                    username, ptitle, status, vendor
+            );
+            Page<ProductDto> dtos = products.map(productMapper::toDo);
+            return dtos;
+        }
     }
 
     /* test
@@ -304,4 +338,37 @@ public class ProductService {
     }
 
 
+    public List<ProductDto> filterProductByCategory() {
+        List<Product> entity = productRepository.filterProductByCategory();
+        List<ProductDto> dto = productMapper.toDo(entity);
+        dto.forEach(productDto -> {
+            ProductCategory productCategory = productCategoryRepository.findByProductId(productDto.getId())
+                    .orElse(null);
+            productDto.setCategory(String.valueOf(productCategory.getCategory().getTitle()));
+        });
+        return dto;
+    }
+
+    // todo: admin thay đổi thuộc tính cho product - không có ảnh
+    public String handleChangeProduct(
+            String id, String slug, String title, String summary,
+            Float price, Float discount, Integer quantity, String content
+    ) {
+        Product entity = productRepository.findById(id).orElse(null);
+        if (entity == null) {
+            System.out.println("cập nhật không được thực hiện");
+            return "false";
+        } else {
+            entity.setTitle(title);
+            entity.setSlug(slug);
+            entity.setSummary(summary);
+            entity.setPrice(price);
+            entity.setDiscount(discount);
+            entity.setQuantity(quantity);
+            entity.setContent(content);
+            productRepository.save(entity);
+            System.out.println("cập nhật được thực hiện");
+            return "true";
+        }
+    }
 }

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -170,9 +171,18 @@ public class AuthenticationService {
     // set ADMIN
 //    @Bean
 //    public void updateAdmin(){
-//        var user = userRepository.findByEmail("tu@gmail.com").orElse(null);
+//        var user = userRepository.findByEmail("nguyendaitu1610@gmail.com").orElse(null);
 //        user.setRole(Role.ADMIN);
 //        userRepository.save(user);
+//    }
+    // Set password mặc định 1111
+//        @Bean
+//    public void setPassWordDefault(){
+//        List<User> users = userRepository.findAll();
+//        users.forEach(user -> {
+//            user.setPassword(passwordEncoder.encode("1111"));
+//        });
+//        userRepository.saveAll(users);
 //    }
 
     /*

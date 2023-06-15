@@ -85,13 +85,14 @@ public class ProductResources {
     // todo: filterUsersProducts - user lọc tất cả các product của mình ở dạng page
     @GetMapping("/auth/user/{offset}/{pageSize}/{field}")
     private APIResponse<Page<ProductDto>> filterUsersProducts(
-            @RequestParam(value = "title", defaultValue = "") String title,
             @PathVariable int offset,
             @PathVariable int pageSize,
             @PathVariable String field,
+            @RequestParam(value = "title", defaultValue = "") String title,
+            @RequestParam String categoryId,
             @RequestParam(value = "status", defaultValue = "") String status,
             @RequestParam String sort) {
-        Page<ProductDto> dtos = productService.filterUsersProducts(title, offset, pageSize, field, status, sort);
+        Page<ProductDto> dtos = productService.filterUsersProducts(title, offset, pageSize, field, categoryId, status, sort);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
 
@@ -108,9 +109,9 @@ public class ProductResources {
             @RequestParam String status,
             @RequestParam String vendor
 
-            ) {
+    ) {
         Page<ProductDto> dtos = productService.filterAllProducts(offset, pageSize, field, sort,
-                username, ptitle, ctitle, status,vendor);
+                username, ptitle, ctitle, status, vendor);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
 
@@ -150,7 +151,7 @@ public class ProductResources {
             @RequestParam(value = "title", defaultValue = "") String title,
             @RequestParam(value = "categoryId", defaultValue = "") String categoryId,
             @PathVariable String field) {
-        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize,title, categoryId, field);
+        Page<ProductDto> dtos = productService.findProductsWithPaginationAndSorting(offset, pageSize, title, categoryId, field);
         return new APIResponse<>(dtos.getSize(), dtos);
     }
 
@@ -170,6 +171,7 @@ public class ProductResources {
         List<ProductDto> dtos = productService.filterProduct(sort, field);
         return dtos;
     }
+
     // todo: Quản lý trạng thái của sản phẩm - NCC
     @PutMapping("/auth/change-status")
     public void changeStatus(@RequestParam("id") String id, @RequestParam("status") int status) {
@@ -188,6 +190,7 @@ public class ProductResources {
         List<ProductDto> dtos = productService.lastestProduct(field);
         return dtos;
     }
+
     // todo: upload image
     @PostMapping("/auth/image")
     public ResponseEntity<?> uploadImage(
@@ -198,6 +201,24 @@ public class ProductResources {
                 .body(uploadImage);
     }
 
+    // todo: admin thay đổi thuộc tính cho product - không có ảnh
+    @PostMapping("/auth/admin/handleChangeProduct")
+    public ResponseEntity<?> handleChangeProduct(
+            @RequestParam("id") String id,
+            @RequestParam("slug") String slug,
+            @RequestParam("title") String title,
+            @RequestParam("summary") String summary,
+            @RequestParam("price") Float price,
+            @RequestParam("discount") Float discount,
+            @RequestParam("quantity") Integer quantity,
+            @RequestParam("content") String content
+    ) throws IOException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productService.handleChangeProduct(
+                        id, slug, title, summary, price, discount, quantity, content
+                ));
+    }
+
     @GetMapping("/auth/image/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName) {
         byte[] imageData = imageProductService.downloadImage(fileName);
@@ -205,5 +226,10 @@ public class ProductResources {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
 
+    }
+
+    @GetMapping("/api/filter_product_by_category")
+    public ResponseEntity<?> filterProductByCategory() {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.filterProductByCategory());
     }
 }

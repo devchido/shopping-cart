@@ -52,7 +52,7 @@ export default function SingIn() {
                 console.log(result);
                 localStorage.setItem("token", result.token);
                 // console.log("true");
-                window.location = "/";
+                window.location = "/profile";
             })
             .catch((error) => {
                 console.log("error", error);

@@ -27,6 +27,7 @@ import { VND } from "../../Unity/VND";
 import moment from "moment";
 import { format, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
+import API from "../../Api/Api";
 
 function OrderManagement() {
     // data product-category
@@ -101,7 +102,7 @@ function OrderManagement() {
             redirect: "follow",
         };
         fetch(
-            `/order/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&cartId=${cartId}&userId=${userId}&username=${username}&mobile=${mobile}&email=${email}&address=${address}&city=${city}&country=${country}&status=${status}`,
+            `${API}/order/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&cartId=${cartId}&userId=${userId}&username=${username}&mobile=${mobile}&email=${email}&address=${address}&city=${city}&country=${country}&status=${status}`,
             requestOptions
         )
             .then((response) => {
@@ -157,7 +158,7 @@ function OrderManagement() {
                         <div>
                             <div className="card mb-4">
                                 <div className="card-header d-flex py-3 justify-content-between ">
-                                    <h5 className="mt-1">Quản lý Order</h5>
+                                    <h5 className="mt-1">Quản lý đơn hàng</h5>
                                     <strong>{totalElements}</strong>
                                 </div>
                             </div>
@@ -298,7 +299,7 @@ function OrderManagement() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={item.user.photos}
+                                                                                src={API+item.user.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />

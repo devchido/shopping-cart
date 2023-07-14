@@ -20,6 +20,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { VND } from "../Unity/VND";
 import { format } from "date-fns";
+import API from "../Api/Api";
 
 function OrderDetail() {
     const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận", "Hoàn thành"];
@@ -71,7 +72,7 @@ function OrderDetail() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch("/order-item/auth/shop/order/" + id, requestOptions)
+        fetch(API + "/order-item/auth/shop/order/" + id, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -94,7 +95,7 @@ function OrderDetail() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch("/order/auth/findOneById/" + id, requestOptions)
+        fetch(API + "/order/auth/findOneById/" + id, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -202,7 +203,7 @@ function OrderDetail() {
                           <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                               {/* Image start */}
                               <div className="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                  <img src={item.product.photos} className="w-100" alt={item.product.title} />
+                                  <img src={API + item.product.photos} className="w-100" alt={item.product.title} />
                                   <a href="#!">
                                       <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }} />
                                   </a>
@@ -243,7 +244,8 @@ function OrderDetail() {
     };
     const handleReceiveOrder = () => {
         fetch(
-            "/order/auth/receive?" +
+            API +
+                "/order/auth/receive?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -270,7 +272,8 @@ function OrderDetail() {
     };
     const handleReturnsOrder = () => {
         fetch(
-            "/order/auth/returns?" +
+            API +
+                "/order/auth/returns?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -297,7 +300,8 @@ function OrderDetail() {
     };
     const handleSuccess = () => {
         fetch(
-            "/order/auth/success?" +
+            API +
+                "/order/auth/success?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -323,7 +327,7 @@ function OrderDetail() {
             .catch((error) => console.log("error", error));
     };
     const handleCancelOrder = () => {
-        fetch("/order/auth/cancel?id=" + order.id, {
+        fetch(API + "/order/auth/cancel?id=" + order.id, {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -351,7 +355,7 @@ function OrderDetail() {
     };
     const navigation = useNavigate();
     const handleTransaction = () => {
-        fetch("/transaction/auth/order/" + order.id, {
+        fetch(API + "/transaction/auth/order/" + order.id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -432,7 +436,11 @@ function OrderDetail() {
                                 </div>
                                 <div className="card-body">
                                     <Box sx={{ width: "100%", my: 2 }}>
-                                    {order.status === 0 || order.status === 1 || order.status === 2 || order.status === 3 || order.status === 4 ? (
+                                        {order.status === 0 ||
+                                        order.status === 1 ||
+                                        order.status === 2 ||
+                                        order.status === 3 ||
+                                        order.status === 4 ? (
                                             <Stepper activeStep={order.status + 1}>
                                                 {steps.map((label) => (
                                                     <Step key={label}>
@@ -453,12 +461,12 @@ function OrderDetail() {
                                         ) : null}
                                         {order.status === 7 || order.status === 8 ? (
                                             <Stepper activeStep={order.status - 6}>
-                                            {steps2.map((label) => (
-                                                <Step key={label}>
-                                                    <StepLabel>{label}</StepLabel>
-                                                </Step>
-                                            ))}
-                                        </Stepper>
+                                                {steps2.map((label) => (
+                                                    <Step key={label}>
+                                                        <StepLabel>{label}</StepLabel>
+                                                    </Step>
+                                                ))}
+                                            </Stepper>
                                         ) : null}
                                     </Box>
                                     <Box sx={{ my: 2 }} className=" d-flex justify-content-between">

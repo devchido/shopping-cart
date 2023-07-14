@@ -31,7 +31,7 @@ public interface OrderRepository extends JpaRepository<Order, String> {
      */
 
     @Query(value = "SELECT t.* FROM " + db + ".order t " +
-            "        WHERE user_id = :users and status like concat( :status )", nativeQuery = true)
+            "        WHERE user_id = :users and status like concat( :status ) ORDER By t.id DESC", nativeQuery = true)
     List<Order> findByUser(@Param("users") Long users, @Param("status") String status);
 
     @Query(value = "SELECT t.* FROM " + db + ".order t " +

@@ -20,6 +20,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { format } from "date-fns";
 import { VND } from "../../Unity/VND";
+import API from "../../Api/Api";
 
 export default function TransactionDetailManagement() {
     const steps = ["Chưa thanh toán", "Đã thanh toán", "Thành công"];
@@ -60,7 +61,7 @@ export default function TransactionDetailManagement() {
 
     // admin thực hiện get data của data
     const loadDataTransaction = () => {
-        fetch("/transaction/auth/admin/" + id, {
+        fetch(API+"/transaction/auth/admin/" + id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -120,7 +121,7 @@ export default function TransactionDetailManagement() {
     // Khôi phục đơn hàng
     const handleRecovery = () => {
         fetch(
-            "/data/auth/admin/set-status?" +
+            API+"/data/auth/admin/set-status?" +
                 new URLSearchParams({
                     id: data.id,
                     status: 0,

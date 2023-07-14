@@ -4,13 +4,12 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import { Link, useParams } from "react-router-dom";
 import API from "../Api/Api";
 export default function UserView() {
-    // Đang lỗi
+    
     const [user, setUser] = React.useState({});
     const { id } = useParams();
-    console.log(id);
 
     const loadDataUser = () => {
-        fetch(`/user/api/u/${id}`, {
+        fetch(`${API}/user/api/u/${id}`, {
             method: "GET",
         })
             .then((response) => {
@@ -43,7 +42,7 @@ export default function UserView() {
                                 >
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: 150 }}>
                                         <img
-                                            src={user.photos}
+                                            src={API+user.photos}
                                             alt={user.firstName + " " + user.lastName}
                                             className="img-fluid img-thumbnail mt-4 mb-2"
                                             style={{ width: 150, zIndex: 1 }}
@@ -51,19 +50,20 @@ export default function UserView() {
                                     </div>
                                     <div className="ms-3 " style={{ marginTop: 120 }}>
                                         <h2 className="user-name-style">{user.firstName + " " + user.lastName}</h2>
-                                        {/* <p>
+                                        <p>
                                             <EmailIcon /> {user.email} || <PhoneIcon /> {user.mobile}
-                                        </p> */}
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="p-5 text-black" style={{ backgroundColor: "#f8f9fa" }}>
+                                {/* <div className="p-5 text-black" style={{ backgroundColor: "#f8f9fa" }}>
                                     <div className="d-flex justify-content-end text-center">
                                         <div>
-                                            {/* <p className="mb-1 h5">Email: {user.email}</p>
-                                            <p className="small text-muted mb-0">Email</p> */}
+                                            <p className="mb-1 h5">Email: {user.email}</p>
+                                            <p className="small text-muted mb-0">Email</p>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
+                                <br/>
                                 <div className="card-body p-4 text-black">
                                     <div className="mb-5">
                                         <p className="lead fw-normal mb-1">Intro</p>

@@ -12,6 +12,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { VND } from "../Unity/VND";
 import {
     Alert,
     Button,
@@ -23,7 +24,7 @@ import {
     IconButton,
     Snackbar,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 // LabTabs
@@ -32,9 +33,18 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import API from "../Api/Api";
 //
 
 function Orders() {
+    // Lấy thông tin tử url
+    const location = useLocation();
+    const navigation = useNavigate();
+    const searchParams = new URLSearchParams(location.search);
+    let statusParams = searchParams.get("status");
+    const [status, setStatus] = React.useState("0");
+
+    //
     const [loading, setLoading] = React.useState(false);
     const [order, setOrder] = React.useState([]);
     const [dialogItem, setDialogItem] = React.useState();
@@ -45,37 +55,11 @@ function Orders() {
     //
     const [open, setOpen] = React.useState(false);
     //
-    const [status, setStatus] = React.useState("0");
-    // LabTabs
-    const [value, setValue] = React.useState("0");
 
-    const handleChange = (event, newValue) => {
-        setLoading(true);
-        setStatus(newValue);
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-        var requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-
-        fetch("/order/auth/user?status=" + newValue, requestOptions)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
-                console.log(result);
-                setLoading(false);
-                setOrder(result);
-            })
-            .catch((error) => {
-                console.log("error", error);
-            });
+    const handleChange = (event, value) => {
+        // setLoading(true);
+        // setStatus(newValue);
+        navigation(`/orders?status=${value}`)
     };
     //
     const handleClickOpen = (item) => {
@@ -102,7 +86,7 @@ function Orders() {
             redirect: "follow",
         };
 
-        fetch("/order/auth/user?status=" + status, requestOptions)
+        fetch(API + "/order/auth/user?status=" + status, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -110,7 +94,7 @@ function Orders() {
                 throw new Error(response.status);
             })
             .then((result) => {
-                console.log(result);
+                // console.log(result);
                 setLoading(false);
                 setOrder(result);
             })
@@ -160,8 +144,11 @@ function Orders() {
     };
     React.useEffect(() => {
         setLoading(true);
+        if (statusParams) {
+            setStatus(statusParams);
+        }
         loadDataOrder();
-    }, [status]);
+    }, [status,statusParams]);
 
     const ShowOrders = () => {
         return (
@@ -177,20 +164,15 @@ function Orders() {
                                             {/* 1 */}
                                             <div className="col-md-5 col-lg-5 col-xl-5">
                                                 <p className="lead fw-normal mb-2 ">
-                                                    <span className="text-muted">Order :</span> {item.id}
+                                                    <span className="text-muted">Mã đơn hàng:</span> {item.id}
+                                                </p>
+
+                                                <p>
+                                                    <span className="text-muted">Tổng tiền: </span>
+                                                    {VND.format(item.total)}
                                                 </p>
                                                 <p>
-                                                    <span className="text-muted">Line: </span>
-                                                    {item.line1}
-                                                </p>
-                                                <p>
-                                                    <span className="text-muted">City: </span>
-                                                    {item.city} &nbsp;
-                                                    <span className="text-muted">Country: </span>
-                                                    {item.country}
-                                                </p>
-                                                <p>
-                                                    <span className="text-muted">Content: </span>
+                                                    <span className="text-muted">Ghi chú: </span>
                                                     {item.content}
                                                 </p>
                                             </div>
@@ -221,20 +203,23 @@ function Orders() {
                                                             : null}
                                                     </span>
                                                 </p>
-                                                <span>
-                                                    <span className="text-muted">Created At: </span>
-                                                    {format(parseISO(item.createdAt), "dd-MM-yyyy")}
-                                                </span>
-                                                <br />
-                                                {item.updatedAt ? (
+                                                <p>
                                                     <span>
-                                                        <span className="text-muted">Updated At: </span>
-                                                        {formatDistanceToNow(new Date(item.updatedAt), {
-                                                            locale: vi,
-                                                            addSuffix: true,
-                                                        })}
+                                                        <span className="text-muted">Thời gian tạo: </span>
+                                                        {format(parseISO(item.createdAt), "dd-MM-yyyy")}
                                                     </span>
-                                                ) : null}
+                                                </p>
+                                                <p>
+                                                    {item.updatedAt ? (
+                                                        <span>
+                                                            <span className="text-muted">Thời gian cập nhật: </span>
+                                                            {formatDistanceToNow(new Date(item.updatedAt), {
+                                                                locale: vi,
+                                                                addSuffix: true,
+                                                            })}
+                                                        </span>
+                                                    ) : null}
+                                                </p>
                                             </div>
                                             {/* 4 */}
                                             <div className="col-md-2 col-lg-2 col-xl-2 text-end justify-content-end d-flex">
@@ -323,12 +308,12 @@ function Orders() {
                     <div className="row d-flex justify-content-center align-items-center h-100">
                         <div className="col-11">
                             <div className="d-flex justify-content-between align-items-center mb-4">
-                                <h3 className="fw-normal mb-0 text-black">Order</h3>
-                                <div>
+                                <h3 className="fw-normal mb-0 text-black">Đơn hàng</h3>
+                                {/* <div>
                                     <p className="mb-0">
-                                        <span className="text-muted">Sort by:</span> <span className="text-body">price</span>
+                                        <span className="text-muted">Sort by:</span> <span className="text-body">Id</span>
                                     </p>
-                                </div>
+                                </div> */}
                             </div>
                             {/* LabTabs start */}
                             <LabTabs />

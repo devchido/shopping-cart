@@ -35,6 +35,7 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import IconButton from "@mui/material/IconButton";
 //Paginavtion
 import TablePagination from "@mui/material/TablePagination";
+import API from "../../Api/Api";
 
 function UsersManagement() {
     // data product-category
@@ -74,7 +75,7 @@ function UsersManagement() {
         setDialogVendor();
     };
     const handleChangeVendor = () => {
-        fetch("/user/auth/change-vendor?id=" + dialogItem.id + "&vendor=" + dialogVendor, {
+        fetch(API+"/user/auth/change-vendor?id=" + dialogItem.id + "&vendor=" + dialogVendor, {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -118,7 +119,7 @@ function UsersManagement() {
     };
 
     const loadDataUser = () => {
-        var url = "/user/auth/admin/" + page + "/" + pageSize + "?";
+        var url = API+"/user/auth/admin/" + page + "/" + pageSize + "?";
         fetch(
             url +
                 new URLSearchParams({
@@ -227,8 +228,8 @@ function UsersManagement() {
                         <div>
                             <div className="card mb-4">
                                 <div className="card-header d-flex py-3 justify-content-between ">
-                                    <h5 className="mt-1">Quản lý User</h5>
-                                    <strong>{data.length} user</strong>
+                                    <h5 className="mt-1">Quản lý tài khoản</h5>
+                                    {/* <strong>{data.length} người dùng</strong> */}
                                 </div>
                             </div>
                             <div className="card mb-4">
@@ -321,7 +322,7 @@ function UsersManagement() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={item.photos}
+                                                                                src={API+item.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />

@@ -37,8 +37,8 @@ export default function SignUp() {
             data.get("firstName") === "" ||
             data.get("lastName") === "" ||
             data.get("email") === "" ||
-            data.get("mobile") === "" 
-            // data.get("password") === ""
+            data.get("mobile") === "" ||
+            data.get("password") === ""
         ) {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
@@ -60,6 +60,7 @@ export default function SignUp() {
                                         lastName: data.get("lastName"),
                                         email: data.get("email"),
                                         mobile: data.get("mobile"),
+                                        password: data.get("password"),
                                     });
 
                                     var requestOptions = {
@@ -69,7 +70,7 @@ export default function SignUp() {
                                         redirect: "follow",
                                     };
                                     console.log(raw);
-                                    fetch("/api/v1/auth/register", requestOptions)
+                                    fetch(API+"/api/v1/auth/register", requestOptions)
                                         .then((response) => {
                                             if (response.ok) {
                                                 return response.json();
@@ -78,9 +79,9 @@ export default function SignUp() {
                                         })
                                         .then((result) => {
                                             console.log(result);
-                                            // localStorage.setItem("token", result.token);
-                                            // window.location = "/profile";
-                                            window.location = "/singin"
+                                            localStorage.setItem("token", result.token);
+                                            window.location = "/profile";
+                                            // window.location = "/singin"
                                         })
                                         .catch((error) => {
                                             setSnackbarOpen(true);
@@ -170,7 +171,7 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <TextField required fullWidth id="mobile" label="Mobile" name="mobile" autoComplete="mobile" />
                             </Grid>
-                            {/* <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
@@ -180,7 +181,7 @@ export default function SignUp() {
                                     id="password"
                                     autoComplete="new-password"
                                 />
-                            </Grid> */}
+                            </Grid>
                         </Grid>
                         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                             Đăng ký

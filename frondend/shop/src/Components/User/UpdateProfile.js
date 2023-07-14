@@ -21,7 +21,7 @@ export default function UpdateProfile() {
     };
     const loadDataUser = () => {
         setUser({});
-        if (localStorage.getItem("token") !== null) {
+        if (localStorage.getItem("token")) {
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -31,7 +31,7 @@ export default function UpdateProfile() {
                 redirect: "follow",
             };
 
-            fetch("/user/auth/info", requestOptions)
+            fetch(API+"/user/auth/info", requestOptions)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();
@@ -60,7 +60,7 @@ export default function UpdateProfile() {
         if (data.get("photos").name === "" || data.get("photos").name === null) {
         } else {
             formdata.append("image", data.get("photos"), "/" + event.target[0].value);
-            fetch("/user/auth/image", {
+            fetch(API+"/user/auth/image", {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -89,7 +89,7 @@ export default function UpdateProfile() {
         }
 
         // thông tin user
-        fetch("/user/auth/updateInfo", {
+        fetch(API+"/user/auth/updateInfo", {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -152,7 +152,7 @@ export default function UpdateProfile() {
                             <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                 <img
                                     className="rounded form-control mt-5 border"
-                                    src={user.photos}
+                                    src={API+user.photos}
                                     style={{ maxHeight: "300px" }}
                                     alt=""
                                 />

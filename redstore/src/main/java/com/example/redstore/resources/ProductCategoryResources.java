@@ -1,13 +1,8 @@
 package com.example.redstore.resources;
 
-import com.example.redstore.domain.Category;
-import com.example.redstore.projection.ProductInfo;
-import com.example.redstore.service.CategoryService;
 import com.example.redstore.service.ProductCategoryService;
 import com.example.redstore.service.dto.APIResponse;
-import com.example.redstore.service.dto.CategoryDto;
 import com.example.redstore.service.dto.ProductCategoryDto;
-import com.example.redstore.service.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

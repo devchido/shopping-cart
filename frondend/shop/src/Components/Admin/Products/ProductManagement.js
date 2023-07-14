@@ -29,6 +29,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 import { VND } from "../../Unity/VND";
+import API from "../../Api/Api";
 
 function ProductManagement() {
     // data product-category
@@ -82,7 +83,7 @@ function ProductManagement() {
         setSnackbarOpen(false);
     };
     const loadDataCategory = () => {
-        fetch("/category/api").then((resp) => {
+        fetch(API+"/category/api").then((resp) => {
             resp.json().then((result) => {
                 setCategory(result);
             });
@@ -91,7 +92,7 @@ function ProductManagement() {
 
     const loadDataProduct = () => {
         fetch(
-            "/product/auth/admin/" +
+            API+"/product/auth/admin/" +
                 page +
                 "/" +
                 pageSize +
@@ -188,7 +189,7 @@ function ProductManagement() {
                                             />
                                         </FormControl>
                                         <FormControl className="col-lg-2 col-auto px-2 my-1">
-                                            <Typography>Trạng thái của sản phẩm</Typography>
+                                            <Typography>Trạng thái sản phẩm</Typography>
                                             <Select
                                                 inputProps={{ "aria-label": "Without label" }}
                                                 value={status}
@@ -294,7 +295,6 @@ function ProductManagement() {
                                                         <TableCell className="text-nowrap">Id</TableCell>
                                                         <TableCell className="text-nowrap">Sản phẩm</TableCell>
                                                         <TableCell className="text-nowrap">User</TableCell>
-                                                        <TableCell className="text-nowrap">Thể loại</TableCell>
                                                         <TableCell className="text-nowrap" align="right">
                                                             Giá (₫)
                                                         </TableCell>
@@ -341,9 +341,6 @@ function ProductManagement() {
                                                                     />
                                                                 </TableCell>
 
-                                                                <TableCell className="text-nowrap">
-                                                                    {item.user.firstName + " " + item.user.lastName}
-                                                                </TableCell>
                                                                 <TableCell className="text-nowrap">
                                                                     {item.user.firstName + " " + item.user.lastName}
                                                                 </TableCell>

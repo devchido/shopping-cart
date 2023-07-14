@@ -7,6 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Avatar, Box, Container, CssBaseline, Input, Snackbar, TextField, ThemeProvider } from "@mui/material";
 import { format } from "date-fns";
 import convertToUrl from "../../Unity/CovertToUrl";
+import API from "../../Api/Api";
 
 function ProductDetailManagement() {
     const { id } = useParams();
@@ -53,7 +54,7 @@ function ProductDetailManagement() {
     };
 
     const loadDataProduct = () => {
-        fetch(`/product/auth/${id}`, {
+        fetch(`${API}/product/auth/${id}`, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -75,7 +76,7 @@ function ProductDetailManagement() {
                 setDiscount(result.discount);
                 setQuantity(result.quantity);
                 setContent(result.content);
-                setNewImage(result.photos);
+                setNewImage(API+result.photos);
                 setStatus(result.status);
             })
             .catch((error) => {
@@ -85,7 +86,7 @@ function ProductDetailManagement() {
                 setSnackbarMsg("Load product error!");
             });
         // product category
-        fetch(`/product-category/api/${id}`)
+        fetch(`${API}/product-category/api/${id}`)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -104,7 +105,7 @@ function ProductDetailManagement() {
             });
     };
     const loadDataCategory = () => {
-        fetch("/category/api/filter?title= ")
+        fetch(API+"/category/api/filter?title= ")
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -213,7 +214,7 @@ function ProductDetailManagement() {
     };
     // Chuyển sản phẩm vào mục đã xác nhận
     const handleConfirm = () => {
-        var url = "/product/auth/admin/setStatus?";
+        var url = API+"/product/auth/admin/setStatus?";
         fetch(
             url +
                 new URLSearchParams({
@@ -249,7 +250,7 @@ function ProductDetailManagement() {
     };
     // Chuyển sản phẩm vào mục kiểm duyệt
     const handleCensorship = () => {
-        var url = "/product/auth/admin/setStatus?";
+        var url = API+"/product/auth/admin/setStatus?";
         fetch(
             url +
                 new URLSearchParams({
@@ -345,7 +346,7 @@ function ProductDetailManagement() {
         formdata.append("discount", discount);
         formdata.append("quantity", quantity);
         formdata.append("content", content);
-        fetch("/product/auth/admin/handleChangeProduct", {
+        fetch(API+"/product/auth/admin/handleChangeProduct", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -384,7 +385,7 @@ function ProductDetailManagement() {
     // Cập nhật loại sản phẩm
     const handleChangeProductCategory = () => {
         fetch(
-            "/product-category/auth/handleChangeProductCategory?" +
+            API+"/product-category/auth/handleChangeProductCategory?" +
                 new URLSearchParams({
                     productId: id,
                     categoryId: categoryItem,
@@ -444,7 +445,7 @@ function ProductDetailManagement() {
         var formdata = new FormData();
         formdata.append("image", selectedFile, imageFileName);
         formdata.append("slug", product.slug);
-        fetch("/product/auth/image", {
+        fetch(API+"/product/auth/image", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -648,7 +649,7 @@ function ProductDetailManagement() {
                                     <h5 className="mb-0">Người bán</h5>
                                 </div>
                                 <div className="card-body d-flex">
-                                    <Avatar alt="Remy Sharp" src={product.user.photos} variant="rounded" />
+                                    <Avatar alt="Remy Sharp" src={API+product.user.photos} variant="rounded" />
                                     <p className="my-auto mx-3">
                                         <strong>{product.user.firstName + " " + product.user.lastName}</strong>
                                     </p>
@@ -745,11 +746,11 @@ function ProductDetailManagement() {
                                             Duyệt bài
                                         </button>
                                     ) : null}
-                                    {/* {product.status !== 0 ? (
-                                        <button type="reset" className="btn btn-warning col-auto " onClick={handleWait}>
+                                    
+                                        {/* <button type="reset" className="btn btn-warning col-auto " onClick={handleWait}>
                                             Chờ xác nhận
-                                        </button>
-                                    ) : null} */}
+                                        </button> */}
+                                    
                                 </div>
                             </div>
                         </div>

@@ -1,39 +1,31 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-//
-
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {
     Alert,
-    Avatar,
-    Box,
     Button,
-    Container,
-    CssBaseline,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
     FormControl,
-    Input,
     InputLabel,
     MenuItem,
     Select,
     Snackbar,
-    TextField,
-    ThemeProvider,
 } from "@mui/material";
 import { format } from "date-fns";
+import API from "../../Api/Api";
 
 export default function UserDetailManagement() {
     const { id } = useParams();
     const [user, setUser] = React.useState({
         createdAt: new Date(),
     });
-    const [vendor, setVendor] = React.useState({});
-    const [role, setRole] = React.useState({});
+    const [vendor, setVendor] = React.useState('');
+    const [role, setRole] = React.useState('');
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
@@ -56,7 +48,7 @@ export default function UserDetailManagement() {
         setRole(event.target.value);
     };
     const loadDataUser = () => {
-        fetch(`/user/auth/admin/u/${id}`, {
+        fetch(`${API}/user/auth/admin/u/${id}`, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -86,7 +78,7 @@ export default function UserDetailManagement() {
     // Đổi quyền truy cập cho user
     const handleSetRole = () => {
         fetch(
-            "/user/auth/admin/role?" +
+            API+"/user/auth/admin/role?" +
                 new URLSearchParams({
                     userId: user.id,
                     role: role,
@@ -122,7 +114,7 @@ export default function UserDetailManagement() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         fetch(
-            `/user/auth/admin/u?` +
+            `${API}/user/auth/admin/u?` +
                 new URLSearchParams({
                     id: user.id,
                 }),
@@ -231,7 +223,7 @@ export default function UserDetailManagement() {
                                 <div className="card-body px-5">
                                     <div className="form-outline mt-4">
                                         <img
-                                            src={user.photos}
+                                            src={API+user.photos}
                                             alt="Images"
                                             className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
                                             style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}

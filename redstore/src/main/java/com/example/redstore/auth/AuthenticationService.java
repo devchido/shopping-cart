@@ -39,20 +39,16 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(UserDto request) {
 
-//        Optional<User> userOptionalEmail = userRepository.findByEmail(request.getEmail());
-//        if (userRepository.existsByEmail(request.getEmail())) {
-//            throw new RuntimeException("Email: " + request.getEmail() + " đã được sử dụng.");
-//        }
-//        ;
-        String otp = otpUtil.generateOtp();
-        if (EmailValidator.isEmailValid(request.getEmail())){
-            System.out.println("Email is valid.");
-            try {
-                emailUtil.sendSingUpEmail(request.getFirstName(), request.getLastName(), request.getEmail(), otp);
-            } catch (MessagingException e) {
-                throw new RuntimeException("Unable to send otp please try again");
-            }
-        } else throw new RuntimeException("Email is not valid.");
+        // todo: tạo password tự động (mã otp gửi qua email)
+//        String otp = otpUtil.generateOtp();
+//        if (EmailValidator.isEmailValid(request.getEmail())){
+//            System.out.println("Email is valid.");
+//            try {
+//                emailUtil.sendSingUpEmail(request.getFirstName(), request.getLastName(), request.getEmail(), otp);
+//            } catch (MessagingException e) {
+//                throw new RuntimeException("Unable to send otp please try again");
+//            }
+//        } else throw new RuntimeException("Email is not valid.");
 
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -62,7 +58,8 @@ public class AuthenticationService {
                 .photos("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU")
                 .vendor(0)
                 .createdAt(new Date().toInstant())
-                .password(passwordEncoder.encode(otp))
+                .password(passwordEncoder.encode(request.getPassword()))
+//                .password(passwordEncoder.encode(otp))
                 .role(Role.USER)
                 .build();
         var savedUser = userRepository.save(user);
@@ -151,7 +148,7 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-//    @Bean
+    //    @Bean
 //    public AuthenticationResponse tesstCreate() {
 //        var user1 = User.builder()
 //                .firstName("Admin")
@@ -176,8 +173,8 @@ public class AuthenticationService {
 //        userRepository.save(user);
 //    }
     // Set password mặc định 1111
-//        @Bean
-//    public void setPassWordDefault(){
+//    @Bean
+//    public void setPassWordDefault() {
 //        List<User> users = userRepository.findAll();
 //        users.forEach(user -> {
 //            user.setPassword(passwordEncoder.encode("1111"));
@@ -189,7 +186,8 @@ public class AuthenticationService {
     Admin: Cập nhật quyền cho user
      */
     public void updateRoleUser(String userId, String role) {
-        var user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy user" + userId));
+        var user = userRepository.findById(userId).orElseThrow(() ->
+                new RuntimeException("Không tìm thấy user" + userId));
         user.setRole(Role.valueOf(role));
         userRepository.save(user);
     }

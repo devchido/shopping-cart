@@ -2,6 +2,7 @@ package com.example.redstore.service;
 
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
+import com.example.redstore.projection.ProductInfo;
 import com.example.redstore.projection.RatingInfo;
 import com.example.redstore.repository.*;
 import com.example.redstore.service.dto.ProductDto;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -245,7 +247,7 @@ public class ProductService {
 
     // todo: filterUsersProducts - lọc tất cả các product của user đang đăng nhập ở dạng page
     public Page<ProductDto> filterUsersProducts(String title, int offset, int pageSize, String field, String categoryId, String status, String sort) {
-        if (!categoryId.equals("")){
+        if (!categoryId.equals("")) {
             Page<Product> products = productRepository.filterUsersProducts(title,
                     (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
 
@@ -283,6 +285,18 @@ public class ProductService {
             Page<ProductDto> dtos = products.map(productMapper::toDo);
             return dtos;
         }
+    }
+
+    // todo: hiển thị danh sách sản phẩm bán chạy nhất
+    public Page<ProductInfo> findBestSellingProduct(
+            int offset, int pageSize,
+            String title, LocalDate time1, LocalDate time2,
+            String sort, String field) {
+        Page<ProductInfo> product = productRepository.findBestSellingProduct(
+                (PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.valueOf(sort), field))),
+                title, time1, time2
+        );
+        return product;
     }
 
     /* test

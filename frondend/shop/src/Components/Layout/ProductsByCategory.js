@@ -1,6 +1,7 @@
 import React from "react";
 import ProductItem from "./ProductItem";
 import ProductCategoryItem from "./ProductCategoryItem";
+import API from "../Api/Api";
 function ProductsByCategory() {
     const [productData, setProductData] = React.useState([]);
 
@@ -8,9 +9,9 @@ function ProductsByCategory() {
 
     const loadDataProduct = () => {
         setLoading(true);
-        fetch("/product/api/filter_product_by_category").then((resp) => {
+        fetch(API+"/product/api/filter_product_by_category").then((resp) => {
             resp.json().then((result) => {
-                console.log(result);
+                // console.log(result);
                 setLoading(false);
                 setProductData(result);
             });

@@ -5,6 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Snackbar } from "@mui/material";
 import convertToUrl from "../../Unity/CovertToUrl";
+import API from "../../Api/Api";
 
 export default function CategoryDetailManagement() {
     const { id } = useParams();
@@ -28,7 +29,7 @@ export default function CategoryDetailManagement() {
         setSlug(url);
     };
     const loadDataCategory = () => {
-        fetch(`/category/api/${id}`, {
+        fetch(`${API}/category/api/${id}`, {
             method: "GET",
         })
             .then((response) => {
@@ -62,7 +63,7 @@ export default function CategoryDetailManagement() {
             setSnackbarSeverity("error");
             setSnackbarMsg("Thông tin chưa hợp lệ!");
         } else {
-            fetch(`/category/auth/admin/${id}`, {
+            fetch(`${API}/category/auth/admin/${id}`, {
                 method: "PUT",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),

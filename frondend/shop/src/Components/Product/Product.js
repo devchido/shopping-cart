@@ -1,14 +1,21 @@
 import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { Link, useNavigate } from "react-router-dom";
-import { Box, Button, Divider, InputBase, Paper, Skeleton, TextField } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { InputBase, Paper, Skeleton } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import { VND } from "../Unity/VND";
 import ProductItem from "../Layout/ProductItem";
+import API from "../Api/Api";
 
 function Product() {
+    // Lấy thông tin từ url
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    let categoryParams = searchParams.get("category");
+    //
+    const navigation = useNavigate();
+    //
     const [page, setPage] = React.useState(1);
     // product data
     const [product, setProduct] = React.useState([]);
@@ -28,11 +35,6 @@ function Product() {
     const [categoryId, setCategoryId] = React.useState("");
     // loading
     const [loading, setLoading] = React.useState(false);
-    // chuyển trang chi tiết sản phẩm
-    const navigation = useNavigate();
-    const handleClick = (item) => {
-        navigation(`/product/${item.slug}`);
-    };
 
     // Sự kiện
     const handleChange = (event, value) => {
@@ -48,7 +50,8 @@ function Product() {
     const loadDataProduct = () => {
         setLoading(true);
         fetch(
-            "product/api/paginationAndSort/" +
+            API +
+                "/product/api/paginationAndSort/" +
                 offset +
                 "/" +
                 pageSize +
@@ -80,7 +83,7 @@ function Product() {
         );
     };
     const loadDataCategory = () => {
-        fetch("/category/api/filter?title=")
+        fetch(API + "/category/api/filter?title=")
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -99,7 +102,12 @@ function Product() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
-    }, [page, offset, categoryId]);
+        if (categoryParams) {
+            setCategoryId(categoryParams);
+        } else{
+            setCategoryId("")
+        }
+    }, [page, offset, categoryId, categoryParams]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -109,7 +117,7 @@ function Product() {
     };
     const handleClickCategory = (item) => {
         setCategoryId(item.id);
-        // loadDataProduct();
+        setOffset(0);
     };
     return (
         <div>
@@ -124,7 +132,7 @@ function Product() {
                         >
                             <InputBase
                                 sx={{ ml: 1, flex: 1, fontSize: 18 }}
-                                placeholder="Search products"
+                                placeholder="Tìm kiếm sản phẩm"
                                 name="title"
                                 value={title}
                                 onChange={(event) => handleTitleChange(event)}
@@ -142,15 +150,24 @@ function Product() {
                         <button
                             className="btn btn-outline-dark m-1"
                             onClick={() => {
-                                setCategoryId("");
-                                // loadDataProduct();
+                                // setCategoryId("");
+                                // // loadDataProduct();
+                                // setPage(1);
+                                navigation("/product");
                             }}
                         >
-                            All
+                            Tất cả ({totalElements})
                         </button>
                         {category.map((item) => {
                             return (
-                                <button className="btn btn-outline-dark m-1" onClick={() => handleClickCategory(item)}>
+                                <button
+                                    className="btn btn-outline-dark m-1"
+                                    key={item.id}
+                                    onClick={() =>
+                                        // handleClickCategory(item);
+                                        navigation(`/product?category=${item.id}`)
+                                    }
+                                >
                                     {item.title}
                                 </button>
                             );
@@ -163,55 +180,9 @@ function Product() {
                     ) : (
                         <>
                             {product.length > 0 ? (
-                                <>
-                                    {product.map((item, i) => {
-                                        return (
-                                            // <div className="col-lg-3 col-md-4 col-sm-6 mb-4 col-auto p-2" key={i}>
-                                            //     <div
-                                            //         className="card h-100 text-center p-2"
-                                            //         style={{ maxWidth: "300px", width: "auto" }}
-                                            //     >
-                                            //         <img
-                                            //             src={item.photos}
-                                            //             className="card-img-top w-auto"
-                                            //             title={item.title}
-                                            //             alt={item.title}
-                                            //             height="250px"
-                                            //             onClick={() => handleClick(item)}
-                                            //         />
-                                            //         <div className="card-body">
-                                            //             <div className="mask">
-                                            //                 <div className="d-flex justify-content-center h-100">
-                                            //                     <h5>
-                                            //                         {/* <span className="badge bg-primary ms-2">New</span>
-                                            //             <span className="badge bg-success ms-2">Eco</span> */}
-                                            //                         {item.discount > 0 ? (
-                                            //                             <span className="badge bg-danger ms-2">
-                                            //                                 -{item.discount}%
-                                            //                             </span>
-                                            //                         ) : null}
-                                            //                     </h5>
-                                            //                 </div>
-                                            //             </div>
-
-                                            //             <h5
-                                            //                 className="card-title mb-0 text-nowrap text-truncate text-capitalize"
-                                            //                 title={item.title}
-                                            //                 onClick={() => handleClick(item)}
-                                            //             >
-                                            //                 {item.title}
-                                            //             </h5>
-                                            //             <p className="card-text lead fw-bold">{VND.format(item.price)}</p>
-                                            //             {/* <Link to={`/product/${item.slug}`} className="btn btn-outline-dark">
-                                            //     Details
-                                            // </Link> */}
-                                            //         </div>
-                                            //     </div>
-                                            // </div>
-                                            <ProductItem {...item} />
-                                        );
-                                    })}
-                                </>
+                                product.map((item, i) => {
+                                    return <ProductItem {...item} key={item.id} />;
+                                })
                             ) : (
                                 <div className="alert alert-info" role="alert">
                                     Không có sản phẩm phù hợp.

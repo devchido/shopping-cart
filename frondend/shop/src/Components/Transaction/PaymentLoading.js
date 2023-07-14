@@ -3,6 +3,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
+import API from "../Api/Api";
 function PaymentLoading() {
     const location = useLocation();
     const navigation = useNavigate();
@@ -21,7 +22,7 @@ function PaymentLoading() {
     const vnp_TxnRef = searchParams.get("vnp_TxnRef");
     const vnp_SecureHash = searchParams.get("vnp_SecureHash");
     const checkPayment = () => {
-        fetch("/transaction/auth/check_payment", {
+        fetch(API+"/transaction/auth/check_payment", {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),

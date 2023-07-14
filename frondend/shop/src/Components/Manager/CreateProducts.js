@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider, createTheme } from "@mui/material";
 import convertToUrl from "../Unity/CovertToUrl";
+import API from "../Api/Api";
 
 const theme = createTheme();
 function CreateProduct() {
@@ -35,7 +36,7 @@ function CreateProduct() {
     };
 
     const loadDataCategory = () => {
-        fetch("/category/api/filter?title= ")
+        fetch(API+"/category/api/filter?title= ")
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -96,7 +97,7 @@ function CreateProduct() {
             setSnackbarMsg("Thông tin chưa đầy đủ!");
         } else {
             // save thông tin product
-            fetch("/product/auth", {
+            fetch(API+"/product/auth", {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -141,7 +142,7 @@ function CreateProduct() {
                             setSnackbarOpen(true);
                             setSnackbarSeverity("success");
                             setSnackbarMsg("Tạo ảnh thành công.");
-                            fetch("/product/api/findProductBySlug/" + data.get("slug")).then((resp) => {
+                            fetch(API+"/product/api/findProductBySlug/" + data.get("slug")).then((resp) => {
                                 resp.json().then((result) => {
                                     // console.log(result);
                                     navigation(`/management/update-product/${result.id}`);

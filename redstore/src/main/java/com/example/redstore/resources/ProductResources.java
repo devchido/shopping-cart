@@ -1,5 +1,6 @@
 package com.example.redstore.resources;
 
+import com.example.redstore.projection.ProductInfo;
 import com.example.redstore.service.ImageProductService;
 import com.example.redstore.service.ProductService;
 import com.example.redstore.service.UserService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -231,5 +233,23 @@ public class ProductResources {
     @GetMapping("/api/filter_product_by_category")
     public ResponseEntity<?> filterProductByCategory() {
         return ResponseEntity.status(HttpStatus.OK).body(productService.filterProductByCategory());
+    }
+    // todo: hiển thị danh sách sản phẩm bán chạy nhất
+    @GetMapping("/api/best_selling_product/{offset}/{pageSize}")
+    public APIResponse<Page<ProductInfo>> findBestSellingProduct(
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @RequestParam String title,
+            @RequestParam LocalDate time1,
+            @RequestParam LocalDate time2,
+            @RequestParam String sort,
+            @RequestParam String field
+
+    ){
+        Page<ProductInfo> dtos = productService.findBestSellingProduct(
+                offset, pageSize,
+                title, time1, time2,
+                sort, field);
+        return new APIResponse<>(dtos.getSize(), dtos);
     }
 }

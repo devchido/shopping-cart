@@ -19,6 +19,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 //
 import { VND } from "../Unity/VND";
+import API from "../Api/Api";
 
 export default function ShoppingCart() {
     const [cart, setCart] = React.useState({});
@@ -65,7 +66,7 @@ export default function ShoppingCart() {
     };
 
     const loadDataCart = () => {
-        fetch("/cart/auth/active", {
+        fetch(API+"/cart/auth/active", {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -80,7 +81,7 @@ export default function ShoppingCart() {
             .then((result) => {
                 console.log("cart", result);
                 setCart(result);
-                fetch("/cart-item/auth/cart/" + result.id, {
+                fetch(API+"/cart-item/auth/cart/" + result.id, {
                     method: "GET",
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -114,7 +115,7 @@ export default function ShoppingCart() {
                                 <div className="d-flex align-items-center mb-4  ">
                                     <div className="flex-shrink-0 me-2">
                                         <img
-                                            src={item.product.photos}
+                                            src={API+item.product.photos}
                                             className="img-fluid"
                                             style={{ width: 200, height: 210 }}
                                             alt=""
@@ -125,9 +126,9 @@ export default function ShoppingCart() {
                                         <p>
                                             <strong className="text-dark blockquote text-capitalize">{item.product.title}</strong>
                                         </p>
-                                        <h6 style={{ color: "#9e9e9e" }}>Giảm giá: {item.product.discount}%</h6>
+                                        <h6 style={{ color: "#9e9e9e" }}>Giảm giá: {item.discount}%</h6>
                                         <div className="row justify-content-between">
-                                            <p className="fw-bold col-auto">{VND.format(item.product.price)}</p>
+                                            <p className="fw-bold col-auto">{VND.format(item.price)}</p>
 
                                             <div className=" d-flex col-auto">
                                                 <input
@@ -261,7 +262,7 @@ export default function ShoppingCart() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        fetch("/cart/auth/" + cart.id, {
+        fetch(API+"/cart/auth/" + cart.id, {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -315,7 +316,7 @@ export default function ShoppingCart() {
                 setSnackbarMsg("Thông tin giỏ hàng không hợp lệ!");
                 handleCloseDialog();
             } else {
-                fetch("/order/auth/createByCart?idCart=" + cart.id, {
+                fetch(API+"/order/auth/createByCart?idCart=" + cart.id, {
                     method: "POST",
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -520,16 +521,16 @@ export default function ShoppingCart() {
                                     <div className="row">
                                         <div className="col-lg-8 px-5 py-4">
                                             <div className="d-flex justify-content-between">
-                                                <h3 className="mb-5 pt-2  fw-bold text-uppercase">Shopping-Cart</h3>
-                                                <p className="pt-3  fw-bold ">{cartDetail.length} item</p>
+                                                <h3 className="mb-5 pt-2  fw-bold text-uppercase">Giỏ hàng</h3>
+                                                <p className="pt-3  fw-bold ">{cartDetail.length} sản phẩm</p>
                                             </div>
                                             {loading ? <Loading /> : <ShowCartItem />}
                                             <div className="d-flex justify-content-between px-x">
-                                                <p className="fw-bold">Sub total:</p>
+                                                <p className="fw-bold">Tổng tiền:</p>
                                                 <p className="fw-bold">{VND.format(totalValue)}</p>
                                             </div>
                                             <div className="d-flex justify-content-between px-x">
-                                                <p className="fw-bold">Discount:</p>
+                                                <p className="fw-bold">Giảm giá:</p>
                                                 <p className="fw-bold">{VND.format(discountValue)}</p>
                                             </div>
 
@@ -537,7 +538,7 @@ export default function ShoppingCart() {
                                                 className="d-flex justify-content-between p-2 mb-2"
                                                 style={{ backgroundColor: "#e1f5fe" }}
                                             >
-                                                <h5 className="fw-bold mb-0">Total:</h5>
+                                                <h5 className="fw-bold mb-0">Tổng tiền sau khi giảm giá:</h5>
                                                 <h5 className="fw-bold mb-0">{VND.format(totalValue - discountValue)}</h5>
                                             </div>
                                         </div>
@@ -553,7 +554,7 @@ export default function ShoppingCart() {
                                                                 title="View"
                                                                 sx={{ fontSize: "40px" }}
                                                             />
-                                                            Back
+                                                            Trở lại
                                                         </Link>
                                                     </span>
                                                     {cart.status === 0 ? (

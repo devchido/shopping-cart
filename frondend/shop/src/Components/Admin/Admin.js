@@ -13,12 +13,15 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import OrderManagement from "./Order/OrderManagement";
 import TransactionManagement from "./Transaction/TransactionManagement";
 import StoreIcon from "@mui/icons-material/Store";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // có thể xem để test nav
 // Nested List
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
+    const location = useLocation();
+    const navigation = useNavigate();
+    const searchParams = new URLSearchParams(location.search);
+    let keyParams = searchParams.get("key");
     return (
         <div
             role="tabpanel"
@@ -26,10 +29,11 @@ function TabPanel(props) {
             id={`vertical-tabpanel-${index}`}
             aria-labelledby={`vertical-tab-${index}`}
             className=" w-100"
+            
             {...other}
         >
             {value === index && (
-                <div className="p-4 ">
+                <div className="p-5 ">
                     <>{children}</>
                 </div>
             )}
@@ -47,6 +51,7 @@ function a11yProps(index) {
     return {
         id: `vertical-tab-${index}`,
         "aria-controls": `vertical-tabpanel-${index}`,
+        
     };
 }
 
@@ -95,7 +100,7 @@ function Admin() {
                 sx={{ borderRight: 1, borderColor: "divider", width: "12rem", justifyContent: "left" }}
             >
                 <Tab
-                    label="user"
+                    label="Người dùng"
                     className={"text-nowrap"}
                     sx={{ justifyContent: "left" }}
                     {...a11yProps(0)}
@@ -103,7 +108,7 @@ function Admin() {
                     iconPosition="start"
                 />
                 <Tab
-                    label="product"
+                    label="Sản phẩm"
                     className={"text-nowrap"}
                     sx={{ justifyContent: "left" }}
                     {...a11yProps(1)}
@@ -111,7 +116,7 @@ function Admin() {
                     iconPosition="start"
                 />
                 <Tab
-                    label="category"
+                    label="Danh mục"
                     className={"text-nowrap"}
                     sx={{ justifyContent: "left" }}
                     {...a11yProps(2)}
@@ -119,7 +124,7 @@ function Admin() {
                     iconPosition="start"
                 />
                 <Tab
-                    label="Order"
+                    label="Đơn hàng"
                     className={"text-nowrap"}
                     sx={{ justifyContent: "left" }}
                     {...a11yProps(3)}
@@ -127,7 +132,7 @@ function Admin() {
                     iconPosition="start"
                 />
                 <Tab
-                    label="Transaction"
+                    label="Đơn thanh toán"
                     className={"text-nowrap"}
                     sx={{ justifyContent: "left" }}
                     {...a11yProps(4)}

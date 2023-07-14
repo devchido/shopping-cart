@@ -29,6 +29,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 import { VND } from "../Unity/VND";
+import API from "../Api/Api";
 
 function ListProducts() {
     const [status, setStatus] = React.useState("");
@@ -69,7 +70,7 @@ function ListProducts() {
     };
 
     const loadDataCategory = () => {
-        fetch("/category/api").then((resp) => {
+        fetch(API+"/category/api").then((resp) => {
             resp.json().then((result) => {
                 setCategory(result);
             });
@@ -89,7 +90,7 @@ function ListProducts() {
     };
     const handleDelete = () => {
         fetch(
-            `/product/auth/${dialogItem.id}`,
+            `${API}/product/auth/${dialogItem.id}`,
             {
                 method: "DELETE",
                 headers: {
@@ -131,7 +132,7 @@ function ListProducts() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch(`/product/auth/user/${page}/${pageSize}/${field}?title=${title}&categoryId=${ctitle}&status=${status}&sort=${sort}`, requestOptions)
+        fetch(`${API}/product/auth/user/${page}/${pageSize}/${field}?title=${title}&categoryId=${ctitle}&status=${status}&sort=${sort}`, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -393,7 +394,7 @@ function ListProducts() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={item.photos}
+                                                                                src={API+item.photos}
                                                                                 variant="rounded"
                                                                             />
                                                                         }

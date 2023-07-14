@@ -43,6 +43,7 @@ import { format, parseISO, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 import { VND } from "../../Unity/VND";
 import moment from "moment";
+import API from "../../Api/Api";
 
 function CategoryManagement() {
     // data product-category
@@ -56,7 +57,7 @@ function CategoryManagement() {
     const [page, setPage] = React.useState(0);
 
     // Số sản phẩm được hiển thị
-    const [pageSize, setPageSize] = React.useState(20);
+    const [pageSize, setPageSize] = React.useState(5);
     const [field, setField] = React.useState("id");
     const [sort, setSort] = React.useState("ASC");
     const [title, setTitle] = React.useState("");
@@ -97,7 +98,7 @@ function CategoryManagement() {
     };
 
     const loadDataCategory = () => {
-        fetch(`/category/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&title=${title}`, {
+        fetch(`${API}/category/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&title=${title}`, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -129,7 +130,7 @@ function CategoryManagement() {
     };
     const handleDelete = () => {
         fetch(
-            `/category/auth/admin?` +
+            `${API}/category/auth/admin?` +
                 new URLSearchParams({
                     id: dialogItem.id,
                 }),
@@ -149,7 +150,7 @@ function CategoryManagement() {
             .then((result) => {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
-                setSnackbarMsg("Đã xoá category với id: "+ dialogItem.id);
+                setSnackbarMsg("Đã xoá category với id: " + dialogItem.id);
                 handleCloseDialog();
                 loadDataCategory();
             })
@@ -199,9 +200,7 @@ function CategoryManagement() {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleCloseDialog}>Không</Button>
-                            <Button onClick={handleDelete}>
-                                Xoá
-                            </Button>
+                            <Button onClick={handleDelete}>Xoá</Button>
                         </DialogActions>
                     </>
                 ) : null}
@@ -287,10 +286,12 @@ function CategoryManagement() {
                                                                             </IconButton>
                                                                         </Link>
 
-                                                                        <IconButton color="error" title="Delete">
-                                                                            <DeleteIcon
-                                                                                onClick={() => handleClickOpenDialog(item)}
-                                                                            />
+                                                                        <IconButton
+                                                                            color="error"
+                                                                            title="Delete"
+                                                                            onClick={() => handleClickOpenDialog(item)}
+                                                                        >
+                                                                            <DeleteIcon />
                                                                         </IconButton>
                                                                     </div>
                                                                 </TableCell>

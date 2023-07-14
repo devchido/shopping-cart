@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
+import API from "../Api/Api";
 
 export default function CommentForm(product) {
     const [replyParentId, setReplyParentId] = useState(null);
@@ -51,7 +52,7 @@ export default function CommentForm(product) {
     };
     const handleDeleteComment = () => {
         fetch(
-            `/comment/auth?` +
+            `${API}/comment/auth?` +
                 new URLSearchParams({
                     commentId: dialogItem.id,
                 }),
@@ -87,7 +88,7 @@ export default function CommentForm(product) {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!commentText.trim()) return;
-        fetch("/comment/auth", {
+        fetch(API+"/comment/auth", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -124,7 +125,7 @@ export default function CommentForm(product) {
     const handleSubmitReply = (event) => {
         event.preventDefault();
         if (!commentTextReply.trim()) return;
-        fetch("/comment/auth", {
+        fetch(API+"/comment/auth", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -167,7 +168,7 @@ export default function CommentForm(product) {
     };
 
     const filterCommentByProduct = () => {
-        fetch("/comment/api/find-by-product?productId=" + productId, {
+        fetch(API+"/comment/api/find-by-product?productId=" + productId, {
             method: "GET",
         })
             .then((response) => {
@@ -182,7 +183,7 @@ export default function CommentForm(product) {
             .catch((error) => console.log("error", error));
     };
     const filterCommentReply = () => {
-        fetch("/comment/api/filter-comment-reply?productId=" + productId, {
+        fetch(API+"/comment/api/filter-comment-reply?productId=" + productId, {
             method: "GET",
         })
             .then((response) => {
@@ -205,7 +206,7 @@ export default function CommentForm(product) {
         }
         const loadDataUser = () => {
             if (localStorage.getItem("token") !== null) {
-                fetch("/user/auth/info", {
+                fetch(API+"/user/auth/info", {
                     method: "GET",
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -320,7 +321,7 @@ export default function CommentForm(product) {
                     <Paper style={{ padding: "10px 20px 0 20px", marginTop: 10, backgroundColor: "#f8f8f8" }}>
                         <Grid container wrap="nowrap" spacing={2}>
                             <Grid item>
-                                <Avatar alt="Remy Sharp" src={item.user.photos} />
+                                <Avatar alt="Remy Sharp" src={API+item.user.photos} />
                             </Grid>
                             <Grid justifyContent="left" item xs zeroMinWidth>
                                 <p>{item.content}</p>

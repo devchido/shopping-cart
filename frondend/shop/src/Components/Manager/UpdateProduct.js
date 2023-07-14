@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import convertToUrl from "../Unity/CovertToUrl";
+import API from "../Api/Api";
 function UpdateProduct() {
     const { id } = useParams();
     const [product, setProduct] = React.useState({
@@ -62,7 +63,7 @@ function UpdateProduct() {
     };
     const loadDataProduct = () => {
         setIsLoading(true);
-        fetch(`/product/auth/${id}`, {
+        fetch(`${API}/product/auth/${id}`, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -88,7 +89,7 @@ function UpdateProduct() {
                 setSnackbarMsg("Load product error!");
             });
         // product category
-        fetch(`/product-category/api/${id}`)
+        fetch(`${API}/product-category/api/${id}`)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -107,7 +108,7 @@ function UpdateProduct() {
             });
     };
     const loadDataCategory = () => {
-        fetch("/category/api/filter?title= ")
+        fetch(API+"/category/api/filter?title= ")
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -123,7 +124,7 @@ function UpdateProduct() {
     };
     // Đăng bán sản phẩm
     const handleChangeStatus = () => {
-        var url = "/product/auth/change-status?";
+        var url = API+"/product/auth/change-status?";
         fetch(
             url +
                 new URLSearchParams({
@@ -174,7 +175,7 @@ function UpdateProduct() {
         } else {
             formdata.append("image", data.get("photos"), "/" + event.target[0].value);
             formdata.append("slug", product.slug);
-            fetch("/product/auth/image", {
+            fetch(API+"/product/auth/image", {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -211,7 +212,7 @@ function UpdateProduct() {
             setSnackbarSeverity("error");
             setSnackbarMsg("Thông tin chưa đầy đủ!");
         } else {
-            fetch(`/product/auth/${id}`, {
+            fetch(`${API}/product/auth/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -251,7 +252,7 @@ function UpdateProduct() {
     };
     // Chuyển sản phẩm vào mục kiểm duyệt
     const handleCensorship = () => {
-        var url = "/product/auth/admin/setStatus?";
+        var url = API+"/product/auth/admin/setStatus?";
         fetch(
             url +
                 new URLSearchParams({
@@ -498,7 +499,7 @@ function UpdateProduct() {
                                         </div>
                                         <div className="card-body ">
                                             <img
-                                                src={product.photos}
+                                                src={API+product.photos}
                                                 alt="Images"
                                                 className="img-thumbnail form-control  m-auto"
                                                 style={{ height: "300px", width: "300px" }}

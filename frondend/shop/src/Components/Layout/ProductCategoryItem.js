@@ -12,11 +12,7 @@ export default function ProductCategoryItem({ category, products }) {
             </div>
             <div className="row justify-content-center">
                 {products.map((item, i) => {
-                    return (
-                        <>
-                            <ProductItem {...item} />
-                        </>
-                    );
+                    return <ProductItem {...item} key={item.id} />;
                 })}
             </div>
         </div>

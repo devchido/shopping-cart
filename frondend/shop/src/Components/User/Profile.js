@@ -20,7 +20,7 @@ function Profile() {
                 redirect: "follow",
             };
 
-            fetch("/user/auth/info", requestOptions)
+            fetch(API+"/user/auth/info", requestOptions)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();
@@ -54,7 +54,7 @@ function Profile() {
                                 >
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: 150 }}>
                                         <img
-                                            src={user.photos}
+                                            src={API+user.photos}
                                             alt={user.firstName + " " + user.lastName}
                                             className="img-fluid img-thumbnail mt-4 mb-2"
                                             style={{ width: 150, zIndex: 1 }}

@@ -20,6 +20,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { format } from "date-fns";
 import { VND } from "../Unity/VND";
+import API from "../Api/Api";
 
 export default function TransactionDetail() {
     //
@@ -63,7 +64,7 @@ export default function TransactionDetail() {
 
     // admin thực hiện get data của data
     const loadDataTransaction = () => {
-        fetch("/transaction/auth/" + id, {
+        fetch(API+"/transaction/auth/" + id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -166,12 +167,12 @@ export default function TransactionDetail() {
                                 {data.order.city}
                             </span>
                         </li>
-                        <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                        {/* <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                             Country
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
                                 {data.order.country}
                             </span>
-                        </li>
+                        </li> */}
                         <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                             Content
                             <span className="w-auto" style={{ maxWidth: "75%" }}>
@@ -197,7 +198,7 @@ export default function TransactionDetail() {
     };
 
     const handlePayment = () => {
-        fetch("/transaction/auth/payment/" + data.id, {
+        fetch(API+"/transaction/auth/payment/" + data.id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),

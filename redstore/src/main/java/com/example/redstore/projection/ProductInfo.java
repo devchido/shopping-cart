@@ -1,25 +1,21 @@
 package com.example.redstore.projection;
 
+import com.example.redstore.domain.User;
+
 import java.time.Instant;
+import java.time.LocalDate;
 
 public interface ProductInfo {
-    Long getPCId();
-    Long getCId();
-    String getCTitle();
-    String getCSlug();
-    String getCContent();
-    Long getPId();
-    String getPTitle();
-    String getPSlug();
-    String getPSummary();
+    String getId();
+    String getTitle();
+    String getSlug();
+    String getDiscount();
+    String getQuantity();
+    String getPrice();
     String getPhotos();
-    Float getPrice();
-    Float getDiscount();
-    Short getQuantity();
-    Instant getCreatedAt();
-    Instant getUpdatedAt();
-    Instant getEndsAt();
-    Short getStatus();
-    String getContent();
+    String getStatus();
+    LocalDate getCreatedAt();
+    LocalDate getUpdatedAt();
+    String getCount();
 
 }

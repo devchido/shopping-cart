@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
+import API from "../Api/Api";
 
 const theme = createTheme();
 
@@ -21,7 +22,7 @@ export default function ChangePassword() {
         const data = new FormData(event.currentTarget);
         console.log(data.get("passOld"), data.get("passNew"));
 
-        fetch("/api/v1/auth/change-password?passOld=" + data.get("passOld") + "&passNew=" + data.get("passNew"), {
+        fetch(API+"/api/v1/auth/change-password?passOld=" + data.get("passOld") + "&passNew=" + data.get("passNew"), {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),

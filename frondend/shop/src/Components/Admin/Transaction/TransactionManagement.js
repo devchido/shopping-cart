@@ -5,7 +5,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import {
-    Autocomplete,
     Avatar,
     Button,
     CardHeader,
@@ -16,7 +15,6 @@ import {
     DialogTitle,
     Input,
     Stack,
-    TableFooter,
     TextField,
     Typography,
 } from "@mui/material";
@@ -28,7 +26,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 //Icon
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Snackbar } from "@mui/material";
 import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
@@ -42,6 +39,7 @@ import { VND } from "../../Unity/VND";
 import moment from "moment";
 import { format, formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
+import API from "../../Api/Api";
 
 function TransactionManagement() {
     // data product-category
@@ -56,7 +54,7 @@ function TransactionManagement() {
 
     // Số sản phẩm được hiển thị
     const [pageSize, setPageSize] = React.useState(5);
-    const [field, setField] = React.useState("created_at");
+    const [field, setField] = React.useState("updated_at");
     const [sort, setSort] = React.useState("DESC");
     const [orderId, setOrderId] = React.useState("");
     const [userId, setUserId] = React.useState("");
@@ -132,7 +130,7 @@ function TransactionManagement() {
             redirect: "follow",
         };
         fetch(
-            `/transaction/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&orderId=${orderId}&userId=${userId}&username=${username}&mobile=${mobile}&email=${email}&address=${address}&city=${city}&country=${country}&type=${type}&mode=${mode}&status=${status}`,
+            `${API}/transaction/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&orderId=${orderId}&userId=${userId}&username=${username}&mobile=${mobile}&email=${email}&address=${address}&city=${city}&country=${country}&type=${type}&mode=${mode}&status=${status}`,
             requestOptions
         )
             .then((response) => {
@@ -161,7 +159,7 @@ function TransactionManagement() {
     };
     const handleDelete = () => {
         if (dialogItem.status === 1) {
-            fetch("/transaction/auth/admin/" + dialogItem.id, {
+            fetch(API+"/transaction/auth/admin/" + dialogItem.id, {
                 method: "DELETE",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -245,7 +243,7 @@ function TransactionManagement() {
                         <div>
                             <div className="card mb-4">
                                 <div className="card-header d-flex py-3 justify-content-between ">
-                                    <h5 className="mt-1">Quản lý Transaction</h5>
+                                    <h5 className="mt-1">Quản lý phiếu thanh toán</h5>
                                     <strong>{totalElements}</strong>
                                 </div>
                             </div>
@@ -367,21 +365,29 @@ function TransactionManagement() {
                                 </Box>
                             </div>
                             <div className="card mb-4">
+                                <Box className="card-body row">
+                                    <Box className="my-2 col-auto m-auto">
+                                        <Typography >Tổng số giao dịch: <b style={{color: "#1976d2"}}>{totalElements} </b></Typography>
+                                        </Box>
+                                    <Box className="my-2 col-auto m-auto">
+                                        <Typography>Tổng số tiền: <b style={{color: "#1976d2"}}>{VND.format(data.reduce((sum, item) => sum + item.order.total, 0))}</b></Typography>
+                                    </Box>
+                                </Box>
+                            </div>
+                            <div className="card mb-4">
                                 <Box sx={{ width: "100%" }}>
                                     <Paper sx={{ width: "100%", mb: 2 }}>
                                         <TableContainer component={Paper}>
                                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell className="text-nowrap">Id</TableCell>
-                                                        <TableCell className="text-nowrap">User</TableCell>
-                                                        <TableCell className="text-nowrap">Order</TableCell>
-                                                        <TableCell className="text-nowrap">Mobile</TableCell>
-                                                        <TableCell className="text-nowrap">Email</TableCell>
-                                                        <TableCell className="text-nowrap">Address</TableCell>
-                                                        {/* <TableCell className="text-nowrap">Total</TableCell>
-                                                        <TableCell className="text-nowrap">Time</TableCell> */}
-                                                        <TableCell className="text-nowrap">Status</TableCell>
+                                                        <TableCell className="text-nowrap">Mã Phiếu</TableCell>
+                                                        <TableCell className="text-nowrap">Mã người dùng</TableCell>
+                                                        <TableCell className="text-nowrap">Mã đơn hàng</TableCell>
+                                                        <TableCell className="text-nowrap">Mã giao dịch</TableCell>
+                                                        <TableCell className="text-nowrap">Total</TableCell>
+                                                        <TableCell className="text-nowrap">Ngày tạo</TableCell>
+                                                        <TableCell className="text-nowrap">Trạng thái</TableCell>
                                                         <TableCell className="text-nowrap" align="center">
                                                             Action
                                                         </TableCell>
@@ -398,7 +404,7 @@ function TransactionManagement() {
                                                                     {item.id}
                                                                 </TableCell>
 
-                                                                <TableCell>
+                                                                {/* <TableCell>
                                                                     <CardHeader
                                                                         avatar={
                                                                             <Avatar
@@ -411,17 +417,24 @@ function TransactionManagement() {
                                                                         title={item.user.firstName + " " + item.user.lastName}
                                                                         sx={{ p: 0 }}
                                                                     />
-                                                                </TableCell>
+                                                                </TableCell> */}
 
+                                                                <TableCell className="text-nowrap">{item.user.id}</TableCell>
                                                                 <TableCell className="text-nowrap">{item.order.id}</TableCell>
-                                                                <TableCell className="text-nowrap">{item.user.mobile}</TableCell>
-                                                                <TableCell className="text-nowrap">{item.user.email}</TableCell>
+                                                                <TableCell className="text-nowrap">{item.code}</TableCell>
+                                                                
+                                                                <TableCell className="text-nowrap">{VND.format(item.order.total)}</TableCell>
                                                                 <TableCell className="text-nowrap">
-                                                                    {item.order.line1 +
-                                                                        "-" +
-                                                                        item.order.city +
-                                                                        "-" +
-                                                                        item.order.country}
+                                                                
+                                                                        <Input
+                                                                            type="datetime-local"
+                                                                            defaultValue={format(
+                                                                                new Date(item.updatedAt),
+                                                                                "yyyy-MM-dd'T'hh:mm"
+                                                                            )}
+                                                                            readOnly
+                                                                        />
+                                                                    
                                                                 </TableCell>
 
                                                                 <TableCell className="text-nowrap">

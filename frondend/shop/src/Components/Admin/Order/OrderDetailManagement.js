@@ -20,6 +20,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { format } from "date-fns";
 import { VND } from "../../Unity/VND";
+import API from "../../Api/Api";
 
 export default function OrderDetailManagement() {
     const steps = ["Chờ xác nhận", "Đang vận chuyển", "Đang giao", "Đã nhận"];
@@ -68,7 +69,7 @@ export default function OrderDetailManagement() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch("/order-item/auth/admin/o/" + id, requestOptions)
+        fetch(API+"/order-item/auth/admin/o/" + id, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -84,7 +85,7 @@ export default function OrderDetailManagement() {
     };
     // admin thực hiện get data của order
     const loadDataOrder = () => {
-        fetch("/order/auth/admin/p/" + id, {
+        fetch(API+"/order/auth/admin/p/" + id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -105,7 +106,7 @@ export default function OrderDetailManagement() {
     };
     const navigation = useNavigate();
     const handleTransaction = () => {
-        fetch("/transaction/auth/admin/order/" + order.id, {
+        fetch(API+"/transaction/auth/admin/order/" + order.id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -130,7 +131,7 @@ export default function OrderDetailManagement() {
     // xác nhận vận chuyển hàng của đơn hàng: 0 -> 1
     const handleShippingOrder = () => {
         fetch(
-            "/order/auth/admin/shipping?" +
+            API+"/order/auth/admin/shipping?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -158,7 +159,7 @@ export default function OrderDetailManagement() {
     // xác nhận đang giao hàng cho đơn hàng: 1 -> 2
     const handleDeliveryOrder = () => {
         fetch(
-            "/order/auth/admin/delivery?" +
+            API+"/order/auth/admin/delivery?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -186,7 +187,7 @@ export default function OrderDetailManagement() {
     // admin - xác nhận đã hoàn trả hàng: 7 -> 8
     const handleReturnedOrder = () => {
         fetch(
-            "/order/auth/admin/returned?" +
+            API+"/order/auth/admin/returned?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -216,7 +217,7 @@ export default function OrderDetailManagement() {
     };
     // admin huỷ đơn hàng: 0 || 1 || 2 -> 5
     const handleCancelOrder = () => {
-        fetch("/order/auth/admin/cancel?id=" + order.id, {
+        fetch(API+"/order/auth/admin/cancel?id=" + order.id, {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -240,7 +241,7 @@ export default function OrderDetailManagement() {
     // xác nhận đã hoàn trả hàng: 7 -> 8
     const handleReturned = () => {
         fetch(
-            "/order/auth/admin/returned?" +
+            API+"/order/auth/admin/returned?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -358,7 +359,7 @@ export default function OrderDetailManagement() {
                           <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                               {/* Image start */}
                               <div className="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                  <img src={item.product.photos} className="w-100" alt={item.product.title} />
+                                  <img src={API+item.product.photos} className="w-100" alt={item.product.title} />
                                   <a href="#!">
                                       <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }} />
                                   </a>

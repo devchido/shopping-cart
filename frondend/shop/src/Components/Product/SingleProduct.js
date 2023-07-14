@@ -27,6 +27,7 @@ import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
 import { VND } from "../Unity/VND";
 import CommentForm from "./CommentForm";
+import API from "../Api/Api";
 function SingleProduct() {
     const { slug } = useParams();
     const [product, setProduct] = useState({
@@ -46,7 +47,6 @@ function SingleProduct() {
     const [open, setOpen] = React.useState(false);
 
     //Drawer
-    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
@@ -65,30 +65,33 @@ function SingleProduct() {
         setLoading(true);
         loadDataProduct();
     }, []);
-    // kiểm tra sản phẩm đã được chủ đang nhập đánh giá hay chưa
+    // kiểm tra sản phẩm đã được chủ đăng nhập đánh giá hay chưa
     const handleCheckReview = (result) => {
-        fetch("/product-review/auth/product?productId=" + result.id, {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error(response.status);
+        if(localStorage.getItem('token')){
+            fetch(API+"/product-review/auth/product?productId=" + result.id, {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
             })
-            .then((result) => {
-                if (result !== null) {
-                    setCheckRating(true);
-                    // console.log(result);
-                    setDataRating(result);
-                }
-            })
-            .catch((error) => {
-                setCheckRating(false);
-            });
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error(response.status);
+                })
+                .then((result) => {
+                    if (result !== null) {
+                        setCheckRating(true);
+                        // console.log(result);
+                        setDataRating(result);
+                    }
+                })
+                .catch((error) => {
+                    setCheckRating(false);
+                });
+        }
+        
     };
     const handleReviewProduct = () => {
         console.log(rating, ratingTitle, ratingContent);
@@ -98,7 +101,7 @@ function SingleProduct() {
             setSnackbarMsg("Thông tin đánh giá chưa hợp lệ");
             return;
         }
-        fetch("/product-review/auth/create", {
+        fetch(API+"/product-review/auth/create", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -119,7 +122,6 @@ function SingleProduct() {
             })
             .then((result) => {
                 // console.log(result);
-                setIsDrawerOpen(false);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Thành công");
@@ -137,7 +139,7 @@ function SingleProduct() {
             });
     };
     const loadDataProduct = () => {
-        fetch("/product/api/findProductBySlug/" + slug).then((resp) => {
+        fetch(API+"/product/api/findProductBySlug/" + slug).then((resp) => {
             resp.json().then((result) => {
                 // console.log(result);
                 setLoading(false);
@@ -151,133 +153,6 @@ function SingleProduct() {
         return <>Loading . . .</>;
     };
 
-    const ShowProduct = () => {
-        return (
-            <>
-                <div className="col-sm-6 d-flex justify-content-center border">
-                    <img src={product.photos} alt={product.title} height={"400px"} width={"400px"} />
-                </div>
-                <div className="col-md-6">
-                    <h1 className="display-5">{product.title}</h1>
-                    <p className="lead">Loại sản phẩm: {product.category}</p>
-
-                    <p className="lead">Hiện còn: {product.quantity}</p>
-
-                    {product.discount === 0 ? (
-                        <>
-                            <h3 className="display-6 fw-bold my-4">{VND.format(product.price)} </h3>
-                        </>
-                    ) : (
-                        <>
-                            <p className="lead">
-                                Giá: <del className="text-danger">{VND.format(product.price)} </del>
-                            </p>
-                            <h3 className="display-6 fw-bold my-4">
-                                <span className="lead">Chỉ cần: </span>
-                                {VND.format(product.price - (product.price * product.discount) / 100)}
-                            </h3>
-                        </>
-                    )}
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBlock: 2,
-                        }}
-                    >
-                        <Rating name="read-only" value={product.rating.diem} precision={0.5} max={10} readOnly />
-                        <Box sx={{ ml: 2 }}>
-                            <Typography component="legend">{product.rating.dem} đánh giá</Typography>
-                        </Box>
-                    </Box>
-
-                    <p className="">{product.summary}</p>
-
-                    <div className=" d-flex  my-3">
-                        <IconButton
-                            sx={{ mx: 1 }}
-                            onClick={() => {
-                                if (quantity > 0) {
-                                    setQuantity((i) => i - 1);
-                                }
-                            }}
-                        >
-                            <RemoveIcon className="text-danger" />
-                        </IconButton>
-                        <input
-                            style={{ width: "4rem" }}
-                            min={0}
-                            max={product.quantity}
-                            name="quantity"
-                            value={quantity}
-                            type="number"
-                            className="form-control form-control-sm"
-                            onChange={(e) => {
-                                if (e.target.value < 0) {
-                                    setQuantity(0);
-                                } else if (e.target.value > product.quantity) {
-                                    setQuantity(product.quantity);
-                                } else {
-                                    setQuantity(e.target.value);
-                                }
-                            }}
-                        />
-
-                        <IconButton
-                            sx={{ mx: 1 }}
-                            onClick={() => {
-                                if (quantity < product.quantity) {
-                                    setQuantity((i) => i + 1);
-                                }
-                            }}
-                        >
-                            <AddIcon className="text-primary" />
-                        </IconButton>
-                    </div>
-
-                    {localStorage.getItem("token") !== null ? (
-                        <>
-                            {product.status === 1 ? (
-                                <>
-                                    <button
-                                        className="btn btn-info ms-2 px-3 py-2"
-                                        onClick={() => {
-                                            if (quantity <= 0) {
-                                                setSnackbarOpen(true);
-                                                setSnackbarSeverity("error");
-                                                setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
-                                            } else {
-                                                handleAddToCart();
-                                            }
-                                        }}
-                                    >
-                                        Add to Cart
-                                    </button>
-                                    <button className="btn btn-warning ms-2 px-3 py-2" onClick={handleClickOpen}>
-                                        Đánh giá
-                                    </button>
-                                </>
-                            ) : (
-                                <button className="btn btn-danger ms-2 px-3 py-2">Sản phẩm hiện không hoạt động</button>
-                            )}
-                        </>
-                    ) : null}
-                </div>
-                <div className=" justify-content-center my-4">
-                    <div className="card  mb-4 w-100">
-                        <div className="card-header py-3">
-                            <h5 className="mb-0 text-capitalize">Thông tin chi tiết</h5>
-                        </div>
-                        <div className="card-body">
-                            <pre style={{ fontSize: "1rem", fontFamily: "Roboto,Helvetica,Arial" }}>{product.content}</pre>
-                        </div>
-                    </div>
-                    <ShowUser />
-                    <CommentForm product={product} />
-                </div>
-            </>
-        );
-    };
     const ShowUser = () => {
         return (
             <div>
@@ -287,7 +162,7 @@ function SingleProduct() {
                         <h5 className="mb-0 text-capitalize">Người bán</h5>
                     </div>
                     <div className="card-body d-flex">
-                        <Avatar alt="Remy Sharp" src={product.user.photos} variant="rounded" />
+                        <Avatar alt="Remy Sharp" src={API+product.user.photos} variant="rounded" />
                         <p className="my-auto mx-3">
                             <Link to={"/user/" + product.user.id}>
                                 <strong>{product.user.firstName + " " + product.user.lastName}</strong>
@@ -301,52 +176,58 @@ function SingleProduct() {
 
     const handleAddToCart = () => {
         //
-        fetch("/cart/auth/active", {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
+        if (quantity <= product.quantity) {
+            fetch(API+"/cart/auth/active", {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
             })
-            .then((result) => {
-                fetch("/cart-item/auth/create", {
-                    method: "POST",
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        productId: product.id,
-                        quantity: quantity,
-                    }),
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw Error(response.status);
                 })
-                    .then((response) => {
-                        if (response.ok) {
-                            return response.status;
-                        }
-                        throw new Error(response.status);
+                .then((result) => {
+                    fetch(API+"/cart-item/auth/create", {
+                        method: "POST",
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            productId: product.id,
+                            quantity: quantity,
+                        }),
                     })
-                    .then((result) => {
-                        // console.log(result);
-                        setIsDrawerOpen(false);
-                        setSnackbarOpen(true);
-                        setSnackbarSeverity("success");
-                        setSnackbarMsg("Thành công");
-                        loadDataProduct();
-                    })
-                    .catch((error) => {
-                        // console.log("error", error);
-                        setSnackbarOpen(true);
-                        setSnackbarSeverity("error");
-                        setSnackbarMsg("False");
-                    });
-            })
-            .catch((error) => console.log("error", error));
+                        .then((response) => {
+                            if (response.ok) {
+                                return response.status;
+                            }
+                            throw new Error(response.status);
+                        })
+                        .then((result) => {
+                            // console.log(result);
+                            setSnackbarOpen(true);
+                            setSnackbarSeverity("success");
+                            setSnackbarMsg("Thành công");
+                            loadDataProduct();
+                        })
+                        .catch((error) => {
+                            // console.log("error", error);
+                            setSnackbarOpen(true);
+                            setSnackbarSeverity("error");
+                            setSnackbarMsg("False");
+                        });
+                })
+                .catch((error) => console.log("error", error));
+        } else {
+            setSnackbarOpen(true);
+            setSnackbarSeverity("Số lượng đặt hàng không hợp lệ!");
+            setSnackbarMsg("False");
+        }
+
         //
     };
 
@@ -477,7 +358,139 @@ function SingleProduct() {
             )}
 
             <div className="container py-5">
-                <div className="row py-4">{loading ? <Loading /> : <ShowProduct />}</div>
+                <div className="row py-4">
+                    {loading ? (
+                        <Loading />
+                    ) : (
+                        <>
+                            <div className="col-sm-6 d-flex justify-content-center border">
+                                <img src={API+product.photos} alt={product.title} height={"400px"} width={"400px"} />
+                            </div>
+                            <div className="col-md-6">
+                                <h1 className="display-5">{product.title}</h1>
+                                <p className="lead">Loại sản phẩm: {product.category}</p>
+
+                                <p className="lead">Hiện còn: {product.quantity}</p>
+
+                                {product.discount === 0 ? (
+                                    <>
+                                        <h3 className="display-6 fw-bold my-4">{VND.format(product.price)} </h3>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className="lead">
+                                            Giá: <del className="text-danger">{VND.format(product.price)} </del>
+                                        </p>
+                                        <h3 className="display-6 fw-bold my-4">
+                                            <span className="lead">Chỉ cần: </span>
+                                            {VND.format(product.price - (product.price * product.discount) / 100)}
+                                        </h3>
+                                    </>
+                                )}
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        marginBlock: 2,
+                                    }}
+                                >
+                                    <Rating name="read-only" value={product.rating.diem} precision={0.5} max={10} readOnly />
+                                    <Box sx={{ ml: 2 }}>
+                                        <Typography component="legend">{product.rating.dem} đánh giá</Typography>
+                                    </Box>
+                                </Box>
+
+                                <p className="">{product.summary}</p>
+
+                                <div className=" d-flex  my-3">
+                                    <IconButton
+                                        sx={{ mx: 1 }}
+                                        onClick={() => {
+                                            if (quantity > 0) {
+                                                setQuantity((i) => i - 1);
+                                            }
+                                        }}
+                                    >
+                                        <RemoveIcon className="text-danger" />
+                                    </IconButton>
+                                    <input
+                                        style={{ width: "4rem" }}
+                                        min={0}
+                                        max={product.quantity}
+                                        name="quantity"
+                                        value={quantity}
+                                        type="number"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) => {
+                                            if (e.target.value < 0) {
+                                                setQuantity(0);
+                                            } else if (e.target.value > product.quantity) {
+                                                setQuantity(product.quantity);
+                                            } else {
+                                                setQuantity(e.target.value);
+                                            }
+                                        }}
+                                    />
+
+                                    <IconButton
+                                        sx={{ mx: 1 }}
+                                        onClick={() => {
+                                            if (quantity < product.quantity) {
+                                                setQuantity((i) => parseInt(i, 10) + 1);
+                                            }
+                                        }}
+                                    >
+                                        <AddIcon className="text-primary" />
+                                    </IconButton>
+                                </div>
+
+                                {localStorage.getItem("token") !== null ? (
+                                    <>
+                                        {product.status === 1 && product.quantity !== 0 ? (
+                                            <>
+                                                <button
+                                                    className="btn btn-info ms-2 px-3 py-2"
+                                                    onClick={() => {
+                                                        if (quantity <= 0) {
+                                                            setSnackbarOpen(true);
+                                                            setSnackbarSeverity("error");
+                                                            setSnackbarMsg("Số lượng sản phẩm không hợp lệ");
+                                                        } else {
+                                                            handleAddToCart();
+                                                        }
+                                                    }}
+                                                >
+                                                    Add to Cart
+                                                </button>
+                                                <button className="btn btn-warning ms-2 px-3 py-2" onClick={handleClickOpen}>
+                                                    Đánh giá
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button className="btn btn-danger ms-2 px-3 py-2">
+                                                Sản phẩm hiện không khả dụng
+                                            </button>
+                                        )}
+                                    </>
+                                ) : null}
+                            </div>
+                            <div className=" justify-content-center my-4">
+                                <div className="card  mb-4 w-100">
+                                    <div className="card-header py-3">
+                                        <h5 className="mb-0 text-capitalize">Thông tin chi tiết</h5>
+                                    </div>
+                                    <div className="card-body">
+                                        <pre style={{ fontSize: "1rem", fontFamily: "Roboto,Helvetica,Arial" }}>
+                                            {product.content}
+                                        </pre>
+                                    </div>
+                                </div>
+                                <ShowUser />
+                                <CommentForm product={product} />
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );

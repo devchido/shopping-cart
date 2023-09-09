@@ -9,9 +9,6 @@ import WidgetsIcon from "@mui/icons-material/Widgets";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
 import ErrorIcon from "@mui/icons-material/Error";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { VND } from "../Unity/VND";
 import {
     Alert,
@@ -21,8 +18,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    IconButton,
-    Snackbar,
 } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { format, parseISO, formatDistanceToNow } from "date-fns";
@@ -32,8 +27,8 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 //
 
 function Orders() {
@@ -263,24 +258,7 @@ function Orders() {
 
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={3000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={open}
                 onClose={handleClose}

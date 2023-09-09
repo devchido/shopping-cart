@@ -1,15 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-//
-
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Box, Container, CssBaseline, Snackbar, TextField, ThemeProvider, createTheme } from "@mui/material";
 import convertToUrl from "../Unity/CovertToUrl";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 
-const theme = createTheme();
 function CreateProduct() {
     const [category, setCategory] = React.useState([]);
     const [selectedFile, setSelectedFile] = React.useState();
@@ -125,7 +120,7 @@ function CreateProduct() {
                     setSnackbarSeverity("success");
                     setSnackbarMsg("tạo thông tin sản phẩm Thành công.");
 
-                    fetch("/product/auth/image", {
+                    fetch(API+"/product/auth/image", {
                         method: "POST",
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -153,7 +148,7 @@ function CreateProduct() {
                             console.log("error", error);
                             setSnackbarOpen(true);
                             setSnackbarSeverity("error");
-                            setSnackbarMsg("False tạo ảnh");
+                            setSnackbarMsg("False! Tạo ảnh không thành công");
                         });
                 })
                 .catch((error) => {
@@ -167,24 +162,7 @@ function CreateProduct() {
 
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
                     <p className="lead" style={{ fontWeight: "500" }}>

@@ -5,26 +5,20 @@ import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Role;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
-import com.example.redstore.service.dto.UserDto;
+import com.example.redstore.dto.UserDto;
 import com.example.redstore.token.Token;
 import com.example.redstore.token.TokenRepository;
 import com.example.redstore.token.TokenType;
 import com.example.redstore.util.EmailUtil;
-import com.example.redstore.util.EmailValidator;
 import com.example.redstore.util.OtpUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

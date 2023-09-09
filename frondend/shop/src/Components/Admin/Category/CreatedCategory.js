@@ -1,17 +1,16 @@
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Box, Snackbar } from "@mui/material";
+
+import { Box } from "@mui/material";
 import convertToUrl from "../../Unity/CovertToUrl";
 import API from "../../Api/Api";
+import SnackbarMessage from "../../Layout/SnackbarMessage";
 
 export default function CreatedCategory() {
     const [title, setTitle] = React.useState("");
     const [slug, setSlug] = React.useState("");
     const [content, setContent] = React.useState("");
-    const [category, setCategory] = React.useState({});
     const navigation = useNavigate();
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -32,12 +31,7 @@ export default function CreatedCategory() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (
-            data.get("title") === null ||
-            data.get("title") === "" ||
-            data.get("slug") === null ||
-            data.get("slug") === "" 
-        ) {
+        if (data.get("title") === null || data.get("title") === "" || data.get("slug") === null || data.get("slug") === "") {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
             setSnackbarMsg("Thông tin chưa hợp lệ!");
@@ -64,7 +58,7 @@ export default function CreatedCategory() {
                     setSnackbarOpen(true);
                     setSnackbarSeverity("success");
                     setSnackbarMsg("Thêm mới category thành công.");
-                    navigation("/admin")
+                    navigation("/admin");
                 })
                 .catch((error) => {
                     console.log("error", error);
@@ -77,24 +71,7 @@ export default function CreatedCategory() {
 
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
 
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
@@ -106,7 +83,6 @@ export default function CreatedCategory() {
                                 </div>
 
                                 <div className="card-body px-5">
-                                    
                                     <div className="form-outline mt-4  ">
                                         <label className="form-label">Title</label>
                                         <input

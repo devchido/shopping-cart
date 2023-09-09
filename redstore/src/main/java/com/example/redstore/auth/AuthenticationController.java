@@ -1,11 +1,10 @@
 package com.example.redstore.auth;
 
-import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.service.ImageProductService;
 import com.example.redstore.service.ImageUserSevice;
-import com.example.redstore.service.dto.UserDto;
+import com.example.redstore.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,16 +22,6 @@ public class AuthenticationController {
     private final ImageUserSevice imageUserSevice;
     private final ImageProductService imageProductService;
 
-    /*
-    http://localhost:8080/api/v1/auth/register
-    {
-      "firstName": "Nguyễn",
-      "lastName": "Tú",
-      "email": "tunguyen@gmail.com",
-      "mobile": "098412367",
-      "password": "1111"
-    }
-    * */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody UserDto request
@@ -47,7 +36,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
-    // Check gmail
+    // todo: Check gmail
     @GetMapping("/check-email")
     public String checkEmail(@RequestParam String email) {
         User user = userRepository.findByEmail(email).orElse(null);
@@ -57,6 +46,7 @@ public class AuthenticationController {
             return null;
         }
     }
+    // todo: check mobile
     @GetMapping("/check-mobile")
     public String checkMobile(@RequestParam String mobile) {
         User user = userRepository.findByMobile(mobile).orElse(null);

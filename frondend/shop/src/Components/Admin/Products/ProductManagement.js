@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Autocomplete, Avatar, CardHeader, Stack, TableFooter, TextField, Typography } from "@mui/material";
+import { Avatar, CardHeader, Stack, TextField, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,23 +13,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 //Icon
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert } from "@mui/material";
 import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 //item menu
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 //Paginavtion
 import TablePagination from "@mui/material/TablePagination";
-import { format, parseISO, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 import { VND } from "../../Unity/VND";
 import API from "../../Api/Api";
+import SnackbarMessage from "../../Layout/SnackbarMessage";
 
 function ProductManagement() {
     // data product-category
@@ -143,24 +138,7 @@ function ProductManagement() {
     }, [page, pageSize, field, sort, status, ctitle]);
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <section className="h-100 gradient-custom col-lg-12">
                 <div className="container py-5">
                     <div className="row d-flex justify-content-center my-4">

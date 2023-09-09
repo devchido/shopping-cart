@@ -1,12 +1,9 @@
 package com.example.redstore.service;
 
 import com.example.redstore.domain.Category;
-import com.example.redstore.domain.User;
-import com.example.redstore.repository.CartItemRepository;
 import com.example.redstore.repository.CategoryRepository;
-import com.example.redstore.service.dto.CategoryDto;
-import com.example.redstore.service.dto.UserDto;
-import com.example.redstore.service.mapper.CategoryMapper;
+import com.example.redstore.dto.CategoryDto;
+import com.example.redstore.mapper.CategoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

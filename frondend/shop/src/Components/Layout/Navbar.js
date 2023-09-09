@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 // test redux
-import { connect } from "react-redux";
 import DrawerHeader from "../common/DrawerHeader";
 import API from "../Api/Api";
 

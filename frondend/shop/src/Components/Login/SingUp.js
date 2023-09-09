@@ -12,11 +12,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 //
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert } from "@mui/material";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 
 const theme = createTheme();
 
@@ -104,28 +101,10 @@ export default function SignUp() {
             });
         }
     };
-    const checkEmail = () => {};
 
     return (
         <ThemeProvider theme={theme}>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={3000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box

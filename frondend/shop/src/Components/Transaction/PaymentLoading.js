@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
 import API from "../Api/Api";
 function PaymentLoading() {
     const location = useLocation();

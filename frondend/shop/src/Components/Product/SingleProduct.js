@@ -1,33 +1,24 @@
 import {
-    Alert,
     Avatar,
     Box,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
-    Divider,
-    Drawer,
     IconButton,
-    List,
-    ListItem,
     Rating,
-    Snackbar,
     TextField,
     Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import { formatDistanceToNow } from "date-fns";
-import { vi } from "date-fns/locale";
 import { VND } from "../Unity/VND";
 import CommentForm from "./CommentForm";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 function SingleProduct() {
     const { slug } = useParams();
     const [product, setProduct] = useState({
@@ -67,8 +58,8 @@ function SingleProduct() {
     }, []);
     // kiểm tra sản phẩm đã được chủ đăng nhập đánh giá hay chưa
     const handleCheckReview = (result) => {
-        if(localStorage.getItem('token')){
-            fetch(API+"/product-review/auth/product?productId=" + result.id, {
+        if (localStorage.getItem("token")) {
+            fetch(API + "/product-review/auth/product?productId=" + result.id, {
                 method: "GET",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -91,7 +82,6 @@ function SingleProduct() {
                     setCheckRating(false);
                 });
         }
-        
     };
     const handleReviewProduct = () => {
         console.log(rating, ratingTitle, ratingContent);
@@ -101,7 +91,7 @@ function SingleProduct() {
             setSnackbarMsg("Thông tin đánh giá chưa hợp lệ");
             return;
         }
-        fetch(API+"/product-review/auth/create", {
+        fetch(API + "/product-review/auth/create", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -139,7 +129,7 @@ function SingleProduct() {
             });
     };
     const loadDataProduct = () => {
-        fetch(API+"/product/api/findProductBySlug/" + slug).then((resp) => {
+        fetch(API + "/product/api/findProductBySlug/" + slug).then((resp) => {
             resp.json().then((result) => {
                 // console.log(result);
                 setLoading(false);
@@ -162,7 +152,7 @@ function SingleProduct() {
                         <h5 className="mb-0 text-capitalize">Người bán</h5>
                     </div>
                     <div className="card-body d-flex">
-                        <Avatar alt="Remy Sharp" src={API+product.user.photos} variant="rounded" />
+                        <Avatar alt="Remy Sharp" src={API + product.user.photos} variant="rounded" />
                         <p className="my-auto mx-3">
                             <Link to={"/user/" + product.user.id}>
                                 <strong>{product.user.firstName + " " + product.user.lastName}</strong>
@@ -177,7 +167,7 @@ function SingleProduct() {
     const handleAddToCart = () => {
         //
         if (quantity <= product.quantity) {
-            fetch(API+"/cart/auth/active", {
+            fetch(API + "/cart/auth/active", {
                 method: "GET",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -190,7 +180,7 @@ function SingleProduct() {
                     throw Error(response.status);
                 })
                 .then((result) => {
-                    fetch(API+"/cart-item/auth/create", {
+                    fetch(API + "/cart-item/auth/create", {
                         method: "POST",
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -233,24 +223,7 @@ function SingleProduct() {
 
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
 
             {checkRating ? (
                 <Dialog
@@ -364,7 +337,7 @@ function SingleProduct() {
                     ) : (
                         <>
                             <div className="col-sm-6 d-flex justify-content-center border">
-                                <img src={API+product.photos} alt={product.title} height={"400px"} width={"400px"} />
+                                <img src={API + product.photos} alt={product.title} height={"400px"} width={"400px"} />
                             </div>
                             <div className="col-md-6">
                                 <h1 className="display-5">{product.title}</h1>

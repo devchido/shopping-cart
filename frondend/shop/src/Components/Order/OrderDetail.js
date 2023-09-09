@@ -3,15 +3,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 //
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { IconButton, Input, Typography } from "@mui/material";
-//
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Snackbar } from "@mui/material";
+
 //
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 //
 import Box from "@mui/material/Box";
@@ -21,6 +17,7 @@ import StepLabel from "@mui/material/StepLabel";
 import { VND } from "../Unity/VND";
 import { format } from "date-fns";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 
 function OrderDetail() {
     const steps = ["Chờ xử lý", "Đang vận chuyển", "Đang giao", "Đã nhận", "Hoàn thành"];
@@ -38,8 +35,7 @@ function OrderDetail() {
     // thông tin chi tiết của order
     const [orderDetail, setOrderDetail] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
-    // Nhận thông tin của order: item được chọn
-    const [orderItem, setOrderItem] = React.useState();
+    
 
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -192,9 +188,7 @@ function OrderDetail() {
             </div>
         );
     };
-    const handleSubmit = (event) => {
-        event.preventDefault();
-    };
+    
     const SingleItem = () => {
         return orderDetail.length > 0
             ? orderDetail.map((item, i) => (
@@ -385,24 +379,7 @@ function OrderDetail() {
     }, []);
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={open}
                 onClose={handleClose}

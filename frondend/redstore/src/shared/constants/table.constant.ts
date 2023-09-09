@@ -1,1 +1,0 @@
-export const TABLEC_CELL_COLOR_INACTIVE = '#818EB1';

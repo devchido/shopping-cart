@@ -4,8 +4,6 @@ import Navbar from "./Components/Layout/Navbar";
 import ScrollToTop from "react-scroll-to-top";
 import Footer from "./Components/Layout/Footer";
 import Router from "./Components/Routes/Router";
-import Sidenav from "./Components/Layout/Sidenav";
-import DrawerHeader from "./Components/common/DrawerHeader";
 
 
 function App(props) {

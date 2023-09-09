@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 //
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { FormControl, IconButton, Input, InputLabel, MenuItem, Select, Skeleton, Stack, Typography } from "@mui/material";
-//
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Snackbar } from "@mui/material";
+
+import {  Input, Skeleton, Stack, Typography } from "@mui/material";
+
 //
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -21,6 +19,7 @@ import StepLabel from "@mui/material/StepLabel";
 import { format } from "date-fns";
 import { VND } from "../Unity/VND";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 
 export default function TransactionDetail() {
     //
@@ -41,17 +40,12 @@ export default function TransactionDetail() {
     });
 
     const [loading, setLoading] = React.useState(false);
-    // Nhận thông tin của data: item được chọn
-    const [dataItem, setDataItem] = React.useState();
+    
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
     const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     const handleClose = () => {
         setOpen(false);
@@ -84,9 +78,6 @@ export default function TransactionDetail() {
             })
             .catch((error) => console.log("error", error));
     };
-
-    // 0,2,3 -> Huỷ đơn hàng -> 1
-    const handleCanceldata = () => {};
 
     const Loading = () => {
         return (
@@ -258,24 +249,7 @@ export default function TransactionDetail() {
     }, []);
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={open}
                 onClose={handleClose}

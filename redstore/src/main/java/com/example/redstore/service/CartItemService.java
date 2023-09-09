@@ -4,22 +4,17 @@ import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Cart;
 import com.example.redstore.domain.CartItem;
 import com.example.redstore.domain.Product;
-import com.example.redstore.domain.User;
 import com.example.redstore.repository.CartItemRepository;
 import com.example.redstore.repository.CartRepository;
 import com.example.redstore.repository.ProductRepository;
-import com.example.redstore.repository.UserRepository;
-import com.example.redstore.service.dto.CartDto;
-import com.example.redstore.service.dto.CartItemDto;
-import com.example.redstore.service.mapper.CartItemMapper;
-import com.example.redstore.service.mapper.CartMapper;
+import com.example.redstore.dto.CartItemDto;
+import com.example.redstore.mapper.CartItemMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

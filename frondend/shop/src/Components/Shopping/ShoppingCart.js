@@ -9,8 +9,9 @@ import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { DialogContentText, IconButton, Stack } from "@mui/material";
 //
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Snackbar } from "@mui/material";
+// import CloseIcon from "@mui/icons-material/Close";
+import { Alert } from "@mui/material";
+// import { Alert, Snackbar } from "@mui/material";
 //
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -20,6 +21,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 //
 import { VND } from "../Unity/VND";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 
 export default function ShoppingCart() {
     const [cart, setCart] = React.useState({});
@@ -66,7 +68,7 @@ export default function ShoppingCart() {
     };
 
     const loadDataCart = () => {
-        fetch(API+"/cart/auth/active", {
+        fetch(API + "/cart/auth/active", {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -81,7 +83,7 @@ export default function ShoppingCart() {
             .then((result) => {
                 console.log("cart", result);
                 setCart(result);
-                fetch(API+"/cart-item/auth/cart/" + result.id, {
+                fetch(API + "/cart-item/auth/cart/" + result.id, {
                     method: "GET",
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -115,7 +117,7 @@ export default function ShoppingCart() {
                                 <div className="d-flex align-items-center mb-4  ">
                                     <div className="flex-shrink-0 me-2">
                                         <img
-                                            src={API+item.product.photos}
+                                            src={API + item.product.photos}
                                             className="img-fluid"
                                             style={{ width: 200, height: 210 }}
                                             alt=""
@@ -262,7 +264,7 @@ export default function ShoppingCart() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        fetch(API+"/cart/auth/" + cart.id, {
+        fetch(API + "/cart/auth/" + cart.id, {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -316,7 +318,7 @@ export default function ShoppingCart() {
                 setSnackbarMsg("Thông tin giỏ hàng không hợp lệ!");
                 handleCloseDialog();
             } else {
-                fetch(API+"/order/auth/createByCart?idCart=" + cart.id, {
+                fetch(API + "/order/auth/createByCart?idCart=" + cart.id, {
                     method: "POST",
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -419,24 +421,8 @@ export default function ShoppingCart() {
     }, []);
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={open}
                 onClose={handleClose}

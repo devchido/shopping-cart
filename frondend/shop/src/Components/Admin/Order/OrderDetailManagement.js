@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 //
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { FormControl, IconButton, Input, InputLabel, MenuItem, Select, Typography } from "@mui/material";
-//
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Snackbar } from "@mui/material";
+import {  IconButton, Input, Typography } from "@mui/material";
 //
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -21,6 +18,7 @@ import StepLabel from "@mui/material/StepLabel";
 import { format } from "date-fns";
 import { VND } from "../../Unity/VND";
 import API from "../../Api/Api";
+import SnackbarMessage from "../../Layout/SnackbarMessage";
 
 export default function OrderDetailManagement() {
     const steps = ["Chờ xác nhận", "Đang vận chuyển", "Đang giao", "Đã nhận"];
@@ -406,24 +404,7 @@ export default function OrderDetailManagement() {
     }, []);
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={open}
                 onClose={handleClose}

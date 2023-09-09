@@ -2,12 +2,12 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
 
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Avatar, Box, Container, CssBaseline, Input, Snackbar, TextField, ThemeProvider } from "@mui/material";
+
+import {  Avatar, Input } from "@mui/material";
 import { format } from "date-fns";
 import convertToUrl from "../../Unity/CovertToUrl";
 import API from "../../Api/Api";
+import SnackbarMessage from "../../Layout/SnackbarMessage";
 
 function ProductDetailManagement() {
     const { id } = useParams();
@@ -477,24 +477,7 @@ function ProductDetailManagement() {
 
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">
                     <form

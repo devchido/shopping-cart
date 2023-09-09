@@ -17,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 
 export default function CommentForm(product) {
     const [replyParentId, setReplyParentId] = useState(null);
@@ -194,7 +195,7 @@ export default function CommentForm(product) {
             })
             .then((result) => {
                 setCommentReply(result);
-                // console.log(result);
+                console.log(result);
             })
             .catch((error) => console.log("error", error));
     };
@@ -229,47 +230,10 @@ export default function CommentForm(product) {
         };
         loadDataUser();
     }, [productId]);
-    const ShowFormComment = () => {
-        return (
-            <Paper style={{ padding: "20px 20px", marginTop: 10 }}>
-                <Grid container wrap="nowrap" spacing={2}>
-                    <Grid item className="w-100">
-                        <textarea
-                            className="form-control"
-                            placeholder="Nhập bình luận"
-                            value={commentText}
-                            onChange={handleCommentTextChange}
-                        ></textarea>
-                    </Grid>
-                    <Grid item justifyContent="left">
-                        <Button type="submit" variant="outlined" className="h-100">
-                            Gửi
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Paper>
-        );
-    };
+    
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -321,7 +285,7 @@ export default function CommentForm(product) {
                     <Paper style={{ padding: "10px 20px 0 20px", marginTop: 10, backgroundColor: "#f8f8f8" }}>
                         <Grid container wrap="nowrap" spacing={2}>
                             <Grid item>
-                                <Avatar alt="Remy Sharp" src={API+item.user.photos} />
+                                <Avatar alt="" src={API+item.user.photos} />
                             </Grid>
                             <Grid justifyContent="left" item xs zeroMinWidth>
                                 <p>{item.content}</p>
@@ -359,9 +323,10 @@ export default function CommentForm(product) {
                             </Grid>
                         </Grid>
                     </Paper>
-
+                    
                     {commentReply.map((itemReply) => (
                         <div key={itemReply.id}>
+                            
                             {itemReply.parentId === item.id ? (
                                 <Paper
                                     style={{
@@ -373,7 +338,7 @@ export default function CommentForm(product) {
                                 >
                                     <Grid container wrap="nowrap" spacing={2}>
                                         <Grid item>
-                                            <Avatar alt="Remy Sharp" src={itemReply.user.photos} />
+                                            <Avatar alt="Remy Sharp" src={API+itemReply.user.photos} />
                                         </Grid>
                                         <Grid justifyContent="left" item xs zeroMinWidth>
                                             <p>{itemReply.content}</p>

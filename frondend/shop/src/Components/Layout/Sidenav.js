@@ -16,9 +16,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import HomeIcon from "@mui/icons-material/Home";
-import Home from "../Home/Home";
 import Router from "../Routes/Router";
 
 const drawerWidth = 240;
@@ -89,7 +87,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 export default function Sidenav() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
-    const [menuData, setMenuData] = React.useState("Home");
 
     const handleDrawerClose = () => {
         setOpen(false);

@@ -9,18 +9,14 @@ import com.example.redstore.repository.CartItemRepository;
 import com.example.redstore.repository.CartRepository;
 import com.example.redstore.repository.ProductRepository;
 import com.example.redstore.repository.UserRepository;
-import com.example.redstore.service.dto.CartDto;
-import com.example.redstore.service.dto.ProductDto;
-import com.example.redstore.service.mapper.CartMapper;
-import com.example.redstore.service.mapper.ProductMapper;
+import com.example.redstore.dto.CartDto;
+import com.example.redstore.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

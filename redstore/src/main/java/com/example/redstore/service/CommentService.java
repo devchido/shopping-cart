@@ -3,19 +3,16 @@ package com.example.redstore.service;
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.Comment;
 import com.example.redstore.domain.Product;
-import com.example.redstore.repository.CategoryRepository;
 import com.example.redstore.repository.CommentRepository;
 import com.example.redstore.repository.ProductRepository;
-import com.example.redstore.service.dto.CommentDto;
-import com.example.redstore.service.mapper.CommentMapper;
+import com.example.redstore.dto.CommentDto;
+import com.example.redstore.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

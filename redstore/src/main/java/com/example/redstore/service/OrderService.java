@@ -3,23 +3,20 @@ package com.example.redstore.service;
 import com.example.redstore.config.SecurityUtils;
 import com.example.redstore.domain.*;
 import com.example.redstore.repository.*;
-import com.example.redstore.service.dto.OrderDto;
-import com.example.redstore.service.dto.UserDto;
-import com.example.redstore.service.mapper.CartItemMapOrderItemMapper;
-import com.example.redstore.service.mapper.CartMapOrderMapper;
-import com.example.redstore.service.mapper.OrderMapper;
+import com.example.redstore.dto.OrderDto;
+import com.example.redstore.mapper.CartItemMapOrderItemMapper;
+import com.example.redstore.mapper.CartMapOrderMapper;
+import com.example.redstore.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor

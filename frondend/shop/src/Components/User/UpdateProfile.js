@@ -1,11 +1,8 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 
 export default function UpdateProfile() {
     const [user, setUser] = React.useState({});
@@ -127,24 +124,7 @@ export default function UpdateProfile() {
     };
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={3000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Box component="form" onSubmit={handleSubmit} noValidate="novalidate" encType="multipart/form-data">
                 <div className="container rounded bg-white mt-5">
                     <div className="row">

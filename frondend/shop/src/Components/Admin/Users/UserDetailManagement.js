@@ -1,9 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import {
-    Alert,
     Button,
     Dialog,
     DialogActions,
@@ -14,10 +11,10 @@ import {
     InputLabel,
     MenuItem,
     Select,
-    Snackbar,
 } from "@mui/material";
 import { format } from "date-fns";
 import API from "../../Api/Api";
+import SnackbarMessage from "../../Layout/SnackbarMessage";
 
 export default function UserDetailManagement() {
     const { id } = useParams();
@@ -162,24 +159,7 @@ export default function UserDetailManagement() {
 
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={open}
                 onClose={handleClose}

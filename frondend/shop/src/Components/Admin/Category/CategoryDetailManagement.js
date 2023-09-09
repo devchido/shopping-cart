@@ -1,18 +1,16 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Box, Snackbar } from "@mui/material";
+import {  Box } from "@mui/material";
 import convertToUrl from "../../Unity/CovertToUrl";
 import API from "../../Api/Api";
+import SnackbarMessage from "../../Layout/SnackbarMessage";
 
 export default function CategoryDetailManagement() {
     const { id } = useParams();
     const [title, setTitle] = React.useState("");
     const [slug, setSlug] = React.useState("");
     const [content, setContent] = React.useState("");
-    const [category, setCategory] = React.useState({});
 
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -101,24 +99,7 @@ export default function CategoryDetailManagement() {
 
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
 
             <section className="h-100 gradient-custom" style={{ backgroundColor: "#eee" }}>
                 <div className="container py-5">

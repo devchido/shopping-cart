@@ -1,33 +1,20 @@
 package com.example.redstore.service;
 
-import com.example.redstore.auth.AuthenticationRequest;
-import com.example.redstore.auth.AuthenticationResponse;
-import com.example.redstore.config.JwtService;
 import com.example.redstore.config.SecurityUtils;
-import com.example.redstore.domain.ProductCategory;
 import com.example.redstore.domain.Role;
 import com.example.redstore.domain.User;
 import com.example.redstore.repository.UserRepository;
-import com.example.redstore.service.dto.ProductCategoryDto;
-import com.example.redstore.service.dto.UserDto;
-import com.example.redstore.service.mapper.UserMapper;
+import com.example.redstore.dto.UserDto;
+import com.example.redstore.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

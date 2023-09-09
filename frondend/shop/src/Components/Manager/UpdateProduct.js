@@ -2,24 +2,11 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
 
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import {
-    Alert,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Skeleton,
-    Snackbar,
-    Stack,
-    createTheme,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Skeleton, Stack } from "@mui/material";
 import { format } from "date-fns";
 import convertToUrl from "../Unity/CovertToUrl";
 import API from "../Api/Api";
+import SnackbarMessage from "../Layout/SnackbarMessage";
 function UpdateProduct() {
     const { id } = useParams();
     const [product, setProduct] = React.useState({
@@ -34,8 +21,6 @@ function UpdateProduct() {
 
     const [productCategory, setProductCategory] = React.useState({});
     const [category, setCategory] = React.useState([]);
-
-    const [newImage, setNewImage] = React.useState({});
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
@@ -108,7 +93,7 @@ function UpdateProduct() {
             });
     };
     const loadDataCategory = () => {
-        fetch(API+"/category/api/filter?title= ")
+        fetch(API + "/category/api/filter?title= ")
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -124,7 +109,7 @@ function UpdateProduct() {
     };
     // Đăng bán sản phẩm
     const handleChangeStatus = () => {
-        var url = API+"/product/auth/change-status?";
+        var url = API + "/product/auth/change-status?";
         fetch(
             url +
                 new URLSearchParams({
@@ -148,7 +133,7 @@ function UpdateProduct() {
                 console.log("user", result);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
-                setSnackbarMsg("Success!");
+                setSnackbarMsg("Đã chuyển sản phẩm vào mục đăng bán.");
                 loadDataProduct();
                 handleCloseDialog();
             })
@@ -175,7 +160,7 @@ function UpdateProduct() {
         } else {
             formdata.append("image", data.get("photos"), "/" + event.target[0].value);
             formdata.append("slug", product.slug);
-            fetch(API+"/product/auth/image", {
+            fetch(API + "/product/auth/image", {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -206,7 +191,7 @@ function UpdateProduct() {
             data.get("summary") === "" ||
             data.get("price") === "" ||
             data.get("discount") === "" ||
-            data.get("quantity") === "" 
+            data.get("quantity") === ""
         ) {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
@@ -252,7 +237,7 @@ function UpdateProduct() {
     };
     // Chuyển sản phẩm vào mục kiểm duyệt
     const handleCensorship = () => {
-        var url = API+"/product/auth/admin/setStatus?";
+        var url = API + "/product/auth/admin/setStatus?";
         fetch(
             url +
                 new URLSearchParams({
@@ -296,24 +281,7 @@ function UpdateProduct() {
     };
     return (
         <div>
-            <Snackbar
-                sx={{ marginTop: "50px" }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={snackbarOpen}
-                autoHideDuration={5000}
-                onClose={snackbarClose}
-            >
-                <Alert
-                    severity={`${snackbarSeverity}`}
-                    action={[
-                        <IconButton key={"close"} aria-label="Close" sx={{ p: 0.5 }} onClick={snackbarClose}>
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                >
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
+            <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -499,7 +467,7 @@ function UpdateProduct() {
                                         </div>
                                         <div className="card-body ">
                                             <img
-                                                src={API+product.photos}
+                                                src={API + product.photos}
                                                 alt="Images"
                                                 className="img-thumbnail form-control  m-auto"
                                                 style={{ height: "300px", width: "300px" }}

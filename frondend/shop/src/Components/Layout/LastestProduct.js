@@ -1,21 +1,27 @@
 import React from "react";
 import ProductItem from "./ProductItem";
 import API from "../Api/Api";
+import axios from "axios";
 function LastestProduct() {
     const [product, setProduct] = React.useState([]);
 
     const [loading, setLoading] = React.useState(false);
 
-    const loadDataProduct = () => {
+    const loadDataProduct = React.useCallback(() => {
         setLoading(true);
-        fetch(API+"/product/api/lastest-product?field=").then((resp) => {
-            resp.json().then((result) => {
-                // console.log(result);
+        axios
+            .get(API + "/product/api/lastest-product?field=")
+            .then((res) => {
+                console.log(res);
+                console.log("12345");
                 setLoading(false);
-                setProduct(result);
+                setProduct(res.data.data);
+            })
+            .catch((error) => {
+                console.log("error", error);
             });
-        });
-    };
+        
+    }, []);
     const Loading = () => {
         return <>Loading . . .</>;
     };
@@ -26,7 +32,7 @@ function LastestProduct() {
     };
     React.useEffect(() => {
         loadDataProduct();
-    }, []);
+    }, [loadDataProduct]);
     return (
         <div className="container my-5 py-5">
             <div className="row">

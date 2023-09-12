@@ -1,5 +1,6 @@
 package com.example.redstore.controller;
 
+import com.example.redstore.payload.response.DataResponse;
 import com.example.redstore.projection.ProductInfo;
 import com.example.redstore.service.ImageProductService;
 import com.example.redstore.service.ProductService;
@@ -184,9 +185,13 @@ public class ProductController {
 
     // sản phẩm mới nhất
     @GetMapping("/api/lastest-product")
-    public List<ProductDto> lastestProduct(@RequestParam String field) {
+    public DataResponse<List<ProductDto>> lastestProduct(@RequestParam String field) {
         List<ProductDto> dtos = productService.lastestProduct(field);
-        return dtos;
+        if (dtos != null) {
+            return new DataResponse<>(true, dtos, "Product found successfully.");
+        } else {
+            return new DataResponse<>(false, null, "Product not found.");
+        }
     }
 
     // todo: upload image

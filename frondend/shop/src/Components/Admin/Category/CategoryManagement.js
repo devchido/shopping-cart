@@ -72,11 +72,6 @@ function CategoryManagement() {
         setPage(0);
         loadDataCategory();
     };
-    const navigation = useNavigate();
-    const handleChange = (event) => {
-        // setRole(event.target.value);
-        loadDataCategory();
-    };
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);

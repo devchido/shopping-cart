@@ -1,10 +1,12 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
-import {  Box } from "@mui/material";
+import { Box } from "@mui/material";
 import convertToUrl from "../../Unity/CovertToUrl";
 import API from "../../Api/Api";
 import SnackbarMessage from "../../Layout/SnackbarMessage";
+import { useCallback } from "react";
+import axios from "axios";
 
 export default function CategoryDetailManagement() {
     const { id } = useParams();
@@ -26,21 +28,14 @@ export default function CategoryDetailManagement() {
         setTitle(text);
         setSlug(url);
     };
-    const loadDataCategory = () => {
-        fetch(`${API}/category/api/${id}`, {
-            method: "GET",
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log("category ", result);
-                setTitle(result.title);
-                setSlug(result.slug);
-                setContent(result.content);
+    const loadDataCategory = useCallback(() => {
+        axios
+            .get(`${API}/category/api/${id}`)
+            .then((res) => {
+                console.log("category ", res);
+                setTitle(res.data.title);
+                setSlug(res.data.slug);
+                setContent(res.data.content);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -48,42 +43,41 @@ export default function CategoryDetailManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Load product error!");
             });
-    };
+    }, [id]);
     // Đổi data
     const handleEditCategory = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (
-            title === "" ||
-            slug === "" 
-        ) {
+        if (title === "" || slug === "") {
             setSnackbarOpen(true);
             setSnackbarSeverity("error");
             setSnackbarMsg("Thông tin chưa hợp lệ!");
         } else {
-            fetch(`${API}/category/auth/admin/${id}`, {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title: data.get("title"),
-                    slug: data.get("slug"),
-                    content: data.get("content"),
-                }),
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.status;
+            axios
+                .put(
+                    `${API}/category/auth/admin/${id}`,
+                    {
+                        title: data.get("title"),
+                        slug: data.get("slug"),
+                        content: data.get("content"),
+                    },
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json",
+                        },
                     }
-                    throw Error(response.status);
-                })
-                .then((result) => {
-                    setSnackbarOpen(true);
-                    setSnackbarSeverity("success");
-                    setSnackbarMsg("Set data true");
-                    loadDataCategory();
+                )
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log(response.status);
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity("success");
+                        setSnackbarMsg("Lưu thành công.");
+                        loadDataCategory();
+                    } else {
+                        throw new Error(response.statusText);
+                    }
                 })
                 .catch((error) => {
                     console.log("error", error);
@@ -95,7 +89,7 @@ export default function CategoryDetailManagement() {
     };
     React.useEffect(() => {
         loadDataCategory();
-    }, []);
+    }, [loadDataCategory]);
 
     return (
         <div>
@@ -148,11 +142,11 @@ export default function CategoryDetailManagement() {
                                         <label className="form-label">Content</label>
                                         <textarea
                                             type="text"
-                                           value={content}
+                                            value={content}
                                             className="form-control"
                                             id="content"
                                             name="content"
-                                            onChange={(e)=> setContent(e.target.value)}
+                                            onChange={(e) => setContent(e.target.value)}
                                         />
                                     </div>
                                 </div>

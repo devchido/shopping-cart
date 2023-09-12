@@ -1,84 +1,45 @@
+
 import * as React from "react";
-import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import UsersManagement from "./Users/UsersManagement";
 import ProductManagement from "./Products/ProductManagement";
+import CategoryManagement from "./Category/CategoryManagement";
+import OrderManagement from "./Order/OrderManagement";
+import TransactionManagement from "./Transaction/TransactionManagement";
+//
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CategoryIcon from "@mui/icons-material/Category";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import UsersManagement from "./Users/UsersManagement";
-import CategoryManagement from "./Category/CategoryManagement";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import OrderManagement from "./Order/OrderManagement";
-import TransactionManagement from "./Transaction/TransactionManagement";
 import StoreIcon from "@mui/icons-material/Store";
-import { useLocation, useNavigate } from "react-router-dom";
-// có thể xem để test nav
-// Nested List
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-    const location = useLocation();
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import API from "../Api/Api";
+//
+
+export default function Admin() {
+    let { keyParams } = useParams();
+    const [value, setValue] = React.useState("user");
+
     const navigation = useNavigate();
-    const searchParams = new URLSearchParams(location.search);
-    let keyParams = searchParams.get("key");
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
-            className=" w-100"
-            
-            {...other}
-        >
-            {value === index && (
-                <div className="p-5 ">
-                    <>{children}</>
-                </div>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `vertical-tab-${index}`,
-        "aria-controls": `vertical-tabpanel-${index}`,
-        
-    };
-}
-
-function Admin() {
-    const [value, setValue] = React.useState(0);
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        // setValue(newValue);
+        navigation("/admin/" + newValue);
     };
-    const navigation = useNavigate();
-
-    React.useEffect(()=>{
+    const loadDataUser = React.useCallback(() => {
         if (localStorage.getItem("token") !== null) {
-            fetch("/user/auth/info", {
-                method: "GET",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error(response.status);
+            axios
+                .get(API + "/user/auth/info", {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
                 })
-                .then((result) => {
-                    console.log(result);
-                    if (result.role !== "ADMIN"){
+                .then((res) => {
+                    if (res.data.role !== "ADMIN") {
                         navigation("/");
                     }
                 })
@@ -86,77 +47,90 @@ function Admin() {
                     console.log("error", error);
                 });
         }
-    },[])
+    }, [navigation]);
+    React.useEffect(() => {
+        if (keyParams !== null) {
+            setValue(keyParams)
+        };
+        if (keyParams === null || keyParams === undefined) {
+            setValue("user");
+        };
+        
+        if (localStorage.getItem("token") !== null) {
+            loadDataUser();
+        }
+    }, [loadDataUser, keyParams]);
 
     return (
         <Box sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex" }}>
-            <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={value}
-                onChange={handleChange}
-                aria-label="Vertical tabs example"
-                className="text-left col-3"
-                sx={{ borderRight: 1, borderColor: "divider", width: "12rem", justifyContent: "left" }}
-            >
-                <Tab
-                    label="Người dùng"
-                    className={"text-nowrap"}
-                    sx={{ justifyContent: "left" }}
-                    {...a11yProps(0)}
-                    icon={<AccountCircleIcon />}
-                    iconPosition="start"
-                />
-                <Tab
-                    label="Sản phẩm"
-                    className={"text-nowrap"}
-                    sx={{ justifyContent: "left" }}
-                    {...a11yProps(1)}
-                    icon={<StoreIcon />}
-                    iconPosition="start"
-                />
-                <Tab
-                    label="Danh mục"
-                    className={"text-nowrap"}
-                    sx={{ justifyContent: "left" }}
-                    {...a11yProps(2)}
-                    icon={<CategoryIcon />}
-                    iconPosition="start"
-                />
-                <Tab
-                    label="Đơn hàng"
-                    className={"text-nowrap"}
-                    sx={{ justifyContent: "left" }}
-                    {...a11yProps(3)}
-                    icon={<AssignmentIcon />}
-                    iconPosition="start"
-                />
-                <Tab
-                    label="Đơn thanh toán"
-                    className={"text-nowrap"}
-                    sx={{ justifyContent: "left" }}
-                    {...a11yProps(4)}
-                    icon={<ReceiptLongIcon />}
-                    iconPosition="start"
-                />
-            </Tabs>
-            <TabPanel value={value} index={0}>
-                <UsersManagement />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <ProductManagement />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                <CategoryManagement />
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-                <OrderManagement />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-                <TransactionManagement />
-            </TabPanel>
+            <TabContext value={value}>
+                <Box sx={{ borderRight: 1, borderColor: "divider" }}>
+                    <TabList
+                        orientation="vertical"
+                        variant="scrollable"
+                        onChange={handleChange}
+                        aria-label="lab API tabs example"
+                    >
+                        <Tab
+                            label="Người dùng"
+                            value="user"
+                            className={"text-nowrap"}
+                            sx={{ justifyContent: "left" }}
+                            icon={<AccountCircleIcon />}
+                            iconPosition="start"
+                        />
+                        <Tab
+                            label="Sản phẩm"
+                            value="product"
+                            className={"text-nowrap"}
+                            sx={{ justifyContent: "left" }}
+                            icon={<StoreIcon />}
+                            iconPosition="start"
+                        />
+                        <Tab
+                            label="Danh mục"
+                            value="category"
+                            className={"text-nowrap"}
+                            sx={{ justifyContent: "left" }}
+                            icon={<CategoryIcon />}
+                            iconPosition="start"
+                        />
+                        <Tab
+                            label="Đơn hàng"
+                            value="order"
+                            className={"text-nowrap"}
+                            sx={{ justifyContent: "left" }}
+                            icon={<AssignmentIcon />}
+                            iconPosition="start"
+                        />
+                        <Tab
+                            label="Đơn thanh toán"
+                            value="transaction"
+                            className={"text-nowrap"}
+                            sx={{ justifyContent: "left" }}
+                            icon={<ReceiptLongIcon />}
+                            iconPosition="start"
+                        />
+                    </TabList>
+                </Box>
+                <Box sx={{ width: "100%" }}>
+                    <TabPanel value="user">
+                        <UsersManagement />
+                    </TabPanel>
+                    <TabPanel value="product">
+                        <ProductManagement />
+                    </TabPanel>
+                    <TabPanel value="category">
+                        <CategoryManagement />
+                    </TabPanel>
+                    <TabPanel value="order">
+                        <OrderManagement />
+                    </TabPanel>
+                    <TabPanel value="transaction">
+                        <TransactionManagement />
+                    </TabPanel>
+                </Box>
+            </TabContext>
         </Box>
     );
 }
-
-export default Admin;

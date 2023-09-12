@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { useHistory } from 'react-router-dom';
 import Home from "../Home/Home";
 import Admin from "../Admin/Admin";
 import Product from "../Product/Product";
@@ -9,7 +8,6 @@ import SingIn from "../Login/SingIn";
 import SingUp from "../Login/SingUp";
 import Profile from "../User/Profile";
 import UpdateProfile from "../User/UpdateProfile";
-import Carts from "../Shopping/Carts";
 import CartDetail from "../Shopping/CartDetail";
 import CartAdd from "../Shopping/CartAdd";
 import CreateProducts from "../Manager/CreateProducts";
@@ -19,12 +17,7 @@ import Orders from "../Order/Orders";
 import OrderDetail from "../Order/OrderDetail";
 import ListProducts from "../Manager/ListProducts";
 import UpdateProduct from "../Manager/UpdateProduct";
-import UsersManagement from "../Admin/Users/UsersManagement";
-import ProductManagement from "../Admin/Products/ProductManagement";
 import ProductDetailManagement from "../Admin/Products/ProductDetailManagement";
-import CategoryManagement from "../Admin/Category/CategoryManagement";
-import OrderManagement from "../Admin/Order/OrderManagement";
-import TransactionManagement from "../Admin/Transaction/TransactionManagement";
 import UserDetailManagement from "../Admin/Users/UserDetailManagement";
 import CategoryDetailManagement from "../Admin/Category/CategoryDetailManagement";
 import CreatedCategory from "../Admin/Category/CreatedCategory";
@@ -46,26 +39,18 @@ function Router() {
 
             {/* Admin management */}
             <Route path="/admin" element={<Admin />}></Route>
-            {/* User management */}
-            {/* <Route path="/admin/user" element={<UsersManagement />}></Route> */}
+            {/* User, product, category, order, transaction management */}
+            <Route path="/admin/:keyParams" element={<Admin />}></Route>
             {/* User detail management */}
             <Route path="/admin/user/:id" element={<UserDetailManagement />}></Route>
-            {/* Products management */}
-            {/* <Route path="/admin/product" element={<ProductManagement />}></Route> */}
             {/* Product Detail management */}
             <Route path="/admin/product/:id" element={<ProductDetailManagement />}></Route>
-            {/* Category management */}
-            {/* <Route path="/admin/category" element={<CategoryManagement />}></Route> */}
             {/* Category detail management */}
             <Route path="/admin/category/:id" element={<CategoryDetailManagement />}></Route>
             {/* Add Category management */}
             <Route path="/admin/category/create" element={<CreatedCategory />}></Route>
             {/* Order management */}
-            {/* <Route path="/admin/order" element={<OrderManagement />}></Route> */}
-            {/* Order management */}
             <Route path="/admin/order/:id" element={<OrderDetailManagement />}></Route>
-            {/* Transaction management */}
-            {/* <Route path="/admin/transaction" element={<TransactionManagement />}></Route> */}
             {/* Transaction detail management */}
             <Route path="/admin/transaction/:id" element={<TransactionDetailManagement />}></Route>
 

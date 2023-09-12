@@ -18,6 +18,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 // test redux
 import DrawerHeader from "../common/DrawerHeader";
 import API from "../Api/Api";
+import axios from "axios";
 
 //
 function Navbar() {
@@ -44,44 +45,31 @@ function Navbar() {
         localStorage.removeItem("token");
     };
 
-    const loadDataUser = () => {
+    const loadDataUser = React.useCallback(() => {
         if (localStorage.getItem("token") !== null) {
-            fetch(API+"/user/auth/info", {
-                method: "GET",
+            
+            axios.get(API + "/user/auth/info", {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
                 },
             })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error(response.status);
-                })
-                .then((result) => {
-                    // console.log(result);
-                    setUser(result);
+                .then((res) => {
+                    setUser(res.data);
                 })
                 .catch((error) => {
                     console.log("error", error);
                     handleLogout();
                 });
         }
-    };
+    }, []);
     const handleChangeVendor = () => {
-        fetch(API+"/user/auth/change-vendor?id=" + user.id + "&vendor=2", {
-            method: "PUT",
+        
+        axios.put(API + "/user/auth/change-vendor?id=" + user.id + "&vendor=2", null, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
             },
         })
             .then((response) => {
-                if (response.ok) {
-                    return response.text();
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
                 loadDataUser();
             })
             .catch((error) => {
@@ -91,7 +79,7 @@ function Navbar() {
 
     React.useEffect(() => {
         loadDataUser();
-    }, []);
+    }, [loadDataUser]);
     return (
         <Box>
             <AppBar position="fixed" className="navbar p-0">

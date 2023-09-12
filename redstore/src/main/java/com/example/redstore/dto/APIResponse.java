@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class APIResponse<T> {
     int recordCount;
     T response;
+
+    // api dạng list chia thành các mục chỉ số, phân trang <page>
 }

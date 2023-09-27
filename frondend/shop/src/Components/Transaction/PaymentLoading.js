@@ -20,8 +20,8 @@ function PaymentLoading() {
     const vnp_TransactionStatus = searchParams.get("vnp_TransactionStatus");
     const vnp_TxnRef = searchParams.get("vnp_TxnRef");
     const vnp_SecureHash = searchParams.get("vnp_SecureHash");
-    const checkPayment = () => {
-        fetch(API+"/transaction/auth/check_payment", {
+    const checkPayment = React.useCallback(() => {
+        fetch(API + "/transaction/auth/check_payment", {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -61,10 +61,24 @@ function PaymentLoading() {
             .catch((error) => {
                 console.log("error", error);
             });
-    };
+    }, [
+        navigation,
+        vnp_Amount,
+        vnp_BankCode,
+        vnp_BankTranNo,
+        vnp_CardType,
+        vnp_OrderInfo,
+        vnp_PayDate,
+        vnp_ResponseCode,
+        vnp_SecureHash,
+        vnp_TmnCode,
+        vnp_TransactionNo,
+        vnp_TransactionStatus,
+        vnp_TxnRef,
+    ]);
     useEffect(() => {
         checkPayment();
-    }, []);
+    }, [checkPayment]);
     return (
         <div>
             <Box

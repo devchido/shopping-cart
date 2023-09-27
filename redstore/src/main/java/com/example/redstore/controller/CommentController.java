@@ -1,5 +1,6 @@
 package com.example.redstore.controller;
 
+import com.example.redstore.payload.response.DataResponse;
 import com.example.redstore.service.CommentService;
 import com.example.redstore.dto.CommentDto;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,15 @@ public class CommentController {
     public List<CommentDto> filterCommentReply(@RequestParam Long productId){
         List<CommentDto> dtos = commentService.filterCommentReply(productId);
         return dtos;
+    }
+    @GetMapping("/api")
+    public DataResponse<List<CommentDto>> fillAllComment(){
+        List<CommentDto> dtos = commentService.fillAllComment();
+        if (dtos != null) {
+            return new DataResponse<>(true, dtos, "Comment found successfully.");
+        } else {
+            return new DataResponse<>(false, null, "Comment not found.");
+        }
     }
     // todo: tạo comment mới
     @PostMapping("/auth")

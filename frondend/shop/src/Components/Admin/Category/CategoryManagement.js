@@ -1,17 +1,8 @@
 import React from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Stack,
-    TextField,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TextField } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -30,6 +21,8 @@ import TablePagination from "@mui/material/TablePagination";
 
 import API from "../../Api/Api";
 import SnackbarMessage from "../../Layout/SnackbarMessage";
+import axios from "axios";
+import { useCallback } from "react";
 
 function CategoryManagement() {
     // data product-category
@@ -43,8 +36,10 @@ function CategoryManagement() {
 
     // Số sản phẩm được hiển thị
     const [pageSize, setPageSize] = React.useState(5);
-    const [field, setField] = React.useState("id");
-    const [sort, setSort] = React.useState("ASC");
+    // const [field, setField] = React.useState("id");
+    // const [sort, setSort] = React.useState("ASC");
+    let field = "id";
+    let sort = "ASC";
     const [title, setTitle] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
     // dialog delete
@@ -77,23 +72,17 @@ function CategoryManagement() {
         setSnackbarOpen(false);
     };
 
-    const loadDataCategory = () => {
-        fetch(`${API}/category/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&title=${title}`, {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
+    const loadDataCategory = useCallback(() => {
+        axios
+            .get(API + `/category/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&title=${title}`, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
             })
-            .then((result) => {
-                console.log("category", result);
-                setData(result.response.content);
-                setTotalElements(result.response.totalElements);
+            .then((res) => {
+                console.log("category", res.data);
+                setData(res.data.response.content);
+                setTotalElements(res.data.response.totalElements);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -101,7 +90,7 @@ function CategoryManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! không load được dữ liệu user");
             });
-    };
+    }, [field, page, pageSize, sort, title]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -109,33 +98,28 @@ function CategoryManagement() {
         loadDataCategory();
     };
     const handleDelete = () => {
-        fetch(
-            `${API}/category/auth/admin?` +
-                new URLSearchParams({
-                    id: dialogItem.id,
-                }),
-            {
-                method: "DELETE",
+        axios
+            .delete(`${API}/category/auth/admin`, {
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
+                params: {
+                    id: dialogItem.id,
+                },
             })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Đã xoá category với id: " + dialogItem.id);
-                handleCloseDialog();
-                loadDataCategory();
+            .then((response) => {
+                if (response.status === 200) {
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity("success");
+                    setSnackbarMsg(`Đã xoá category với id: ${dialogItem.id}`);
+                    handleCloseDialog();
+                    loadDataCategory();
+                } else {
+                    throw new Error(`Response status: ${response.status}`);
+                }
             })
             .catch((error) => {
-                console.log("error", error);
+                console.error("error", error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! Xoá không thành công");
@@ -144,7 +128,7 @@ function CategoryManagement() {
     };
     React.useEffect(() => {
         loadDataCategory();
-    }, [page, pageSize]);
+    }, [loadDataCategory]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />

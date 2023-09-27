@@ -16,7 +16,7 @@ export default function UpdateProfile() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-    const loadDataUser = () => {
+    const loadDataUser = React.useCallback(() => {
         setUser({});
         if (localStorage.getItem("token")) {
             var myHeaders = new Headers();
@@ -44,11 +44,11 @@ export default function UpdateProfile() {
                     handleLogout();
                 });
         }
-    };
+    },[]);
 
     React.useEffect(() => {
         loadDataUser();
-    }, []);
+    }, [loadDataUser]);
 
     const handleSubmit = (event) => {
         event.preventDefault();

@@ -163,35 +163,25 @@ public class TransactionService {
     public PaymentDto paymentUser(String id) throws UnsupportedEncodingException {
         Transaction entity = transactionRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Không tìm thấy transaction, id: " + id));
-//        if (entity.getUser().getId() == SecurityUtils.getPrincipal().getId()) {
-//            entity.setStatus(1);
-//            transactionRepository.save(entity);
-//            System.out.println("transaction đã được thanh toán");
-//        }
-        //
-        //        String orderType = req.getParameter("ordertype");
-//        String bankCode = req.getParameter("bankCode");
 
         long amount = (long) (entity.getOrder().getTotal() * 100);
         String vnp_TxnRef = String.valueOf(entity.getOrder().getId());
-//        String vnp_TxnRef = Config.getRandomNumber(8);
-//        String vnp_IpAddr = Config.getIpAddress(req);
         String vnp_TmnCode = Config.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
+
         vnp_Params.put("vnp_Version", Config.vnp_Version);
         vnp_Params.put("vnp_Command", Config.vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount));
-        vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_BankCode", "NCB");
-
+        vnp_Params.put("vnp_Locale", "vn");
+        vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
-
-        vnp_Params.put("vnp_Locale", "vn");
-
-        vnp_Params.put("vnp_ReturnUrl", Config.vnp_Returnurl);
+        vnp_Params.put("vnp_OrderType", Config.vnp_OrderType);
+        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        vnp_Params.put("vnp_IpAddr", "192.168.1.12");
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");

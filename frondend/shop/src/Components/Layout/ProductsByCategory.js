@@ -1,5 +1,4 @@
 import React from "react";
-import ProductItem from "./ProductItem";
 import ProductCategoryItem from "./ProductCategoryItem";
 import API from "../Api/Api";
 function ProductsByCategory() {

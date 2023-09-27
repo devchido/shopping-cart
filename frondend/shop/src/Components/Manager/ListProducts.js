@@ -4,7 +4,19 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import {  Avatar, Button, CardHeader, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TableFooter, TextField, Typography } from "@mui/material";
+import {
+    Avatar,
+    Button,
+    CardHeader,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -65,13 +77,13 @@ function ListProducts() {
         loadDataProduct();
     };
 
-    const loadDataCategory = () => {
-        fetch(API+"/category/api").then((resp) => {
+    const loadDataCategory = React.useCallback(() => {
+        fetch(API + "/category/api").then((resp) => {
             resp.json().then((result) => {
                 setCategory(result);
             });
         });
-    };
+    },[]);
     // dialog
 
     const handleClickOpenDialog = (item) => {
@@ -85,15 +97,12 @@ function ListProducts() {
         setDialogItem();
     };
     const handleDelete = () => {
-        fetch(
-            `${API}/product/auth/${dialogItem.id}`,
-            {
-                method: "DELETE",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
+        fetch(`${API}/product/auth/${dialogItem.id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+        })
             .then((response) => {
                 if (response.ok) {
                     return response.text();
@@ -114,13 +123,13 @@ function ListProducts() {
                 setSnackbarMsg("Sản phẩm này hiện không thể xoá!");
                 handleCloseDialog();
             });
-    }
+    };
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
 
-    const loadDataProduct = () => {
+    const loadDataProduct = React.useCallback(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var requestOptions = {
@@ -128,7 +137,10 @@ function ListProducts() {
             headers: myHeaders,
             redirect: "follow",
         };
-        fetch(`${API}/product/auth/user/${page}/${pageSize}/${field}?title=${title}&categoryId=${ctitle}&status=${status}&sort=${sort}`, requestOptions)
+        fetch(
+            `${API}/product/auth/user/${page}/${pageSize}/${field}?title=${title}&categoryId=${ctitle}&status=${status}&sort=${sort}`,
+            requestOptions
+        )
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -146,7 +158,7 @@ function ListProducts() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error!");
             });
-    };
+    }, [ctitle, field, page, pageSize, sort, status, title]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -156,7 +168,7 @@ function ListProducts() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
-    }, [page, pageSize, field, ctitle, status, sort]);
+    }, [loadDataProduct, loadDataCategory]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
@@ -171,13 +183,13 @@ function ListProducts() {
                         <DialogTitle id="alert-dialog-title">Xoá sản phẩm</DialogTitle>
 
                         <DialogContent className="d-flex justify-content-center">
-                            <DialogContentText>Bạn có muốn xoá sản phẩm <b>{dialogItem.title}</b> không?</DialogContentText>
+                            <DialogContentText>
+                                Bạn có muốn xoá sản phẩm <b>{dialogItem.title}</b> không?
+                            </DialogContentText>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleCloseDialog}>Không</Button>
-                            <Button onClick={handleDelete}>
-                                Xoá
-                            </Button>
+                            <Button onClick={handleDelete}>Xoá</Button>
                         </DialogActions>
                     </>
                 ) : null}
@@ -195,7 +207,7 @@ function ListProducts() {
                                 </div>
                             </div>
                             <div className="card mb-4">
-                            <Box
+                                <Box
                                     component="form"
                                     onSubmit={handleSubmit}
                                     className="card-body row d-flex justify-content-between"
@@ -250,7 +262,7 @@ function ListProducts() {
                                             </Select>
                                         </FormControl>
                                     </Box>
-                                    
+
                                     <Box className="w-100 my-2">
                                         <Typography>Sắp xếp</Typography>
                                         <FormControl className="col-lg-3 col-auto px-2 my-1">
@@ -373,7 +385,7 @@ function ListProducts() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={API+item.photos}
+                                                                                src={API + item.photos}
                                                                                 variant="rounded"
                                                                             />
                                                                         }
@@ -400,7 +412,7 @@ function ListProducts() {
                                                                     })}
                                                                 </TableCell>
                                                                 <TableCell className="text-nowrap" align="center">
-                                                                {item.status === 0 ? (
+                                                                    {item.status === 0 ? (
                                                                         <span className="badge bg-warning text-capitalize ms-2">
                                                                             Chờ xét duyệt
                                                                         </span>
@@ -433,7 +445,11 @@ function ListProducts() {
                                                                                 <BorderColorIcon />
                                                                             </IconButton>
                                                                         </Link>
-                                                                        <IconButton color="error" title="Remove" onClick={() => handleClickOpenDialog(item)}>
+                                                                        <IconButton
+                                                                            color="error"
+                                                                            title="Remove"
+                                                                            onClick={() => handleClickOpenDialog(item)}
+                                                                        >
                                                                             <DeleteIcon />
                                                                         </IconButton>
                                                                     </div>

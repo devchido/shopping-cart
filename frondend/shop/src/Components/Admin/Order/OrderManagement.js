@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import {  Avatar, CardHeader, Input, Stack,  TextField, Typography } from "@mui/material";
+import { Avatar, CardHeader, Input, Stack, TextField, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -25,6 +25,7 @@ import { VND } from "../../Unity/VND";
 import { format } from "date-fns";
 import API from "../../Api/Api";
 import SnackbarMessage from "../../Layout/SnackbarMessage";
+import axios from "axios";
 
 function OrderManagement() {
     // data product-category
@@ -32,7 +33,6 @@ function OrderManagement() {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
-    const [category, setCategory] = React.useState("");
 
     // Trang hiện tại của page
     const [page, setPage] = React.useState(0);
@@ -41,14 +41,14 @@ function OrderManagement() {
     const [pageSize, setPageSize] = React.useState(5);
     const [field, setField] = React.useState("created_at");
     const [sort, setSort] = React.useState("DESC");
-    const [cartId, setCartId] = React.useState("");
-    const [userId, setUserId] = React.useState("");
+    const [cartId] = React.useState("");
+    const [userId] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [mobile, setMobile] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [address, setAddress] = React.useState("");
-    const [city, setCity] = React.useState("");
-    const [country, setCountry] = React.useState("");
+    const [address] = React.useState("");
+    const [city] = React.useState("");
+    const [country] = React.useState("");
     const [status, setStatus] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
 
@@ -62,7 +62,6 @@ function OrderManagement() {
         setPage(0);
         loadDataOrder();
     };
-    const navigation = useNavigate();
     const handleChangeStatus = (event) => {
         setStatus(event.target.value);
         loadDataOrder();
@@ -76,42 +75,28 @@ function OrderManagement() {
         loadDataOrder();
     };
     //
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    // Đóng menu
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    
+    
+    
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
 
-    const loadDataOrder = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-        var requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-        fetch(
-            `${API}/order/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&cartId=${cartId}&userId=${userId}&username=${username}&mobile=${mobile}&email=${email}&address=${address}&city=${city}&country=${country}&status=${status}`,
-            requestOptions
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
+    const loadDataOrder = React.useCallback(() => {
+        axios
+            .get(
+                `${API}/order/auth/admin/${page}/${pageSize}?field=${field}&sort=${sort}&cartId=${cartId}&userId=${userId}&username=${username}&mobile=${mobile}&email=${email}&address=${address}&city=${city}&country=${country}&status=${status}`,
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
                 }
-                throw Error(response.status);
-            })
+            )
             .then((result) => {
                 console.log("order", result);
-                setData(result.response.content);
-                setTotalElements(result.response.totalElements);
+                setData(result.data.response.content);
+                setTotalElements(result.data.response.totalElements);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -119,7 +104,7 @@ function OrderManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! không load được dữ liệu order");
             });
-    };
+    }, [address, cartId, city, country, email, field, mobile, page, pageSize, sort, status, userId, username]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -128,7 +113,7 @@ function OrderManagement() {
     };
     React.useEffect(() => {
         loadDataOrder();
-    }, [page, pageSize, status, field, sort]);
+    }, [loadDataOrder]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
@@ -233,11 +218,8 @@ function OrderManagement() {
                                     </Box>
 
                                     <Box className="my-2">
-                                        <FormControl className="px-2" >
-                                            <button
-                                                type="submit"
-                                                className="btn btn-dark text-nowrap"
-                                            >
+                                        <FormControl className="px-2">
+                                            <button type="submit" className="btn btn-dark text-nowrap">
                                                 Search
                                             </button>
                                         </FormControl>
@@ -250,7 +232,7 @@ function OrderManagement() {
                                         <TableContainer component={Paper}>
                                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                                 <TableHead>
-                                                    <TableRow >
+                                                    <TableRow>
                                                         <TableCell className="text-nowrap">Id</TableCell>
                                                         <TableCell className="text-nowrap">User</TableCell>
                                                         <TableCell className="text-nowrap">Mobile</TableCell>
@@ -279,13 +261,15 @@ function OrderManagement() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={API+item.user.photos}
+                                                                                src={API + item.user.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />
                                                                         }
                                                                         style={{ minWidth: "200px", maxWidth: "400px" }}
-                                                                        title={item.firstName + " " + item.lastName}
+                                                                        title={
+                                                                            <Link to={"/user/" + item.user.id} className="text-black">{item.firstName + " " + item.lastName}</Link>
+                                                                            }
                                                                         sx={{ p: 0 }}
                                                                     />
                                                                 </TableCell>
@@ -296,10 +280,6 @@ function OrderManagement() {
                                                                     {VND.format(item.total)}
                                                                 </TableCell>
                                                                 <TableCell className="text-nowrap">
-                                                                    {/* {formatDistanceToNow(new Date(item.updatedAt), {
-                                                                        locale: vi,
-                                                                        addSuffix: true,
-                                                                    })} */}
                                                                     {item.updatedAt ? (
                                                                         <Input
                                                                             type="datetime-local"
@@ -339,24 +319,16 @@ function OrderManagement() {
                                                                         ? "Hoàn trả"
                                                                         : null || item.status === 8
                                                                         ? "Đã hoàn trả"
-                                                                        : null
-                                                                    }
+                                                                        : null}
                                                                 </TableCell>
 
                                                                 <TableCell align="center" className="row ">
                                                                     <div className="d-flex">
-                                                                        {/* <IconButton color="primary">
-                                                                            <CalendarViewMonthIcon />
-                                                                        </IconButton> */}
                                                                         <Link to={`/admin/order/${item.id}`}>
-                                                                        <IconButton color="success" title="Edit">
-                                                                            <BorderColorIcon />
-                                                                        </IconButton>
+                                                                            <IconButton color="success" title="Edit">
+                                                                                <BorderColorIcon />
+                                                                            </IconButton>
                                                                         </Link>
-
-                                                                        {/* <IconButton color="error" title="Delete">
-                                                                            <DeleteIcon />
-                                                                        </IconButton> */}
                                                                     </div>
                                                                 </TableCell>
                                                             </TableRow>

@@ -9,7 +9,7 @@ function Profile() {
     const handleLogout = () => {
         localStorage.removeItem("token");
     };
-    const loadDataUser = () => {
+    const loadDataUser = React.useCallback(() => {
         if (localStorage.getItem("token") !== null) {
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -36,11 +36,11 @@ function Profile() {
                     handleLogout();
                 });
         }
-    };
+    },[]);
 
     React.useEffect(() => {
         loadDataUser();
-    }, []);
+    }, [loadDataUser]);
     return (
         <div>
             <section className="h-100 gradient-custom-2">

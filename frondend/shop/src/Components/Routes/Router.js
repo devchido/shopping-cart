@@ -4,8 +4,8 @@ import Home from "../Home/Home";
 import Admin from "../Admin/Admin";
 import Product from "../Product/Product";
 import SingleProduct from "../Product/SingleProduct";
-import SingIn from "../Login/SingIn";
-import SingUp from "../Login/SingUp";
+import SignIn from "../Login/SignIn";
+import SignUp from "../Login/SignUp";
 import Profile from "../User/Profile";
 import UpdateProfile from "../User/UpdateProfile";
 import CartDetail from "../Shopping/CartDetail";
@@ -60,8 +60,8 @@ function Router() {
             <Route path="/product/:slug" element={<SingleProduct />}></Route>
 
             {/* Login */}
-            <Route path="/singin" element={<SingIn />}></Route>
-            <Route path="/singup" element={<SingUp />}></Route>
+            <Route path="/signin" element={<SignIn />}></Route>
+            <Route path="/signup" element={<SignUp />}></Route>
             <Route path="/forgot-password" element={<ForgotPassWord />} />
 
             {/* User View */}

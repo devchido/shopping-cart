@@ -15,7 +15,7 @@ import API from "../Api/Api";
 
 const theme = createTheme();
 
-export default function SingIn() {
+export default function SignIn() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -109,7 +109,7 @@ export default function SingIn() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link to={"/singup"} variant="body2">
+                                <Link to={"/signup"} variant="body2">
                                     {"Bạn chưa có tài khoản? Đăng ký"}
                                 </Link>
                             </Grid>

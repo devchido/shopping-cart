@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 //
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {  IconButton, Input, Typography } from "@mui/material";
+import { IconButton, Input, Typography } from "@mui/material";
 //
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { VND } from "../../Unity/VND";
 import API from "../../Api/Api";
 import SnackbarMessage from "../../Layout/SnackbarMessage";
+import axios from "axios";
 
 export default function OrderDetailManagement() {
     const steps = ["Chờ xác nhận", "Đang vận chuyển", "Đang giao", "Đã nhận"];
@@ -26,7 +27,7 @@ export default function OrderDetailManagement() {
     // id của order
     const { id } = useParams();
     //
-    const [status, setStatus] = useState({});
+    // const [status, setStatus] = useState({});
     const [order, setOrder] = React.useState({
         id: "",
         firstName: "",
@@ -37,8 +38,6 @@ export default function OrderDetailManagement() {
     // thông tin chi tiết của order
     const [orderDetail, setOrderDetail] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
-    // Nhận thông tin của order: item được chọn
-    const [orderItem, setOrderItem] = React.useState();
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
@@ -58,53 +57,38 @@ export default function OrderDetailManagement() {
         setSnackbarOpen(false);
     };
     // get data chi tiết của order
-    const loadDataOrderDetail = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-        var requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow",
-        };
-        fetch(API+"/order-item/auth/admin/o/" + id, requestOptions)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
+    const loadDataOrderDetail = React.useCallback(() => {
+        axios
+            .get(API + "/order-item/auth/admin/o/" + id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
             })
-            .then((result) => {
-                // console.log("cart-item", result);
+            .then((res) => {
+                console.log("cart-item", res);
                 setLoading(false);
-                setOrderDetail(result);
+                setOrderDetail(res.data);
             })
             .catch((error) => console.log("error", error));
-    };
+    }, [id]);
     // admin thực hiện get data của order
-    const loadDataOrder = () => {
-        fetch(API+"/order/auth/admin/p/" + id, {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
+    const loadDataOrder = React.useCallback(() => {
+        axios
+            .get(API + "/order/auth/admin/p/" + id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
             })
-            .then((result) => {
-                console.log("order", result);
-                setOrder(result);
-                setStatus(result.status);
+            .then((res) => {
+                console.log("order", res.data);
+                setOrder(res.data);
+                // setStatus(res.data.status);
             })
             .catch((error) => console.log("error", error));
-    };
+    }, [id]);
     const navigation = useNavigate();
     const handleTransaction = () => {
-        fetch(API+"/transaction/auth/admin/order/" + order.id, {
+        fetch(API + "/transaction/auth/admin/order/" + order.id, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -129,7 +113,8 @@ export default function OrderDetailManagement() {
     // xác nhận vận chuyển hàng của đơn hàng: 0 -> 1
     const handleShippingOrder = () => {
         fetch(
-            API+"/order/auth/admin/shipping?" +
+            API +
+                "/order/auth/admin/shipping?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -156,36 +141,54 @@ export default function OrderDetailManagement() {
     };
     // xác nhận đang giao hàng cho đơn hàng: 1 -> 2
     const handleDeliveryOrder = () => {
-        fetch(
-            API+"/order/auth/admin/delivery?" +
-                new URLSearchParams({
-                    id: order.id,
-                }),
-            {
-                method: "PUT",
+        axios
+            .put(`${API}/order/auth/admin/delivery`, null, {
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw new Error(response.status);
+                params: {
+                    id: order.id,
+                },
             })
-            .then((result) => {
+            .then((res) => {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Xác nhận đơn hàng đã vận chuyển! Đơn hàng được chuyển giao tới khách hàng.");
                 loadDataOrder();
             })
-            .catch((error) => console.log("error", error));
+            .catch((error) => console.error("error", error));
+        // fetch(
+        //     API +
+        //         "/order/auth/admin/delivery?" +
+        //         new URLSearchParams({
+        //             id: order.id,
+        //         }),
+        //     {
+        //         method: "PUT",
+        //         headers: {
+        //             Authorization: "Bearer " + localStorage.getItem("token"),
+        //         },
+        //     }
+        // )
+        //     .then((response) => {
+        //         if (response.ok) {
+        //             return response.status;
+        //         }
+        //         throw new Error(response.status);
+        //     })
+        //     .then((result) => {
+        //         setSnackbarOpen(true);
+        //         setSnackbarSeverity("success");
+        //         setSnackbarMsg("Xác nhận đơn hàng đã vận chuyển! Đơn hàng được chuyển giao tới khách hàng.");
+        //         loadDataOrder();
+        //     })
+        //     .catch((error) => console.log("error", error));
     };
     // admin - xác nhận đã hoàn trả hàng: 7 -> 8
     const handleReturnedOrder = () => {
         fetch(
-            API+"/order/auth/admin/returned?" +
+            API +
+                "/order/auth/admin/returned?" +
                 new URLSearchParams({
                     id: order.id,
                 }),
@@ -208,14 +211,16 @@ export default function OrderDetailManagement() {
                 setSnackbarMsg("Xác nhận đơn hàng đã được hoàn trả thành công.");
                 loadDataOrder();
             })
-            .catch((error) => {console.log("error", error)
-            setSnackbarOpen(true);
-            setSnackbarSeverity("error");
-            setSnackbarMsg("Xác nhận đơn hàng đã được hoàn trả không thành công!");});
+            .catch((error) => {
+                console.log("error", error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity("error");
+                setSnackbarMsg("Xác nhận đơn hàng đã được hoàn trả không thành công!");
+            });
     };
     // admin huỷ đơn hàng: 0 || 1 || 2 -> 5
     const handleCancelOrder = () => {
-        fetch(API+"/order/auth/admin/cancel?id=" + order.id, {
+        fetch(API + "/order/auth/admin/cancel?id=" + order.id, {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -237,33 +242,34 @@ export default function OrderDetailManagement() {
             .catch((error) => console.log("error", error));
     };
     // xác nhận đã hoàn trả hàng: 7 -> 8
-    const handleReturned = () => {
-        fetch(
-            API+"/order/auth/admin/returned?" +
-                new URLSearchParams({
-                    id: order.id,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Xác nhận hoàn trả! Đơn hàng sẽ được gửi trả về đơn vị, đồng thời hoàn tiền cho khách hàng.");
-                loadDataOrder();
-            })
-            .catch((error) => console.log("error", error));
-    };
+    // const handleReturned = () => {
+    //     fetch(
+    //         API +
+    //             "/order/auth/admin/returned?" +
+    //             new URLSearchParams({
+    //                 id: order.id,
+    //             }),
+    //         {
+    //             method: "PUT",
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem("token"),
+    //             },
+    //         }
+    //     )
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.status;
+    //             }
+    //             throw Error(response.status);
+    //         })
+    //         .then((result) => {
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("success");
+    //             setSnackbarMsg("Xác nhận hoàn trả! Đơn hàng sẽ được gửi trả về đơn vị, đồng thời hoàn tiền cho khách hàng.");
+    //             loadDataOrder();
+    //         })
+    //         .catch((error) => console.log("error", error));
+    // };
 
     const Loading = () => {
         return <>Loading</>;
@@ -357,7 +363,7 @@ export default function OrderDetailManagement() {
                           <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                               {/* Image start */}
                               <div className="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                  <img src={API+item.product.photos} className="w-100" alt={item.product.title} />
+                                  <img src={API + item.product.photos} className="w-100" alt={item.product.title} />
                                   <a href="#!">
                                       <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }} />
                                   </a>
@@ -401,7 +407,7 @@ export default function OrderDetailManagement() {
         setLoading(true);
         loadDataOrder();
         loadDataOrderDetail();
-    }, []);
+    }, [loadDataOrder, loadDataOrderDetail]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
@@ -464,12 +470,12 @@ export default function OrderDetailManagement() {
                                         ) : null}
                                         {order.status === 7 || order.status === 8 ? (
                                             <Stepper activeStep={order.status - 6}>
-                                            {steps2.map((label) => (
-                                                <Step key={label}>
-                                                    <StepLabel>{label}</StepLabel>
-                                                </Step>
-                                            ))}
-                                        </Stepper>
+                                                {steps2.map((label) => (
+                                                    <Step key={label}>
+                                                        <StepLabel>{label}</StepLabel>
+                                                    </Step>
+                                                ))}
+                                            </Stepper>
                                         ) : null}
                                     </Box>
                                     <Box sx={{ my: 2 }} className=" d-flex justify-content-between">
@@ -515,10 +521,8 @@ export default function OrderDetailManagement() {
                             ) : null}
                             <div className="card mb-4 card-body ">
                                 <div className="row form-group ">
-                                    <Link to={"/admin"} className="col-auto mx-auto mb-3">
-                                        <button type="reset" className="btn btn-dark btn-block ">
-                                            Trở lại
-                                        </button>
+                                    <Link to={"/admin/order"} className="col-auto mx-auto mb-3">
+                                        <button className="btn btn-dark btn-block ">Trở lại</button>
                                     </Link>
                                     {order.status === 0 ? (
                                         <button
@@ -538,7 +542,7 @@ export default function OrderDetailManagement() {
                                             Xác nhận - Đang giao
                                         </button>
                                     ) : null}
-                                    
+
                                     {order.status === 0 || order.status === 1 || order.status === 2 ? (
                                         <button
                                             type="button"
@@ -557,7 +561,6 @@ export default function OrderDetailManagement() {
                                             Đã hoàn trả
                                         </button>
                                     ) : null}
-                                    
                                 </div>
                             </div>
                         </div>

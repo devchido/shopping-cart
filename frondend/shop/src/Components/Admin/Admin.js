@@ -1,25 +1,21 @@
-
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+//
 import UsersManagement from "./Users/UsersManagement";
 import ProductManagement from "./Products/ProductManagement";
 import CategoryManagement from "./Category/CategoryManagement";
 import OrderManagement from "./Order/OrderManagement";
 import TransactionManagement from "./Transaction/TransactionManagement";
+import CommentManagement from "./Comment/CommentManagement";
 //
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CategoryIcon from "@mui/icons-material/Category";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import StoreIcon from "@mui/icons-material/Store";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import API from "../Api/Api";
-//
+import { ADMIN_TAB_LINKS } from "../../shared/constants/navigation";
 
 export default function Admin() {
     let { keyParams } = useParams();
@@ -50,12 +46,12 @@ export default function Admin() {
     }, [navigation]);
     React.useEffect(() => {
         if (keyParams !== null) {
-            setValue(keyParams)
-        };
+            setValue(keyParams);
+        }
         if (keyParams === null || keyParams === undefined) {
             setValue("user");
-        };
-        
+        }
+
         if (localStorage.getItem("token") !== null) {
             loadDataUser();
         }
@@ -71,46 +67,17 @@ export default function Admin() {
                         onChange={handleChange}
                         aria-label="lab API tabs example"
                     >
-                        <Tab
-                            label="Người dùng"
-                            value="user"
-                            className={"text-nowrap"}
-                            sx={{ justifyContent: "left" }}
-                            icon={<AccountCircleIcon />}
-                            iconPosition="start"
-                        />
-                        <Tab
-                            label="Sản phẩm"
-                            value="product"
-                            className={"text-nowrap"}
-                            sx={{ justifyContent: "left" }}
-                            icon={<StoreIcon />}
-                            iconPosition="start"
-                        />
-                        <Tab
-                            label="Danh mục"
-                            value="category"
-                            className={"text-nowrap"}
-                            sx={{ justifyContent: "left" }}
-                            icon={<CategoryIcon />}
-                            iconPosition="start"
-                        />
-                        <Tab
-                            label="Đơn hàng"
-                            value="order"
-                            className={"text-nowrap"}
-                            sx={{ justifyContent: "left" }}
-                            icon={<AssignmentIcon />}
-                            iconPosition="start"
-                        />
-                        <Tab
-                            label="Đơn thanh toán"
-                            value="transaction"
-                            className={"text-nowrap"}
-                            sx={{ justifyContent: "left" }}
-                            icon={<ReceiptLongIcon />}
-                            iconPosition="start"
-                        />
+                        {ADMIN_TAB_LINKS.map((item) => (
+                            <Tab
+                                key={item.key}
+                                label={item.label}
+                                value={item.key}
+                                className={"text-nowrap"}
+                                sx={{ justifyContent: "left" }}
+                                icon={item.icon}
+                                iconPosition="start"
+                            />
+                        ))}
                     </TabList>
                 </Box>
                 <Box sx={{ width: "100%" }}>
@@ -128,6 +95,9 @@ export default function Admin() {
                     </TabPanel>
                     <TabPanel value="transaction">
                         <TransactionManagement />
+                    </TabPanel>
+                    <TabPanel value="comment">
+                        <CommentManagement />
                     </TabPanel>
                 </Box>
             </TabContext>

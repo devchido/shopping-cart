@@ -12,11 +12,14 @@ import java.util.*;
 
 public class Config {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "http://localhost:3000/transaction";
-    public static String vnp_TmnCode = "WN328428";
+    public static String vnp_ReturnUrl = "http://localhost:3000/transaction";
+    public static String vnp_TmnCode = "J6CPLXS1";
+
+
+    public static String vnp_OrderType = "other";
     public static String vnp_Version = "2.1.0";
     public static String vnp_Command = "pay";
-    public static String vnp_HashSecret = "XSFFUMIZBTQLXZWWVTFWPYMPHTVHDKBM";
+    public static String vnp_HashSecret = "ZHLGBFEXQTNJXPMQZVCQQRCMAWENMXTC";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 //    public static String database = "shop";
 

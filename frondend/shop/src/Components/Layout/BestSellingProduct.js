@@ -3,12 +3,12 @@ import ProductItem from "./ProductItem";
 import API from "../Api/Api";
 export default function BestSellingProduct() {
     const [product, setProduct] = React.useState([]);
-    const [time1, setTime1] = React.useState(new Date("2021-12-30"));
-    const [time2, setTime2] = React.useState(new Date("2023-12-30"));
+    const [time1] = React.useState(new Date("2021-12-30"));
+    const [time2] = React.useState(new Date("2023-12-30"));
 
     const [loading, setLoading] = React.useState(false);
 
-    const loadDataProduct = () => {
+    const loadDataProduct = React.useCallback(() => {
         setLoading(true);
         fetch(
             API+"/product/api/best_selling_product/0/8?title=&time1=" +
@@ -23,7 +23,7 @@ export default function BestSellingProduct() {
                 setProduct(result.response.content);
             });
         });
-    };
+    },[time1, time2]);
     const Loading = () => {
         return <>Loading . . .</>;
     };
@@ -34,7 +34,7 @@ export default function BestSellingProduct() {
     };
     React.useEffect(() => {
         loadDataProduct();
-    }, []);
+    }, [loadDataProduct]);
     return (
         <div className="container my-5 py-5">
             <div className="row">

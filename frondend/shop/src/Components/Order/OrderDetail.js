@@ -59,7 +59,7 @@ function OrderDetail() {
         setSnackbarOpen(false);
     };
     // get data chi tiết của order
-    const loadDataOrderDetail = () => {
+    const loadDataOrderDetail = React.useCallback(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -81,9 +81,9 @@ function OrderDetail() {
                 setOrderDetail(result);
             })
             .catch((error) => console.log("error", error));
-    };
+    }, [id]);
     // get data của order
-    const loadDataOrder = () => {
+    const loadDataOrder = React.useCallback(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var requestOptions = {
@@ -103,7 +103,7 @@ function OrderDetail() {
                 setOrder(result);
             })
             .catch((error) => console.log("error", error));
-    };
+    }, [id]);
 
     const Loading = () => {
         return <>Loading</>;
@@ -376,7 +376,7 @@ function OrderDetail() {
         setLoading(true);
         loadDataOrder();
         loadDataOrderDetail();
-    }, []);
+    }, [loadDataOrder, loadDataOrderDetail]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />

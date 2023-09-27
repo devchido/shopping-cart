@@ -51,11 +51,21 @@ function SingleProduct() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
+    const loadDataProduct = React.useCallback(() => {
+        fetch(API + "/product/api/findProductBySlug/" + slug).then((resp) => {
+            resp.json().then((result) => {
+                // console.log(result);
+                setLoading(false);
+                setProduct(result);
+                handleCheckReview(result);
+            });
+        });
+    },[slug]);
 
     useEffect(() => {
         setLoading(true);
         loadDataProduct();
-    }, []);
+    }, [loadDataProduct]);
     // kiểm tra sản phẩm đã được chủ đăng nhập đánh giá hay chưa
     const handleCheckReview = (result) => {
         if (localStorage.getItem("token")) {
@@ -128,16 +138,7 @@ function SingleProduct() {
                 setSnackbarMsg("False");
             });
     };
-    const loadDataProduct = () => {
-        fetch(API + "/product/api/findProductBySlug/" + slug).then((resp) => {
-            resp.json().then((result) => {
-                // console.log(result);
-                setLoading(false);
-                setProduct(result);
-                handleCheckReview(result);
-            });
-        });
-    };
+    
 
     const Loading = () => {
         return <>Loading . . .</>;

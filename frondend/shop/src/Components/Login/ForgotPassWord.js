@@ -111,12 +111,12 @@ export default function ForgotPassWord() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link to={"/singin"} variant="body2">
+                                <Link to={"/signin"} variant="body2">
                                     {"Đăng nhập"}
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link to={"/singup"} variant="body2">
+                                <Link to={"/signup"} variant="body2">
                                     {"Bạn chưa có tài khoản? Đăng ký"}
                                 </Link>
                             </Grid>

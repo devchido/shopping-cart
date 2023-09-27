@@ -45,8 +45,8 @@ function Orders() {
     const [dialogItem, setDialogItem] = React.useState();
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-    const [snackbarMsg, setSnackbarMsg] = React.useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    const [snackbarMsg] = React.useState("");
+    const [snackbarSeverity] = React.useState("warning");
     //
     const [open, setOpen] = React.useState(false);
     //
@@ -55,12 +55,6 @@ function Orders() {
         // setLoading(true);
         // setStatus(newValue);
         navigation(`/orders?status=${value}`)
-    };
-    //
-    const handleClickOpen = (item) => {
-        // console.log(item);
-        setOpen(true);
-        setDialogItem(item);
     };
 
     const handleClose = () => {
@@ -71,7 +65,7 @@ function Orders() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-    const loadDataOrder = () => {
+    const loadDataOrder = React.useCallback(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -96,7 +90,7 @@ function Orders() {
             .catch((error) => {
                 console.log("error", error);
             });
-    };
+    },[status]);
     const Loading = () => {
         return (
             <Stack>
@@ -143,7 +137,7 @@ function Orders() {
             setStatus(statusParams);
         }
         loadDataOrder();
-    }, [status,statusParams]);
+    }, [loadDataOrder, statusParams]);
 
     const ShowOrders = () => {
         return (

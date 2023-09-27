@@ -13,11 +13,13 @@ import com.example.redstore.util.EmailUtil;
 import com.example.redstore.util.OtpUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Service
@@ -142,14 +144,14 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    //    @Bean
+//        @Bean
 //    public AuthenticationResponse tesstCreate() {
 //        var user1 = User.builder()
 //                .firstName("Admin")
 //                .lastName("admin")
 //                .email("admin@gmail.com")
 //                .mobile("09899899889")
-//                .createAt(Instant.now())
+//                .createdAt(Instant.now())
 //                .password(passwordEncoder.encode("Admin"))
 //                .role(Role.ADMIN).build();
 //        var savedUser = userRepository.save(user1);

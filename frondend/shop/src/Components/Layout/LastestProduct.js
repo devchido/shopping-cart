@@ -12,8 +12,6 @@ function LastestProduct() {
         axios
             .get(API + "/product/api/lastest-product?field=")
             .then((res) => {
-                console.log(res);
-                console.log("12345");
                 setLoading(false);
                 setProduct(res.data.data);
             })

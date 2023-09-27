@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -51,27 +51,27 @@ function TransactionManagement() {
     const [pageSize, setPageSize] = React.useState(5);
     const [field, setField] = React.useState("updated_at");
     const [sort, setSort] = React.useState("DESC");
-    const [orderId, setOrderId] = React.useState("");
-    const [userId, setUserId] = React.useState("");
+    const [orderId] = React.useState("");
+    const [userId] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [mobile, setMobile] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [address, setAddress] = React.useState("");
     const [city, setCity] = React.useState("");
-    const [country, setCountry] = React.useState("");
-    const [type, setType] = React.useState("");
-    const [mode, setMode] = React.useState("");
+    const [country] = React.useState("");
+    const [type] = React.useState("");
+    const [mode] = React.useState("");
     const [status, setStatus] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
     //
     const [dialogItem, setDialogItem] = React.useState();
     const [openDialog, setOpenDialog] = React.useState(false);
 
-    const handleClickOpenDialog = (item) => {
-        // console.log(item);
-        setOpenDialog(true);
-        setDialogItem(item);
-    };
+    // const handleClickOpenDialog = (item) => {
+        
+    //     setOpenDialog(true);
+    //     setDialogItem(item);
+    // };
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
@@ -88,7 +88,7 @@ function TransactionManagement() {
         setPage(0);
         loadDataTransaction();
     };
-    const navigation = useNavigate();
+    // const navigation = useNavigate();
     const handleChangeStatus = (event) => {
         setStatus(event.target.value);
         loadDataTransaction();
@@ -102,21 +102,21 @@ function TransactionManagement() {
         loadDataTransaction();
     };
     //
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    // const [anchorEl, setAnchorEl] = React.useState(null);
+    // const open = Boolean(anchorEl);
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    // };
     // Đóng menu
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    // const handleClose = () => {
+    //     setAnchorEl(null);
+    // };
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
 
-    const loadDataTransaction = () => {
+    const loadDataTransaction = React.useCallback(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var requestOptions = {
@@ -145,7 +145,7 @@ function TransactionManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! không load được dữ liệu transaction");
             });
-    };
+    },[address, city, country, email, field, mobile, mode, orderId, page, pageSize, sort, status, type, userId, username]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -189,7 +189,7 @@ function TransactionManagement() {
     };
     React.useEffect(() => {
         loadDataTransaction();
-    }, [page, pageSize, status, field, sort]);
+    }, [loadDataTransaction]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />

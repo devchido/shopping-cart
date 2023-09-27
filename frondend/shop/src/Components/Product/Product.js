@@ -21,9 +21,9 @@ function Product() {
     const [product, setProduct] = React.useState([]);
     const [category, setCategory] = React.useState([]);
     // size của 1 page
-    const [pageSize, setPageSize] = React.useState(12);
+    const [pageSize] = React.useState(12);
     // sort by filde
-    const [field, setField] = React.useState("id");
+    const [field] = React.useState("id");
     // thứ tự của page
     const [offset, setOffset] = React.useState(0);
     // tổng số product
@@ -47,7 +47,7 @@ function Product() {
         // loadDataProduct();
     };
 
-    const loadDataProduct = () => {
+    const loadDataProduct = React.useCallback(() => {
         setLoading(true);
         fetch(
             API +
@@ -64,14 +64,13 @@ function Product() {
                 })
         ).then((resp) => {
             resp.json().then((result) => {
-                console.log(result);
                 setLoading(false);
                 setProduct(result.response.content);
                 setTotalElements(result.response.totalElements);
                 setTotalPages(result.response.totalPages);
             });
         });
-    };
+    }, [categoryId, field, offset, pageSize, title]);
     const Loading = () => {
         return (
             <Stack direction="row" spacing={2} sx={{ m: 1, justifyContent: "center" }}>
@@ -82,7 +81,7 @@ function Product() {
             </Stack>
         );
     };
-    const loadDataCategory = () => {
+    const loadDataCategory = React.useCallback(() => {
         fetch(API + "/category/api/filter?title=")
             .then((response) => {
                 if (response.ok) {
@@ -91,13 +90,12 @@ function Product() {
                 throw new Error(response.status);
             })
             .then((result) => {
-                console.log("category", result);
                 setCategory(result);
             })
             .catch((error) => {
                 console.log("error", error);
             });
-    };
+    },[]);
 
     React.useEffect(() => {
         loadDataProduct();
@@ -107,7 +105,7 @@ function Product() {
         } else{
             setCategoryId("")
         }
-    }, [page, offset, categoryId, categoryParams]);
+    }, [page, offset, categoryId, categoryParams, loadDataProduct, loadDataCategory]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -115,10 +113,10 @@ function Product() {
         setOffset(0);
         loadDataProduct();
     };
-    const handleClickCategory = (item) => {
-        setCategoryId(item.id);
-        setOffset(0);
-    };
+    // const handleClickCategory = (item) => {
+    //     setCategoryId(item.id);
+    //     setOffset(0);
+    // };
     return (
         <div>
             <div className="container  py-5">

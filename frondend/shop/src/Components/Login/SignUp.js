@@ -78,7 +78,6 @@ export default function SignUp() {
                                             console.log(result);
                                             localStorage.setItem("token", result.token);
                                             window.location = "/profile";
-                                            // window.location = "/singin"
                                         })
                                         .catch((error) => {
                                             setSnackbarOpen(true);
@@ -167,7 +166,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link to={"/singin"} variant="body2">
+                                <Link to={"/signin"} variant="body2">
                                     Bạn đã có tài khoản? Đăng nhập
                                 </Link>
                             </Grid>

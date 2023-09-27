@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
 
@@ -30,7 +30,7 @@ export default function TransactionDetail() {
     // id của data
     const { id } = useParams();
     //
-    const [status, setStatus] = useState({});
+    // const [status, setStatus] = useState({});
     const [data, setData] = React.useState({
         id: "",
         user: {},
@@ -57,7 +57,7 @@ export default function TransactionDetail() {
     };
 
     // admin thực hiện get data của data
-    const loadDataTransaction = () => {
+    const loadDataTransaction = React.useCallback(() => {
         fetch(API+"/transaction/auth/" + id, {
             method: "GET",
             headers: {
@@ -74,10 +74,10 @@ export default function TransactionDetail() {
                 console.log("data", result);
                 setLoading(false);
                 setData(result);
-                setStatus(result.status);
+                // setStatus(result.status);
             })
             .catch((error) => console.log("error", error));
-    };
+    },[id]);
 
     const Loading = () => {
         return (
@@ -246,7 +246,7 @@ export default function TransactionDetail() {
     React.useEffect(() => {
         setLoading(true);
         loadDataTransaction();
-    }, []);
+    }, [loadDataTransaction]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />

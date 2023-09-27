@@ -46,7 +46,7 @@ function UpdateProduct() {
         setTitle(text);
         setSlug(url);
     };
-    const loadDataProduct = () => {
+    const loadDataProduct = React.useCallback(() => {
         setIsLoading(true);
         fetch(`${API}/product/auth/${id}`, {
             method: "GET",
@@ -91,8 +91,8 @@ function UpdateProduct() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Load product-category error!");
             });
-    };
-    const loadDataCategory = () => {
+    }, [id]);
+    const loadDataCategory = React.useCallback(() => {
         fetch(API + "/category/api/filter?title= ")
             .then((response) => {
                 if (response.ok) {
@@ -106,7 +106,7 @@ function UpdateProduct() {
             .catch((error) => {
                 console.log("error", error);
             });
-    };
+    }, []);
     // Đăng bán sản phẩm
     const handleChangeStatus = () => {
         var url = API + "/product/auth/change-status?";
@@ -148,7 +148,7 @@ function UpdateProduct() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
-    }, []);
+    }, [loadDataCategory, loadDataProduct]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -236,41 +236,41 @@ function UpdateProduct() {
         }
     };
     // Chuyển sản phẩm vào mục kiểm duyệt
-    const handleCensorship = () => {
-        var url = API + "/product/auth/admin/setStatus?";
-        fetch(
-            url +
-                new URLSearchParams({
-                    id: product.id,
-                    status: 2,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.text();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log("user", result);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Sản phẩm được chuyển vào mục kiểm duyệt");
-                loadDataProduct();
-            })
-            .catch((error) => {
-                console.log("error", error);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("error");
-                setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
-            });
-    };
+    // const handleCensorship = () => {
+    //     var url = API + "/product/auth/admin/setStatus?";
+    //     fetch(
+    //         url +
+    //             new URLSearchParams({
+    //                 id: product.id,
+    //                 status: 2,
+    //             }),
+    //         {
+    //             method: "PUT",
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem("token"),
+    //             },
+    //         }
+    //     )
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.text();
+    //             }
+    //             throw Error(response.status);
+    //         })
+    //         .then((result) => {
+    //             console.log("user", result);
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("success");
+    //             setSnackbarMsg("Sản phẩm được chuyển vào mục kiểm duyệt");
+    //             loadDataProduct();
+    //         })
+    //         .catch((error) => {
+    //             console.log("error", error);
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("error");
+    //             setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
+    //         });
+    // };
     const Loading = () => {
         return (
             <Stack direction="row" spacing={2} sx={{ m: 1, justifyContent: "center" }}>

@@ -14,6 +14,7 @@ export default function ProductItem({ id, title, slug, price, discount, photos }
                         title={title}
                         alt={title}
                         height="250px"
+                        loading="lazy"
                         // onClick={() => handleClick(item)}
                     />
                 </Link>
@@ -38,9 +39,7 @@ export default function ProductItem({ id, title, slug, price, discount, photos }
                         </Link>
                     </h5>
                     <p className="card-text lead fw-bold">{VND.format(price)}</p>
-                    {/* <Link to={`/product/${slug}`} className="btn btn-outline-dark">
-                            Details
-                        </Link> */}
+                    
                 </div>
             </div>
         </div>

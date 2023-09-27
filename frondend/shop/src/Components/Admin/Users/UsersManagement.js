@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -42,15 +42,14 @@ function UsersManagement() {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
-    const [open, setOpen] = React.useState(false);
 
     // Trang hiện tại của page
     const [page, setPage] = React.useState(0);
 
     // Số sản phẩm được hiển thị
     const [pageSize, setPageSize] = React.useState(5);
-    const [field, setField] = React.useState("id");
-    const [sort, setSort] = React.useState("ASC");
+    const [field] = React.useState("id");
+    const [sort] = React.useState("ASC");
     const [keyname, setKeyName] = React.useState("");
     const [mobile, setMobile] = React.useState("");
     const [email, setEmail] = React.useState("");
@@ -73,7 +72,7 @@ function UsersManagement() {
         setDialogVendor();
     };
     const handleChangeVendor = () => {
-        fetch(API+"/user/auth/change-vendor?id=" + dialogItem.id + "&vendor=" + dialogVendor, {
+        fetch(API + "/user/auth/change-vendor?id=" + dialogItem.id + "&vendor=" + dialogVendor, {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -104,7 +103,6 @@ function UsersManagement() {
         setPage(0);
         loadDataUser();
     };
-    const navigation = useNavigate();
     const handleChange = (event) => {
         setRole(event.target.value);
         loadDataUser();
@@ -116,8 +114,8 @@ function UsersManagement() {
         setSnackbarOpen(false);
     };
 
-    const loadDataUser = () => {
-        var url = API+"/user/auth/admin/" + page + "/" + pageSize + "?";
+    const loadDataUser = React.useCallback(() => {
+        var url = API + "/user/auth/admin/" + page + "/" + pageSize + "?";
         fetch(
             url +
                 new URLSearchParams({
@@ -142,7 +140,7 @@ function UsersManagement() {
                 throw Error(response.status);
             })
             .then((result) => {
-                console.log("user", result);
+                // console.log("user", result);
                 setData(result.response.content);
                 setTotalElements(result.response.totalElements);
             })
@@ -152,7 +150,7 @@ function UsersManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! không load được dữ liệu user");
             });
-    };
+    }, [email, field, keyname, mobile, page, pageSize, role, sort]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -162,7 +160,7 @@ function UsersManagement() {
 
     React.useEffect(() => {
         loadDataUser();
-    }, [page, pageSize, role]);
+    }, [loadDataUser, page, pageSize, role]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
@@ -303,7 +301,7 @@ function UsersManagement() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={API+item.photos}
+                                                                                src={API + item.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />

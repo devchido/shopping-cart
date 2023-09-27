@@ -1,13 +1,12 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-//
 
-
-import {  Avatar, Input } from "@mui/material";
+import { Avatar, Input } from "@mui/material";
 import { format } from "date-fns";
 import convertToUrl from "../../Unity/CovertToUrl";
 import API from "../../Api/Api";
 import SnackbarMessage from "../../Layout/SnackbarMessage";
+import axios from "axios";
 
 function ProductDetailManagement() {
     const { id } = useParams();
@@ -39,7 +38,7 @@ function ProductDetailManagement() {
     const [imageFileName, setImageFileName] = React.useState("");
 
     // chuyển đổi trạng thái của sản phẩm
-    const [status, setStatus] = React.useState(0);
+    // const [status, setStatus] = React.useState(0);
     const [productCategory, setProductCategory] = React.useState({});
     const [category, setCategory] = React.useState([]);
 
@@ -48,36 +47,32 @@ function ProductDetailManagement() {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    //
+    const [isDisabled, setIsDisabled] = React.useState("disabled");
 
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
 
-    const loadDataProduct = () => {
-        fetch(`${API}/product/auth/${id}`, {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
+    const loadDataProduct = React.useCallback(() => {
+        axios
+            .get(`${API}/product/auth/${id}`, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
             })
-            .then((result) => {
-                console.log("product", result);
-                setProduct(result);
-                setTitle(result.title);
-                setSlug(result.slug);
-                setSumary(result.summary);
-                setPrice(result.price);
-                setDiscount(result.discount);
-                setQuantity(result.quantity);
-                setContent(result.content);
-                setNewImage(API+result.photos);
-                setStatus(result.status);
+            .then((res) => {
+                // console.log("product", res);
+                setProduct(res.data);
+                setTitle(res.data.title);
+                setSlug(res.data.slug);
+                setSumary(res.data.summary);
+                setPrice(res.data.price);
+                setDiscount(res.data.discount);
+                setQuantity(res.data.quantity);
+                setContent(res.data.content);
+                setNewImage(API + res.data.photos);
+                // setStatus(res.data.status);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -85,17 +80,14 @@ function ProductDetailManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Load product error!");
             });
+    }, [id]);
+    const loadDataProductCategory = React.useCallback(() => {
         // product category
-        fetch(`${API}/product-category/api/${id}`)
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log("product-category", result);
-                setProductCategory(result.category);
+        axios
+            .get(`${API}/product-category/api/${id}`)
+            .then((res) => {
+                // console.log("product-category", result);
+                setProductCategory(res.data.category);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -103,23 +95,18 @@ function ProductDetailManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Load product-category error!");
             });
-    };
-    const loadDataCategory = () => {
-        fetch(API+"/category/api/filter?title= ")
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
-                // console.log(result);
-                setCategory(result);
+    }, [id]);
+    const loadDataCategory = React.useCallback(() => {
+        axios
+            .get(API + "/category/api/filter?title= ")
+            .then((res) => {
+                // console.log(res.data);
+                setCategory(res.data);
             })
             .catch((error) => {
                 console.log("error", error);
             });
-    };
+    }, []);
     // thay đổi slug mặc định
     const handleChangeSlug = (event) => {
         const text = event.target.value;
@@ -129,92 +116,92 @@ function ProductDetailManagement() {
     };
 
     // Set trạng thái của sản phẩm : status
-    const handleSetStatus = () => {
-        var url = "/product/auth/admin/setStatus?";
-        console.log("status: " + status);
-        fetch(
-            url +
-                new URLSearchParams({
-                    id: product.id,
-                    status: status,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.text();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log("user", result);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                loadDataProduct();
-                if (status === 0) {
-                    setSnackbarMsg("Sản phẩm được chuyển vào mục Chờ xác nhận");
-                }
-                if (status === 1) {
-                    setSnackbarMsg("Sản phẩm được chuyển vào mục đã duyệt");
-                }
-                if (status === 2) {
-                    setSnackbarMsg("Sản phẩm được chuyển vào mục kiểm duyệt");
-                }
-                if (status === 3) {
-                    setSnackbarMsg("Sản phẩm được chuyển vào mục bị ngưng bán!");
-                }
-            })
-            .catch((error) => {
-                console.log("error", error);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("error");
-                setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
-            });
-    };
+    // const handleSetStatus = () => {
+    //     var url = "/product/auth/admin/setStatus?";
+    //     console.log("status: " + status);
+    //     fetch(
+    //         url +
+    //             new URLSearchParams({
+    //                 id: product.id,
+    //                 status: status,
+    //             }),
+    //         {
+    //             method: "PUT",
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem("token"),
+    //             },
+    //         }
+    //     )
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.text();
+    //             }
+    //             throw Error(response.status);
+    //         })
+    //         .then((result) => {
+    //             console.log("user", result);
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("success");
+    //             loadDataProduct();
+    //             if (status === 0) {
+    //                 setSnackbarMsg("Sản phẩm được chuyển vào mục Chờ xác nhận");
+    //             }
+    //             if (status === 1) {
+    //                 setSnackbarMsg("Sản phẩm được chuyển vào mục đã duyệt");
+    //             }
+    //             if (status === 2) {
+    //                 setSnackbarMsg("Sản phẩm được chuyển vào mục kiểm duyệt");
+    //             }
+    //             if (status === 3) {
+    //                 setSnackbarMsg("Sản phẩm được chuyển vào mục bị ngưng bán!");
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log("error", error);
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("error");
+    //             setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
+    //         });
+    // };
     // Chuyển sản phẩm vào mục chờ xác nhận
-    const handleWait = () => {
-        var url = "/product/auth/admin/setStatus?";
-        fetch(
-            url +
-                new URLSearchParams({
-                    id: product.id,
-                    status: 0,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.text();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log("user", result);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Sản phẩm được chuyển vào mục Chờ xác nhận");
-                loadDataProduct();
-            })
-            .catch((error) => {
-                console.log("error", error);
-                setSnackbarOpen(true);
-                setSnackbarSeverity("error");
-                setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
-            });
-    };
+    // const handleWait = () => {
+    //     var url = "/product/auth/admin/setStatus?";
+    //     fetch(
+    //         url +
+    //             new URLSearchParams({
+    //                 id: product.id,
+    //                 status: 0,
+    //             }),
+    //         {
+    //             method: "PUT",
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem("token"),
+    //             },
+    //         }
+    //     )
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.text();
+    //             }
+    //             throw Error(response.status);
+    //         })
+    //         .then((result) => {
+    //             console.log("user", result);
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("success");
+    //             setSnackbarMsg("Sản phẩm được chuyển vào mục Chờ xác nhận");
+    //             loadDataProduct();
+    //         })
+    //         .catch((error) => {
+    //             console.log("error", error);
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("error");
+    //             setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
+    //         });
+    // };
     // Chuyển sản phẩm vào mục đã xác nhận
     const handleConfirm = () => {
-        var url = API+"/product/auth/admin/setStatus?";
+        var url = API + "/product/auth/admin/setStatus?";
         fetch(
             url +
                 new URLSearchParams({
@@ -250,7 +237,7 @@ function ProductDetailManagement() {
     };
     // Chuyển sản phẩm vào mục kiểm duyệt
     const handleCensorship = () => {
-        var url = API+"/product/auth/admin/setStatus?";
+        var url = API + "/product/auth/admin/setStatus?";
         fetch(
             url +
                 new URLSearchParams({
@@ -324,6 +311,7 @@ function ProductDetailManagement() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
+        loadDataProductCategory();
         if (!selectedFile) {
             setPreview(undefined);
             return;
@@ -333,7 +321,7 @@ function ProductDetailManagement() {
         setPreview(objectUrl);
         // free memory when ever this component is unmounted
         return () => URL.revokeObjectURL(objectUrl);
-    }, [selectedFile]);
+    }, [loadDataProduct, loadDataCategory, loadDataProductCategory, selectedFile]);
     // ---------------------------------------------------------------
     // Thay đổi thuộc tính sản phẩm
     const handleChangeProduct = () => {
@@ -346,7 +334,7 @@ function ProductDetailManagement() {
         formdata.append("discount", discount);
         formdata.append("quantity", quantity);
         formdata.append("content", content);
-        fetch(API+"/product/auth/admin/handleChangeProduct", {
+        fetch(API + "/product/auth/admin/handleChangeProduct", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -384,35 +372,25 @@ function ProductDetailManagement() {
     };
     // Cập nhật loại sản phẩm
     const handleChangeProductCategory = () => {
-        fetch(
-            API+"/product-category/auth/handleChangeProductCategory?" +
-                new URLSearchParams({
-                    productId: id,
-                    categoryId: categoryItem,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-                // body: JSON.stringify({
-                //     productId: id,
-                //     categoryId: categoryItem,
-                // }),
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.text();
+        axios
+            .put(
+                `${API}/product-category/auth/product/${id}/category/${categoryItem}`,
+                // `${API}/product-category/auth/handleChangeProductCategory?productId=${id}&categoryId=${categoryItem}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
                 }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log(result);
-                if (result === "true") {
+            )
+
+            .then((res) => {
+                console.log(res);
+                if (res.data === true) {
                     setSnackbarOpen(true);
                     setSnackbarSeverity("success");
                     setSnackbarMsg("Cập nhật loại sản phẩm thành công.");
+                    setIsDisabled('disabled')
                 } else {
                     setSnackbarOpen(true);
                     setSnackbarSeverity("error");
@@ -421,7 +399,7 @@ function ProductDetailManagement() {
                 // loadDataProduct();
             })
             .catch((error) => {
-                console.log("error", error);
+                console.error("error", error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Thực hiện Cập nhật loại sản phẩm không thành công.");
@@ -445,7 +423,7 @@ function ProductDetailManagement() {
         var formdata = new FormData();
         formdata.append("image", selectedFile, imageFileName);
         formdata.append("slug", product.slug);
-        fetch(API+"/product/auth/image", {
+        fetch(API + "/product/auth/image", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -612,7 +590,8 @@ function ProductDetailManagement() {
                                             name="category"
                                             onChange={(e) => {
                                                 setCategoryItem(e.target.value);
-                                                console.log(e.target.value);
+                                                setIsDisabled('');
+                                                // console.log(e.target.value);
                                             }}
                                         >
                                             <option value={productCategory.id ? productCategory.id : ""}>
@@ -632,7 +611,7 @@ function ProductDetailManagement() {
                                     <h5 className="mb-0">Người bán</h5>
                                 </div>
                                 <div className="card-body d-flex">
-                                    <Avatar alt="Remy Sharp" src={API+product.user.photos} variant="rounded" />
+                                    <Avatar alt="Remy Sharp" src={API + product.user.photos} variant="rounded" />
                                     <p className="my-auto mx-3">
                                         <strong>{product.user.firstName + " " + product.user.lastName}</strong>
                                     </p>
@@ -692,7 +671,11 @@ function ProductDetailManagement() {
                             {categoryItem && (
                                 <div className="card mb-4 card-body ">
                                     <div className=" row form-group justify-content-between">
-                                        <button type="button" className="btn btn-info" onClick={handleChangeProductCategory}>
+                                        <button
+                                            type="button"
+                                            className={`btn btn-info ${isDisabled}`}
+                                            onClick={handleChangeProductCategory}
+                                        >
                                             Cập nhật loại sản phẩm
                                         </button>
                                     </div>
@@ -701,7 +684,7 @@ function ProductDetailManagement() {
 
                             <div className="card mb-4 card-body ">
                                 <div className=" row form-group justify-content-between">
-                                    <Link to={"/admin"} className="col-auto">
+                                    <Link to={"/admin/product"} className="col-auto">
                                         <button type="button" className="btn btn-dark  ">
                                             Cancel
                                         </button>
@@ -729,11 +712,10 @@ function ProductDetailManagement() {
                                             Duyệt bài
                                         </button>
                                     ) : null}
-                                    
-                                        {/* <button type="reset" className="btn btn-warning col-auto " onClick={handleWait}>
+
+                                    {/* <button type="reset" className="btn btn-warning col-auto " onClick={handleWait}>
                                             Chờ xác nhận
                                         </button> */}
-                                    
                                 </div>
                             </div>
                         </div>

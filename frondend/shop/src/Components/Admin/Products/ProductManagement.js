@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -45,7 +45,7 @@ function ProductManagement() {
     const [ptitle, setPtitle] = React.useState("");
     const [ctitle, setCtitle] = React.useState("");
     const [status, setStatus] = React.useState("");
-    const [vendor, setVendor] = React.useState("");
+    const [vendor] = React.useState("");
     const [totalElements, setTotalElements] = React.useState("");
 
     const handleChangePage = (event, newPage) => {
@@ -58,34 +58,26 @@ function ProductManagement() {
         setPage(0);
         loadDataProduct();
     };
-    const navigation = useNavigate();
+    
     const handleChange = (event) => {
         setStatus(event.target.value);
         loadDataProduct();
     };
-    //
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    // Đóng menu
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    
+    
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
-    const loadDataCategory = () => {
+    const loadDataCategory = React.useCallback(() => {
         fetch(API+"/category/api").then((resp) => {
             resp.json().then((result) => {
                 setCategory(result);
             });
         });
-    };
+    },[]);
 
-    const loadDataProduct = () => {
+    const loadDataProduct = React.useCallback(() => {
         fetch(
             API+"/product/auth/admin/" +
                 page +
@@ -125,7 +117,7 @@ function ProductManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! không load được dữ liệu product");
             });
-    };
+    }, [ctitle,field, page, pageSize, ptitle, sort, status, username, vendor])
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -135,7 +127,7 @@ function ProductManagement() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
-    }, [page, pageSize, field, sort, status, ctitle]);
+    }, [loadDataProduct, loadDataCategory]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />

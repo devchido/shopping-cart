@@ -58,7 +58,7 @@ export default function CreatedCategory() {
                     setSnackbarOpen(true);
                     setSnackbarSeverity("success");
                     setSnackbarMsg("Thêm mới category thành công.");
-                    navigation("/admin");
+                    navigation("/admin/category");
                 })
                 .catch((error) => {
                     console.log("error", error);
@@ -127,7 +127,7 @@ export default function CreatedCategory() {
                                 </div>
                                 <div className="card-body">
                                     <div className=" row form-group ">
-                                        <Link to={"/admin"} className="col-auto m-auto">
+                                        <Link to={"/admin/category"} className="col-auto m-auto">
                                             <button type="button" className="btn btn-dark  ">
                                                 Cancel
                                             </button>

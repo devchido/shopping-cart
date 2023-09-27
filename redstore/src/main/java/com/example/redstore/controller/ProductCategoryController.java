@@ -28,10 +28,10 @@ public class ProductCategoryController {
     public void edit(@RequestBody ProductCategoryDto dto, @PathVariable("id") Long id) {
         productCategoryService.edit(id, dto);
     }
-    @PutMapping("/auth/handleChangeProductCategory")
+    @PutMapping("/auth/product/{productId}/category/{categoryId}")
     public ResponseEntity<?> handleChangeProductCategory(
-            @RequestParam("productId") Long productId,
-            @RequestParam("categoryId") String categoryId
+            @PathVariable Long productId,
+            @PathVariable String categoryId
     ){
         return ResponseEntity.status(HttpStatus.OK).body(productCategoryService.handleChangeProductCategory(productId, categoryId));
     }

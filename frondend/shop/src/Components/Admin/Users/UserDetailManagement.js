@@ -44,7 +44,7 @@ export default function UserDetailManagement() {
     const handleChange = (event) => {
         setRole(event.target.value);
     };
-    const loadDataUser = () => {
+    const loadDataUser = React.useCallback(() => {
         fetch(`${API}/user/auth/admin/u/${id}`, {
             method: "GET",
             headers: {
@@ -71,7 +71,7 @@ export default function UserDetailManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Load product error!");
             });
-    };
+    },[id]);
     // Đổi quyền truy cập cho user
     const handleSetRole = () => {
         fetch(
@@ -155,7 +155,7 @@ export default function UserDetailManagement() {
     };
     React.useEffect(() => {
         loadDataUser();
-    }, []);
+    }, [loadDataUser]);
 
     return (
         <div>
@@ -309,7 +309,7 @@ export default function UserDetailManagement() {
 
                             <div className="card mb-4 card-body ">
                                 <div className=" row form-group ">
-                                    <Link to={"/admin"} className="col-auto m-auto">
+                                    <Link to={"/admin/user"} className="col-auto m-auto">
                                         <button type="button" className="btn btn-dark  ">
                                             Cancel
                                         </button>

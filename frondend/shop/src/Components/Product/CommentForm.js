@@ -1,5 +1,4 @@
 import {
-    Alert,
     Avatar,
     Button,
     Dialog,
@@ -8,12 +7,9 @@ import {
     DialogContentText,
     DialogTitle,
     Grid,
-    IconButton,
     Paper,
-    Snackbar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
 import { formatDistanceToNow } from "date-fns";
 import vi from "date-fns/locale/vi";
 import API from "../Api/Api";
@@ -89,7 +85,7 @@ export default function CommentForm(product) {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!commentText.trim()) return;
-        fetch(API+"/comment/auth", {
+        fetch(API + "/comment/auth", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -126,7 +122,7 @@ export default function CommentForm(product) {
     const handleSubmitReply = (event) => {
         event.preventDefault();
         if (!commentTextReply.trim()) return;
-        fetch(API+"/comment/auth", {
+        fetch(API + "/comment/auth", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -168,8 +164,8 @@ export default function CommentForm(product) {
         setCommentTextReply(event.target.value);
     };
 
-    const filterCommentByProduct = () => {
-        fetch(API+"/comment/api/find-by-product?productId=" + productId, {
+    const filterCommentByProduct = React.useCallback(() => {
+        fetch(API + "/comment/api/find-by-product?productId=" + productId, {
             method: "GET",
         })
             .then((response) => {
@@ -182,9 +178,9 @@ export default function CommentForm(product) {
                 setComment(result);
             })
             .catch((error) => console.log("error", error));
-    };
-    const filterCommentReply = () => {
-        fetch(API+"/comment/api/filter-comment-reply?productId=" + productId, {
+    }, [productId]);
+    const filterCommentReply = React.useCallback(() => {
+        fetch(API + "/comment/api/filter-comment-reply?productId=" + productId, {
             method: "GET",
         })
             .then((response) => {
@@ -198,39 +194,40 @@ export default function CommentForm(product) {
                 console.log(result);
             })
             .catch((error) => console.log("error", error));
-    };
+    }, [productId]);
+    const loadDataUser = React.useCallback(() => {
+        if (localStorage.getItem("token") !== null) {
+            fetch(API + "/user/auth/info", {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error(response.status);
+                })
+                .then((result) => {
+                    // console.log(result);
+                    setUser(result);
+                })
+                .catch((error) => {
+                    console.log("error", error);
+                });
+        }
+    }, []);
     useEffect(() => {
         setProductId(product.product.id);
         if (typeof productId === "number") {
             filterCommentByProduct();
             filterCommentReply();
         }
-        const loadDataUser = () => {
-            if (localStorage.getItem("token") !== null) {
-                fetch(API+"/user/auth/info", {
-                    method: "GET",
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
-                    },
-                })
-                    .then((response) => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw new Error(response.status);
-                    })
-                    .then((result) => {
-                        // console.log(result);
-                        setUser(result);
-                    })
-                    .catch((error) => {
-                        console.log("error", error);
-                    });
-            }
-        };
+
         loadDataUser();
-    }, [productId]);
-    
+    }, [productId, product.product.id, filterCommentByProduct, filterCommentReply, loadDataUser]);
+
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
@@ -285,7 +282,7 @@ export default function CommentForm(product) {
                     <Paper style={{ padding: "10px 20px 0 20px", marginTop: 10, backgroundColor: "#f8f8f8" }}>
                         <Grid container wrap="nowrap" spacing={2}>
                             <Grid item>
-                                <Avatar alt="" src={API+item.user.photos} />
+                                <Avatar alt="" src={API + item.user.photos} />
                             </Grid>
                             <Grid justifyContent="left" item xs zeroMinWidth>
                                 <p>{item.content}</p>
@@ -323,10 +320,9 @@ export default function CommentForm(product) {
                             </Grid>
                         </Grid>
                     </Paper>
-                    
+
                     {commentReply.map((itemReply) => (
                         <div key={itemReply.id}>
-                            
                             {itemReply.parentId === item.id ? (
                                 <Paper
                                     style={{
@@ -338,7 +334,7 @@ export default function CommentForm(product) {
                                 >
                                     <Grid container wrap="nowrap" spacing={2}>
                                         <Grid item>
-                                            <Avatar alt="Remy Sharp" src={API+itemReply.user.photos} />
+                                            <Avatar alt="Remy Sharp" src={API + itemReply.user.photos} />
                                         </Grid>
                                         <Grid justifyContent="left" item xs zeroMinWidth>
                                             <p>{itemReply.content}</p>

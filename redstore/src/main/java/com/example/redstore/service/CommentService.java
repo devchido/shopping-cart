@@ -58,4 +58,10 @@ public class CommentService {
         System.out.println("comment reply");
         return dtos;
     }
+
+    public List<CommentDto> fillAllComment() {
+        List<Comment> entity = commentRepository.findAll();
+        List<CommentDto> dtos = commentMapper.toDo(entity);
+        return dtos;
+    }
 }

@@ -1,14 +1,14 @@
 import React from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import API from "../Api/Api";
 export default function UserView() {
     
     const [user, setUser] = React.useState({});
     const { id } = useParams();
 
-    const loadDataUser = () => {
+    const loadDataUser = React.useCallback(() => {
         fetch(`${API}/user/api/u/${id}`, {
             method: "GET",
         })
@@ -24,11 +24,11 @@ export default function UserView() {
             .catch((error) => {
                 console.log("error", error);
             });
-    };
+    },[id]);
 
     React.useEffect(() => {
         loadDataUser();
-    }, []);
+    }, [loadDataUser]);
     return (
         <div>
             <section className="h-100 gradient-custom-2">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useParams } from "react-router-dom";
 //
 import { Input,  Skeleton, Stack, Typography } from "@mui/material";
@@ -26,7 +26,7 @@ export default function TransactionDetailManagement() {
     // id của data
     const { id } = useParams();
     //
-    const [status, setStatus] = useState({});
+    // const [status, setStatus] = useState({});
     const [data, setData] = React.useState({
         id: "",
         user: {},
@@ -37,16 +37,16 @@ export default function TransactionDetailManagement() {
 
     const [loading, setLoading] = React.useState(false);
     // Nhận thông tin của data: item được chọn
-    const [dataItem, setDataItem] = React.useState();
+    // const [dataItem, setDataItem] = React.useState();
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-    const [snackbarMsg, setSnackbarMsg] = React.useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    const [snackbarMsg] = React.useState("");
+    const [snackbarSeverity] = React.useState("warning");
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    // const handleClickOpen = () => {
+    //     setOpen(true);
+    // };
 
     const handleClose = () => {
         setOpen(false);
@@ -58,7 +58,7 @@ export default function TransactionDetailManagement() {
     };
 
     // admin thực hiện get data của data
-    const loadDataTransaction = () => {
+    const loadDataTransaction = React.useCallback(() => {
         fetch(API+"/transaction/auth/admin/" + id, {
             method: "GET",
             headers: {
@@ -75,76 +75,76 @@ export default function TransactionDetailManagement() {
                 console.log("data", result);
                 setLoading(false);
                 setData(result);
-                setStatus(result.status);
+                // setStatus(result.status);
             })
             .catch((error) => console.log("error", error));
-    };
+    },[id]);
     // 0 -> Xác nhận đơn hàng -> chuyển giao tới đơn vị vận chuyển: 2
-    const handleConfirmdata = () => {};
+    // const handleConfirmdata = () => {};
     // 2 -> Xác nhận đã vận chuyển -> chuyển giao tới khách hàng: 3
-    const handleShipped = () => {};
+    // const handleShipped = () => {};
     // 3 -> Xác nhận đã giao hàng -> đã nhận được hàng:5
-    const handleDelivered = () => {};
+    // const handleDelivered = () => {};
     // 0,2,3 -> Huỷ đơn hàng -> 1
     const handleCanceldata = () => {};
     // 5 -> Hoàn trả đơn hàng -> 4
-    const handleRefund = () => {
-        fetch(
-            "/data/auth/admin/set-status?" +
-                new URLSearchParams({
-                    id: data.id,
-                    status: 4,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Xác nhận hoàn trả! Đơn hàng sẽ được gửi trả về đơn vị, đồng thời hoàn tiền cho khách hàng.");
-                loadDataTransaction();
-            })
-            .catch((error) => console.log("error", error));
-    };
+    // const handleRefund = () => {
+    //     fetch(
+    //         "/data/auth/admin/set-status?" +
+    //             new URLSearchParams({
+    //                 id: data.id,
+    //                 status: 4,
+    //             }),
+    //         {
+    //             method: "PUT",
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem("token"),
+    //             },
+    //         }
+    //     )
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.status;
+    //             }
+    //             throw Error(response.status);
+    //         })
+    //         .then((result) => {
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("success");
+    //             setSnackbarMsg("Xác nhận hoàn trả! Đơn hàng sẽ được gửi trả về đơn vị, đồng thời hoàn tiền cho khách hàng.");
+    //             loadDataTransaction();
+    //         })
+    //         .catch((error) => console.log("error", error));
+    // };
     // Khôi phục đơn hàng
-    const handleRecovery = () => {
-        fetch(
-            API+"/data/auth/admin/set-status?" +
-                new URLSearchParams({
-                    id: data.id,
-                    status: 0,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                setSnackbarOpen(true);
-                setSnackbarSeverity("success");
-                setSnackbarMsg("Xác nhận khôi phục đơn hàng. Đã chuyển vào mục chờ xử lý");
-                loadDataTransaction();
-            })
-            .catch((error) => console.log("error", error));
-    };
+    // const handleRecovery = () => {
+    //     fetch(
+    //         API+"/data/auth/admin/set-status?" +
+    //             new URLSearchParams({
+    //                 id: data.id,
+    //                 status: 0,
+    //             }),
+    //         {
+    //             method: "PUT",
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem("token"),
+    //             },
+    //         }
+    //     )
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.status;
+    //             }
+    //             throw Error(response.status);
+    //         })
+    //         .then((result) => {
+    //             setSnackbarOpen(true);
+    //             setSnackbarSeverity("success");
+    //             setSnackbarMsg("Xác nhận khôi phục đơn hàng. Đã chuyển vào mục chờ xử lý");
+    //             loadDataTransaction();
+    //         })
+    //         .catch((error) => console.log("error", error));
+    // };
 
     const Loading = () => {
         return (
@@ -258,7 +258,7 @@ export default function TransactionDetailManagement() {
     React.useEffect(() => {
         setLoading(true);
         loadDataTransaction();
-    }, []);
+    }, [loadDataTransaction]);
     return (
         <div>
             <SnackbarMessage open={snackbarOpen} severity={snackbarSeverity} message={snackbarMsg} onClose={snackbarClose} />
@@ -342,7 +342,7 @@ export default function TransactionDetailManagement() {
                             {loading ? <Loading /> : <ShowDatadata />}
                             <div className="card mb-4 card-body ">
                                 <div className="row form-group ">
-                                    <Link to={"/admin"} className="col-auto mx-auto mb-3">
+                                    <Link to={"/admin/transaction"} className="col-auto mx-auto mb-3">
                                         <button type="reset" className="btn btn-dark btn-block ">
                                             Trở lại
                                         </button>

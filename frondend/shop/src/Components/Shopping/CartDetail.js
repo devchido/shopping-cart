@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 //
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -32,7 +32,7 @@ function CartDetail() {
     //
     const [open, setOpen] = React.useState(false);
 
-    const navigation = useNavigate();
+    // const navigation = useNavigate();
 
     const handleClickOpen = (item) => {
         console.log(item);
@@ -51,7 +51,7 @@ function CartDetail() {
         setSnackbarOpen(false);
     };
 
-    const loadDataCartDetail = () => {
+    const loadDataCartDetail = React.useCallback(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -73,8 +73,8 @@ function CartDetail() {
                 setCartDetail(result);
             })
             .catch((error) => console.log("error", error));
-    };
-    const loadDataCart = () => {
+    },[id]);
+    const loadDataCart = React.useCallback(() => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
         var requestOptions = {
@@ -94,7 +94,7 @@ function CartDetail() {
                 setCart(result);
             })
             .catch((error) => console.log("error", error));
-    };
+    },[id]);
 
     const ShowCartItem = () => {
         return (
@@ -129,23 +129,25 @@ function CartDetail() {
                                                     className="form-control form-control-sm"
                                                     readOnly
                                                 />
-                                                {cart === 0 ? <IconButton sx={{ mx: 1 }} title="Sửa" onClick={() => handleClickOpen(item)}>
-                                                    <BorderColorIcon className="text-primary" />
-                                                </IconButton> : null}
-
-                                                
+                                                {cart === 0 ? (
+                                                    <IconButton sx={{ mx: 1 }} title="Sửa" onClick={() => handleClickOpen(item)}>
+                                                        <BorderColorIcon className="text-primary" />
+                                                    </IconButton>
+                                                ) : null}
                                             </div>
                                         </div>
                                         <hr />
                                         <div className="d-flex justify-content-between">
-                                            {cart.statut === 0 ? <IconButton
-                                                className="text-danger me-1 m-2"
-                                                onClick={() => handleDelete(item)}
-                                                title="remove"
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton> : null }
-                                            
+                                            {cart.statut === 0 ? (
+                                                <IconButton
+                                                    className="text-danger me-1 m-2"
+                                                    onClick={() => handleDelete(item)}
+                                                    title="remove"
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            ) : null}
+
                                             <Link to={`/product/${item.product.slug}`}>
                                                 <IconButton className="text-primary m-2" title="view">
                                                     <VisibilityIcon />
@@ -401,7 +403,7 @@ function CartDetail() {
         setLoading(true);
         loadDataCart();
         loadDataCartDetail();
-    }, []);
+    }, [loadDataCart, loadDataCartDetail]);
     return (
         <div>
             <Snackbar
@@ -488,15 +490,15 @@ function CartDetail() {
                         <div className="col">
                             <div className="card shopping-cart" style={{ borderRadius: 15 }}>
                                 <div className="card-body text-black">
-                                        <div className="row">
-                                            <div className="col-lg-6 px-5 py-4">
-                                                <div className="d-flex justify-content-between">
-                                                    <h3 className="mb-5 pt-2  fw-bold text-uppercase">Cart: {cart.id}</h3>
-                                                    <p className="pt-3  fw-bold ">{cartDetail.length} item</p>
-                                                </div>
-                                                {loading ? <Loading /> : <ShowCartItem />}
+                                    <div className="row">
+                                        <div className="col-lg-6 px-5 py-4">
+                                            <div className="d-flex justify-content-between">
+                                                <h3 className="mb-5 pt-2  fw-bold text-uppercase">Cart: {cart.id}</h3>
+                                                <p className="pt-3  fw-bold ">{cartDetail.length} item</p>
+                                            </div>
+                                            {loading ? <Loading /> : <ShowCartItem />}
 
-                                                {/* <div className="d-flex justify-content-between px-x">
+                                            {/* <div className="d-flex justify-content-between px-x">
                                                 <p className="fw-bold">Discount:</p>
                                                 <p className="fw-bold">95$</p>
                                             </div>
@@ -507,52 +509,48 @@ function CartDetail() {
                                                 <h5 className="fw-bold mb-0">Total:</h5>
                                                 <h5 className="fw-bold mb-0">2261$</h5>
                                             </div> */}
-                                            </div>
-                                            <div className="col-lg-6 px-5 py-4">
-                                                <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">Thông tin</h3>
-                                                <form onSubmit={handleSubmit} className="mb-5">
-                                                    <ShowDataCart />
-                                                    <div className="d-flex justify-content-between">
-                                                        <span className="fw-bold mt-1">
-                                                            <Link
-                                                                to={"/carts"}
-                                                                style={{ fontSize: "24px" }}
-                                                                className="text-dark"
-                                                            >
-                                                                <ChevronLeftIcon
-                                                                    className="text-dark me-0 pb-1 "
-                                                                    title="View"
-                                                                    sx={{ fontSize: "40px" }}
-                                                                />
-                                                                Back
-                                                            </Link>
-                                                        </span>
-                                                        {cart.status === 0 ? (
-                                                            <>
-                                                                <span>
-                                                                    <button
-                                                                        type="submit"
-                                                                        className="btn btn-outline-dark btn-block  "
-                                                                    >
-                                                                        Cập nhật
-                                                                    </button>
-                                                                </span>
-
-                                                                <span>
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn btn-dark btn-block"
-                                                                        onClick={handleOrderNow}
-                                                                    >
-                                                                        Order now
-                                                                    </button>
-                                                                </span>
-                                                            </>
-                                                        ) : null}
-                                                    </div>
-                                                </form>
-                                            </div>
                                         </div>
+                                        <div className="col-lg-6 px-5 py-4">
+                                            <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">Thông tin</h3>
+                                            <form onSubmit={handleSubmit} className="mb-5">
+                                                <ShowDataCart />
+                                                <div className="d-flex justify-content-between">
+                                                    <span className="fw-bold mt-1">
+                                                        <Link to={"/carts"} style={{ fontSize: "24px" }} className="text-dark">
+                                                            <ChevronLeftIcon
+                                                                className="text-dark me-0 pb-1 "
+                                                                title="View"
+                                                                sx={{ fontSize: "40px" }}
+                                                            />
+                                                            Back
+                                                        </Link>
+                                                    </span>
+                                                    {cart.status === 0 ? (
+                                                        <>
+                                                            <span>
+                                                                <button
+                                                                    type="submit"
+                                                                    className="btn btn-outline-dark btn-block  "
+                                                                >
+                                                                    Cập nhật
+                                                                </button>
+                                                            </span>
+
+                                                            <span>
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-dark btn-block"
+                                                                    onClick={handleOrderNow}
+                                                                >
+                                                                    Order now
+                                                                </button>
+                                                            </span>
+                                                        </>
+                                                    ) : null}
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

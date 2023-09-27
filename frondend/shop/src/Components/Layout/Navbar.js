@@ -161,7 +161,7 @@ function Navbar() {
                             {localStorage.getItem("token") === null ? (
                                 <>
                                     <Typography className="btn btn-outline-light btn-rounded">
-                                        <Link to={"singin"}>Đăng nhập</Link>
+                                        <Link to={"signin"}>Đăng nhập</Link>
                                     </Typography>
                                 </>
                             ) : (

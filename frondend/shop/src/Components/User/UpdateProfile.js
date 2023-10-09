@@ -38,6 +38,7 @@ export default function UpdateProfile() {
                 .then((result) => {
                     // console.log(result);
                     setUser(result);
+                    console.log(result);
                 })
                 .catch((error) => {
                     console.log("error", error);

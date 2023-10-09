@@ -22,6 +22,6 @@ public class ImageProduct {
     private String name;
     private String type;
     @Lob
-    @Column(name = "imagedata",length = 1000)
+    @Column(name = "imagedata", columnDefinition = "MEDIUMBLOB", length = 1000)
     private byte[] imageData;
 }

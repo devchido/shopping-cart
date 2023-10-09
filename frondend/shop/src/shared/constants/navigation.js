@@ -3,6 +3,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import StoreIcon from "@mui/icons-material/Store";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import CommentIcon from '@mui/icons-material/Comment';
 
 export const ADMIN_TAB_LINKS = [
     {
@@ -39,6 +40,6 @@ export const ADMIN_TAB_LINKS = [
         key: "comment",
         label: "Bình luận",
         path: "/admin/comment",
-        icon: <ReceiptLongIcon />,
+        icon: <CommentIcon />,
     },
 ];

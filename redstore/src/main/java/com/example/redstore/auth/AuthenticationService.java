@@ -2,14 +2,17 @@ package com.example.redstore.auth;
 
 import com.example.redstore.config.JwtService;
 import com.example.redstore.config.SecurityUtils;
+import com.example.redstore.domain.ImageUser;
 import com.example.redstore.domain.Role;
 import com.example.redstore.domain.User;
+import com.example.redstore.repository.ImageUserRepository;
 import com.example.redstore.repository.UserRepository;
 import com.example.redstore.dto.UserDto;
-import com.example.redstore.token.Token;
+import com.example.redstore.token.Tokens;
 import com.example.redstore.token.TokenRepository;
 import com.example.redstore.token.TokenType;
 import com.example.redstore.util.EmailUtil;
+import com.example.redstore.util.ImageUtils;
 import com.example.redstore.util.OtpUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
 
@@ -32,8 +39,9 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final OtpUtil otpUtil;
     private final EmailUtil emailUtil;
+    private final ImageUserRepository imageUserRepository;
 
-    public AuthenticationResponse register(UserDto request) {
+    public AuthenticationResponse register(UserDto request) throws IOException {
 
         // todo: tạo password tự động (mã otp gửi qua email)
 //        String otp = otpUtil.generateOtp();
@@ -51,16 +59,15 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .mobile(request.getMobile())
-                .photos("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYmlp9JDeNMaFZzw9S3G1dVztGqF_2vq9nA&usqp=CAU")
                 .vendor(0)
                 .createdAt(new Date().toInstant())
                 .password(passwordEncoder.encode(request.getPassword()))
-//                .password(passwordEncoder.encode(otp))
                 .role(Role.USER)
                 .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
+        saveImageUser(user.getEmail());
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -123,7 +130,7 @@ public class AuthenticationService {
     }
 
     private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
+        var token = Tokens.builder()
                 .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
@@ -131,6 +138,25 @@ public class AuthenticationService {
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
+    }
+    private void saveImageUser(String email) throws IOException {
+        // test save image
+        User user = userRepository.findByEmail(email).orElseThrow();
+        String imagePath = "D:\\DEVMASTER\\DEV2206LM_SpringBoot\\shopping-cart\\redstore\\src\\user_default.jpg"; // Thay đổi đường dẫn tới tệp ảnh của bạn
+        // Tạo đối tượng Path từ đường dẫn
+        Path imageFilePath = Paths.get(imagePath);
+        // Đọc dữ liệu ảnh từ tệp
+        var imageData = Files.readAllBytes(imageFilePath);
+        // Tạo đối tượng ImageUser và gán giá trị cho cột imageData (kiểu BLOB)
+        ImageUser imageUser = new ImageUser();
+        imageUser.setUser(user);
+        imageUser.setName("user-" + user.getId());
+        imageUser.setType("jpg");
+        imageUser.setImageData(ImageUtils.compressImage(imageData));
+
+        imageUserRepository.save(imageUser);
+        user.setPhotos("/api/v1/auth/image/user/user-"+user.getId());
+        userRepository.save(user);
     }
 
     private void revokeAllUserTokens(User user) {
@@ -144,23 +170,25 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-//        @Bean
-//    public AuthenticationResponse tesstCreate() {
-//        var user1 = User.builder()
-//                .firstName("Admin")
-//                .lastName("admin")
-//                .email("admin@gmail.com")
-//                .mobile("09899899889")
-//                .createdAt(Instant.now())
-//                .password(passwordEncoder.encode("Admin"))
-//                .role(Role.ADMIN).build();
-//        var savedUser = userRepository.save(user1);
-//        var jwtToken = jwtService.generateToken(user1);
-//        saveUserToken(savedUser, jwtToken);
-//        return AuthenticationResponse.builder()
-//                .token(jwtToken)
-//                .build();
-//    }
+    @Bean
+    public AuthenticationResponse tesstCreate() throws IOException {
+        var user1 = User.builder()
+                .firstName("Admin")
+                .lastName("admin")
+                .email("admin@gmail.com")
+                .mobile("09899899889")
+                .vendor(1)
+                .createdAt(Instant.now())
+                .password(passwordEncoder.encode("1111"))
+                .role(Role.ADMIN).build();
+        var savedUser = userRepository.save(user1);
+        var jwtToken = jwtService.generateToken(user1);
+        saveUserToken(savedUser, jwtToken);
+        saveImageUser(user1.getEmail());
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
     // set ADMIN
 //    @Bean
 //    public void updateAdmin(){

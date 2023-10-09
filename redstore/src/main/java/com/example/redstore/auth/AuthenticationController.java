@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -25,7 +27,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody UserDto request
-    ) {
+    ) throws IOException {
         return ResponseEntity.ok(service.register(request));
     }
 

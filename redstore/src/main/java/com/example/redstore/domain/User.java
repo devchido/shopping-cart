@@ -1,6 +1,6 @@
 package com.example.redstore.domain;
 
-import com.example.redstore.token.Token;
+import com.example.redstore.token.Tokens;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -61,7 +60,7 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+    private List<Tokens> tokens;
 
 
     @Override

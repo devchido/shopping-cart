@@ -24,10 +24,11 @@ public class ImageUserSevice {
     private final UserRepository userRepository;
 
     public String uploadImage(MultipartFile file) throws IOException {
-        ImageUser entity = repository.findByName("user-"+SecurityUtils.getPrincipal().getId()).orElse(null);
+        ImageUser entity = repository.findByUserId(SecurityUtils.getPrincipal().getId()).orElse(null);
         if (entity == null){
             System.out.println("chưa có ảnh");
             ImageUser imageData = repository.save(ImageUser.builder()
+                            .user(SecurityUtils.getPrincipal())
                     .name("user-"+ SecurityUtils.getPrincipal().getId())
                     .type(file.getContentType())
                     .imageData(ImageUtils.compressImage(file.getBytes())).build());

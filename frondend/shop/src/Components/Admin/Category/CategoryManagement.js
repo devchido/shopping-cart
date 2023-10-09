@@ -158,7 +158,7 @@ function CategoryManagement() {
                         <div>
                             <div className="card mb-4">
                                 <div className="card-header d-flex py-3 justify-content-between ">
-                                    <h5 className="mt-1">Quản lý Category</h5>
+                                    <h5 className="mt-1">Quản lý danh mục</h5>
                                     <NavLink to={"/admin/category/create"}>
                                         <button className="btn btn-outline-dark">Tạo mới</button>
                                     </NavLink>

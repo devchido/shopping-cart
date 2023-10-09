@@ -9,4 +9,5 @@ public interface ImageUserRepository extends JpaRepository<ImageUser,Long> {
 
 
     Optional<ImageUser> findByName(String fileName);
+    Optional<ImageUser> findByUserId(Long userId);
 }

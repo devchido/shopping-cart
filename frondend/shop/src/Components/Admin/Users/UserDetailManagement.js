@@ -15,14 +15,15 @@ import {
 import { format } from "date-fns";
 import API from "../../Api/Api";
 import SnackbarMessage from "../../Layout/SnackbarMessage";
+import axios from "axios";
 
 export default function UserDetailManagement() {
     const { id } = useParams();
     const [user, setUser] = React.useState({
         createdAt: new Date(),
     });
-    const [vendor, setVendor] = React.useState('');
-    const [role, setRole] = React.useState('');
+    const [vendor, setVendor] = React.useState("");
+    const [role, setRole] = React.useState("");
     //
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
@@ -71,30 +72,19 @@ export default function UserDetailManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Load product error!");
             });
-    },[id]);
+    }, [id]);
     // Đổi quyền truy cập cho user
     const handleSetRole = () => {
-        fetch(
-            API+"/user/auth/admin/role?" +
-                new URLSearchParams({
-                    userId: user.id,
-                    role: role,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        )
+        axios({
+            method: "put",
+            url: `${API}/user/auth/admin/role?userId=${user.id}&&role=${role}`,
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            data: {},
+        })
             .then((response) => {
-                if (response.ok) {
-                    return response.text();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log("user", result);
+                console.log("user", response);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Đã chuyển chức năng: " + role);
@@ -104,43 +94,32 @@ export default function UserDetailManagement() {
                 console.log("error", error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity("error");
-                setSnackbarMsg("error! Chuyển đổi trạng thái sản phẩm không hoạt động!");
+                setSnackbarMsg("Lỗi phân quyền!");
             });
     };
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        fetch(
-            `${API}/user/auth/admin/u?` +
-                new URLSearchParams({
-                    id: user.id,
-                }),
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    photos: data.get("photos"),
-                    firstName: data.get("firstName"),
-                    lastName: data.get("lastName"),
-                    mobile: data.get("mobile"),
-                    email: data.get("email"),
-                    intro: data.get("intro"),
-                    profile: data.get("profile"),
-                    vendor: vendor,
-                    role: data.get("role"),
-                }),
-            }
-        )
+        axios({
+            method: "put",
+            url: `${API}/user/auth/admin/u?id=${user.id}`,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
+            data: {
+                photos: data.get("photos"),
+                firstName: data.get("firstName"),
+                lastName: data.get("lastName"),
+                mobile: data.get("mobile"),
+                email: data.get("email"),
+                intro: data.get("intro"),
+                profile: data.get("profile"),
+                vendor: vendor,
+                role: data.get("role"),
+            },
+        })
             .then((response) => {
-                if (response.ok) {
-                    return response.status;
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
                 setSnackbarOpen(true);
                 setSnackbarSeverity("success");
                 setSnackbarMsg("Set data true");
@@ -203,7 +182,7 @@ export default function UserDetailManagement() {
                                 <div className="card-body px-5">
                                     <div className="form-outline mt-4">
                                         <img
-                                            src={API+user.photos}
+                                            src={API + user.photos}
                                             alt="Images"
                                             className="img-thumbnail form-control form-control-lg col-md-2 m-auto"
                                             style={{ width: "auto", maxHeight: "250px", maxWidth: "250px" }}

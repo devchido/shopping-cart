@@ -1,6 +1,7 @@
 import React from "react";
 import ProductItem from "./ProductItem";
 import API from "../Api/Api";
+import axios from "axios";
 export default function BestSellingProduct() {
     const [product, setProduct] = React.useState([]);
     const [time1] = React.useState(new Date("2021-12-30"));
@@ -10,20 +11,24 @@ export default function BestSellingProduct() {
 
     const loadDataProduct = React.useCallback(() => {
         setLoading(true);
-        fetch(
-            API+"/product/api/best_selling_product/0/8?title=&time1=" +
-                time1.toISOString().slice(0, 10) +
-                "&time2=" +
-                time2.toISOString().slice(0, 10) +
-                "&sort=DESC&field=count"
-        ).then((resp) => {
-            resp.json().then((result) => {
+        axios
+            .get(
+                API +
+                    "/product/api/best_selling_product/0/8?title=&time1=" +
+                    time1.toISOString().slice(0, 10) +
+                    "&time2=" +
+                    time2.toISOString().slice(0, 10) +
+                    "&sort=DESC&field=count"
+            )
+            .then((res) => {
                 // console.log(result);
                 setLoading(false);
-                setProduct(result.response.content);
+                setProduct(res.data.response.content);
+            })
+            .catch((error) => {
+                console.log(error);
             });
-        });
-    },[time1, time2]);
+    }, [time1, time2]);
     const Loading = () => {
         return <>Loading . . .</>;
     };

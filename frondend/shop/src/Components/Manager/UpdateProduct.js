@@ -7,9 +7,11 @@ import { format } from "date-fns";
 import convertToUrl from "../Unity/CovertToUrl";
 import API from "../Api/Api";
 import SnackbarMessage from "../Layout/SnackbarMessage";
+import axios from "axios";
 function UpdateProduct() {
     const { id } = useParams();
     const [product, setProduct] = React.useState({
+        id: "",
         createdAt: new Date(),
         updatedAt: new Date(),
         endsAt: new Date(),
@@ -29,7 +31,6 @@ function UpdateProduct() {
     const [openDialog, setOpenDialog] = React.useState(false);
 
     const handleClickOpenDialog = () => {
-        // console.log(item);
         setOpenDialog(true);
     };
 
@@ -40,6 +41,19 @@ function UpdateProduct() {
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
+    //
+    const [imagePreview, setImagePreview] = React.useState("");
+    const handleImageChange = (event) => {
+        const file = event.target.files[0]; // Get the selected file
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImagePreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    //
     const handleChangeSlug = (event) => {
         const text = event.target.value;
         const url = convertToUrl(text);
@@ -48,24 +62,18 @@ function UpdateProduct() {
     };
     const loadDataProduct = React.useCallback(() => {
         setIsLoading(true);
-        fetch(`${API}/product/auth/${id}`, {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
+        axios
+            .get(`${API}/product/auth/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
             })
-            .then((result) => {
-                console.log("product", result);
-                setProduct(result);
+            .then((response) => {
+                console.log("product", response.data);
+                setProduct(response.data);
                 setIsLoading(false);
-                setTitle(result.title);
-                setSlug(result.slug);
+                setTitle(response.data.title);
+                setSlug(response.data.slug);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -73,17 +81,15 @@ function UpdateProduct() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("Load product error!");
             });
+    }, [id]);
+    const loadDataProductCategory = React.useCallback(() => {
         // product category
-        fetch(`${API}/product-category/api/${id}`)
+
+        axios
+            .get(`${API}/product-category/api/${id}`)
+
             .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
-            })
-            .then((result) => {
-                console.log("product-category", result);
-                setProductCategory(result.category);
+                setProductCategory(response.data.category);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -93,15 +99,10 @@ function UpdateProduct() {
             });
     }, [id]);
     const loadDataCategory = React.useCallback(() => {
-        fetch(API + "/category/api/filter?title= ")
+        axios
+            .get(API + "/category/api/filter?title=")
             .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
-                setCategory(result);
+                setCategory(response.data);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -109,9 +110,9 @@ function UpdateProduct() {
     }, []);
     // Đăng bán sản phẩm
     const handleChangeStatus = () => {
-        var url = API + "/product/auth/change-status?";
         fetch(
-            url +
+            API +
+                "/product/auth/change-status?" +
                 new URLSearchParams({
                     id: product.id,
                     status: status,
@@ -148,7 +149,8 @@ function UpdateProduct() {
     React.useEffect(() => {
         loadDataProduct();
         loadDataCategory();
-    }, [loadDataCategory, loadDataProduct]);
+        loadDataProductCategory();
+    }, [loadDataCategory, loadDataProduct, loadDataProductCategory]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -180,9 +182,6 @@ function UpdateProduct() {
                 })
                 .catch((error) => {
                     console.log("error", error);
-                    // setSnackbarOpen(true);
-                    // setSnackbarSeverity("error");
-                    // setSnackbarMsg("False");
                 });
         }
         if (
@@ -197,35 +196,34 @@ function UpdateProduct() {
             setSnackbarSeverity("error");
             setSnackbarMsg("Thông tin chưa đầy đủ!");
         } else {
-            fetch(`${API}/product/auth/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-                body: JSON.stringify({
-                    title: data.get("title"),
-                    slug: data.get("slug"),
-                    summary: data.get("summary"),
-                    price: data.get("price"),
-                    discount: data.get("discount"),
-                    quantity: data.get("quantity"),
-                    content: data.get("content"),
-                    category: data.get("category"),
-                }),
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.status;
+            
+            axios
+                .put(
+                    `${API}/product/auth/${id}`,
+                    {
+                        title: data.get("title"),
+                        slug: data.get("slug"),
+                        summary: data.get("summary"),
+                        price: data.get("price"),
+                        discount: data.get("discount"),
+                        quantity: data.get("quantity"),
+                        content: data.get("content"),
+                        category: data.get("category"),
+                    },
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
                     }
-                    throw new Error(response.status);
-                })
-                .then((result) => {
-                    console.log(result);
+                )
+                
+                .then(() => {
                     setSnackbarOpen(true);
                     setSnackbarSeverity("success");
                     setSnackbarMsg("Cập nhật Thành công.");
                     loadDataProduct();
+                    loadDataProductCategory();
                 })
                 .catch((error) => {
                     console.log("error", error);
@@ -467,7 +465,7 @@ function UpdateProduct() {
                                         </div>
                                         <div className="card-body ">
                                             <img
-                                                src={API + product.photos}
+                                                src={imagePreview || API + product.photos}
                                                 alt="Images"
                                                 className="img-thumbnail form-control  m-auto"
                                                 style={{ height: "300px", width: "300px" }}
@@ -478,6 +476,7 @@ function UpdateProduct() {
                                                 type="file"
                                                 className="form-control mt-2 mx-auto"
                                                 style={{ width: "300px" }}
+                                                onChange={handleImageChange}
                                             />
                                         </div>
                                     </div>
@@ -521,11 +520,11 @@ function UpdateProduct() {
                                                     Huỷ đăng bán
                                                 </button>
                                             ) : null}
+                                            <button type="submit" className="btn btn-primary btn-block">
+                                                Update
+                                            </button>
                                             {product.status === 2 ? (
                                                 <>
-                                                    <button type="submit" className="btn btn-primary btn-block">
-                                                        Update
-                                                    </button>
                                                     <button
                                                         type="button"
                                                         className="btn btn-info btn-block"

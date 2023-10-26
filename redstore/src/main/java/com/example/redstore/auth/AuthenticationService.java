@@ -142,12 +142,12 @@ public class AuthenticationService {
     private void saveImageUser(String email) throws IOException {
         // test save image
         User user = userRepository.findByEmail(email).orElseThrow();
-        String imagePath = "D:\\DEVMASTER\\DEV2206LM_SpringBoot\\shopping-cart\\redstore\\src\\user_default.jpg"; // Thay đổi đường dẫn tới tệp ảnh của bạn
+        String imagePath = "src/user_default.jpg"; // Đường dẫn tới tệp ảnh của bạn
         // Tạo đối tượng Path từ đường dẫn
         Path imageFilePath = Paths.get(imagePath);
         // Đọc dữ liệu ảnh từ tệp
         var imageData = Files.readAllBytes(imageFilePath);
-        // Tạo đối tượng ImageUser và gán giá trị cho cột imageData (kiểu BLOB)
+        // Tạo đối tượng ImageUser và gán giá trị
         ImageUser imageUser = new ImageUser();
         imageUser.setUser(user);
         imageUser.setName("user-" + user.getId());
@@ -170,29 +170,29 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    @Bean
-    public AuthenticationResponse tesstCreate() throws IOException {
-        var user1 = User.builder()
-                .firstName("Admin")
-                .lastName("admin")
-                .email("admin@gmail.com")
-                .mobile("09899899889")
-                .vendor(1)
-                .createdAt(Instant.now())
-                .password(passwordEncoder.encode("1111"))
-                .role(Role.ADMIN).build();
-        var savedUser = userRepository.save(user1);
-        var jwtToken = jwtService.generateToken(user1);
-        saveUserToken(savedUser, jwtToken);
-        saveImageUser(user1.getEmail());
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
-    }
+//    @Bean
+//    public AuthenticationResponse tesstCreate() throws IOException {
+//        var user1 = User.builder()
+//                .firstName("Admin")
+//                .lastName("admin")
+//                .email("admin@gmail.com")
+//                .mobile("09899899889")
+//                .vendor(1)
+//                .createdAt(Instant.now())
+//                .password(passwordEncoder.encode("1111"))
+//                .role(Role.ADMIN).build();
+//        var savedUser = userRepository.save(user1);
+//        var jwtToken = jwtService.generateToken(user1);
+//        saveUserToken(savedUser, jwtToken);
+//        saveImageUser(user1.getEmail());
+//        return AuthenticationResponse.builder()
+//                .token(jwtToken)
+//                .build();
+//    }
     // set ADMIN
 //    @Bean
 //    public void updateAdmin(){
-//        var user = userRepository.findByEmail("nguyendaitu1610@gmail.com").orElse(null);
+//        var user = userRepository.findByEmail("tu@gmail.com").orElse(null);
 //        user.setRole(Role.ADMIN);
 //        userRepository.save(user);
 //    }

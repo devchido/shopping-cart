@@ -3,28 +3,21 @@ import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { useParams } from "react-router-dom";
 import API from "../Api/Api";
+import axios from "axios";
 export default function UserView() {
-    
     const [user, setUser] = React.useState({});
     const { id } = useParams();
 
     const loadDataUser = React.useCallback(() => {
-        fetch(`${API}/user/api/u/${id}`, {
-            method: "GET",
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error(response.status);
-            })
-            .then((result) => {
-                setUser(result);
+        axios
+            .get(API + "/user/api/u/" + id)
+            .then((res) => {
+                setUser(res.data);
             })
             .catch((error) => {
                 console.log("error", error);
             });
-    },[id]);
+    }, [id]);
 
     React.useEffect(() => {
         loadDataUser();
@@ -42,7 +35,7 @@ export default function UserView() {
                                 >
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: 150 }}>
                                         <img
-                                            src={API+user.photos}
+                                            src={API + user.photos}
                                             alt={user.firstName + " " + user.lastName}
                                             className="img-fluid img-thumbnail mt-4 mb-2"
                                             style={{ width: 150, zIndex: 1 }}
@@ -63,7 +56,7 @@ export default function UserView() {
                                         </div>
                                     </div>
                                 </div> */}
-                                <br/>
+                                <br />
                                 <div className="card-body p-4 text-black">
                                     <div className="mb-5">
                                         <p className="lead fw-normal mb-1">Intro</p>

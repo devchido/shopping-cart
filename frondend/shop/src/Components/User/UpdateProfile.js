@@ -3,12 +3,26 @@ import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import API from "../Api/Api";
 import SnackbarMessage from "../Layout/SnackbarMessage";
+import axios from "axios";
 
 export default function UpdateProfile() {
     const [user, setUser] = React.useState({});
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState("warning");
+    //
+    const [imagePreview, setImagePreview] = React.useState("");
+    const handleImageChange = (event) => {
+        const file = event.target.files[0]; // Get the selected file
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImagePreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    //
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -19,33 +33,21 @@ export default function UpdateProfile() {
     const loadDataUser = React.useCallback(() => {
         setUser({});
         if (localStorage.getItem("token")) {
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-            var requestOptions = {
-                method: "GET",
-                headers: myHeaders,
-                redirect: "follow",
-            };
-
-            fetch(API+"/user/auth/info", requestOptions)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error(response.status);
+            axios
+                .get(API + "/user/auth/info", {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
                 })
-                .then((result) => {
-                    // console.log(result);
-                    setUser(result);
-                    console.log(result);
+                .then((res) => {
+                    setUser(res.data);
                 })
                 .catch((error) => {
                     console.log("error", error);
                     handleLogout();
                 });
         }
-    },[]);
+    }, []);
 
     React.useEffect(() => {
         loadDataUser();
@@ -58,7 +60,7 @@ export default function UpdateProfile() {
         if (data.get("photos").name === "" || data.get("photos").name === null) {
         } else {
             formdata.append("image", data.get("photos"), "/" + event.target[0].value);
-            fetch(API+"/user/auth/image", {
+            fetch(API + "/user/auth/image", {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -87,7 +89,7 @@ export default function UpdateProfile() {
         }
 
         // thông tin user
-        fetch(API+"/user/auth/updateInfo", {
+        fetch(API + "/user/auth/updateInfo", {
             method: "PUT",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -133,17 +135,17 @@ export default function UpdateProfile() {
                             <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                 <img
                                     className="rounded form-control mt-5 border"
-                                    src={API+user.photos}
+                                    src={imagePreview || API + user.photos} // Use the image preview if available
                                     style={{ maxHeight: "300px" }}
                                     alt=""
                                 />
-
                                 <input
                                     type="file"
                                     className="form-control mt-4"
                                     placeholder="Photos link"
                                     id="photos"
                                     name="photos"
+                                    onChange={handleImageChange} // Handle file selection
                                 />
                             </div>
                         </div>
@@ -230,7 +232,10 @@ export default function UpdateProfile() {
                                     </div>
                                 </div>
                                 <div className="mt-5 text-right float-end">
-                                    <Link to={"/change-password"} className="btn btn-outline-dark">Đổi mật khẩu</Link>&nbsp;
+                                    <Link to={"/change-password"} className="btn btn-outline-dark">
+                                        Đổi mật khẩu
+                                    </Link>
+                                    &nbsp;
                                     <button className="btn btn-primary" type="submit">
                                         Save Profile
                                     </button>

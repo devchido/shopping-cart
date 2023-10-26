@@ -25,6 +25,7 @@ import vi from "date-fns/locale/vi";
 import { VND } from "../../Unity/VND";
 import API from "../../Api/Api";
 import SnackbarMessage from "../../Layout/SnackbarMessage";
+import axios from "axios";
 
 function ProductManagement() {
     // data product-category
@@ -58,58 +59,48 @@ function ProductManagement() {
         setPage(0);
         loadDataProduct();
     };
-    
+
     const handleChange = (event) => {
         setStatus(event.target.value);
         loadDataProduct();
     };
-    
-    
+
     // Đóng snackbar
     const snackbarClose = () => {
         setSnackbarOpen(false);
     };
     const loadDataCategory = React.useCallback(() => {
-        fetch(API+"/category/api").then((resp) => {
-            resp.json().then((result) => {
-                setCategory(result);
+        axios
+            .get(API + "/category/api")
+            .then((response) => {
+                setCategory(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
             });
-        });
-    },[]);
+    }, []);
 
     const loadDataProduct = React.useCallback(() => {
-        fetch(
-            API+"/product/auth/admin/" +
-                page +
-                "/" +
-                pageSize +
-                "?" +
-                new URLSearchParams({
-                    field: field,
-                    sort: sort,
-                    username: username,
-                    ptitle: ptitle,
-                    ctitle: ctitle,
-                    status: status,
-                    vendor: vendor,
-                }),
-            {
-                method: "GET",
+        const queryParams = new URLSearchParams({
+            field: field,
+            sort: sort,
+            username: username,
+            ptitle: ptitle,
+            ctitle: ctitle,
+            status: status,
+            vendor: vendor,
+        }).toString();
+
+        axios
+            .get(`${API}/product/auth/admin/${page}/${pageSize}?${queryParams}`, {
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-            }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw Error(response.status);
             })
-            .then((result) => {
-                console.log("product ", result);
-                setData(result.response.content);
-                setTotalElements(result.response.totalElements);
+            .then((response) => {
+                console.log("product ", response.data);
+                setData(response.data.response.content);
+                setTotalElements(response.data.response.totalElements);
             })
             .catch((error) => {
                 console.log("error", error);
@@ -117,7 +108,7 @@ function ProductManagement() {
                 setSnackbarSeverity("error");
                 setSnackbarMsg("error! không load được dữ liệu product");
             });
-    }, [ctitle,field, page, pageSize, ptitle, sort, status, username, vendor])
+    }, [ctitle, field, page, pageSize, ptitle, sort, status, username, vendor]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -300,7 +291,7 @@ function ProductManagement() {
                                                                         avatar={
                                                                             <Avatar
                                                                                 alt="Remy Sharp"
-                                                                                src={item.photos}
+                                                                                src={API + item.photos}
                                                                                 variant="rounded"
                                                                                 sx={{ width: 56, height: 56 }}
                                                                             />

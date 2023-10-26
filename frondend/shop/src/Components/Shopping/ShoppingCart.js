@@ -182,32 +182,6 @@ export default function ShoppingCart() {
     const ShowDataCart = () => {
         return (
             <>
-                {/* <div className="row">
-                    <div className="col-md-6 mb-3">
-                        <div className="form-outline">
-                            <input type="text" className="form-control form-control-lg" defaultValue={cart.firstName} disabled />
-                            <label className="form-label">Họ</label>
-                        </div>
-                    </div>
-                    <div className="col-md-6 mb-3">
-                        <div className="form-outline">
-                            <input type="text" className="form-control form-control-lg" defaultValue={cart.lastName} disabled />
-                            <label className="form-label">Tên</label>
-                        </div>
-                    </div>
-                </div> */}
-                {/* <div className="form-outline mb-3">
-                    <input type="number" className="form-control form-control-lg" defaultValue={cart.mobile} disabled />
-                    <label className="form-label" htmlFor="typeText">
-                        Điện thoại
-                    </label>
-                </div>
-                <div className="form-outline mb-3">
-                    <input type="text" className="form-control form-control-lg" defaultValue={cart.email} disabled />
-                    <label className="form-label" htmlFor="typeText">
-                        Email
-                    </label>
-                </div> */}
                 <div className="form-outline mb-3">
                     <input
                         type="text"
@@ -362,7 +336,7 @@ export default function ShoppingCart() {
             redirect: "follow",
         };
 
-        fetch("/cart-item/auth/" + item.id, requestOptions)
+        fetch(API+"/cart-item/auth/" + item.id, requestOptions)
             .then((response) => {
                 if (response.ok) {
                     return response.status;
@@ -387,7 +361,7 @@ export default function ShoppingCart() {
             handleDelete(cartItem);
             handleClose();
         } else {
-            fetch("/cart-item/auth/" + cartItem.id + "?quantity=" + quantity, {
+            fetch(API+"/cart-item/auth/" + cartItem.id + "?quantity=" + quantity, {
                 method: "PUT",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -466,7 +440,7 @@ export default function ShoppingCart() {
                                 <IconButton
                                     sx={{ mx: 1 }}
                                     onClick={() => {
-                                        if (quantity < cartItem.product.quantity) {
+                                        if (quantity < (cartItem.product.quantity + cartItem.quantity)) {
                                             setQuantity((i) => i + 1);
                                         }
                                     }}

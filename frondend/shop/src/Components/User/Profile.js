@@ -3,33 +3,22 @@ import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { Link } from "react-router-dom";
 import API from "../Api/Api";
+import axios from "axios";
 function Profile() {
     const [user, setUser] = React.useState({});
-
     const handleLogout = () => {
         localStorage.removeItem("token");
     };
     const loadDataUser = React.useCallback(() => {
-        if (localStorage.getItem("token") !== null) {
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
-
-            var requestOptions = {
-                method: "GET",
-                headers: myHeaders,
-                redirect: "follow",
-            };
-
-            fetch(API+"/user/auth/info", requestOptions)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error(response.status);
+        if (localStorage.getItem("token")) {
+            axios
+                .get(API + "/user/auth/info", {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
                 })
-                .then((result) => {
-                    // console.log(result);
-                    setUser(result);
+                .then((res) => {
+                    setUser(res.data);
                 })
                 .catch((error) => {
                     console.log("error", error);
@@ -58,6 +47,7 @@ function Profile() {
                                             alt={user.firstName + " " + user.lastName}
                                             className="img-fluid img-thumbnail mt-4 mb-2"
                                             style={{ width: 150, zIndex: 1 }}
+                                            loading="lazy"
                                         />
                                         <Link
                                             to={"/profile/update"}

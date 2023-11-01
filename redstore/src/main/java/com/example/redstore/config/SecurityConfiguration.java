@@ -74,8 +74,6 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000"); // Replace with the appropriate allowed origin(s)
-        configuration.addAllowedOrigin("https://rhy4pj-3000.csb.app"); // Replace with the appropriate allowed origin(s)
-        configuration.addAllowedOrigin("https://rhy4pj-8080.csb.app"); // Replace with the appropriate allowed origin(s)
         configuration.addAllowedMethod("GET");
         configuration.addAllowedMethod("POST");
         configuration.addAllowedMethod("PUT");
